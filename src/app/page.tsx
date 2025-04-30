@@ -1,13 +1,30 @@
 import Image from "next/image";
-
+import {LoginForm} from "@/components/auth_forms/login_form";
+import {OrDivider} from "@/components/auth_forms/or_divider";
 export default function Home() {
-  return (
-    <div id='burger-wrapper'>
-		<header>
-			<h1 className='text-red-500 text-4xl'>SMASH BURGER</h1>
-			<h2 className='text-cyan-300 text-3xl'>IS THERE A COMPILER THAT COMPILES PYTHON INTO JAVASCRIPT?</h2>
-			<h3 className="text-red-800"> NALDOUCHES BRANCH </h3>
-		</header>
-	</div>
-  );
+    return (
+        <div
+            id="burger-wrapper(naldoz-branch)"
+            className="m-0 p-0 w-full max-w-full"
+        >
+            <header>
+                <h1 className="text-red-800 text-3xl"> NALDOUCHE'S BRANCH </h1>
+            </header>
+
+            <section id="naldoz-branch">
+                <h2>Components</h2>
+                <div>
+                    <h2>Login/Register Components </h2>
+
+                    <div className="w-full max-w-md mx-auto p-4">
+                        <LoginForm />
+                    </div>
+
+                    <div>
+                        <OrDivider />
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
 }
