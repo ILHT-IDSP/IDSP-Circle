@@ -5,6 +5,9 @@ import {RememberMe} from "./remember_user_checkbox";
 import {ForgotPassword} from "./forgot_password";
 import {LOGO} from "../Circles_Logo";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faGoogle} from "@fortawesome/free-brands-svg-icons";
+
 export function LoginForm() {
     return (
         <>
