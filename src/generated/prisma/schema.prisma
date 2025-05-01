@@ -16,6 +16,7 @@ datasource db {
 
 // Define your models here
 model User {
+<<<<<<< HEAD
   id           Int      @id @default(autoincrement())
   email        String   @unique
   name         String?
@@ -177,3 +178,13 @@ model Follow {
   @@index([followerId])
   @@index([followingId])
 }
+=======
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// You can add more models as needed
+>>>>>>> origin/naldozburger
