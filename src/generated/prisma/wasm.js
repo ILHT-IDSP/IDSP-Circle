@@ -124,8 +124,86 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   name: 'name',
+  username: 'username',
+  bio: 'bio',
+  profileImage: 'profileImage',
+  coverImage: 'coverImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CircleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  avatar: 'avatar',
+  coverImage: 'coverImage',
+  isPrivate: 'isPrivate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  creatorId: 'creatorId'
+};
+
+exports.Prisma.MembershipScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  circleId: 'circleId',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PostScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  videoUrl: 'videoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  circleId: 'circleId',
+  musicId: 'musicId'
+};
+
+exports.Prisma.MusicScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  artist: 'artist',
+  albumCover: 'albumCover',
+  audioUrl: 'audioUrl',
+  duration: 'duration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SavedMusicScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  musicId: 'musicId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  postId: 'postId'
+};
+
+exports.Prisma.LikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  postId: 'postId'
+};
+
+exports.Prisma.FollowScalarFieldEnum = {
+  id: 'id',
+  followerId: 'followerId',
+  followingId: 'followingId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -142,10 +220,22 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.Role = exports.$Enums.Role = {
+  MEMBER: 'MEMBER',
+  MODERATOR: 'MODERATOR',
+  ADMIN: 'ADMIN'
+};
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Circle: 'Circle',
+  Membership: 'Membership',
+  Post: 'Post',
+  Music: 'Music',
+  SavedMusic: 'SavedMusic',
+  Comment: 'Comment',
+  Like: 'Like',
+  Follow: 'Follow'
 };
 
 /**
