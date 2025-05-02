@@ -1,36 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
 :root {
-	--circles-dark-blue: #0044cc;
-	--circles-light-blue: #689bff;
-	--circles-dark: #0e0e0e;
-	--circles-light: #f8f4ea;
-	--groovy-green: #14aa3e;
-	--groovy-red: #E8083E;
+    --circles-dark-blue: #0044cc;
+    --circles-light-blue: #689bff;
+    --circles-dark: #0e0e0e;
+    --circles-light: #f8f4ea;
+    --groovy-green: #14aa3e;
+    --groovy-red: #e8083e;
 }
 
 body {
-	font-family: 'DM Sans', sans-serif;
-	font-optical-sizing: auto;
-	background-color: var(--circles-light);
-	color: var(--circles-dark)
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    background-color: var(--circles-light);
+    color: var(--circles-dark);
 }
 
 h1 {
-	font-size: 1.75rem;
-	font-weight: 600;
-	line-height: 2.5rem;
-	color: var(--circles-dark-blue)
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 2.5rem;
+    color: var(--circles-dark-blue);
 }
 
 h2 {
-	font-size: 1.25rem;
-	font-weight: 500;
-	line-height: 2rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 2rem;
 }
 
 p {
-	line-height: 1.5rem;
+    line-height: 1.5rem;
 }
 
-@import 'tailwindcss';
+@import "tailwindcss";

@@ -5,9 +5,6 @@ import {RememberMe} from "./remember_user_checkbox";
 import {ForgotPassword} from "./forgot_password";
 import {LOGO} from "../Circles_Logo";
 
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faGoogle} from "@fortawesome/free-brands-svg-icons";
-
 export function LoginForm() {
     return (
         <>
@@ -25,12 +22,14 @@ export function LoginForm() {
                     action=""
                     method="POST"
                 >
-                    <UsernameEmailOrPhoneNumberLoginInput />
-                    <PasswordInput />
+                    <div className="flex flex-col gap-2">
+                        <UsernameEmailOrPhoneNumberLoginInput />
+                        <PasswordInput />
+                    </div>
 
                     <div
                         id="login-options"
-                        className="flex justify-between items-center m-auto"
+                        className="flex justify-between items-center m-auto my-6"
                     >
                         <RememberMe />
                         <ForgotPassword />

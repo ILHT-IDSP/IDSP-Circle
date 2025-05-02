@@ -10,7 +10,7 @@ export function AlternativeLogins() {
         >
             <div
                 id="google-auth"
-                className="border-2 border-white p-8 w-25 h-25 rounded-full"
+                className="border-2 border-black p-8 w-25 h-25 rounded-full"
             >
                 <a href="">
                     <FontAwesomeIcon
@@ -21,7 +21,7 @@ export function AlternativeLogins() {
             </div>
             <div
                 id="apple-auth"
-                className="border-2 border-white p-8 pt-6 w-25 h-25 rounded-full"
+                className="border-2 border-black p-8 pt-6 w-25 h-25 rounded-full"
             >
                 <a href="">
                     <FontAwesomeIcon
@@ -32,7 +32,7 @@ export function AlternativeLogins() {
             </div>
             <div
                 id="facebook-auth"
-                className="border-2 border-white p-9.5 pt-8 w-25 h-25 rounded-full"
+                className="border-2 border-black p-9.5 pt-8 w-25 h-25 rounded-full"
             >
                 <a href="">
                     <FontAwesomeIcon
