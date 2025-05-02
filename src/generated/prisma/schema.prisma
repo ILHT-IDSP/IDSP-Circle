@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define your models here
+model User {
+<<<<<<< HEAD
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String?
+  username     String   @unique
+  bio          String?
+  profileImage String? // URL to profile image
+  coverImage   String? // URL to cover image
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  posts          Post[] // User's posts
+  comments       Comment[] // User's comments
+  likes          Like[] // User's likes
+  createdCircles Circle[] // Circles created by the user
+  memberships    Membership[] // Circles the user is a member of
+  savedMusic     SavedMusic[] // Music saved by the user
+  followers      Follow[]     @relation("Follower")
+  following      Follow[]     @relation("Following")
+}
+
+model Circle {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  avatar      String? // URL to circle avatar
+  coverImage  String? // URL to circle cover image
+  isPrivate   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creatorId   Int
+
+  // Relations
+  creator User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  members Membership[] // Users who are members of this circle
+  posts   Post[] // Posts in this circle
+
+  @@index([creatorId])
+}
+
+model Membership {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  circleId  Int
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  circle Circle @relation(fields: [circleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, circleId])
+  @@index([userId])
+  @@index([circleId])
+}
+
+enum Role {
+  MEMBER
+  MODERATOR
+  ADMIN
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  content   String
+  imageUrl  String? // URL to post image (optional)
+  videoUrl  String? // URL to post video (optional)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  circleId  Int
+  musicId   Int // Every post must have music attached
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  circle   Circle    @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  music    Music     @relation(fields: [musicId], references: [id])
+  comments Comment[]
+  likes    Like[]
+
+  @@index([userId])
+  @@index([circleId])
+  @@index([musicId])
+}
+
+model Music {
+  id         Int      @id @default(autoincrement())
+  title      String
+  artist     String
+  albumCover String? // URL to album cover
+  audioUrl   String // URL to music file or external service link
+  duration   Int? // Duration in seconds
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  posts   Post[] // Posts using this music
+  savedBy SavedMusic[] // Users who saved this music
+}
+
+model SavedMusic {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  musicId   Int
+  createdAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  music Music @relation(fields: [musicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, musicId])
+  @@index([userId])
+  @@index([musicId])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  postId    Int
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([postId])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  postId    Int
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+
+  // Relations
+  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+=======
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// You can add more models as needed
+>>>>>>> origin/naldozburger
