@@ -1,27 +1,35 @@
 "use client";
-import {AwesomeIcon} from "../../../public/icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 import {ToggleShowPassword} from "./toggle_show_password";
 
-export function PasswordInput() {
-    return (
-        <>
-            <div
-                id="login-password-input"
-                className="p-2"
-            >
-                <div className="rounded-3xl w-full bg-white flex justify-between">
-                    <input
-                        id="password-input"
-                        type="Password"
-                        placeholder="Password"
-                        className="w-full placeholder-black indent-4 p-1.5"
-                    />
+interface PasswordInputProps {
+    onChange?: (value: string) => void;
+    id?: string;
+}
 
-                    <ToggleShowPassword inputId="password-input" />
-                </div>
+export function PasswordInput({ onChange, id = "password-input" }: PasswordInputProps = {}) {
+    const [password, setPassword] = useState("");
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
+        onChange?.(e.target.value);
+    };
+    
+    return (
+        <div className="p-2">
+            <div className="rounded-3xl w-full bg-white flex justify-between">
+                <input
+                    id={id}
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={handleChange}
+                    className="w-full placeholder-black indent-4 p-1.5 outline-none rounded-3xl"
+                    required
+                />
+
+                <ToggleShowPassword inputId={id} />
             </div>
-        </>
-    );
+        </div>    );
 }

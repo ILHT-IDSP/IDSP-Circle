@@ -1,43 +1,50 @@
+"use client";
+
+import { FormEvent } from "react";
 import {LoginButton} from "./login_buttons";
 import {UsernameEmailOrPhoneNumberLoginInput} from "./username_email_phonenumber_input";
 import {PasswordInput} from "./password_input";
 import {RememberMe} from "./remember_user_checkbox";
 import {ForgotPassword} from "./forgot_password";
-import {LOGO} from "../Circles_Logo";
+import CirclesLogo from "../Circles_Logo";
 
 export function LoginForm() {
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        
+        try {
+            // Login form submission logic here
+            console.log("Form submitted");
+        } catch (error) {
+            console.error("Login failed", error);
+        }
+    };
+
     return (
-        <>
-            <div
-                id="login-form"
-                className="flex flex-col items-center"
-            >
-                <div
-                    id="login-circle-logo"
-                    className=""
-                >
-                    <LOGO />
-                </div>
-                <form
-                    action=""
-                    method="POST"
-                >
-                    <div className="flex flex-col gap-2">
-                        <UsernameEmailOrPhoneNumberLoginInput />
-                        <PasswordInput />
-                    </div>
-
-                    <div
-                        id="login-options"
-                        className="flex justify-between items-center m-auto my-6"
-                    >
-                        <RememberMe />
-                        <ForgotPassword />
-                    </div>
-
-                    <LoginButton />
-                </form>
+        <div
+            className="flex flex-col items-center"
+        >
+            <div className="mb-6">
+				<CirclesLogo/>
             </div>
-        </>
+            <form
+                onSubmit={handleSubmit}
+                className="w-full max-w-md"
+            >
+                <div className="flex flex-col gap-2">
+                    <UsernameEmailOrPhoneNumberLoginInput />
+                    <PasswordInput />
+                </div>
+
+                <div
+                    className="flex justify-between items-center my-6"
+                >
+                    <RememberMe />
+                    <ForgotPassword />
+                </div>
+
+                <LoginButton onClick={() => {}} />
+            </form>
+        </div>
     );
 }

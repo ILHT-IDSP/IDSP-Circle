@@ -1,4 +1,18 @@
-export function UsernameEmailOrPhoneNumberLoginInput() {
+"use client";
+import { useState } from "react";
+
+interface UsernameEmailOrPhoneNumberLoginInputProps {
+    onChange?: (value: string) => void;
+}
+
+export function UsernameEmailOrPhoneNumberLoginInput({ onChange }: UsernameEmailOrPhoneNumberLoginInputProps = {}) {
+    const [value, setValue] = useState("");
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
+        onChange?.(e.target.value);
+    };
+    
     return (
         <>
             <div
@@ -7,8 +21,12 @@ export function UsernameEmailOrPhoneNumberLoginInput() {
             >
                 <input
                     type="text"
+                    name="username"
                     placeholder="Phone number, email, or username"
-                    className="rounded-3xl w-2xl bg-white placeholder-black indent-4 p-1.5"
+                    value={value}
+                    onChange={handleChange}
+                    className="rounded-3xl w-full bg-white placeholder-black indent-4 p-1.5 outline-none"
+                    required
                 />
             </div>
         </>

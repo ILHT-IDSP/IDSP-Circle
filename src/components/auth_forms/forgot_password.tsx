@@ -1,14 +1,28 @@
-export function ForgotPassword() {
+'use client';
+
+interface ForgotPasswordProps {
+    onForgotPasswordClick?: () => void;
+}
+
+export function ForgotPassword({ onForgotPasswordClick }: ForgotPasswordProps = {}) {
     return (
-        <>
-            <div
-                id="forgotten-password-container"
-                className="inline-block"
+        <div
+            id="forgotten-password-container"
+            className="inline-block"
+        >
+            <a 
+                href="/reset-password" 
+                className="text-blue-500 hover:text-blue-700 underline transition-colors"
+                onClick={(e) => {
+                    if (onForgotPasswordClick) {
+                        e.preventDefault();
+                        onForgotPasswordClick();
+                    }
+                }}
+                aria-label="Reset your password"
             >
-                <p className="underline text-blue-500">
-                    <a href="SMASHBURGER">Forgot Password?</a>
-                </p>
-            </div>
-        </>
+                Forgot Password?
+            </a>
+        </div>
     );
 }

@@ -1,43 +1,74 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFacebookF, faGoogle} from "@fortawesome/free-brands-svg-icons";
-import {faApple} from "@fortawesome/free-brands-svg-icons";
+"use client";
 
-export function AlternativeLogins() {
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFacebookF, faGoogle, faApple} from "@fortawesome/free-brands-svg-icons";
+
+interface AlternativeLoginsProps {
+    onGoogleLogin?: () => void;
+    onAppleLogin?: () => void;
+    onFacebookLogin?: () => void;
+}
+
+export function AlternativeLogins({
+    onGoogleLogin = () => {},
+    onAppleLogin = () => {},
+    onFacebookLogin = () => {},
+}: AlternativeLoginsProps = {}) {
     return (
         <div
             id="alternative-logins-container"
             className="max-w-full w-full flex items-center justify-center gap-4"
-        >
-            <div
+        >            <div
                 id="google-auth"
-                className="border-2 border-black p-8 w-25 h-25 rounded-full"
             >
-                <a href="">
-                    <FontAwesomeIcon
+                <a 
+                    href="#" 
+                    aria-label="Sign in with Google"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onGoogleLogin();
+                    }}
+                    className="flex items-center justify-center w-full h-full"
+                >                    <FontAwesomeIcon
                         icon={faGoogle}
-                        className="max-w-full w-15 text-2xl"
+                		className="border-1 border-black p-2 aspect-square  rounded-full flex items-center justify-center text-2xl"
+                        
                     />
                 </a>
-            </div>
-            <div
+            </div>            
+			<div
                 id="apple-auth"
-                className="border-2 border-black p-8 pt-6 w-25 h-25 rounded-full"
             >
-                <a href="">
-                    <FontAwesomeIcon
+                <a 
+                    href="#" 
+                    aria-label="Sign in with Apple"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onAppleLogin();
+                    }}
+                    className="flex items-center justify-center w-full h-full"
+                >                    <FontAwesomeIcon
                         icon={faApple}
-                        className="max-w-full w-15"
+                		className="border-1 border-black p-2 aspect-square  rounded-full flex items-center justify-center text-2xl"
+
                     />
                 </a>
-            </div>
-            <div
+            </div>            
+			<div
                 id="facebook-auth"
-                className="border-2 border-black p-9.5 pt-8 w-25 h-25 rounded-full"
             >
-                <a href="">
-                    <FontAwesomeIcon
+                <a 
+                    href="#" 
+                    aria-label="Sign in with Facebook"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onFacebookLogin();
+                    }}
+                    className="flex items-center justify-center w-full h-full"
+                >                    <FontAwesomeIcon
                         icon={faFacebookF}
-                        className="text-1xl"
+                	className="border-1 border-circles-dark p-2 aspect-square rounded-full flex items-center justify-center text-2xl"
+                        
                     />
                 </a>
             </div>
