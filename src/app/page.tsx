@@ -116,20 +116,22 @@ export default function Home() {
                     <h2 className="text-2xl font-bold mb-4">Settings Components</h2>
                     
                     <div className="max-w-md mx-auto bg-gray-900 p-6 rounded-lg">
-                        <SettingsCategory title="Albums">
-                            <SettingsItem label="Privacy" icon={<FaImages />} href="#" />
-                            <SettingsItem label="Notification" icon={<FaBell />} href="#" />
-                        </SettingsCategory>
-
-                        <SettingsCategory title="Accessibility">
-                            <SettingsItem label="Dark / Light Mode" icon={<FaAdjust />} href="#" />
-                            <SettingsItem label="Font Size" icon={<FaAdjust />} href="#" />
-                        </SettingsCategory>
-
-                        <SettingsCategory title="Account">
-                            <SettingsItem label="Friends List" icon={<FaUserFriends />} href="#" />
-                            <SettingsItem label="Logout" icon={<FaSignOutAlt />} href="#" />
-                        </SettingsCategory>
+                        
+							  <SettingsCategory title="Albums">
+								<SettingsItem label="Privacy" icon={<FaImages />} href="/settings/albums" />
+								<SettingsItem label="Notification" icon={<FaBell />} href="/settings/albums" />
+							  </SettingsCategory>
+						
+							  <SettingsCategory title="Accessibility">
+								<SettingsItem label="Dark / Light Mode" icon={<FaAdjust />} href="/settings/accessibility" />
+								<SettingsItem label="Contrast" icon={<FaAdjust />} href="/settings/accessibility" />
+								<SettingsItem label="Font Size" icon={<FaAdjust />} href="/settings/accessibility" />
+							  </SettingsCategory>
+						
+							  <SettingsCategory title="Account">
+								<SettingsItem label="Friends List" icon={<FaUserFriends />} href="/settings/friends" />
+								<SettingsItem label="Logout" icon={<FaSignOutAlt />} href="#" />
+							  </SettingsCategory>
                     </div>
                 </section>
             </div>

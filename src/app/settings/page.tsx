@@ -1,4 +1,4 @@
-import SettingsCategory from "@/components/settings_form/SettingsCategory";
+ import SettingsCategory from "@/components/settings_form/SettingsCategory";
 import SettingsItem from "@/components/settings_form/SettingsItem";
 import { FaBell, FaUserFriends, FaAdjust, FaImages, FaSignOutAlt } from "react-icons/fa";
 
