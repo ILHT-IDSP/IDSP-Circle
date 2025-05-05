@@ -7,6 +7,8 @@ import {PasswordInput} from "./password_input";
 import {RememberMe} from "./remember_user_checkbox";
 import {ForgotPassword} from "./forgot_password";
 import CirclesLogo from "../Circles_Logo";
+import { OrDivider } from "./or_divider";
+import { AlternativeLogins } from "./alternative_login";
 
 export function LoginForm() {
     const handleSubmit = async (e: FormEvent) => {
@@ -44,7 +46,14 @@ export function LoginForm() {
                 </div>
 
                 <LoginButton onClick={() => {}} />
+				
+				<OrDivider/>
+				<AlternativeLogins/>
+
             </form>
+
+		
+
         </div>
     );
 }

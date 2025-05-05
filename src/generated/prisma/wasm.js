@@ -128,6 +128,7 @@ exports.Prisma.UserScalarFieldEnum = {
   bio: 'bio',
   profileImage: 'profileImage',
   coverImage: 'coverImage',
+  isProfilePrivate: 'isProfilePrivate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -206,6 +207,23 @@ exports.Prisma.FollowScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.UserSettingsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  darkMode: 'darkMode',
+  highContrast: 'highContrast',
+  fontSize: 'fontSize',
+  defaultAlbumPrivacy: 'defaultAlbumPrivacy',
+  muteAlbumContent: 'muteAlbumContent',
+  muteAlbumComments: 'muteAlbumComments',
+  enableNotifications: 'enableNotifications',
+  notifyNewMessages: 'notifyNewMessages',
+  notifyFriendRequests: 'notifyFriendRequests',
+  notifyCircleInvites: 'notifyCircleInvites',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -235,7 +253,8 @@ exports.Prisma.ModelName = {
   SavedMusic: 'SavedMusic',
   Comment: 'Comment',
   Like: 'Like',
-  Follow: 'Follow'
+  Follow: 'Follow',
+  UserSettings: 'UserSettings'
 };
 
 /**

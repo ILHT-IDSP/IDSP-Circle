@@ -1,30 +1,63 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaMoon, FaLowVision, FaFont } from "react-icons/fa";
 
 export default function AccessibilityPage() {
   const [mode, setMode] = useState("dark");
   const [contrast, setContrast] = useState(false);
   const [fontSize, setFontSize] = useState("medium");
-
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Fetch user settings on component mount
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const response = await fetch('/api/settings');
+        if (response.ok) {
+          const settings = await response.json();
+          setMode(settings.darkMode ? 'dark' : 'light');
+          setContrast(settings.highContrast);
+          setFontSize(settings.fontSize);
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchSettings();
+  }, []);
   return (
     <div className="min-h-screen bg-black text-white px-4 py-6 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center">Accessibility</h1>
 
-      {/* Darkmode*/}
-      <div className="bg-zinc-800 p-4 rounded-lg flex items-center mb-4">
-        <FaMoon className="text-xl mr-3" />
-        <span>Dark / Light Mode</span>
-      </div>
-
-      <div className="mb-6 space-y-2">
+      {isLoading ? (
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-circles-light-blue"></div>
+        </div>
+      ) : (
+        <>
+          {/* Darkmode*/}
+          <div className="bg-zinc-800 p-4 rounded-lg flex items-center mb-4">
+            <FaMoon className="text-xl mr-3" />
+            <span>Dark / Light Mode</span>
+          </div><div className="mb-6 space-y-2">
         <label className="flex items-center justify-between">
           <span>Dark Mode (Default)</span>
           <input
             type="radio"
             name="theme"
             checked={mode === "dark"}
-            onChange={() => setMode("dark")}
+            onChange={() => {
+              setMode("dark");
+              // Save setting to API
+              fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ darkMode: true })
+              });
+            }}
           />
         </label>
         <label className="flex items-center justify-between">
@@ -33,7 +66,15 @@ export default function AccessibilityPage() {
             type="radio"
             name="theme"
             checked={mode === "light"}
-            onChange={() => setMode("light")}
+            onChange={() => {
+              setMode("light");
+              // Save setting to API
+              fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ darkMode: false })
+              });
+            }}
           />
         </label>
       </div>
@@ -85,9 +126,10 @@ export default function AccessibilityPage() {
             name="font"
             checked={fontSize === "small"}
             onChange={() => setFontSize("small")}
-          />
-        </label>
+          />        </label>
       </div>
+        </>
+      )}
     </div>
   );
 }

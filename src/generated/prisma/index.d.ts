@@ -58,6 +58,11 @@ export type Like = $Result.DefaultSelection<Prisma.$LikePayload>
  * 
  */
 export type Follow = $Result.DefaultSelection<Prisma.$FollowPayload>
+/**
+ * Model UserSettings
+ * 
+ */
+export type UserSettings = $Result.DefaultSelection<Prisma.$UserSettingsPayload>
 
 /**
  * Enums
@@ -291,6 +296,16 @@ export class PrismaClient<
     * ```
     */
   get follow(): Prisma.FollowDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userSettings`: Exposes CRUD operations for the **UserSettings** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserSettings
+    * const userSettings = await prisma.userSettings.findMany()
+    * ```
+    */
+  get userSettings(): Prisma.UserSettingsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -739,7 +754,8 @@ export namespace Prisma {
     SavedMusic: 'SavedMusic',
     Comment: 'Comment',
     Like: 'Like',
-    Follow: 'Follow'
+    Follow: 'Follow',
+    UserSettings: 'UserSettings'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -758,7 +774,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "circle" | "membership" | "post" | "music" | "savedMusic" | "comment" | "like" | "follow"
+      modelProps: "user" | "circle" | "membership" | "post" | "music" | "savedMusic" | "comment" | "like" | "follow" | "userSettings"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1428,6 +1444,80 @@ export namespace Prisma {
           }
         }
       }
+      UserSettings: {
+        payload: Prisma.$UserSettingsPayload<ExtArgs>
+        fields: Prisma.UserSettingsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserSettingsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserSettingsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>
+          }
+          findFirst: {
+            args: Prisma.UserSettingsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserSettingsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>
+          }
+          findMany: {
+            args: Prisma.UserSettingsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>[]
+          }
+          create: {
+            args: Prisma.UserSettingsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>
+          }
+          createMany: {
+            args: Prisma.UserSettingsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserSettingsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>[]
+          }
+          delete: {
+            args: Prisma.UserSettingsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>
+          }
+          update: {
+            args: Prisma.UserSettingsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserSettingsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserSettingsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserSettingsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserSettingsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingsPayload>
+          }
+          aggregate: {
+            args: Prisma.UserSettingsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserSettings>
+          }
+          groupBy: {
+            args: Prisma.UserSettingsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserSettingsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserSettingsCountArgs<ExtArgs>
+            result: $Utils.Optional<UserSettingsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1521,6 +1611,7 @@ export namespace Prisma {
     comment?: CommentOmit
     like?: LikeOmit
     follow?: FollowOmit
+    userSettings?: UserSettingsOmit
   }
 
   /* Types for Logging */
@@ -1856,6 +1947,7 @@ export namespace Prisma {
     bio: string | null
     profileImage: string | null
     coverImage: string | null
+    isProfilePrivate: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1868,6 +1960,7 @@ export namespace Prisma {
     bio: string | null
     profileImage: string | null
     coverImage: string | null
+    isProfilePrivate: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1880,6 +1973,7 @@ export namespace Prisma {
     bio: number
     profileImage: number
     coverImage: number
+    isProfilePrivate: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1902,6 +1996,7 @@ export namespace Prisma {
     bio?: true
     profileImage?: true
     coverImage?: true
+    isProfilePrivate?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1914,6 +2009,7 @@ export namespace Prisma {
     bio?: true
     profileImage?: true
     coverImage?: true
+    isProfilePrivate?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1926,6 +2022,7 @@ export namespace Prisma {
     bio?: true
     profileImage?: true
     coverImage?: true
+    isProfilePrivate?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2025,6 +2122,7 @@ export namespace Prisma {
     bio: string | null
     profileImage: string | null
     coverImage: string | null
+    isProfilePrivate: boolean
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -2056,6 +2154,7 @@ export namespace Prisma {
     bio?: boolean
     profileImage?: boolean
     coverImage?: boolean
+    isProfilePrivate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     posts?: boolean | User$postsArgs<ExtArgs>
@@ -2066,6 +2165,7 @@ export namespace Prisma {
     savedMusic?: boolean | User$savedMusicArgs<ExtArgs>
     followers?: boolean | User$followersArgs<ExtArgs>
     following?: boolean | User$followingArgs<ExtArgs>
+    settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2077,6 +2177,7 @@ export namespace Prisma {
     bio?: boolean
     profileImage?: boolean
     coverImage?: boolean
+    isProfilePrivate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2089,6 +2190,7 @@ export namespace Prisma {
     bio?: boolean
     profileImage?: boolean
     coverImage?: boolean
+    isProfilePrivate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2101,11 +2203,12 @@ export namespace Prisma {
     bio?: boolean
     profileImage?: boolean
     coverImage?: boolean
+    isProfilePrivate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "username" | "bio" | "profileImage" | "coverImage" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "username" | "bio" | "profileImage" | "coverImage" | "isProfilePrivate" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     posts?: boolean | User$postsArgs<ExtArgs>
     comments?: boolean | User$commentsArgs<ExtArgs>
@@ -2115,6 +2218,7 @@ export namespace Prisma {
     savedMusic?: boolean | User$savedMusicArgs<ExtArgs>
     followers?: boolean | User$followersArgs<ExtArgs>
     following?: boolean | User$followingArgs<ExtArgs>
+    settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2131,6 +2235,7 @@ export namespace Prisma {
       savedMusic: Prisma.$SavedMusicPayload<ExtArgs>[]
       followers: Prisma.$FollowPayload<ExtArgs>[]
       following: Prisma.$FollowPayload<ExtArgs>[]
+      settings: Prisma.$UserSettingsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2140,6 +2245,7 @@ export namespace Prisma {
       bio: string | null
       profileImage: string | null
       coverImage: string | null
+      isProfilePrivate: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2544,6 +2650,7 @@ export namespace Prisma {
     savedMusic<T extends User$savedMusicArgs<ExtArgs> = {}>(args?: Subset<T, User$savedMusicArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     followers<T extends User$followersArgs<ExtArgs> = {}>(args?: Subset<T, User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     following<T extends User$followingArgs<ExtArgs> = {}>(args?: Subset<T, User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2580,6 +2687,7 @@ export namespace Prisma {
     readonly bio: FieldRef<"User", 'String'>
     readonly profileImage: FieldRef<"User", 'String'>
     readonly coverImage: FieldRef<"User", 'String'>
+    readonly isProfilePrivate: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -3159,6 +3267,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FollowScalarFieldEnum | FollowScalarFieldEnum[]
+  }
+
+  /**
+   * User.settings
+   */
+  export type User$settingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    where?: UserSettingsWhereInput
   }
 
   /**
@@ -12319,6 +12446,1219 @@ export namespace Prisma {
 
 
   /**
+   * Model UserSettings
+   */
+
+  export type AggregateUserSettings = {
+    _count: UserSettingsCountAggregateOutputType | null
+    _avg: UserSettingsAvgAggregateOutputType | null
+    _sum: UserSettingsSumAggregateOutputType | null
+    _min: UserSettingsMinAggregateOutputType | null
+    _max: UserSettingsMaxAggregateOutputType | null
+  }
+
+  export type UserSettingsAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+  }
+
+  export type UserSettingsSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+  }
+
+  export type UserSettingsMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    darkMode: boolean | null
+    highContrast: boolean | null
+    fontSize: string | null
+    defaultAlbumPrivacy: boolean | null
+    muteAlbumContent: boolean | null
+    muteAlbumComments: boolean | null
+    enableNotifications: boolean | null
+    notifyNewMessages: boolean | null
+    notifyFriendRequests: boolean | null
+    notifyCircleInvites: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserSettingsMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    darkMode: boolean | null
+    highContrast: boolean | null
+    fontSize: string | null
+    defaultAlbumPrivacy: boolean | null
+    muteAlbumContent: boolean | null
+    muteAlbumComments: boolean | null
+    enableNotifications: boolean | null
+    notifyNewMessages: boolean | null
+    notifyFriendRequests: boolean | null
+    notifyCircleInvites: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserSettingsCountAggregateOutputType = {
+    id: number
+    userId: number
+    darkMode: number
+    highContrast: number
+    fontSize: number
+    defaultAlbumPrivacy: number
+    muteAlbumContent: number
+    muteAlbumComments: number
+    enableNotifications: number
+    notifyNewMessages: number
+    notifyFriendRequests: number
+    notifyCircleInvites: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserSettingsAvgAggregateInputType = {
+    id?: true
+    userId?: true
+  }
+
+  export type UserSettingsSumAggregateInputType = {
+    id?: true
+    userId?: true
+  }
+
+  export type UserSettingsMinAggregateInputType = {
+    id?: true
+    userId?: true
+    darkMode?: true
+    highContrast?: true
+    fontSize?: true
+    defaultAlbumPrivacy?: true
+    muteAlbumContent?: true
+    muteAlbumComments?: true
+    enableNotifications?: true
+    notifyNewMessages?: true
+    notifyFriendRequests?: true
+    notifyCircleInvites?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserSettingsMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    darkMode?: true
+    highContrast?: true
+    fontSize?: true
+    defaultAlbumPrivacy?: true
+    muteAlbumContent?: true
+    muteAlbumComments?: true
+    enableNotifications?: true
+    notifyNewMessages?: true
+    notifyFriendRequests?: true
+    notifyCircleInvites?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserSettingsCountAggregateInputType = {
+    id?: true
+    userId?: true
+    darkMode?: true
+    highContrast?: true
+    fontSize?: true
+    defaultAlbumPrivacy?: true
+    muteAlbumContent?: true
+    muteAlbumComments?: true
+    enableNotifications?: true
+    notifyNewMessages?: true
+    notifyFriendRequests?: true
+    notifyCircleInvites?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserSettingsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSettings to aggregate.
+     */
+    where?: UserSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingsOrderByWithRelationInput | UserSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserSettings
+    **/
+    _count?: true | UserSettingsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserSettingsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSettingsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserSettingsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserSettingsMaxAggregateInputType
+  }
+
+  export type GetUserSettingsAggregateType<T extends UserSettingsAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserSettings]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserSettings[P]>
+      : GetScalarType<T[P], AggregateUserSettings[P]>
+  }
+
+
+
+
+  export type UserSettingsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSettingsWhereInput
+    orderBy?: UserSettingsOrderByWithAggregationInput | UserSettingsOrderByWithAggregationInput[]
+    by: UserSettingsScalarFieldEnum[] | UserSettingsScalarFieldEnum
+    having?: UserSettingsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserSettingsCountAggregateInputType | true
+    _avg?: UserSettingsAvgAggregateInputType
+    _sum?: UserSettingsSumAggregateInputType
+    _min?: UserSettingsMinAggregateInputType
+    _max?: UserSettingsMaxAggregateInputType
+  }
+
+  export type UserSettingsGroupByOutputType = {
+    id: number
+    userId: number
+    darkMode: boolean
+    highContrast: boolean
+    fontSize: string
+    defaultAlbumPrivacy: boolean
+    muteAlbumContent: boolean
+    muteAlbumComments: boolean
+    enableNotifications: boolean
+    notifyNewMessages: boolean
+    notifyFriendRequests: boolean
+    notifyCircleInvites: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: UserSettingsCountAggregateOutputType | null
+    _avg: UserSettingsAvgAggregateOutputType | null
+    _sum: UserSettingsSumAggregateOutputType | null
+    _min: UserSettingsMinAggregateOutputType | null
+    _max: UserSettingsMaxAggregateOutputType | null
+  }
+
+  type GetUserSettingsGroupByPayload<T extends UserSettingsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserSettingsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserSettingsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserSettingsGroupByOutputType[P]>
+            : GetScalarType<T[P], UserSettingsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserSettingsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: boolean
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSettings"]>
+
+  export type UserSettingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: boolean
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSettings"]>
+
+  export type UserSettingsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: boolean
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSettings"]>
+
+  export type UserSettingsSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: boolean
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "darkMode" | "highContrast" | "fontSize" | "defaultAlbumPrivacy" | "muteAlbumContent" | "muteAlbumComments" | "enableNotifications" | "notifyNewMessages" | "notifyFriendRequests" | "notifyCircleInvites" | "createdAt" | "updatedAt", ExtArgs["result"]["userSettings"]>
+  export type UserSettingsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserSettingsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserSettingsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserSettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserSettings"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      darkMode: boolean
+      highContrast: boolean
+      fontSize: string
+      defaultAlbumPrivacy: boolean
+      muteAlbumContent: boolean
+      muteAlbumComments: boolean
+      enableNotifications: boolean
+      notifyNewMessages: boolean
+      notifyFriendRequests: boolean
+      notifyCircleInvites: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userSettings"]>
+    composites: {}
+  }
+
+  type UserSettingsGetPayload<S extends boolean | null | undefined | UserSettingsDefaultArgs> = $Result.GetResult<Prisma.$UserSettingsPayload, S>
+
+  type UserSettingsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserSettingsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserSettingsCountAggregateInputType | true
+    }
+
+  export interface UserSettingsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserSettings'], meta: { name: 'UserSettings' } }
+    /**
+     * Find zero or one UserSettings that matches the filter.
+     * @param {UserSettingsFindUniqueArgs} args - Arguments to find a UserSettings
+     * @example
+     * // Get one UserSettings
+     * const userSettings = await prisma.userSettings.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserSettingsFindUniqueArgs>(args: SelectSubset<T, UserSettingsFindUniqueArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserSettings that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserSettingsFindUniqueOrThrowArgs} args - Arguments to find a UserSettings
+     * @example
+     * // Get one UserSettings
+     * const userSettings = await prisma.userSettings.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserSettingsFindUniqueOrThrowArgs>(args: SelectSubset<T, UserSettingsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingsFindFirstArgs} args - Arguments to find a UserSettings
+     * @example
+     * // Get one UserSettings
+     * const userSettings = await prisma.userSettings.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserSettingsFindFirstArgs>(args?: SelectSubset<T, UserSettingsFindFirstArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserSettings that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingsFindFirstOrThrowArgs} args - Arguments to find a UserSettings
+     * @example
+     * // Get one UserSettings
+     * const userSettings = await prisma.userSettings.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserSettingsFindFirstOrThrowArgs>(args?: SelectSubset<T, UserSettingsFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserSettings
+     * const userSettings = await prisma.userSettings.findMany()
+     * 
+     * // Get first 10 UserSettings
+     * const userSettings = await prisma.userSettings.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userSettingsWithIdOnly = await prisma.userSettings.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserSettingsFindManyArgs>(args?: SelectSubset<T, UserSettingsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserSettings.
+     * @param {UserSettingsCreateArgs} args - Arguments to create a UserSettings.
+     * @example
+     * // Create one UserSettings
+     * const UserSettings = await prisma.userSettings.create({
+     *   data: {
+     *     // ... data to create a UserSettings
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserSettingsCreateArgs>(args: SelectSubset<T, UserSettingsCreateArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserSettings.
+     * @param {UserSettingsCreateManyArgs} args - Arguments to create many UserSettings.
+     * @example
+     * // Create many UserSettings
+     * const userSettings = await prisma.userSettings.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserSettingsCreateManyArgs>(args?: SelectSubset<T, UserSettingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserSettings and returns the data saved in the database.
+     * @param {UserSettingsCreateManyAndReturnArgs} args - Arguments to create many UserSettings.
+     * @example
+     * // Create many UserSettings
+     * const userSettings = await prisma.userSettings.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserSettings and only return the `id`
+     * const userSettingsWithIdOnly = await prisma.userSettings.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserSettingsCreateManyAndReturnArgs>(args?: SelectSubset<T, UserSettingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserSettings.
+     * @param {UserSettingsDeleteArgs} args - Arguments to delete one UserSettings.
+     * @example
+     * // Delete one UserSettings
+     * const UserSettings = await prisma.userSettings.delete({
+     *   where: {
+     *     // ... filter to delete one UserSettings
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserSettingsDeleteArgs>(args: SelectSubset<T, UserSettingsDeleteArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserSettings.
+     * @param {UserSettingsUpdateArgs} args - Arguments to update one UserSettings.
+     * @example
+     * // Update one UserSettings
+     * const userSettings = await prisma.userSettings.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserSettingsUpdateArgs>(args: SelectSubset<T, UserSettingsUpdateArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserSettings.
+     * @param {UserSettingsDeleteManyArgs} args - Arguments to filter UserSettings to delete.
+     * @example
+     * // Delete a few UserSettings
+     * const { count } = await prisma.userSettings.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserSettingsDeleteManyArgs>(args?: SelectSubset<T, UserSettingsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserSettings
+     * const userSettings = await prisma.userSettings.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserSettingsUpdateManyArgs>(args: SelectSubset<T, UserSettingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserSettings and returns the data updated in the database.
+     * @param {UserSettingsUpdateManyAndReturnArgs} args - Arguments to update many UserSettings.
+     * @example
+     * // Update many UserSettings
+     * const userSettings = await prisma.userSettings.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserSettings and only return the `id`
+     * const userSettingsWithIdOnly = await prisma.userSettings.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserSettingsUpdateManyAndReturnArgs>(args: SelectSubset<T, UserSettingsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserSettings.
+     * @param {UserSettingsUpsertArgs} args - Arguments to update or create a UserSettings.
+     * @example
+     * // Update or create a UserSettings
+     * const userSettings = await prisma.userSettings.upsert({
+     *   create: {
+     *     // ... data to create a UserSettings
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserSettings we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserSettingsUpsertArgs>(args: SelectSubset<T, UserSettingsUpsertArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingsCountArgs} args - Arguments to filter UserSettings to count.
+     * @example
+     * // Count the number of UserSettings
+     * const count = await prisma.userSettings.count({
+     *   where: {
+     *     // ... the filter for the UserSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserSettingsCountArgs>(
+      args?: Subset<T, UserSettingsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserSettingsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserSettingsAggregateArgs>(args: Subset<T, UserSettingsAggregateArgs>): Prisma.PrismaPromise<GetUserSettingsAggregateType<T>>
+
+    /**
+     * Group by UserSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserSettingsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserSettingsGroupByArgs['orderBy'] }
+        : { orderBy?: UserSettingsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserSettingsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserSettingsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserSettings model
+   */
+  readonly fields: UserSettingsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserSettings.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserSettingsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserSettings model
+   */
+  interface UserSettingsFieldRefs {
+    readonly id: FieldRef<"UserSettings", 'Int'>
+    readonly userId: FieldRef<"UserSettings", 'Int'>
+    readonly darkMode: FieldRef<"UserSettings", 'Boolean'>
+    readonly highContrast: FieldRef<"UserSettings", 'Boolean'>
+    readonly fontSize: FieldRef<"UserSettings", 'String'>
+    readonly defaultAlbumPrivacy: FieldRef<"UserSettings", 'Boolean'>
+    readonly muteAlbumContent: FieldRef<"UserSettings", 'Boolean'>
+    readonly muteAlbumComments: FieldRef<"UserSettings", 'Boolean'>
+    readonly enableNotifications: FieldRef<"UserSettings", 'Boolean'>
+    readonly notifyNewMessages: FieldRef<"UserSettings", 'Boolean'>
+    readonly notifyFriendRequests: FieldRef<"UserSettings", 'Boolean'>
+    readonly notifyCircleInvites: FieldRef<"UserSettings", 'Boolean'>
+    readonly createdAt: FieldRef<"UserSettings", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserSettings", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserSettings findUnique
+   */
+  export type UserSettingsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSettings to fetch.
+     */
+    where: UserSettingsWhereUniqueInput
+  }
+
+  /**
+   * UserSettings findUniqueOrThrow
+   */
+  export type UserSettingsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSettings to fetch.
+     */
+    where: UserSettingsWhereUniqueInput
+  }
+
+  /**
+   * UserSettings findFirst
+   */
+  export type UserSettingsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSettings to fetch.
+     */
+    where?: UserSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingsOrderByWithRelationInput | UserSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSettings.
+     */
+    cursor?: UserSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSettings.
+     */
+    distinct?: UserSettingsScalarFieldEnum | UserSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * UserSettings findFirstOrThrow
+   */
+  export type UserSettingsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSettings to fetch.
+     */
+    where?: UserSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingsOrderByWithRelationInput | UserSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSettings.
+     */
+    cursor?: UserSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSettings.
+     */
+    distinct?: UserSettingsScalarFieldEnum | UserSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * UserSettings findMany
+   */
+  export type UserSettingsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSettings to fetch.
+     */
+    where?: UserSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingsOrderByWithRelationInput | UserSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserSettings.
+     */
+    cursor?: UserSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    distinct?: UserSettingsScalarFieldEnum | UserSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * UserSettings create
+   */
+  export type UserSettingsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserSettings.
+     */
+    data: XOR<UserSettingsCreateInput, UserSettingsUncheckedCreateInput>
+  }
+
+  /**
+   * UserSettings createMany
+   */
+  export type UserSettingsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserSettings.
+     */
+    data: UserSettingsCreateManyInput | UserSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserSettings createManyAndReturn
+   */
+  export type UserSettingsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserSettings.
+     */
+    data: UserSettingsCreateManyInput | UserSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserSettings update
+   */
+  export type UserSettingsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserSettings.
+     */
+    data: XOR<UserSettingsUpdateInput, UserSettingsUncheckedUpdateInput>
+    /**
+     * Choose, which UserSettings to update.
+     */
+    where: UserSettingsWhereUniqueInput
+  }
+
+  /**
+   * UserSettings updateMany
+   */
+  export type UserSettingsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserSettings.
+     */
+    data: XOR<UserSettingsUpdateManyMutationInput, UserSettingsUncheckedUpdateManyInput>
+    /**
+     * Filter which UserSettings to update
+     */
+    where?: UserSettingsWhereInput
+    /**
+     * Limit how many UserSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserSettings updateManyAndReturn
+   */
+  export type UserSettingsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * The data used to update UserSettings.
+     */
+    data: XOR<UserSettingsUpdateManyMutationInput, UserSettingsUncheckedUpdateManyInput>
+    /**
+     * Filter which UserSettings to update
+     */
+    where?: UserSettingsWhereInput
+    /**
+     * Limit how many UserSettings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserSettings upsert
+   */
+  export type UserSettingsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserSettings to update in case it exists.
+     */
+    where: UserSettingsWhereUniqueInput
+    /**
+     * In case the UserSettings found by the `where` argument doesn't exist, create a new UserSettings with this data.
+     */
+    create: XOR<UserSettingsCreateInput, UserSettingsUncheckedCreateInput>
+    /**
+     * In case the UserSettings was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserSettingsUpdateInput, UserSettingsUncheckedUpdateInput>
+  }
+
+  /**
+   * UserSettings delete
+   */
+  export type UserSettingsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+    /**
+     * Filter which UserSettings to delete.
+     */
+    where: UserSettingsWhereUniqueInput
+  }
+
+  /**
+   * UserSettings deleteMany
+   */
+  export type UserSettingsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSettings to delete
+     */
+    where?: UserSettingsWhereInput
+    /**
+     * Limit how many UserSettings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserSettings without action
+   */
+  export type UserSettingsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSettings
+     */
+    select?: UserSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSettings
+     */
+    omit?: UserSettingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12340,6 +13680,7 @@ export namespace Prisma {
     bio: 'bio',
     profileImage: 'profileImage',
     coverImage: 'coverImage',
+    isProfilePrivate: 'isProfilePrivate',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12445,6 +13786,26 @@ export namespace Prisma {
   export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
 
 
+  export const UserSettingsScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    darkMode: 'darkMode',
+    highContrast: 'highContrast',
+    fontSize: 'fontSize',
+    defaultAlbumPrivacy: 'defaultAlbumPrivacy',
+    muteAlbumContent: 'muteAlbumContent',
+    muteAlbumComments: 'muteAlbumComments',
+    enableNotifications: 'enableNotifications',
+    notifyNewMessages: 'notifyNewMessages',
+    notifyFriendRequests: 'notifyFriendRequests',
+    notifyCircleInvites: 'notifyCircleInvites',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserSettingsScalarFieldEnum = (typeof UserSettingsScalarFieldEnum)[keyof typeof UserSettingsScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -12503,6 +13864,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -12513,13 +13881,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -12565,6 +13926,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     profileImage?: StringNullableFilter<"User"> | string | null
     coverImage?: StringNullableFilter<"User"> | string | null
+    isProfilePrivate?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     posts?: PostListRelationFilter
@@ -12575,6 +13937,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicListRelationFilter
     followers?: FollowListRelationFilter
     following?: FollowListRelationFilter
+    settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12585,6 +13948,7 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     profileImage?: SortOrderInput | SortOrder
     coverImage?: SortOrderInput | SortOrder
+    isProfilePrivate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     posts?: PostOrderByRelationAggregateInput
@@ -12595,6 +13959,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicOrderByRelationAggregateInput
     followers?: FollowOrderByRelationAggregateInput
     following?: FollowOrderByRelationAggregateInput
+    settings?: UserSettingsOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -12608,6 +13973,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     profileImage?: StringNullableFilter<"User"> | string | null
     coverImage?: StringNullableFilter<"User"> | string | null
+    isProfilePrivate?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     posts?: PostListRelationFilter
@@ -12618,6 +13984,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicListRelationFilter
     followers?: FollowListRelationFilter
     following?: FollowListRelationFilter
+    settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
   }, "id" | "email" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -12628,6 +13995,7 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     profileImage?: SortOrderInput | SortOrder
     coverImage?: SortOrderInput | SortOrder
+    isProfilePrivate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -12648,6 +14016,7 @@ export namespace Prisma {
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     profileImage?: StringNullableWithAggregatesFilter<"User"> | string | null
     coverImage?: StringNullableWithAggregatesFilter<"User"> | string | null
+    isProfilePrivate?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -13198,6 +14567,108 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Follow"> | Date | string
   }
 
+  export type UserSettingsWhereInput = {
+    AND?: UserSettingsWhereInput | UserSettingsWhereInput[]
+    OR?: UserSettingsWhereInput[]
+    NOT?: UserSettingsWhereInput | UserSettingsWhereInput[]
+    id?: IntFilter<"UserSettings"> | number
+    userId?: IntFilter<"UserSettings"> | number
+    darkMode?: BoolFilter<"UserSettings"> | boolean
+    highContrast?: BoolFilter<"UserSettings"> | boolean
+    fontSize?: StringFilter<"UserSettings"> | string
+    defaultAlbumPrivacy?: BoolFilter<"UserSettings"> | boolean
+    muteAlbumContent?: BoolFilter<"UserSettings"> | boolean
+    muteAlbumComments?: BoolFilter<"UserSettings"> | boolean
+    enableNotifications?: BoolFilter<"UserSettings"> | boolean
+    notifyNewMessages?: BoolFilter<"UserSettings"> | boolean
+    notifyFriendRequests?: BoolFilter<"UserSettings"> | boolean
+    notifyCircleInvites?: BoolFilter<"UserSettings"> | boolean
+    createdAt?: DateTimeFilter<"UserSettings"> | Date | string
+    updatedAt?: DateTimeFilter<"UserSettings"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserSettingsOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    darkMode?: SortOrder
+    highContrast?: SortOrder
+    fontSize?: SortOrder
+    defaultAlbumPrivacy?: SortOrder
+    muteAlbumContent?: SortOrder
+    muteAlbumComments?: SortOrder
+    enableNotifications?: SortOrder
+    notifyNewMessages?: SortOrder
+    notifyFriendRequests?: SortOrder
+    notifyCircleInvites?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserSettingsWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId?: number
+    AND?: UserSettingsWhereInput | UserSettingsWhereInput[]
+    OR?: UserSettingsWhereInput[]
+    NOT?: UserSettingsWhereInput | UserSettingsWhereInput[]
+    darkMode?: BoolFilter<"UserSettings"> | boolean
+    highContrast?: BoolFilter<"UserSettings"> | boolean
+    fontSize?: StringFilter<"UserSettings"> | string
+    defaultAlbumPrivacy?: BoolFilter<"UserSettings"> | boolean
+    muteAlbumContent?: BoolFilter<"UserSettings"> | boolean
+    muteAlbumComments?: BoolFilter<"UserSettings"> | boolean
+    enableNotifications?: BoolFilter<"UserSettings"> | boolean
+    notifyNewMessages?: BoolFilter<"UserSettings"> | boolean
+    notifyFriendRequests?: BoolFilter<"UserSettings"> | boolean
+    notifyCircleInvites?: BoolFilter<"UserSettings"> | boolean
+    createdAt?: DateTimeFilter<"UserSettings"> | Date | string
+    updatedAt?: DateTimeFilter<"UserSettings"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type UserSettingsOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    darkMode?: SortOrder
+    highContrast?: SortOrder
+    fontSize?: SortOrder
+    defaultAlbumPrivacy?: SortOrder
+    muteAlbumContent?: SortOrder
+    muteAlbumComments?: SortOrder
+    enableNotifications?: SortOrder
+    notifyNewMessages?: SortOrder
+    notifyFriendRequests?: SortOrder
+    notifyCircleInvites?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserSettingsCountOrderByAggregateInput
+    _avg?: UserSettingsAvgOrderByAggregateInput
+    _max?: UserSettingsMaxOrderByAggregateInput
+    _min?: UserSettingsMinOrderByAggregateInput
+    _sum?: UserSettingsSumOrderByAggregateInput
+  }
+
+  export type UserSettingsScalarWhereWithAggregatesInput = {
+    AND?: UserSettingsScalarWhereWithAggregatesInput | UserSettingsScalarWhereWithAggregatesInput[]
+    OR?: UserSettingsScalarWhereWithAggregatesInput[]
+    NOT?: UserSettingsScalarWhereWithAggregatesInput | UserSettingsScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"UserSettings"> | number
+    userId?: IntWithAggregatesFilter<"UserSettings"> | number
+    darkMode?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    highContrast?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    fontSize?: StringWithAggregatesFilter<"UserSettings"> | string
+    defaultAlbumPrivacy?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    muteAlbumContent?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    muteAlbumComments?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    enableNotifications?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    notifyNewMessages?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    notifyFriendRequests?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    notifyCircleInvites?: BoolWithAggregatesFilter<"UserSettings"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"UserSettings"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserSettings"> | Date | string
+  }
+
   export type UserCreateInput = {
     email: string
     name?: string | null
@@ -13205,6 +14676,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -13215,6 +14687,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13225,6 +14698,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -13235,6 +14709,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -13244,6 +14719,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -13254,6 +14730,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13264,6 +14741,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -13274,6 +14752,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -13284,6 +14763,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13295,6 +14775,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13307,6 +14788,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13815,6 +15297,121 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserSettingsCreateInput = {
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: string
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutSettingsInput
+  }
+
+  export type UserSettingsUncheckedCreateInput = {
+    id?: number
+    userId: number
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: string
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingsUpdateInput = {
+    darkMode?: BoolFieldUpdateOperationsInput | boolean
+    highContrast?: BoolFieldUpdateOperationsInput | boolean
+    fontSize?: StringFieldUpdateOperationsInput | string
+    defaultAlbumPrivacy?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumContent?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumComments?: BoolFieldUpdateOperationsInput | boolean
+    enableNotifications?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewMessages?: BoolFieldUpdateOperationsInput | boolean
+    notifyFriendRequests?: BoolFieldUpdateOperationsInput | boolean
+    notifyCircleInvites?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSettingsNestedInput
+  }
+
+  export type UserSettingsUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    darkMode?: BoolFieldUpdateOperationsInput | boolean
+    highContrast?: BoolFieldUpdateOperationsInput | boolean
+    fontSize?: StringFieldUpdateOperationsInput | string
+    defaultAlbumPrivacy?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumContent?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumComments?: BoolFieldUpdateOperationsInput | boolean
+    enableNotifications?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewMessages?: BoolFieldUpdateOperationsInput | boolean
+    notifyFriendRequests?: BoolFieldUpdateOperationsInput | boolean
+    notifyCircleInvites?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSettingsCreateManyInput = {
+    id?: number
+    userId: number
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: string
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingsUpdateManyMutationInput = {
+    darkMode?: BoolFieldUpdateOperationsInput | boolean
+    highContrast?: BoolFieldUpdateOperationsInput | boolean
+    fontSize?: StringFieldUpdateOperationsInput | string
+    defaultAlbumPrivacy?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumContent?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumComments?: BoolFieldUpdateOperationsInput | boolean
+    enableNotifications?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewMessages?: BoolFieldUpdateOperationsInput | boolean
+    notifyFriendRequests?: BoolFieldUpdateOperationsInput | boolean
+    notifyCircleInvites?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSettingsUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    darkMode?: BoolFieldUpdateOperationsInput | boolean
+    highContrast?: BoolFieldUpdateOperationsInput | boolean
+    fontSize?: StringFieldUpdateOperationsInput | string
+    defaultAlbumPrivacy?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumContent?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumComments?: BoolFieldUpdateOperationsInput | boolean
+    enableNotifications?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewMessages?: BoolFieldUpdateOperationsInput | boolean
+    notifyFriendRequests?: BoolFieldUpdateOperationsInput | boolean
+    notifyCircleInvites?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -13854,6 +15451,11 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -13909,6 +15511,11 @@ export namespace Prisma {
     none?: FollowWhereInput
   }
 
+  export type UserSettingsNullableScalarRelationFilter = {
+    is?: UserSettingsWhereInput | null
+    isNot?: UserSettingsWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -13950,6 +15557,7 @@ export namespace Prisma {
     bio?: SortOrder
     profileImage?: SortOrder
     coverImage?: SortOrder
+    isProfilePrivate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13966,6 +15574,7 @@ export namespace Prisma {
     bio?: SortOrder
     profileImage?: SortOrder
     coverImage?: SortOrder
+    isProfilePrivate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13978,6 +15587,7 @@ export namespace Prisma {
     bio?: SortOrder
     profileImage?: SortOrder
     coverImage?: SortOrder
+    isProfilePrivate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14038,6 +15648,14 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -14050,11 +15668,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type UserScalarRelationFilter = {
@@ -14106,14 +15719,6 @@ export namespace Prisma {
   export type CircleSumOrderByAggregateInput = {
     id?: SortOrder
     creatorId?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumRoleFilter<$PrismaModel = never> = {
@@ -14465,6 +16070,67 @@ export namespace Prisma {
     followingId?: SortOrder
   }
 
+  export type UserSettingsCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    darkMode?: SortOrder
+    highContrast?: SortOrder
+    fontSize?: SortOrder
+    defaultAlbumPrivacy?: SortOrder
+    muteAlbumContent?: SortOrder
+    muteAlbumComments?: SortOrder
+    enableNotifications?: SortOrder
+    notifyNewMessages?: SortOrder
+    notifyFriendRequests?: SortOrder
+    notifyCircleInvites?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSettingsAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type UserSettingsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    darkMode?: SortOrder
+    highContrast?: SortOrder
+    fontSize?: SortOrder
+    defaultAlbumPrivacy?: SortOrder
+    muteAlbumContent?: SortOrder
+    muteAlbumComments?: SortOrder
+    enableNotifications?: SortOrder
+    notifyNewMessages?: SortOrder
+    notifyFriendRequests?: SortOrder
+    notifyCircleInvites?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSettingsMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    darkMode?: SortOrder
+    highContrast?: SortOrder
+    fontSize?: SortOrder
+    defaultAlbumPrivacy?: SortOrder
+    muteAlbumContent?: SortOrder
+    muteAlbumComments?: SortOrder
+    enableNotifications?: SortOrder
+    notifyNewMessages?: SortOrder
+    notifyFriendRequests?: SortOrder
+    notifyCircleInvites?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSettingsSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+  }
+
   export type PostCreateNestedManyWithoutUserInput = {
     create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
@@ -14519,6 +16185,12 @@ export namespace Prisma {
     connectOrCreate?: FollowCreateOrConnectWithoutFollowingInput | FollowCreateOrConnectWithoutFollowingInput[]
     createMany?: FollowCreateManyFollowingInputEnvelope
     connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+  }
+
+  export type UserSettingsCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingsCreateOrConnectWithoutUserInput
+    connect?: UserSettingsWhereUniqueInput
   }
 
   export type PostUncheckedCreateNestedManyWithoutUserInput = {
@@ -14577,12 +16249,22 @@ export namespace Prisma {
     connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
   }
 
+  export type UserSettingsUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingsCreateOrConnectWithoutUserInput
+    connect?: UserSettingsWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -14699,6 +16381,16 @@ export namespace Prisma {
     update?: FollowUpdateWithWhereUniqueWithoutFollowingInput | FollowUpdateWithWhereUniqueWithoutFollowingInput[]
     updateMany?: FollowUpdateManyWithWhereWithoutFollowingInput | FollowUpdateManyWithWhereWithoutFollowingInput[]
     deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
+  }
+
+  export type UserSettingsUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingsCreateOrConnectWithoutUserInput
+    upsert?: UserSettingsUpsertWithoutUserInput
+    disconnect?: UserSettingsWhereInput | boolean
+    delete?: UserSettingsWhereInput | boolean
+    connect?: UserSettingsWhereUniqueInput
+    update?: XOR<XOR<UserSettingsUpdateToOneWithWhereWithoutUserInput, UserSettingsUpdateWithoutUserInput>, UserSettingsUncheckedUpdateWithoutUserInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -14821,6 +16513,16 @@ export namespace Prisma {
     deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
   }
 
+  export type UserSettingsUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingsCreateOrConnectWithoutUserInput
+    upsert?: UserSettingsUpsertWithoutUserInput
+    disconnect?: UserSettingsWhereInput | boolean
+    delete?: UserSettingsWhereInput | boolean
+    connect?: UserSettingsWhereUniqueInput
+    update?: XOR<XOR<UserSettingsUpdateToOneWithWhereWithoutUserInput, UserSettingsUpdateWithoutUserInput>, UserSettingsUncheckedUpdateWithoutUserInput>
+  }
+
   export type UserCreateNestedOneWithoutCreatedCirclesInput = {
     create?: XOR<UserCreateWithoutCreatedCirclesInput, UserUncheckedCreateWithoutCreatedCirclesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedCirclesInput
@@ -14853,10 +16555,6 @@ export namespace Prisma {
     connectOrCreate?: PostCreateOrConnectWithoutCircleInput | PostCreateOrConnectWithoutCircleInput[]
     createMany?: PostCreateManyCircleInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutCreatedCirclesNestedInput = {
@@ -15285,6 +16983,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFollowingInput, UserUpdateWithoutFollowingInput>, UserUncheckedUpdateWithoutFollowingInput>
   }
 
+  export type UserCreateNestedOneWithoutSettingsInput = {
+    create?: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSettingsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutSettingsNestedInput = {
+    create?: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSettingsInput
+    upsert?: UserUpsertWithoutSettingsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSettingsInput, UserUpdateWithoutSettingsInput>, UserUncheckedUpdateWithoutSettingsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -15322,6 +17034,11 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -15407,6 +17124,14 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -15419,19 +17144,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumRoleFilter<$PrismaModel = never> = {
@@ -15682,6 +17394,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserSettingsCreateWithoutUserInput = {
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: string
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingsUncheckedCreateWithoutUserInput = {
+    id?: number
+    darkMode?: boolean
+    highContrast?: boolean
+    fontSize?: string
+    defaultAlbumPrivacy?: boolean
+    muteAlbumContent?: boolean
+    muteAlbumComments?: boolean
+    enableNotifications?: boolean
+    notifyNewMessages?: boolean
+    notifyFriendRequests?: boolean
+    notifyCircleInvites?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingsCreateOrConnectWithoutUserInput = {
+    where: UserSettingsWhereUniqueInput
+    create: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
+  }
+
   export type PostUpsertWithWhereUniqueWithoutUserInput = {
     where: PostWhereUniqueInput
     update: XOR<PostUpdateWithoutUserInput, PostUncheckedUpdateWithoutUserInput>
@@ -15894,6 +17642,48 @@ export namespace Prisma {
     data: XOR<FollowUpdateManyMutationInput, FollowUncheckedUpdateManyWithoutFollowingInput>
   }
 
+  export type UserSettingsUpsertWithoutUserInput = {
+    update: XOR<UserSettingsUpdateWithoutUserInput, UserSettingsUncheckedUpdateWithoutUserInput>
+    create: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
+    where?: UserSettingsWhereInput
+  }
+
+  export type UserSettingsUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserSettingsWhereInput
+    data: XOR<UserSettingsUpdateWithoutUserInput, UserSettingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserSettingsUpdateWithoutUserInput = {
+    darkMode?: BoolFieldUpdateOperationsInput | boolean
+    highContrast?: BoolFieldUpdateOperationsInput | boolean
+    fontSize?: StringFieldUpdateOperationsInput | string
+    defaultAlbumPrivacy?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumContent?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumComments?: BoolFieldUpdateOperationsInput | boolean
+    enableNotifications?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewMessages?: BoolFieldUpdateOperationsInput | boolean
+    notifyFriendRequests?: BoolFieldUpdateOperationsInput | boolean
+    notifyCircleInvites?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSettingsUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    darkMode?: BoolFieldUpdateOperationsInput | boolean
+    highContrast?: BoolFieldUpdateOperationsInput | boolean
+    fontSize?: StringFieldUpdateOperationsInput | string
+    defaultAlbumPrivacy?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumContent?: BoolFieldUpdateOperationsInput | boolean
+    muteAlbumComments?: BoolFieldUpdateOperationsInput | boolean
+    enableNotifications?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewMessages?: BoolFieldUpdateOperationsInput | boolean
+    notifyFriendRequests?: BoolFieldUpdateOperationsInput | boolean
+    notifyCircleInvites?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateWithoutCreatedCirclesInput = {
     email: string
     name?: string | null
@@ -15901,6 +17691,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -15910,6 +17701,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCirclesInput = {
@@ -15920,6 +17712,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -15929,6 +17722,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCirclesInput = {
@@ -16014,6 +17808,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -16023,6 +17818,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCirclesInput = {
@@ -16033,6 +17829,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -16042,6 +17839,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type MembershipUpsertWithWhereUniqueWithoutCircleInput = {
@@ -16083,6 +17881,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -16092,6 +17891,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -16102,6 +17902,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -16111,6 +17912,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -16166,6 +17968,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -16175,6 +17978,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -16185,6 +17989,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -16194,6 +17999,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CircleUpsertWithoutMembersInput = {
@@ -16239,6 +18045,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -16248,6 +18055,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -16258,6 +18066,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -16267,6 +18076,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -16396,6 +18206,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -16405,6 +18216,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -16415,6 +18227,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -16424,6 +18237,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CircleUpsertWithoutPostsInput = {
@@ -16623,6 +18437,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -16632,6 +18447,7 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSavedMusicInput = {
@@ -16642,6 +18458,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -16651,6 +18468,7 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSavedMusicInput = {
@@ -16704,6 +18522,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -16713,6 +18532,7 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSavedMusicInput = {
@@ -16723,6 +18543,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -16732,6 +18553,7 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type MusicUpsertWithoutSavedByInput = {
@@ -16775,6 +18597,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -16784,6 +18607,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
@@ -16794,6 +18618,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -16803,6 +18628,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommentsInput = {
@@ -16858,6 +18684,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -16867,6 +18694,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -16877,6 +18705,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -16886,6 +18715,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PostUpsertWithoutCommentsInput = {
@@ -16931,6 +18761,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -16940,6 +18771,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLikesInput = {
@@ -16950,6 +18782,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -16959,6 +18792,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLikesInput = {
@@ -17014,6 +18848,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -17023,6 +18858,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLikesInput = {
@@ -17033,6 +18869,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -17042,6 +18879,7 @@ export namespace Prisma {
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PostUpsertWithoutLikesInput = {
@@ -17087,6 +18925,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -17096,6 +18935,7 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     following?: FollowCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowersInput = {
@@ -17106,6 +18946,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -17115,6 +18956,7 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowersInput = {
@@ -17129,6 +18971,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutUserInput
@@ -17138,6 +18981,7 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowingInput = {
@@ -17148,6 +18992,7 @@ export namespace Prisma {
     bio?: string | null
     profileImage?: string | null
     coverImage?: string | null
+    isProfilePrivate?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -17157,6 +19002,7 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowingInput = {
@@ -17182,6 +19028,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -17191,6 +19038,7 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -17201,6 +19049,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -17210,6 +19059,7 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFollowingInput = {
@@ -17230,6 +19080,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -17239,6 +19090,7 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -17249,6 +19101,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -17258,6 +19111,105 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutSettingsInput = {
+    email: string
+    name?: string | null
+    username: string
+    bio?: string | null
+    profileImage?: string | null
+    coverImage?: string | null
+    isProfilePrivate?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutUserInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    createdCircles?: CircleCreateNestedManyWithoutCreatorInput
+    memberships?: MembershipCreateNestedManyWithoutUserInput
+    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
+    followers?: FollowCreateNestedManyWithoutFollowerInput
+    following?: FollowCreateNestedManyWithoutFollowingInput
+  }
+
+  export type UserUncheckedCreateWithoutSettingsInput = {
+    id?: number
+    email: string
+    name?: string | null
+    username: string
+    bio?: string | null
+    profileImage?: string | null
+    coverImage?: string | null
+    isProfilePrivate?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
+    memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
+    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+  }
+
+  export type UserCreateOrConnectWithoutSettingsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+  }
+
+  export type UserUpsertWithoutSettingsInput = {
+    update: XOR<UserUpdateWithoutSettingsInput, UserUncheckedUpdateWithoutSettingsInput>
+    create: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSettingsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSettingsInput, UserUncheckedUpdateWithoutSettingsInput>
+  }
+
+  export type UserUpdateWithoutSettingsInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutUserNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
+    memberships?: MembershipUpdateManyWithoutUserNestedInput
+    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
+    followers?: FollowUpdateManyWithoutFollowerNestedInput
+    following?: FollowUpdateManyWithoutFollowingNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSettingsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
+    memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
+    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
   }
 
   export type PostCreateManyUserInput = {

@@ -11,6 +11,8 @@ import {PasswordInput} from "@/components/auth_forms/password_input";
 import {RememberMe} from "@/components/auth_forms/remember_user_checkbox";
 import {ForgotPassword} from "@/components/auth_forms/forgot_password";
 import {LoginButton} from "@/components/auth_forms/login_buttons";
+import ProfileContainer from "@/components/Top Nav/profileContainer";
+import MusicLocationTag from "@/components/Top Nav/musicLocationTag";
 
 export default function Home() {
     return (
@@ -109,6 +111,8 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
+						
+
                     </div>
                 </section>
 
@@ -133,8 +137,27 @@ export default function Home() {
 								<SettingsItem label="Logout" icon={<FaSignOutAlt />} href="#" />
 							  </SettingsCategory>
                     </div>
-                </section>
+                </section>		<h2>Profile Container</h2>
+				<div className="mb-10 p-6 w-fit border-gray-200 rounded-lg border-1 flex flex-col items-center gap-4">
+				<ProfileContainer 
+						profileImage="/images/profile1.jpg" 
+						userName= "john"
+						circlesCount={5}
+						friendsCount={120}
+						/>
             </div>
+			</div>
+            
+            <section id="music-location-tag" className="mt-8 mb-10 p-6 border border-gray-200 rounded-lg">
+                <h2 className="text-2xl font-bold mb-4">Music Location Tag</h2>
+                <div className="flex justify-center">
+                    <MusicLocationTag 
+                        song="Blinding Lights"
+                        artist="The Weeknd"
+                        location="Vancouver, BC"
+                    />
+                </div>
+            </section>
         </div>
     );
 }

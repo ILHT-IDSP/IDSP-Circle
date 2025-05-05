@@ -28,7 +28,8 @@ const CircleHolder: React.FC<CircleHolderProps> = ({
 					height={circleSize}
 					className="w-full h-full object-cover"
 				/>
-			</div>			<h3 className="mt-2 text-center font-medium">{name}</h3>
+			</div>			
+			<h3 className="mt-2 text-center font-medium">{name}</h3>
 		</div>
 	);
 };
