@@ -1,24 +1,19 @@
-import type { Metadata } from "next";
-import "./globals.css";
-
-
+import type { Metadata } from 'next';
+import './globals.css';
+import SessionWrapper from './session-wrapper';
 
 export const metadata: Metadata = {
-  title: "Circles",
-  description: "vins",
+  title: 'Circles',
+  description: 'vins',
 };
 
 export default function RootLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        {children}
+      <body className="antialiased">
+        <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 interface LoginButtonProps {
     onClick?: () => void;
     isLoading?: boolean;
