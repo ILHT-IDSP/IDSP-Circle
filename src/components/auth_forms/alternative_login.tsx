@@ -9,13 +9,11 @@ interface AlternativeLoginsProps {
     onFacebookLogin?: () => void;
 }
 
-export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () => {}, onFacebookLogin = () => {}}: AlternativeLoginsProps = {}) {
-    return (
+export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () => {}, onFacebookLogin = () => {}}: AlternativeLoginsProps = {}) {    return (
         <div
             id="alternative-logins-container"
-            className="max-w-full w-full flex items-center justify-center gap-4"
+            className="max-w-full w-full flex items-center justify-center gap-2 sm:gap-4"
         >
-            {" "}
             <div id="google-auth">
                 <a
                     href="#"
@@ -26,10 +24,13 @@ export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () =
                     }}
                     className="flex items-center justify-center w-full h-full"
                 >
-                    {" "}
                     <FontAwesomeIcon
                         icon={faGoogle}
-                        className="border-1 border-black p-5 aspect-square  rounded-full flex items-center justify-center text-2xl"
+                        className="p-3 sm:p-4 md:p-5 aspect-square rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl"
+                        style={{ 
+                            border: '1px solid var(--circles-dark)',
+                            color: 'var(--circles-dark)'
+                        }}
                     />
                 </a>
             </div>
@@ -43,10 +44,13 @@ export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () =
                     }}
                     className="flex items-center justify-center w-full h-full"
                 >
-                    {" "}
                     <FontAwesomeIcon
                         icon={faApple}
-                        className="border-1 border-black p-5 aspect-square  rounded-full flex items-center justify-center text-2xl"
+                        className="p-3 sm:p-4 md:p-5 aspect-square rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl"
+                        style={{ 
+                            border: '1px solid var(--circles-dark)',
+                            color: 'var(--circles-dark)'
+                        }}
                     />
                 </a>
             </div>
@@ -60,10 +64,13 @@ export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () =
                     }}
                     className="flex items-center justify-center w-full h-full"
                 >
-                    {" "}
                     <FontAwesomeIcon
                         icon={faFacebookF}
-                        className="border-1 border-circles-dark p-5 aspect-square rounded-full flex items-center justify-center text-2xl"
+                        className="p-3 sm:p-4 md:p-5 aspect-square rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl"
+                        style={{ 
+                            border: '1px solid var(--circles-dark)',
+                            color: 'var(--circles-dark)'
+                        }}
                     />
                 </a>
             </div>

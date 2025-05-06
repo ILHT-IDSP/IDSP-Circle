@@ -14,16 +14,19 @@ export function ToggleShowPassword({inputId}: {inputId: string}) {
             }
             return newShowPassword;
         });
-    };
-
-    return (
+    };    return (
         <>
             <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="mr-4"
+                className="mr-2 sm:mr-4"
+                style={{ color: 'var(--circles-dark)' }}
+                aria-label={showPassword ? "Hide password" : "Show password"}
             >
-                <AwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                <AwesomeIcon 
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="text-sm sm:text-base" 
+                />
             </button>
         </>
     );

@@ -11,8 +11,9 @@ import {PasswordInput} from "@/components/auth_forms/password_input";
 import {RememberMe} from "@/components/auth_forms/remember_user_checkbox";
 import {ForgotPassword} from "@/components/auth_forms/forgot_password";
 import {LoginButton} from "@/components/auth_forms/login_buttons";
-import ProfileContainer from "@/components/Top Nav/profileContainer";
-import MusicLocationTag from "@/components/Top Nav/musicLocationTag";
+import ProfileContainer from "@/components/top_nav/profileContainer";
+import MusicLocationTag from "@/components/top_nav/musicLocationTag";
+import { AllNavBars } from "@/components/top_nav/example";
 
 export default function Home() {
     return (
@@ -158,6 +159,10 @@ export default function Home() {
                     />
                 </div>
             </section>
+			<section className="my-8 p-6 border-gray-200 rounded-lg ">
+				<h2> Top Nav Bar</h2>
+				<AllNavBars/>
+			</section>
         </div>
     );
 }

@@ -14,13 +14,12 @@ body {
     font-optical-sizing: auto;
     background-color: var(--circles-light);
     color: var(--circles-dark);
-}
+} 
 
 h1 {
     font-size: 1.75rem;
     font-weight: 600;
     line-height: 2.5rem;
-    color: var(--circles-dark-blue);
 }
 
 h2 {

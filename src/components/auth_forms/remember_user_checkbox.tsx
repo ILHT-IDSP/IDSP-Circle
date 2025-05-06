@@ -14,8 +14,7 @@ export function RememberMe({ onChange }: RememberMeProps = {}) {
         onChange?.(e.target.checked);
     };
     
-    return (
-        <div className="flex items-center">
+    return (        <div className="flex items-center">
             <label htmlFor="remember-me" className="flex items-center cursor-pointer">
                 <input 
                     id="remember-me"
@@ -23,10 +22,11 @@ export function RememberMe({ onChange }: RememberMeProps = {}) {
                     type="checkbox" 
                     checked={isChecked}
                     onChange={handleChange}
-                    className="mx-1.5 h-4 w-4"
+                    className="mx-1 sm:mx-1.5 h-3 w-3 sm:h-4 sm:w-4"
+                    style={{ accentColor: 'var(--circles-dark-blue)' }}
                     aria-label="Remember me"
                 />
-                <span className="text-sm">Remember Me</span>
+                <span className="text-xs sm:text-sm" style={{ color: 'var(--circles-dark)' }}>Remember Me</span>
             </label>
         </div>
     );

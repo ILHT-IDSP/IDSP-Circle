@@ -14,10 +14,9 @@ export function PasswordInput({ onChange, id = "password-input" }: PasswordInput
         setPassword(e.target.value);
         onChange?.(e.target.value);
     };
-    
-    return (
-        <div className="p-2">
-            <div className="rounded-3xl w-full bg-white flex justify-between">
+      return (
+        <div className="p-1 sm:p-2">
+            <div className="rounded-3xl w-full flex justify-between" style={{ backgroundColor: 'var(--circles-light)' }}>
                 <input
                     id={id}
                     name="password"
@@ -25,7 +24,8 @@ export function PasswordInput({ onChange, id = "password-input" }: PasswordInput
                     placeholder="Password"
                     value={password}
                     onChange={handleChange}
-                    className="w-full placeholder-black indent-4 p-1.5 outline-none rounded-3xl"
+                    className="w-full indent-3 sm:indent-4 p-1 sm:p-1.5 outline-none rounded-3xl text-sm sm:text-base"
+                    style={{ backgroundColor: 'transparent', color: 'var(--circles-dark)' }}
                     required
                 />
 

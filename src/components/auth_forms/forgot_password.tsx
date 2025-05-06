@@ -9,10 +9,10 @@ export function ForgotPassword({ onForgotPasswordClick }: ForgotPasswordProps = 
         <div
             id="forgotten-password-container"
             className="inline-block"
-        >
-            <a 
+        >            <a 
                 href="/reset-password" 
-                className="text-blue-500 hover:text-blue-700 underline transition-colors"
+                className="text-xs sm:text-sm underline transition-opacity hover:opacity-80"
+                style={{ color: 'var(--circles-dark-blue)' }}
                 onClick={(e) => {
                     if (onForgotPasswordClick) {
                         e.preventDefault();

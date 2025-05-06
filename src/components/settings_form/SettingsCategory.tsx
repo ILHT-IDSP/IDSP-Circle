@@ -12,9 +12,14 @@ export default function SettingsCategory({
   className = ''
 }: SettingsCategoryProps) {
   return (
-    <section className={`mb-6 ${className}`}>
-      <h2 className="text-lg font-semibold text-purple-400 mb-2">{title}</h2>
-      <div className="space-y-2">{children}</div>
+    <section className={`mb-4 sm:mb-6 ${className}`}>
+      <h2 
+        className="mb-2 sm:mb-3"
+        style={{ color: 'var(--circles-dark-blue)' }}
+      >
+        {title}
+      </h2>
+      <div className="space-y-2 sm:space-y-3">{children}</div>
     </section>
   );
 }
