@@ -1,16 +1,16 @@
 import {IInputProps} from "../register_types";
 
-export function EnterEmailInput({value, onChange}: IInputProps) {
+export function ConfirmEmailInput({value, onChange}: IInputProps) {
     return (
         <>
-            <div>
+            <div className="">
                 <label>
-                    <p className="font-bold">Email</p>
+                    <p className="font-bold">Confirm Email</p>
                     <div className="rounded-3xl w-full bg-white flex justify-between">
                         <input
                             type="text"
                             placeholder="Email"
-                            name="email"
+                            name="confirmEmail"
                             value={value}
                             className="rounded-3xl w-full bg-white placeholder-black indent-2 p-1.5 outline-gray-500 outline-2"
                         />
