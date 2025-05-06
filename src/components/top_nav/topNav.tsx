@@ -30,10 +30,8 @@ const TopNav: React.FC<TopNavProps> = ({
 
     switch (rightElement) {
       case 'edit':
-        return (
-          <button 
-            className="hover:opacity-80 transition-opacity"
-            style={{ color: 'var(--circles-dark-blue)' }}
+        return (          <button 
+            className="hover:opacity-80 transition-opacity text-primary"
             onClick={onRightElementClick}
             aria-label="Edit"
           >
@@ -41,10 +39,8 @@ const TopNav: React.FC<TopNavProps> = ({
           </button>
         );
       case 'map':
-        return (
-          <button 
-            className="hover:opacity-80 transition-opacity"
-            style={{ color: 'var(--circles-dark-blue)' }}
+        return (          <button 
+            className="hover:opacity-80 transition-opacity text-primary"
             onClick={onRightElementClick}
             aria-label="Map"
           >
@@ -54,10 +50,8 @@ const TopNav: React.FC<TopNavProps> = ({
       case 'next':
       case 'create':
       case 'skip':
-        return (
-          <button 
-            className="font-medium text-xs sm:text-sm md:text-base lg:text-lg hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: 'var(--circles-dark-blue)' }}
+        return (          <button 
+            className="font-medium text-xs sm:text-sm md:text-base lg:text-lg hover:opacity-80 transition-opacity whitespace-nowrap text-primary"
             onClick={onRightElementClick}
           >
             {rightElement.charAt(0).toUpperCase() + rightElement.slice(1)}
@@ -72,10 +66,8 @@ const TopNav: React.FC<TopNavProps> = ({
       <div className="flex items-center justify-between py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6">
         {/* Left section - responsive width for back button */}
         <div className="w-8 sm:w-10 flex items-center">
-          {showBackButton ? (
-            <button 
-              className="hover:opacity-80 transition-opacity"
-              style={{ color: 'var(--circles-dark-blue)' }}
+          {showBackButton ? (            <button 
+              className="hover:opacity-80 transition-opacity text-primary"
               onClick={onBackClick}
               aria-label="Go back"
             >
@@ -84,10 +76,8 @@ const TopNav: React.FC<TopNavProps> = ({
           ) : null}
         </div>
 
-        {/* Center section - title with responsive sizing */}
-        <h1 
-          className="text-center max-w-[60%] truncate px-2"
-          style={{ color: 'var(--circles-dark-blue)' }}
+        {/* Center section - title with responsive sizing */}        <h1 
+          className="text-center max-w-[60%] truncate px-2 text-primary"
         >
           {title}
         </h1>

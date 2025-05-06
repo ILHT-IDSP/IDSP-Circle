@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
-
+import NextThemeProvider from "../components/theme/NextThemeProvider";
 
 export const metadata: Metadata = {
   title: "Circles",
-  description: "vins",
+  description: "A social media app for connecting with friends",
 };
 
 export default function RootLayout({
@@ -14,11 +13,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased">
+        <NextThemeProvider>
+          {children}
+        </NextThemeProvider>
       </body>
     </html>
   );

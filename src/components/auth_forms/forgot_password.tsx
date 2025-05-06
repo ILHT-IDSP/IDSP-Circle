@@ -11,8 +11,7 @@ export function ForgotPassword({ onForgotPasswordClick }: ForgotPasswordProps = 
             className="inline-block"
         >            <a 
                 href="/reset-password" 
-                className="text-xs sm:text-sm underline transition-opacity hover:opacity-80"
-                style={{ color: 'var(--circles-dark-blue)' }}
+                className="text-xs sm:text-sm underline transition-opacity hover:opacity-80 text-primary"
                 onClick={(e) => {
                     if (onForgotPasswordClick) {
                         e.preventDefault();

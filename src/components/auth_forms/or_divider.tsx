@@ -4,18 +4,14 @@ export function OrDivider() {
             className="flex justify-center items-center w-full my-2 sm:my-4"
             role="separator"
             aria-orientation="horizontal"
-        >
-            <div 
-                className="flex-grow h-[0.5px]" 
-                style={{ backgroundColor: 'var(--circles-dark)', opacity: 0.25 }}
+        >            <div 
+                className="flex-grow h-[0.5px] bg-foreground/25" 
             ></div>
             <span 
-                className="px-2 sm:px-4 text-xs sm:text-sm"
-                style={{ color: 'var(--circles-dark)', opacity: 0.6 }}
+                className="px-2 sm:px-4 text-xs sm:text-sm text-foreground/60"
             >OR</span>
             <div 
-                className="flex-grow h-[0.5px]" 
-                style={{ backgroundColor: 'var(--circles-dark)', opacity: 0.25 }}
+                className="flex-grow h-[0.5px] bg-foreground/25" 
             ></div>
         </div>
     );

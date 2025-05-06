@@ -9,12 +9,8 @@ interface AlternativeLoginsProps {
     onFacebookLogin?: () => void;
 }
 
-export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () => {}, onFacebookLogin = () => {}}: AlternativeLoginsProps = {}) {    return (
-        <div
-            id="alternative-logins-container"
-            className="max-w-full w-full flex items-center justify-center gap-2 sm:gap-4"
-        >
-            <div id="google-auth">
+export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () => {}, onFacebookLogin = () => {}}: AlternativeLoginsProps = {}) {    return (        <div className="w-full flex items-center justify-center gap-2 sm:gap-4">
+            <div>
                 <a
                     href="#"
                     aria-label="Sign in with Google"
@@ -22,19 +18,14 @@ export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () =
                         e.preventDefault();
                         onGoogleLogin();
                     }}
-                    className="flex items-center justify-center w-full h-full"
+                    className="flex items-center justify-center"
                 >
                     <FontAwesomeIcon
                         icon={faGoogle}
-                        className="p-3 sm:p-4 md:p-5 aspect-square rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl"
-                        style={{ 
-                            border: '1px solid var(--circles-dark)',
-                            color: 'var(--circles-dark)'
-                        }}
+                        className="p-3 sm:p-4 rounded-full text-xl border border-foreground text"
                     />
                 </a>
-            </div>
-            <div id="apple-auth">
+            </div>            <div>
                 <a
                     href="#"
                     aria-label="Sign in with Apple"
@@ -42,19 +33,14 @@ export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () =
                         e.preventDefault();
                         onAppleLogin();
                     }}
-                    className="flex items-center justify-center w-full h-full"
+                    className="flex items-center justify-center"
                 >
                     <FontAwesomeIcon
                         icon={faApple}
-                        className="p-3 sm:p-4 md:p-5 aspect-square rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl"
-                        style={{ 
-                            border: '1px solid var(--circles-dark)',
-                            color: 'var(--circles-dark)'
-                        }}
+                        className="p-3 sm:p-4 rounded-full text-xl border  "
                     />
                 </a>
-            </div>
-            <div id="facebook-auth">
+            </div>            <div>
                 <a
                     href="#"
                     aria-label="Sign in with Facebook"
@@ -62,15 +48,11 @@ export function AlternativeLogins({onGoogleLogin = () => {}, onAppleLogin = () =
                         e.preventDefault();
                         onFacebookLogin();
                     }}
-                    className="flex items-center justify-center w-full h-full"
+                    className="flex items-center justify-center"
                 >
                     <FontAwesomeIcon
                         icon={faFacebookF}
-                        className="p-3 sm:p-4 md:p-5 aspect-square rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl"
-                        style={{ 
-                            border: '1px solid var(--circles-dark)',
-                            color: 'var(--circles-dark)'
-                        }}
+                        className="p-3 sm:p-4 rounded-full text-xl border  "
                     />
                 </a>
             </div>
