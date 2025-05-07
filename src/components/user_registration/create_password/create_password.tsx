@@ -1,9 +1,9 @@
-import {EnterEmailInput} from "./email_input";
-import {ConfirmEmailInput} from "./confirm_email";
-import {IFormData, IFormDataProps} from "../register_types";
+import {IFormDataProps, IFormData} from "../register_types";
+import PasswordInput from "./password_input";
+import ConfirmPasswordInput from "./confirm_password";
 import NextButton from "../next_button";
 
-export default function EnterEmail({formData, setFormData, onNext}: IFormDataProps) {
+export default function CreatePassword({formData, setFormData, onNext}: IFormDataProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setFormData((prev: IFormData) => ({...prev, [name]: value}));
@@ -21,12 +21,12 @@ export default function EnterEmail({formData, setFormData, onNext}: IFormDataPro
                 className=""
             >
                 <div className="flex flex-col gap-9">
-                    <EnterEmailInput
-                        value={formData.email}
+                    <PasswordInput
+                        value={formData.password}
                         onChange={handleChange}
                     />
-                    <ConfirmEmailInput
-                        value={formData.confirmEmail}
+                    <ConfirmPasswordInput
+                        value={formData.confirmPassword}
                         onChange={handleChange}
                     />
                 </div>

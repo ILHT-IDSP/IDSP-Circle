@@ -42,4 +42,10 @@ p {
     color: var(--groovy-gray);
 }
 
+.custom-datepicker-popper input {
+    background-color: #0e0e0e;
+    width: 100%;
+    max-width: 100%;
+}
+
 @import "tailwindcss";

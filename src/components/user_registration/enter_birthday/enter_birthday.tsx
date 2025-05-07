@@ -1,9 +1,8 @@
-import {EnterEmailInput} from "./email_input";
-import {ConfirmEmailInput} from "./confirm_email";
 import {IFormData, IFormDataProps} from "../register_types";
 import NextButton from "../next_button";
+import RegisterBirthdayInput from "./birthday_input";
 
-export default function EnterEmail({formData, setFormData, onNext}: IFormDataProps) {
+export default function EnterBirthday({formData, setFormData, onNext}: IFormDataProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setFormData((prev: IFormData) => ({...prev, [name]: value}));
@@ -20,14 +19,10 @@ export default function EnterEmail({formData, setFormData, onNext}: IFormDataPro
                 onSubmit={handleSubmit}
                 className=""
             >
-                <div className="flex flex-col gap-9">
-                    <EnterEmailInput
-                        value={formData.email}
+                <div className="flex flex-col">
+                    <RegisterBirthdayInput
                         onChange={handleChange}
-                    />
-                    <ConfirmEmailInput
-                        value={formData.confirmEmail}
-                        onChange={handleChange}
+                        value={formData.birthday}
                     />
                 </div>
 

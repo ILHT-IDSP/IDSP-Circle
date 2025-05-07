@@ -13,6 +13,7 @@ export function ConfirmEmailInput({value, onChange}: IInputProps) {
                             name="confirmEmail"
                             value={value}
                             className="rounded-3xl w-full bg-white placeholder-black indent-2 p-1.5 outline-gray-500 outline-2"
+                            onChange={onChange}
                         />
                     </div>
                 </label>
