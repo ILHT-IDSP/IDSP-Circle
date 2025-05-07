@@ -90,6 +90,13 @@ select:focus {
 .form-input:focus {
 	border-color: var(--primary);
 	box-shadow: 0 0 0 2px var(--input-focus-ring);
+    --circles-dark-blue: #0044cc;
+    --circles-light-blue: #689bff;
+    --circles-dark: #0e0e0e;
+    --circles-light: #f8f4ea;
+    --groovy-green: #14aa3e;
+    --groovy-red: #e8083e;
+    --groovy-gray: #737373;
 }
 
 body {
@@ -119,6 +126,19 @@ p {
 .black-outline {
 	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 	color: white;
+}
+.register-headers {
+    color: var(--foreground);
+}
+
+.register-descriptions {
+    color: var(--groovy-gray);
+}
+
+.custom-datepicker-popper input {
+    background-color: #0e0e0e;
+    width: 100%;
+    max-width: 100%;
 }
 
 @import 'tailwindcss';

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import {useState} from "react";
 import {ToggleShowPassword} from "./toggle_show_password";
 
 interface PasswordInputProps {
@@ -7,9 +7,9 @@ interface PasswordInputProps {
     id?: string;
 }
 
-export function PasswordInput({ onChange, id = "password-input" }: PasswordInputProps = {}) {
+export function PasswordInput({onChange, id = "password-input"}: PasswordInputProps = {}) {
     const [password, setPassword] = useState("");
-    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
         onChange?.(e.target.value);
@@ -29,5 +29,6 @@ export function PasswordInput({ onChange, id = "password-input" }: PasswordInput
 
                 <ToggleShowPassword inputId={id} />
             </div>
-        </div>    );
+        </div>
+    );
 }
