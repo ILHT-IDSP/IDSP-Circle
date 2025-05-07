@@ -5,7 +5,6 @@ import CircleHolder from '../circle_holders';
 interface AlbumCardProps {
 	albumImage: string;
 	albumName: string;
-	userName: string;
 	userProfileImage: string;
 }
 
@@ -22,7 +21,6 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumImage, albumName, userProfil
 					fill
 					className='object-cover'
 				/>
-				{/* Gradient overlay for text readability */}
 				<div className='absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-foreground/30' />
 
 				<div className='absolute top-3 right-3 z-10'>
