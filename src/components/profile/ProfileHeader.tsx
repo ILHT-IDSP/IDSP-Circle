@@ -6,10 +6,11 @@ import Image from 'next/image';
 
 interface User {
   name: string;
-  email: string;
+  username: string;
   image: string;
+  circlesCount: number;
+  friendsCount: number;
 }
-
 export default function ProfileHeader({ user }: { user: User }) {
   const handleClick = () => {
     document.getElementById('upload-profile-pic')?.click();
@@ -25,7 +26,7 @@ export default function ProfileHeader({ user }: { user: User }) {
   };
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div className="relative flex flex-col items-center mb-6 bg-circles-light rounded-2xl py-4 px-6 shadow-lg">
       <input
         type="file"
         id="upload-profile-pic"
@@ -33,17 +34,40 @@ export default function ProfileHeader({ user }: { user: User }) {
         accept="image/*"
         onChange={handleChange}
       />
+      
+      {/* Profile picture*/}
       <Image
         src={user.image || '/default-avatar.png'}
         alt="Profile"
         width={96}
         height={96}
-        className="w-24 h-24 rounded-full object-cover cursor-pointer"
+        className="w-24 h-24 rounded-full object-cover cursor-pointer border-4 border-circles-dark-blue"
         onClick={handleClick}
       />
-      <p className="text-lg font-semibold mt-2">@{user.name}</p>
-      <Link href="/settings" className="absolute right-0 top-0">
-        <Settings className="w-6 h-6 text-black" />
+      
+      {/* Username*/}
+      <p className="text-xl font-bold text-circles-dark mt-2">@{user.username}</p>
+      
+      {/* circles / friends*/}
+      <div className="flex space-x-8 mt-3">
+        <div className="text-center">
+          <p className="text-circles-dark-blue font-semibold">{user.circlesCount}</p>
+          <p className="text-circles-dark text-sm">circles</p>
+        </div>
+        <div className="text-center">
+          <p className="text-circles-dark-blue font-semibold">{user.friendsCount}</p>
+          <p className="text-circles-dark text-sm">friends</p>
+        </div>
+      </div>
+      
+      {/* Settings button*/}
+      <Link href="/settings" className="absolute right-4 top-4">
+        <Settings className="w-6 h-6 text-circles-dark-blue" />
+      </Link>
+
+      {/* Edit Profile Button*/}
+      <Link href="profile/edit-profile" className="mt-4 bg-circles-dark-blue text-circles-light text-sm font-semibold py-2 px-4 rounded-lg">
+        Edit Profile
       </Link>
     </div>
   );
