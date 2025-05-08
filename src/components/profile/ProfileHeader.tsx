@@ -1,50 +1,48 @@
-'use client';
+"use client";
 
-import { Settings } from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
+import {Settings} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import {IFormData} from "../user_registration/register_types";
 
-interface User {
-  name: string;
-  email: string;
-  image: string;
-}
+export default function ProfileHeader({user}: {user: IFormData}) {
+    const handleClick = () => {
+        document.getElementById("upload-profile-pic")?.click();
+    };
 
-export default function ProfileHeader({ user }: { user: User }) {
-  const handleClick = () => {
-    document.getElementById('upload-profile-pic')?.click();
-  };
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append("avatar", file);
+        await fetch("/api/user/avatar", {method: "POST", body: formData});
+        window.location.reload();
+    };
 
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append('avatar', file);
-    await fetch('/api/user/avatar', { method: 'POST', body: formData });
-    window.location.reload();
-  };
-
-  return (
-    <div className="relative flex flex-col items-center">
-      <input
-        type="file"
-        id="upload-profile-pic"
-        className="hidden"
-        accept="image/*"
-        onChange={handleChange}
-      />
-      <Image
-        src={user.image || '/default-avatar.png'}
-        alt="Profile"
-        width={96}
-        height={96}
-        className="w-24 h-24 rounded-full object-cover cursor-pointer"
-        onClick={handleClick}
-      />
-      <p className="text-lg font-semibold mt-2">@{user.name}</p>
-      <Link href="/settings" className="absolute right-0 top-0">
-        <Settings className="w-6 h-6 text-black" />
-      </Link>
-    </div>
-  );
+    return (
+        <div className="relative flex flex-col items-center">
+            <input
+                type="file"
+                id="upload-profile-pic"
+                className="hidden"
+                accept="image/*"
+                onChange={handleChange}
+            />
+            <Image
+                src={user.profileImage || "/default-avatar.png"}
+                alt="Profile"
+                width={96}
+                height={96}
+                className="w-24 h-24 rounded-full object-cover cursor-pointer"
+                onClick={handleClick}
+            />
+            <p className="text-lg font-semibold mt-2">@{user.username}</p>
+            <Link
+                href="/settings"
+                className="absolute right-0 top-0"
+            >
+                <Settings className="w-6 h-6 text-black" />
+            </Link>
+        </div>
+    );
 }
