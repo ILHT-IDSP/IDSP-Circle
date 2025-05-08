@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "rnext": "rm -rf .next"
+        "rnext": "rm -rf .next",
 		"db:seed": "npx ts-node --project prisma/tsconfig.json prisma/seed.ts"
     },
     "dependencies": {
