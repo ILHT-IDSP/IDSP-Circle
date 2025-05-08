@@ -1,14 +1,13 @@
 export default function AddPictureButton() {
     return (
         <>
-            <footer className="absolute w-full bottom-16">
-                <button
-                    type="submit"
-                    className={`bg-blue-800 text-2xl text-white text-center rounded-full p-3 m-au w-full max-w-full transition-colors`}
-                >
-                    Next
-                </button>
-            </footer>
+            <button
+                // need to pullup file explorer window or sum shi 🔥🔥
+                type="reset"
+                className={`bg-blue-600 text-2xl text-white text-center rounded-full p-2 m-au w-full max-w-full transition-colors`}
+            >
+                Add Picture
+            </button>
         </>
     );
 }

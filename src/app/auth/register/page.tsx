@@ -23,9 +23,9 @@ import AddProfilePicture from "@/components/user_registration/add_profilepicture
 import {set} from "date-fns";
 
 export default function RegisterPage() {
+    const router = useRouter();
     const now = new Date(Date.now());
 
-    const router = useRouter();
     const [formData, setFormData] = useState({
         email: "",
         confirmEmail: "",
@@ -137,9 +137,9 @@ export default function RegisterPage() {
     const handleUploadProfileImage = () => {
         console.log("STEP 6", formData.profileImage);
 
-        if (!formData.profileImage) {
-            throw new Error("Please upload a profile image");
-        }
+        // if (!formData.profileImage) {
+        //     throw new Error("Please upload a profile image");
+        // }
 
         if (step === 6) {
             setStep((prev) => prev + 1);
