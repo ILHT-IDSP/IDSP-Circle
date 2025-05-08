@@ -3,6 +3,8 @@
 import ProfileHeader from "./ProfileHeader";
 import EditProfileForm from "./EditProfileForm";
 import {useEffect, useState} from "react";
+import {useSession} from "next-auth/react";
+import {IFormData} from "../user_registration/register_types";
 // const fakeUser = {
 //     name: "adnan",
 //     email: "adnan@example.com",
@@ -10,24 +12,25 @@ import {useEffect, useState} from "react";
 // };
 
 export default function ProfileScreen() {
-    const [session, setSession] = useState(null);
+    const {data: session} = useSession();
 
-    useEffect(() => {
-        const fetchSession = async () => {
-            try {
-                const response = await fetch("/api/auth/session");
-                if (!response.ok) throw new Error("Failed to fetch session");
-                const data = await response.json();
+    // useEffect(() => {
+    //     const fetchSession = async () => {
+    //         try {
+    //             const response = await fetch("/api/auth/session");
+    //             if (!response.ok) throw new Error("Failed to fetch session");
+    //             const data = await response.json();
 
-                setSession(data.session);
-            } catch (err) {
-                console.error("Error fetching sesh", err);
-            }
-        };
-        fetchSession();
-    }, []);
+    //             setSession(data.session);
+    //         } catch (err) {
+    //             console.error("Error fetching sesh", err);
+    //         }
+    //     };
+    //     fetchSession();
+    // }, []);
 
-    if (!session) {
+    if (!session?.user) {
+        console.error("Not authorized to see page");
         return (
             <>
                 <h2>Loading jitt...</h2>
@@ -35,12 +38,10 @@ export default function ProfileScreen() {
         );
     }
 
-    const {formData} = session;
-
     return (
         <div className="min-h-screen bg-[#fdf8f4] px-4 pt-6 pb-20">
-            <ProfileHeader user={formData} />
-            <EditProfileForm user={formData} />
+            <ProfileHeader user={session?.user as IFormData} />
+            <EditProfileForm user={session?.user as IFormData} />
         </div>
     );
 }

@@ -21,6 +21,8 @@ import RegisterUsernameHeader from "@/components/user_registration/create_userna
 import CreateUsername from "@/components/user_registration/create_username/create_username";
 import AddProfilePicture from "@/components/user_registration/add_profilepicture/add_profilepicture";
 import {set} from "date-fns";
+import RegisterProfileImageHeader from "@/components/user_registration/add_profilepicture/profilepicture_header";
+import RegisterProfileImageDescription from "@/components/user_registration/add_profilepicture/profilepicture_description";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -117,10 +119,6 @@ export default function RegisterPage() {
         console.log("STEP 4", formData.firstName);
         console.log("STEP 4", formData.lastName);
 
-        if (!formData.fullName) {
-            throw new Error("Enter your full name");
-        }
-
         if (formData.fullName.includes("123456789")) {
             throw new Error("Alphabetical characters only");
         }
@@ -136,6 +134,7 @@ export default function RegisterPage() {
 
     const handleUploadProfileImage = () => {
         console.log("STEP 6", formData.profileImage);
+        console.log("FORM DATA BEFORE SUBMISSION", formData);
 
         // if (!formData.profileImage) {
         //     throw new Error("Please upload a profile image");
@@ -231,7 +230,10 @@ export default function RegisterPage() {
             )}
             {step === 6 && (
                 <div id="step-six">
-                    <div className="mb-20"></div>
+                    <div className="mb-20">
+                        <RegisterProfileImageHeader />
+                        <RegisterProfileImageDescription />
+                    </div>
                     <AddProfilePicture
                         formData={formData}
                         setFormData={setFormData}
