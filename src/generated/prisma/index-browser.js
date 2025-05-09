@@ -209,6 +209,16 @@ exports.Prisma.FollowScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.AlbumScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  coverImage: 'coverImage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  creatorId: 'creatorId'
+};
+
 exports.Prisma.UserSettingsScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -256,6 +266,7 @@ exports.Prisma.ModelName = {
   Comment: 'Comment',
   Like: 'Like',
   Follow: 'Follow',
+  Album: 'Album',
   UserSettings: 'UserSettings'
 };
 

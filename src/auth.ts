@@ -1,10 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import CredentialsProvider from "next-auth/providers/credentials"; // have to use this one <----
+<<<<<<< HEAD
 import Credentials from "next-auth/providers/credentials"; // not this one <--
+=======
+// import Credentials from "next-auth/providers/credentials";
+
+>>>>>>> bd1ef4ae7eada3fa1c0686834797d4ff6f7954af
 import {signInSchema} from "./lib/zod";
 import prisma from "./lib/prisma";
-import {PrismaAdapter} from "@auth/prisma-adapter";
+// import {PrismaAdapter} from "@auth/prisma-adapter";
 
 import NextAuth, {type DefaultSession} from "next-auth";
 
@@ -51,8 +57,15 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                         where: {email: email, password: password},
                     });
 
+<<<<<<< HEAD
                     if (!user) {
                         return null;
+=======
+                    // const response = await fetch("/");
+
+                    if (user) {
+                        return user as any;
+>>>>>>> bd1ef4ae7eada3fa1c0686834797d4ff6f7954af
                     }
 
                     // Return user data (exclude password)

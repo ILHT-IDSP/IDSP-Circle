@@ -13,7 +13,7 @@ model User {
   email            String        @unique
   name             String?
   username         String        @unique
-  password		   String
+  password         String
   bio              String?
   profileImage     String?
   coverImage       String?
@@ -30,6 +30,7 @@ model User {
   posts            Post[]
   savedMusic       SavedMusic[]
   settings         UserSettings?
+  Album            Album[]
 }
 
 model Circle {
@@ -149,6 +150,22 @@ model Follow {
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
+}
+
+model Album {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  coverImage  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creatorId   Int
+  creator     User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  // Optionally, relate to posts or music if needed:
+  // posts     Post[]
+  // music     Music[]
+
+  @@index([creatorId])
 }
 
 model UserSettings {
