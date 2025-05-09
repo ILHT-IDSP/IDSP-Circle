@@ -37,7 +37,7 @@ export default function ProfileHeader({ user }: { user: User }) {
       
       {/* Profile picture*/}
       <Image
-        src={user.image || '/default-avatar.png'}
+        src={user.image || '/images/default-avatar.png'}
         alt="Profile"
         width={96}
         height={96}

@@ -39,7 +39,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       <label className="relative cursor-pointer mb-4">
         <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
         <Image
-          src={avatar || '/default-avatar.png'}
+          src={avatar || '/images/default-avatar.png'}
           alt="Profile"
           width={96}
           height={96}

@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials"; // have to use this one <----
-import Credentials from "next-auth/providers/credentials"; // not this one <--
 // import Credentials from "next-auth/providers/credentials";
 
 import {signInSchema} from "./lib/zod";
 import prisma from "./lib/prisma";
-import {PrismaAdapter} from "@auth/prisma-adapter";
+// import {PrismaAdapter} from "@auth/prisma-adapter";
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
     // adapter pos to work but dont
@@ -36,7 +36,7 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                         },
                     });
 
-                    const response = await fetch("/");
+                    // const response = await fetch("/");
 
                     if (user) {
                         return user as any;

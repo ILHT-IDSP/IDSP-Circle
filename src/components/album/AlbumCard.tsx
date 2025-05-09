@@ -30,8 +30,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumImage, albumName, userProfil
 						showName={false}
 					/>
 				</div>
-				<div className='absolute bottom-0 left-0 right-0 flex items-center justify-between p-3 sm:p-4 z-10'>
-					<h3 className='black-outline text-sm font-medium'>{albumName}</h3>
+				<div className='absolute text-lg bottom-0 left-0 right-0 flex items-center justify-between p-3 sm:p-4 z-10'>
+					<h3 className='black-outline font-bold'>{albumName}</h3>
 
 					<div className='flex items-center gap-3'>
 						<button
