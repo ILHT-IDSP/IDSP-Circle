@@ -12,7 +12,7 @@ export interface IFormData {
 }
 
 export interface IFormDataProps {
-    formData: IformData;
+    formData: IFormData;
     setFormData: React.Dispatch<React.SetStateAction<IFormData>>;
     onNext: () => void;
 }
