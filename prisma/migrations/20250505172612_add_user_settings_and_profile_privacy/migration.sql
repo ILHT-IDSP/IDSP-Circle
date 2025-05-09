@@ -1,6 +1,6 @@
 -- AlterTable
 ALTER TABLE "User" ADD COLUMN     "isProfilePrivate" BOOLEAN NOT NULL DEFAULT false;
-
+ALTER TABLE "User" ADD COLUMN "birthday" TIMESTAMP NOT NULL;
 -- CreateTable
 CREATE TABLE "UserSettings" (
     "id" SERIAL NOT NULL,

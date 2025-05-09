@@ -1,12 +1,12 @@
 "use client";
 
+import {Session} from "next-auth";
 import {useState} from "react";
-import {IFormData} from "../user_registration/register_types";
 
-export default function EditProfileForm({user}: {user: IFormData}) {
+export default function EditProfileForm({session}: {session: Session | null}) {
     const [editing, setEditing] = useState(false);
-    const [name, setName] = useState(user.username ?? "");
-    const [email, setEmail] = useState(user.email ?? "");
+    const [name, setName] = useState(session?.user?.name ?? "");
+    const [email, setEmail] = useState(session?.user?.email ?? "");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

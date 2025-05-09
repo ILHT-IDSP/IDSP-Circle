@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "isProfilePrivate" DROP NOT NULL,
+ALTER COLUMN "birthday" SET DATA TYPE TIMESTAMP(3);

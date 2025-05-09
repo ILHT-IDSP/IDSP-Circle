@@ -20,12 +20,31 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Database Setup
+
+This project uses Prisma as ORM with a PostgreSQL database. To set up a local database with sample data, follow these steps:
+
+1. Ensure you have a PostgreSQL database running and your `.env` file contains the correct `DATABASE_URL`.
+2. Run migrations to create the database schema:
+
+```bash
+npx prisma migrate dev
+```
+
+3. Seed the database with sample data:
+
+```bash
+npm run db:seed
+```
+
+This will populate the database with users, circles, music, posts, comments, likes, and other related data for testing and development purposes. The seed script is located at `prisma/seed.ts`.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+-   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
