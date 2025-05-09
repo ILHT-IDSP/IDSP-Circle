@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
     images: {
         domains: ["www.google.com"], // Add the hostname here
     },
+
+    webpack: (config) => {
+        config.externals = [...config.externals, "child_process"];
+        return config;
+    },
 };
 
 export default nextConfig;
