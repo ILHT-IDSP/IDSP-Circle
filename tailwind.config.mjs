@@ -5,23 +5,12 @@ const config = {
 	theme: {
 		extend: {
 			colors: {
-				'circles-dark-blue': 'var(--circles-dark-blue)',
-				'circles-light-blue': 'var(--circles-light-blue)',
-				'circles-dark': 'var(--circles-dark)',
-				'circles-light': 'var(--circles-light)',
-				'groovy-green': 'var(--groovy-green)',
-				'groovy-red': 'var(--groovy-red)',
-				// Theme colors for utility classes
-				background: 'var(--background)',
-				foreground: 'var(--foreground)',
-				primary: 'var(--primary)',
-				'primary-hover': 'var(--primary-hover)',
-				accent: 'var(--accent)',
-				// Form input colors
-				input: {
-					DEFAULT: 'var(--input-background)',
-					foreground: 'var(--input-text)',
-				},
+				'circles-dark-blue': '#0044cc',
+				'circles-light-blue': '#689bff',
+				'circles-dark': '#0e0e0e',
+				'circles-light': '#f8f4ea',
+				'groovy-green': '#14aa3e',
+				'groovy-red': '#e8083e',
 			},
 			borderColor: {
 				DEFAULT: 'var(--input-border)',

@@ -2,6 +2,7 @@ import DemoNavBar from '@/components/top_nav/DemoNavBar';
 import prisma from '@/lib/prisma';
 import CircleHolder from '@/components/circle_holders';
 import AlbumCard from '@/components/album/AlbumCard';
+import NavBar from '@/components/bottom_bar/NavBar';
 
 export default async function Home() {
 	const circles = await prisma.circle.findMany();
@@ -47,7 +48,7 @@ export default async function Home() {
 					</div>
 				</section>
 			</main>
-			<div className='bg-white dark:bg-black text-black dark:text-white p-4'></div>
+			<NavBar/>
 		</>
 	);
 }
