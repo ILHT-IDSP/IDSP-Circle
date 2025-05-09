@@ -19,8 +19,8 @@ model User {
   coverImage       String?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  isProfilePrivate Boolean       @default(false)
-  Album            Album[]
+  isProfilePrivate Boolean?      @default(false)
+  birthday         DateTime
   createdCircles   Circle[]
   comments         Comment[]
   followers        Follow[]      @relation("Follower")
@@ -94,7 +94,6 @@ model Music {
   duration   Int?
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
-  Album      Album[]
   posts      Post[]
   savedBy    SavedMusic[]
 }
@@ -170,35 +169,6 @@ model UserSettings {
   user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-}
-
-model Album {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  coverImage  String
-  isPrivate   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  userId      Int
-  musicId     Int?
-  Music       Music?   @relation(fields: [musicId], references: [id])
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Photo       Photo[]
-
-  @@index([musicId])
-  @@index([userId])
-}
-
-model Photo {
-  id        Int      @id @default(autoincrement())
-  imageUrl  String
-  caption   String?
-  createdAt DateTime @default(now())
-  albumId   Int
-  Album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
-
-  @@index([albumId])
 }
 
 enum Role {

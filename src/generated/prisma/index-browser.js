@@ -131,7 +131,8 @@ exports.Prisma.UserScalarFieldEnum = {
   coverImage: 'coverImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  isProfilePrivate: 'isProfilePrivate'
+  isProfilePrivate: 'isProfilePrivate',
+  birthday: 'birthday'
 };
 
 exports.Prisma.CircleScalarFieldEnum = {
@@ -225,26 +226,6 @@ exports.Prisma.UserSettingsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AlbumScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  coverImage: 'coverImage',
-  isPrivate: 'isPrivate',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId',
-  musicId: 'musicId'
-};
-
-exports.Prisma.PhotoScalarFieldEnum = {
-  id: 'id',
-  imageUrl: 'imageUrl',
-  caption: 'caption',
-  createdAt: 'createdAt',
-  albumId: 'albumId'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -275,9 +256,7 @@ exports.Prisma.ModelName = {
   Comment: 'Comment',
   Like: 'Like',
   Follow: 'Follow',
-  UserSettings: 'UserSettings',
-  Album: 'Album',
-  Photo: 'Photo'
+  UserSettings: 'UserSettings'
 };
 
 /**

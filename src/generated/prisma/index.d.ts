@@ -63,16 +63,6 @@ export type Follow = $Result.DefaultSelection<Prisma.$FollowPayload>
  * 
  */
 export type UserSettings = $Result.DefaultSelection<Prisma.$UserSettingsPayload>
-/**
- * Model Album
- * 
- */
-export type Album = $Result.DefaultSelection<Prisma.$AlbumPayload>
-/**
- * Model Photo
- * 
- */
-export type Photo = $Result.DefaultSelection<Prisma.$PhotoPayload>
 
 /**
  * Enums
@@ -316,26 +306,6 @@ export class PrismaClient<
     * ```
     */
   get userSettings(): Prisma.UserSettingsDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.album`: Exposes CRUD operations for the **Album** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Albums
-    * const albums = await prisma.album.findMany()
-    * ```
-    */
-  get album(): Prisma.AlbumDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.photo`: Exposes CRUD operations for the **Photo** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Photos
-    * const photos = await prisma.photo.findMany()
-    * ```
-    */
-  get photo(): Prisma.PhotoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -785,9 +755,7 @@ export namespace Prisma {
     Comment: 'Comment',
     Like: 'Like',
     Follow: 'Follow',
-    UserSettings: 'UserSettings',
-    Album: 'Album',
-    Photo: 'Photo'
+    UserSettings: 'UserSettings'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -806,7 +774,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "circle" | "membership" | "post" | "music" | "savedMusic" | "comment" | "like" | "follow" | "userSettings" | "album" | "photo"
+      modelProps: "user" | "circle" | "membership" | "post" | "music" | "savedMusic" | "comment" | "like" | "follow" | "userSettings"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1550,154 +1518,6 @@ export namespace Prisma {
           }
         }
       }
-      Album: {
-        payload: Prisma.$AlbumPayload<ExtArgs>
-        fields: Prisma.AlbumFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.AlbumFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.AlbumFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>
-          }
-          findFirst: {
-            args: Prisma.AlbumFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.AlbumFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>
-          }
-          findMany: {
-            args: Prisma.AlbumFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>[]
-          }
-          create: {
-            args: Prisma.AlbumCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>
-          }
-          createMany: {
-            args: Prisma.AlbumCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.AlbumCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>[]
-          }
-          delete: {
-            args: Prisma.AlbumDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>
-          }
-          update: {
-            args: Prisma.AlbumUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>
-          }
-          deleteMany: {
-            args: Prisma.AlbumDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.AlbumUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.AlbumUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>[]
-          }
-          upsert: {
-            args: Prisma.AlbumUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AlbumPayload>
-          }
-          aggregate: {
-            args: Prisma.AlbumAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAlbum>
-          }
-          groupBy: {
-            args: Prisma.AlbumGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AlbumGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.AlbumCountArgs<ExtArgs>
-            result: $Utils.Optional<AlbumCountAggregateOutputType> | number
-          }
-        }
-      }
-      Photo: {
-        payload: Prisma.$PhotoPayload<ExtArgs>
-        fields: Prisma.PhotoFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PhotoFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PhotoFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>
-          }
-          findFirst: {
-            args: Prisma.PhotoFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PhotoFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>
-          }
-          findMany: {
-            args: Prisma.PhotoFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>[]
-          }
-          create: {
-            args: Prisma.PhotoCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>
-          }
-          createMany: {
-            args: Prisma.PhotoCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.PhotoCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>[]
-          }
-          delete: {
-            args: Prisma.PhotoDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>
-          }
-          update: {
-            args: Prisma.PhotoUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>
-          }
-          deleteMany: {
-            args: Prisma.PhotoDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PhotoUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.PhotoUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>[]
-          }
-          upsert: {
-            args: Prisma.PhotoUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PhotoPayload>
-          }
-          aggregate: {
-            args: Prisma.PhotoAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePhoto>
-          }
-          groupBy: {
-            args: Prisma.PhotoGroupByArgs<ExtArgs>
-            result: $Utils.Optional<PhotoGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PhotoCountArgs<ExtArgs>
-            result: $Utils.Optional<PhotoCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1792,8 +1612,6 @@ export namespace Prisma {
     like?: LikeOmit
     follow?: FollowOmit
     userSettings?: UserSettingsOmit
-    album?: AlbumOmit
-    photo?: PhotoOmit
   }
 
   /* Types for Logging */
@@ -1888,7 +1706,6 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    Album: number
     createdCircles: number
     comments: number
     followers: number
@@ -1900,7 +1717,6 @@ export namespace Prisma {
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Album?: boolean | UserCountOutputTypeCountAlbumArgs
     createdCircles?: boolean | UserCountOutputTypeCountCreatedCirclesArgs
     comments?: boolean | UserCountOutputTypeCountCommentsArgs
     followers?: boolean | UserCountOutputTypeCountFollowersArgs
@@ -1920,13 +1736,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountAlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AlbumWhereInput
   }
 
   /**
@@ -2071,13 +1880,11 @@ export namespace Prisma {
    */
 
   export type MusicCountOutputType = {
-    Album: number
     posts: number
     savedBy: number
   }
 
   export type MusicCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Album?: boolean | MusicCountOutputTypeCountAlbumArgs
     posts?: boolean | MusicCountOutputTypeCountPostsArgs
     savedBy?: boolean | MusicCountOutputTypeCountSavedByArgs
   }
@@ -2096,13 +1903,6 @@ export namespace Prisma {
   /**
    * MusicCountOutputType without action
    */
-  export type MusicCountOutputTypeCountAlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AlbumWhereInput
-  }
-
-  /**
-   * MusicCountOutputType without action
-   */
   export type MusicCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
   }
@@ -2112,37 +1912,6 @@ export namespace Prisma {
    */
   export type MusicCountOutputTypeCountSavedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SavedMusicWhereInput
-  }
-
-
-  /**
-   * Count Type AlbumCountOutputType
-   */
-
-  export type AlbumCountOutputType = {
-    Photo: number
-  }
-
-  export type AlbumCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Photo?: boolean | AlbumCountOutputTypeCountPhotoArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * AlbumCountOutputType without action
-   */
-  export type AlbumCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AlbumCountOutputType
-     */
-    select?: AlbumCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * AlbumCountOutputType without action
-   */
-  export type AlbumCountOutputTypeCountPhotoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PhotoWhereInput
   }
 
 
@@ -2182,6 +1951,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isProfilePrivate: boolean | null
+    birthday: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2196,6 +1966,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isProfilePrivate: boolean | null
+    birthday: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2210,6 +1981,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     isProfilePrivate: number
+    birthday: number
     _all: number
   }
 
@@ -2234,6 +2006,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isProfilePrivate?: true
+    birthday?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2248,6 +2021,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isProfilePrivate?: true
+    birthday?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2262,6 +2036,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isProfilePrivate?: true
+    birthday?: true
     _all?: true
   }
 
@@ -2362,7 +2137,8 @@ export namespace Prisma {
     coverImage: string | null
     createdAt: Date
     updatedAt: Date
-    isProfilePrivate: boolean
+    isProfilePrivate: boolean | null
+    birthday: Date
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2396,7 +2172,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
-    Album?: boolean | User$AlbumArgs<ExtArgs>
+    birthday?: boolean
     createdCircles?: boolean | User$createdCirclesArgs<ExtArgs>
     comments?: boolean | User$commentsArgs<ExtArgs>
     followers?: boolean | User$followersArgs<ExtArgs>
@@ -2421,6 +2197,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
+    birthday?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2435,6 +2212,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
+    birthday?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2449,11 +2227,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
+    birthday?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "bio" | "profileImage" | "coverImage" | "createdAt" | "updatedAt" | "isProfilePrivate", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "bio" | "profileImage" | "coverImage" | "createdAt" | "updatedAt" | "isProfilePrivate" | "birthday", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Album?: boolean | User$AlbumArgs<ExtArgs>
     createdCircles?: boolean | User$createdCirclesArgs<ExtArgs>
     comments?: boolean | User$commentsArgs<ExtArgs>
     followers?: boolean | User$followersArgs<ExtArgs>
@@ -2471,7 +2249,6 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      Album: Prisma.$AlbumPayload<ExtArgs>[]
       createdCircles: Prisma.$CirclePayload<ExtArgs>[]
       comments: Prisma.$CommentPayload<ExtArgs>[]
       followers: Prisma.$FollowPayload<ExtArgs>[]
@@ -2493,7 +2270,8 @@ export namespace Prisma {
       coverImage: string | null
       createdAt: Date
       updatedAt: Date
-      isProfilePrivate: boolean
+      isProfilePrivate: boolean | null
+      birthday: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2888,7 +2666,6 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Album<T extends User$AlbumArgs<ExtArgs> = {}>(args?: Subset<T, User$AlbumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdCircles<T extends User$createdCirclesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCirclesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     comments<T extends User$commentsArgs<ExtArgs> = {}>(args?: Subset<T, User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     followers<T extends User$followersArgs<ExtArgs> = {}>(args?: Subset<T, User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2938,6 +2715,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly isProfilePrivate: FieldRef<"User", 'Boolean'>
+    readonly birthday: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -3323,30 +3101,6 @@ export namespace Prisma {
      * Limit how many Users to delete.
      */
     limit?: number
-  }
-
-  /**
-   * User.Album
-   */
-  export type User$AlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    where?: AlbumWhereInput
-    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
-    cursor?: AlbumWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AlbumScalarFieldEnum | AlbumScalarFieldEnum[]
   }
 
   /**
@@ -7362,7 +7116,6 @@ export namespace Prisma {
     duration?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    Album?: boolean | Music$AlbumArgs<ExtArgs>
     posts?: boolean | Music$postsArgs<ExtArgs>
     savedBy?: boolean | Music$savedByArgs<ExtArgs>
     _count?: boolean | MusicCountOutputTypeDefaultArgs<ExtArgs>
@@ -7403,7 +7156,6 @@ export namespace Prisma {
 
   export type MusicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "artist" | "albumCover" | "audioUrl" | "duration" | "createdAt" | "updatedAt", ExtArgs["result"]["music"]>
   export type MusicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Album?: boolean | Music$AlbumArgs<ExtArgs>
     posts?: boolean | Music$postsArgs<ExtArgs>
     savedBy?: boolean | Music$savedByArgs<ExtArgs>
     _count?: boolean | MusicCountOutputTypeDefaultArgs<ExtArgs>
@@ -7414,7 +7166,6 @@ export namespace Prisma {
   export type $MusicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Music"
     objects: {
-      Album: Prisma.$AlbumPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
       savedBy: Prisma.$SavedMusicPayload<ExtArgs>[]
     }
@@ -7821,7 +7572,6 @@ export namespace Prisma {
    */
   export interface Prisma__MusicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Album<T extends Music$AlbumArgs<ExtArgs> = {}>(args?: Subset<T, Music$AlbumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends Music$postsArgs<ExtArgs> = {}>(args?: Subset<T, Music$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     savedBy<T extends Music$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Music$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -8246,30 +7996,6 @@ export namespace Prisma {
      * Limit how many Music to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Music.Album
-   */
-  export type Music$AlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    where?: AlbumWhereInput
-    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
-    cursor?: AlbumWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AlbumScalarFieldEnum | AlbumScalarFieldEnum[]
   }
 
   /**
@@ -13959,2311 +13685,6 @@ export namespace Prisma {
 
 
   /**
-   * Model Album
-   */
-
-  export type AggregateAlbum = {
-    _count: AlbumCountAggregateOutputType | null
-    _avg: AlbumAvgAggregateOutputType | null
-    _sum: AlbumSumAggregateOutputType | null
-    _min: AlbumMinAggregateOutputType | null
-    _max: AlbumMaxAggregateOutputType | null
-  }
-
-  export type AlbumAvgAggregateOutputType = {
-    id: number | null
-    userId: number | null
-    musicId: number | null
-  }
-
-  export type AlbumSumAggregateOutputType = {
-    id: number | null
-    userId: number | null
-    musicId: number | null
-  }
-
-  export type AlbumMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    description: string | null
-    coverImage: string | null
-    isPrivate: boolean | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    userId: number | null
-    musicId: number | null
-  }
-
-  export type AlbumMaxAggregateOutputType = {
-    id: number | null
-    name: string | null
-    description: string | null
-    coverImage: string | null
-    isPrivate: boolean | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    userId: number | null
-    musicId: number | null
-  }
-
-  export type AlbumCountAggregateOutputType = {
-    id: number
-    name: number
-    description: number
-    coverImage: number
-    isPrivate: number
-    createdAt: number
-    updatedAt: number
-    userId: number
-    musicId: number
-    _all: number
-  }
-
-
-  export type AlbumAvgAggregateInputType = {
-    id?: true
-    userId?: true
-    musicId?: true
-  }
-
-  export type AlbumSumAggregateInputType = {
-    id?: true
-    userId?: true
-    musicId?: true
-  }
-
-  export type AlbumMinAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    coverImage?: true
-    isPrivate?: true
-    createdAt?: true
-    updatedAt?: true
-    userId?: true
-    musicId?: true
-  }
-
-  export type AlbumMaxAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    coverImage?: true
-    isPrivate?: true
-    createdAt?: true
-    updatedAt?: true
-    userId?: true
-    musicId?: true
-  }
-
-  export type AlbumCountAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    coverImage?: true
-    isPrivate?: true
-    createdAt?: true
-    updatedAt?: true
-    userId?: true
-    musicId?: true
-    _all?: true
-  }
-
-  export type AlbumAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Album to aggregate.
-     */
-    where?: AlbumWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Albums to fetch.
-     */
-    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: AlbumWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Albums from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Albums.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Albums
-    **/
-    _count?: true | AlbumCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: AlbumAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: AlbumSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: AlbumMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: AlbumMaxAggregateInputType
-  }
-
-  export type GetAlbumAggregateType<T extends AlbumAggregateArgs> = {
-        [P in keyof T & keyof AggregateAlbum]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateAlbum[P]>
-      : GetScalarType<T[P], AggregateAlbum[P]>
-  }
-
-
-
-
-  export type AlbumGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AlbumWhereInput
-    orderBy?: AlbumOrderByWithAggregationInput | AlbumOrderByWithAggregationInput[]
-    by: AlbumScalarFieldEnum[] | AlbumScalarFieldEnum
-    having?: AlbumScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: AlbumCountAggregateInputType | true
-    _avg?: AlbumAvgAggregateInputType
-    _sum?: AlbumSumAggregateInputType
-    _min?: AlbumMinAggregateInputType
-    _max?: AlbumMaxAggregateInputType
-  }
-
-  export type AlbumGroupByOutputType = {
-    id: number
-    name: string
-    description: string | null
-    coverImage: string
-    isPrivate: boolean
-    createdAt: Date
-    updatedAt: Date
-    userId: number
-    musicId: number | null
-    _count: AlbumCountAggregateOutputType | null
-    _avg: AlbumAvgAggregateOutputType | null
-    _sum: AlbumSumAggregateOutputType | null
-    _min: AlbumMinAggregateOutputType | null
-    _max: AlbumMaxAggregateOutputType | null
-  }
-
-  type GetAlbumGroupByPayload<T extends AlbumGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<AlbumGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof AlbumGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], AlbumGroupByOutputType[P]>
-            : GetScalarType<T[P], AlbumGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type AlbumSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    coverImage?: boolean
-    isPrivate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-    musicId?: boolean
-    Music?: boolean | Album$MusicArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
-    Photo?: boolean | Album$PhotoArgs<ExtArgs>
-    _count?: boolean | AlbumCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["album"]>
-
-  export type AlbumSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    coverImage?: boolean
-    isPrivate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-    musicId?: boolean
-    Music?: boolean | Album$MusicArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["album"]>
-
-  export type AlbumSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    coverImage?: boolean
-    isPrivate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-    musicId?: boolean
-    Music?: boolean | Album$MusicArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["album"]>
-
-  export type AlbumSelectScalar = {
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    coverImage?: boolean
-    isPrivate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-    musicId?: boolean
-  }
-
-  export type AlbumOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "coverImage" | "isPrivate" | "createdAt" | "updatedAt" | "userId" | "musicId", ExtArgs["result"]["album"]>
-  export type AlbumInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Music?: boolean | Album$MusicArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
-    Photo?: boolean | Album$PhotoArgs<ExtArgs>
-    _count?: boolean | AlbumCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type AlbumIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Music?: boolean | Album$MusicArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type AlbumIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Music?: boolean | Album$MusicArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $AlbumPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Album"
-    objects: {
-      Music: Prisma.$MusicPayload<ExtArgs> | null
-      User: Prisma.$UserPayload<ExtArgs>
-      Photo: Prisma.$PhotoPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      name: string
-      description: string | null
-      coverImage: string
-      isPrivate: boolean
-      createdAt: Date
-      updatedAt: Date
-      userId: number
-      musicId: number | null
-    }, ExtArgs["result"]["album"]>
-    composites: {}
-  }
-
-  type AlbumGetPayload<S extends boolean | null | undefined | AlbumDefaultArgs> = $Result.GetResult<Prisma.$AlbumPayload, S>
-
-  type AlbumCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AlbumFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AlbumCountAggregateInputType | true
-    }
-
-  export interface AlbumDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Album'], meta: { name: 'Album' } }
-    /**
-     * Find zero or one Album that matches the filter.
-     * @param {AlbumFindUniqueArgs} args - Arguments to find a Album
-     * @example
-     * // Get one Album
-     * const album = await prisma.album.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends AlbumFindUniqueArgs>(args: SelectSubset<T, AlbumFindUniqueArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Album that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {AlbumFindUniqueOrThrowArgs} args - Arguments to find a Album
-     * @example
-     * // Get one Album
-     * const album = await prisma.album.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends AlbumFindUniqueOrThrowArgs>(args: SelectSubset<T, AlbumFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Album that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AlbumFindFirstArgs} args - Arguments to find a Album
-     * @example
-     * // Get one Album
-     * const album = await prisma.album.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends AlbumFindFirstArgs>(args?: SelectSubset<T, AlbumFindFirstArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Album that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AlbumFindFirstOrThrowArgs} args - Arguments to find a Album
-     * @example
-     * // Get one Album
-     * const album = await prisma.album.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends AlbumFindFirstOrThrowArgs>(args?: SelectSubset<T, AlbumFindFirstOrThrowArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Albums that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AlbumFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Albums
-     * const albums = await prisma.album.findMany()
-     * 
-     * // Get first 10 Albums
-     * const albums = await prisma.album.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const albumWithIdOnly = await prisma.album.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends AlbumFindManyArgs>(args?: SelectSubset<T, AlbumFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Album.
-     * @param {AlbumCreateArgs} args - Arguments to create a Album.
-     * @example
-     * // Create one Album
-     * const Album = await prisma.album.create({
-     *   data: {
-     *     // ... data to create a Album
-     *   }
-     * })
-     * 
-     */
-    create<T extends AlbumCreateArgs>(args: SelectSubset<T, AlbumCreateArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Albums.
-     * @param {AlbumCreateManyArgs} args - Arguments to create many Albums.
-     * @example
-     * // Create many Albums
-     * const album = await prisma.album.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends AlbumCreateManyArgs>(args?: SelectSubset<T, AlbumCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Albums and returns the data saved in the database.
-     * @param {AlbumCreateManyAndReturnArgs} args - Arguments to create many Albums.
-     * @example
-     * // Create many Albums
-     * const album = await prisma.album.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Albums and only return the `id`
-     * const albumWithIdOnly = await prisma.album.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends AlbumCreateManyAndReturnArgs>(args?: SelectSubset<T, AlbumCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Album.
-     * @param {AlbumDeleteArgs} args - Arguments to delete one Album.
-     * @example
-     * // Delete one Album
-     * const Album = await prisma.album.delete({
-     *   where: {
-     *     // ... filter to delete one Album
-     *   }
-     * })
-     * 
-     */
-    delete<T extends AlbumDeleteArgs>(args: SelectSubset<T, AlbumDeleteArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Album.
-     * @param {AlbumUpdateArgs} args - Arguments to update one Album.
-     * @example
-     * // Update one Album
-     * const album = await prisma.album.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends AlbumUpdateArgs>(args: SelectSubset<T, AlbumUpdateArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Albums.
-     * @param {AlbumDeleteManyArgs} args - Arguments to filter Albums to delete.
-     * @example
-     * // Delete a few Albums
-     * const { count } = await prisma.album.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends AlbumDeleteManyArgs>(args?: SelectSubset<T, AlbumDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Albums.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AlbumUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Albums
-     * const album = await prisma.album.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends AlbumUpdateManyArgs>(args: SelectSubset<T, AlbumUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Albums and returns the data updated in the database.
-     * @param {AlbumUpdateManyAndReturnArgs} args - Arguments to update many Albums.
-     * @example
-     * // Update many Albums
-     * const album = await prisma.album.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Albums and only return the `id`
-     * const albumWithIdOnly = await prisma.album.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends AlbumUpdateManyAndReturnArgs>(args: SelectSubset<T, AlbumUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Album.
-     * @param {AlbumUpsertArgs} args - Arguments to update or create a Album.
-     * @example
-     * // Update or create a Album
-     * const album = await prisma.album.upsert({
-     *   create: {
-     *     // ... data to create a Album
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Album we want to update
-     *   }
-     * })
-     */
-    upsert<T extends AlbumUpsertArgs>(args: SelectSubset<T, AlbumUpsertArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Albums.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AlbumCountArgs} args - Arguments to filter Albums to count.
-     * @example
-     * // Count the number of Albums
-     * const count = await prisma.album.count({
-     *   where: {
-     *     // ... the filter for the Albums we want to count
-     *   }
-     * })
-    **/
-    count<T extends AlbumCountArgs>(
-      args?: Subset<T, AlbumCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], AlbumCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Album.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AlbumAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends AlbumAggregateArgs>(args: Subset<T, AlbumAggregateArgs>): Prisma.PrismaPromise<GetAlbumAggregateType<T>>
-
-    /**
-     * Group by Album.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AlbumGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends AlbumGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AlbumGroupByArgs['orderBy'] }
-        : { orderBy?: AlbumGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, AlbumGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAlbumGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Album model
-   */
-  readonly fields: AlbumFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Album.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__AlbumClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    Music<T extends Album$MusicArgs<ExtArgs> = {}>(args?: Subset<T, Album$MusicArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    User<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    Photo<T extends Album$PhotoArgs<ExtArgs> = {}>(args?: Subset<T, Album$PhotoArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Album model
-   */
-  interface AlbumFieldRefs {
-    readonly id: FieldRef<"Album", 'Int'>
-    readonly name: FieldRef<"Album", 'String'>
-    readonly description: FieldRef<"Album", 'String'>
-    readonly coverImage: FieldRef<"Album", 'String'>
-    readonly isPrivate: FieldRef<"Album", 'Boolean'>
-    readonly createdAt: FieldRef<"Album", 'DateTime'>
-    readonly updatedAt: FieldRef<"Album", 'DateTime'>
-    readonly userId: FieldRef<"Album", 'Int'>
-    readonly musicId: FieldRef<"Album", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Album findUnique
-   */
-  export type AlbumFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * Filter, which Album to fetch.
-     */
-    where: AlbumWhereUniqueInput
-  }
-
-  /**
-   * Album findUniqueOrThrow
-   */
-  export type AlbumFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * Filter, which Album to fetch.
-     */
-    where: AlbumWhereUniqueInput
-  }
-
-  /**
-   * Album findFirst
-   */
-  export type AlbumFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * Filter, which Album to fetch.
-     */
-    where?: AlbumWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Albums to fetch.
-     */
-    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Albums.
-     */
-    cursor?: AlbumWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Albums from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Albums.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Albums.
-     */
-    distinct?: AlbumScalarFieldEnum | AlbumScalarFieldEnum[]
-  }
-
-  /**
-   * Album findFirstOrThrow
-   */
-  export type AlbumFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * Filter, which Album to fetch.
-     */
-    where?: AlbumWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Albums to fetch.
-     */
-    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Albums.
-     */
-    cursor?: AlbumWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Albums from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Albums.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Albums.
-     */
-    distinct?: AlbumScalarFieldEnum | AlbumScalarFieldEnum[]
-  }
-
-  /**
-   * Album findMany
-   */
-  export type AlbumFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * Filter, which Albums to fetch.
-     */
-    where?: AlbumWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Albums to fetch.
-     */
-    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Albums.
-     */
-    cursor?: AlbumWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Albums from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Albums.
-     */
-    skip?: number
-    distinct?: AlbumScalarFieldEnum | AlbumScalarFieldEnum[]
-  }
-
-  /**
-   * Album create
-   */
-  export type AlbumCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Album.
-     */
-    data: XOR<AlbumCreateInput, AlbumUncheckedCreateInput>
-  }
-
-  /**
-   * Album createMany
-   */
-  export type AlbumCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Albums.
-     */
-    data: AlbumCreateManyInput | AlbumCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Album createManyAndReturn
-   */
-  export type AlbumCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * The data used to create many Albums.
-     */
-    data: AlbumCreateManyInput | AlbumCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Album update
-   */
-  export type AlbumUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Album.
-     */
-    data: XOR<AlbumUpdateInput, AlbumUncheckedUpdateInput>
-    /**
-     * Choose, which Album to update.
-     */
-    where: AlbumWhereUniqueInput
-  }
-
-  /**
-   * Album updateMany
-   */
-  export type AlbumUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Albums.
-     */
-    data: XOR<AlbumUpdateManyMutationInput, AlbumUncheckedUpdateManyInput>
-    /**
-     * Filter which Albums to update
-     */
-    where?: AlbumWhereInput
-    /**
-     * Limit how many Albums to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Album updateManyAndReturn
-   */
-  export type AlbumUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * The data used to update Albums.
-     */
-    data: XOR<AlbumUpdateManyMutationInput, AlbumUncheckedUpdateManyInput>
-    /**
-     * Filter which Albums to update
-     */
-    where?: AlbumWhereInput
-    /**
-     * Limit how many Albums to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Album upsert
-   */
-  export type AlbumUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Album to update in case it exists.
-     */
-    where: AlbumWhereUniqueInput
-    /**
-     * In case the Album found by the `where` argument doesn't exist, create a new Album with this data.
-     */
-    create: XOR<AlbumCreateInput, AlbumUncheckedCreateInput>
-    /**
-     * In case the Album was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<AlbumUpdateInput, AlbumUncheckedUpdateInput>
-  }
-
-  /**
-   * Album delete
-   */
-  export type AlbumDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    /**
-     * Filter which Album to delete.
-     */
-    where: AlbumWhereUniqueInput
-  }
-
-  /**
-   * Album deleteMany
-   */
-  export type AlbumDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Albums to delete
-     */
-    where?: AlbumWhereInput
-    /**
-     * Limit how many Albums to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Album.Music
-   */
-  export type Album$MusicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    where?: MusicWhereInput
-  }
-
-  /**
-   * Album.Photo
-   */
-  export type Album$PhotoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    where?: PhotoWhereInput
-    orderBy?: PhotoOrderByWithRelationInput | PhotoOrderByWithRelationInput[]
-    cursor?: PhotoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PhotoScalarFieldEnum | PhotoScalarFieldEnum[]
-  }
-
-  /**
-   * Album without action
-   */
-  export type AlbumDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Photo
-   */
-
-  export type AggregatePhoto = {
-    _count: PhotoCountAggregateOutputType | null
-    _avg: PhotoAvgAggregateOutputType | null
-    _sum: PhotoSumAggregateOutputType | null
-    _min: PhotoMinAggregateOutputType | null
-    _max: PhotoMaxAggregateOutputType | null
-  }
-
-  export type PhotoAvgAggregateOutputType = {
-    id: number | null
-    albumId: number | null
-  }
-
-  export type PhotoSumAggregateOutputType = {
-    id: number | null
-    albumId: number | null
-  }
-
-  export type PhotoMinAggregateOutputType = {
-    id: number | null
-    imageUrl: string | null
-    caption: string | null
-    createdAt: Date | null
-    albumId: number | null
-  }
-
-  export type PhotoMaxAggregateOutputType = {
-    id: number | null
-    imageUrl: string | null
-    caption: string | null
-    createdAt: Date | null
-    albumId: number | null
-  }
-
-  export type PhotoCountAggregateOutputType = {
-    id: number
-    imageUrl: number
-    caption: number
-    createdAt: number
-    albumId: number
-    _all: number
-  }
-
-
-  export type PhotoAvgAggregateInputType = {
-    id?: true
-    albumId?: true
-  }
-
-  export type PhotoSumAggregateInputType = {
-    id?: true
-    albumId?: true
-  }
-
-  export type PhotoMinAggregateInputType = {
-    id?: true
-    imageUrl?: true
-    caption?: true
-    createdAt?: true
-    albumId?: true
-  }
-
-  export type PhotoMaxAggregateInputType = {
-    id?: true
-    imageUrl?: true
-    caption?: true
-    createdAt?: true
-    albumId?: true
-  }
-
-  export type PhotoCountAggregateInputType = {
-    id?: true
-    imageUrl?: true
-    caption?: true
-    createdAt?: true
-    albumId?: true
-    _all?: true
-  }
-
-  export type PhotoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Photo to aggregate.
-     */
-    where?: PhotoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Photos to fetch.
-     */
-    orderBy?: PhotoOrderByWithRelationInput | PhotoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PhotoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Photos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Photos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Photos
-    **/
-    _count?: true | PhotoCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: PhotoAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PhotoSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PhotoMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PhotoMaxAggregateInputType
-  }
-
-  export type GetPhotoAggregateType<T extends PhotoAggregateArgs> = {
-        [P in keyof T & keyof AggregatePhoto]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePhoto[P]>
-      : GetScalarType<T[P], AggregatePhoto[P]>
-  }
-
-
-
-
-  export type PhotoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PhotoWhereInput
-    orderBy?: PhotoOrderByWithAggregationInput | PhotoOrderByWithAggregationInput[]
-    by: PhotoScalarFieldEnum[] | PhotoScalarFieldEnum
-    having?: PhotoScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PhotoCountAggregateInputType | true
-    _avg?: PhotoAvgAggregateInputType
-    _sum?: PhotoSumAggregateInputType
-    _min?: PhotoMinAggregateInputType
-    _max?: PhotoMaxAggregateInputType
-  }
-
-  export type PhotoGroupByOutputType = {
-    id: number
-    imageUrl: string
-    caption: string | null
-    createdAt: Date
-    albumId: number
-    _count: PhotoCountAggregateOutputType | null
-    _avg: PhotoAvgAggregateOutputType | null
-    _sum: PhotoSumAggregateOutputType | null
-    _min: PhotoMinAggregateOutputType | null
-    _max: PhotoMaxAggregateOutputType | null
-  }
-
-  type GetPhotoGroupByPayload<T extends PhotoGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PhotoGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PhotoGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PhotoGroupByOutputType[P]>
-            : GetScalarType<T[P], PhotoGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PhotoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    imageUrl?: boolean
-    caption?: boolean
-    createdAt?: boolean
-    albumId?: boolean
-    Album?: boolean | AlbumDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["photo"]>
-
-  export type PhotoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    imageUrl?: boolean
-    caption?: boolean
-    createdAt?: boolean
-    albumId?: boolean
-    Album?: boolean | AlbumDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["photo"]>
-
-  export type PhotoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    imageUrl?: boolean
-    caption?: boolean
-    createdAt?: boolean
-    albumId?: boolean
-    Album?: boolean | AlbumDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["photo"]>
-
-  export type PhotoSelectScalar = {
-    id?: boolean
-    imageUrl?: boolean
-    caption?: boolean
-    createdAt?: boolean
-    albumId?: boolean
-  }
-
-  export type PhotoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "imageUrl" | "caption" | "createdAt" | "albumId", ExtArgs["result"]["photo"]>
-  export type PhotoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Album?: boolean | AlbumDefaultArgs<ExtArgs>
-  }
-  export type PhotoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Album?: boolean | AlbumDefaultArgs<ExtArgs>
-  }
-  export type PhotoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Album?: boolean | AlbumDefaultArgs<ExtArgs>
-  }
-
-  export type $PhotoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Photo"
-    objects: {
-      Album: Prisma.$AlbumPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      imageUrl: string
-      caption: string | null
-      createdAt: Date
-      albumId: number
-    }, ExtArgs["result"]["photo"]>
-    composites: {}
-  }
-
-  type PhotoGetPayload<S extends boolean | null | undefined | PhotoDefaultArgs> = $Result.GetResult<Prisma.$PhotoPayload, S>
-
-  type PhotoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PhotoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PhotoCountAggregateInputType | true
-    }
-
-  export interface PhotoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Photo'], meta: { name: 'Photo' } }
-    /**
-     * Find zero or one Photo that matches the filter.
-     * @param {PhotoFindUniqueArgs} args - Arguments to find a Photo
-     * @example
-     * // Get one Photo
-     * const photo = await prisma.photo.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends PhotoFindUniqueArgs>(args: SelectSubset<T, PhotoFindUniqueArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Photo that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {PhotoFindUniqueOrThrowArgs} args - Arguments to find a Photo
-     * @example
-     * // Get one Photo
-     * const photo = await prisma.photo.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends PhotoFindUniqueOrThrowArgs>(args: SelectSubset<T, PhotoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Photo that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhotoFindFirstArgs} args - Arguments to find a Photo
-     * @example
-     * // Get one Photo
-     * const photo = await prisma.photo.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends PhotoFindFirstArgs>(args?: SelectSubset<T, PhotoFindFirstArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Photo that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhotoFindFirstOrThrowArgs} args - Arguments to find a Photo
-     * @example
-     * // Get one Photo
-     * const photo = await prisma.photo.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends PhotoFindFirstOrThrowArgs>(args?: SelectSubset<T, PhotoFindFirstOrThrowArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Photos that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhotoFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Photos
-     * const photos = await prisma.photo.findMany()
-     * 
-     * // Get first 10 Photos
-     * const photos = await prisma.photo.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const photoWithIdOnly = await prisma.photo.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends PhotoFindManyArgs>(args?: SelectSubset<T, PhotoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Photo.
-     * @param {PhotoCreateArgs} args - Arguments to create a Photo.
-     * @example
-     * // Create one Photo
-     * const Photo = await prisma.photo.create({
-     *   data: {
-     *     // ... data to create a Photo
-     *   }
-     * })
-     * 
-     */
-    create<T extends PhotoCreateArgs>(args: SelectSubset<T, PhotoCreateArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Photos.
-     * @param {PhotoCreateManyArgs} args - Arguments to create many Photos.
-     * @example
-     * // Create many Photos
-     * const photo = await prisma.photo.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends PhotoCreateManyArgs>(args?: SelectSubset<T, PhotoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Photos and returns the data saved in the database.
-     * @param {PhotoCreateManyAndReturnArgs} args - Arguments to create many Photos.
-     * @example
-     * // Create many Photos
-     * const photo = await prisma.photo.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Photos and only return the `id`
-     * const photoWithIdOnly = await prisma.photo.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends PhotoCreateManyAndReturnArgs>(args?: SelectSubset<T, PhotoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Photo.
-     * @param {PhotoDeleteArgs} args - Arguments to delete one Photo.
-     * @example
-     * // Delete one Photo
-     * const Photo = await prisma.photo.delete({
-     *   where: {
-     *     // ... filter to delete one Photo
-     *   }
-     * })
-     * 
-     */
-    delete<T extends PhotoDeleteArgs>(args: SelectSubset<T, PhotoDeleteArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Photo.
-     * @param {PhotoUpdateArgs} args - Arguments to update one Photo.
-     * @example
-     * // Update one Photo
-     * const photo = await prisma.photo.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends PhotoUpdateArgs>(args: SelectSubset<T, PhotoUpdateArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Photos.
-     * @param {PhotoDeleteManyArgs} args - Arguments to filter Photos to delete.
-     * @example
-     * // Delete a few Photos
-     * const { count } = await prisma.photo.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends PhotoDeleteManyArgs>(args?: SelectSubset<T, PhotoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Photos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhotoUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Photos
-     * const photo = await prisma.photo.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends PhotoUpdateManyArgs>(args: SelectSubset<T, PhotoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Photos and returns the data updated in the database.
-     * @param {PhotoUpdateManyAndReturnArgs} args - Arguments to update many Photos.
-     * @example
-     * // Update many Photos
-     * const photo = await prisma.photo.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Photos and only return the `id`
-     * const photoWithIdOnly = await prisma.photo.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends PhotoUpdateManyAndReturnArgs>(args: SelectSubset<T, PhotoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Photo.
-     * @param {PhotoUpsertArgs} args - Arguments to update or create a Photo.
-     * @example
-     * // Update or create a Photo
-     * const photo = await prisma.photo.upsert({
-     *   create: {
-     *     // ... data to create a Photo
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Photo we want to update
-     *   }
-     * })
-     */
-    upsert<T extends PhotoUpsertArgs>(args: SelectSubset<T, PhotoUpsertArgs<ExtArgs>>): Prisma__PhotoClient<$Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Photos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhotoCountArgs} args - Arguments to filter Photos to count.
-     * @example
-     * // Count the number of Photos
-     * const count = await prisma.photo.count({
-     *   where: {
-     *     // ... the filter for the Photos we want to count
-     *   }
-     * })
-    **/
-    count<T extends PhotoCountArgs>(
-      args?: Subset<T, PhotoCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PhotoCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Photo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhotoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PhotoAggregateArgs>(args: Subset<T, PhotoAggregateArgs>): Prisma.PrismaPromise<GetPhotoAggregateType<T>>
-
-    /**
-     * Group by Photo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhotoGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PhotoGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PhotoGroupByArgs['orderBy'] }
-        : { orderBy?: PhotoGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PhotoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPhotoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Photo model
-   */
-  readonly fields: PhotoFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Photo.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PhotoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    Album<T extends AlbumDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AlbumDefaultArgs<ExtArgs>>): Prisma__AlbumClient<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Photo model
-   */
-  interface PhotoFieldRefs {
-    readonly id: FieldRef<"Photo", 'Int'>
-    readonly imageUrl: FieldRef<"Photo", 'String'>
-    readonly caption: FieldRef<"Photo", 'String'>
-    readonly createdAt: FieldRef<"Photo", 'DateTime'>
-    readonly albumId: FieldRef<"Photo", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Photo findUnique
-   */
-  export type PhotoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * Filter, which Photo to fetch.
-     */
-    where: PhotoWhereUniqueInput
-  }
-
-  /**
-   * Photo findUniqueOrThrow
-   */
-  export type PhotoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * Filter, which Photo to fetch.
-     */
-    where: PhotoWhereUniqueInput
-  }
-
-  /**
-   * Photo findFirst
-   */
-  export type PhotoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * Filter, which Photo to fetch.
-     */
-    where?: PhotoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Photos to fetch.
-     */
-    orderBy?: PhotoOrderByWithRelationInput | PhotoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Photos.
-     */
-    cursor?: PhotoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Photos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Photos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Photos.
-     */
-    distinct?: PhotoScalarFieldEnum | PhotoScalarFieldEnum[]
-  }
-
-  /**
-   * Photo findFirstOrThrow
-   */
-  export type PhotoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * Filter, which Photo to fetch.
-     */
-    where?: PhotoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Photos to fetch.
-     */
-    orderBy?: PhotoOrderByWithRelationInput | PhotoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Photos.
-     */
-    cursor?: PhotoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Photos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Photos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Photos.
-     */
-    distinct?: PhotoScalarFieldEnum | PhotoScalarFieldEnum[]
-  }
-
-  /**
-   * Photo findMany
-   */
-  export type PhotoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * Filter, which Photos to fetch.
-     */
-    where?: PhotoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Photos to fetch.
-     */
-    orderBy?: PhotoOrderByWithRelationInput | PhotoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Photos.
-     */
-    cursor?: PhotoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Photos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Photos.
-     */
-    skip?: number
-    distinct?: PhotoScalarFieldEnum | PhotoScalarFieldEnum[]
-  }
-
-  /**
-   * Photo create
-   */
-  export type PhotoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Photo.
-     */
-    data: XOR<PhotoCreateInput, PhotoUncheckedCreateInput>
-  }
-
-  /**
-   * Photo createMany
-   */
-  export type PhotoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Photos.
-     */
-    data: PhotoCreateManyInput | PhotoCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Photo createManyAndReturn
-   */
-  export type PhotoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * The data used to create many Photos.
-     */
-    data: PhotoCreateManyInput | PhotoCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Photo update
-   */
-  export type PhotoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Photo.
-     */
-    data: XOR<PhotoUpdateInput, PhotoUncheckedUpdateInput>
-    /**
-     * Choose, which Photo to update.
-     */
-    where: PhotoWhereUniqueInput
-  }
-
-  /**
-   * Photo updateMany
-   */
-  export type PhotoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Photos.
-     */
-    data: XOR<PhotoUpdateManyMutationInput, PhotoUncheckedUpdateManyInput>
-    /**
-     * Filter which Photos to update
-     */
-    where?: PhotoWhereInput
-    /**
-     * Limit how many Photos to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Photo updateManyAndReturn
-   */
-  export type PhotoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * The data used to update Photos.
-     */
-    data: XOR<PhotoUpdateManyMutationInput, PhotoUncheckedUpdateManyInput>
-    /**
-     * Filter which Photos to update
-     */
-    where?: PhotoWhereInput
-    /**
-     * Limit how many Photos to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Photo upsert
-   */
-  export type PhotoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Photo to update in case it exists.
-     */
-    where: PhotoWhereUniqueInput
-    /**
-     * In case the Photo found by the `where` argument doesn't exist, create a new Photo with this data.
-     */
-    create: XOR<PhotoCreateInput, PhotoUncheckedCreateInput>
-    /**
-     * In case the Photo was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PhotoUpdateInput, PhotoUncheckedUpdateInput>
-  }
-
-  /**
-   * Photo delete
-   */
-  export type PhotoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-    /**
-     * Filter which Photo to delete.
-     */
-    where: PhotoWhereUniqueInput
-  }
-
-  /**
-   * Photo deleteMany
-   */
-  export type PhotoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Photos to delete
-     */
-    where?: PhotoWhereInput
-    /**
-     * Limit how many Photos to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Photo without action
-   */
-  export type PhotoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Photo
-     */
-    select?: PhotoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Photo
-     */
-    omit?: PhotoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PhotoInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Enums
    */
 
@@ -16288,7 +13709,8 @@ export namespace Prisma {
     coverImage: 'coverImage',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    isProfilePrivate: 'isProfilePrivate'
+    isProfilePrivate: 'isProfilePrivate',
+    birthday: 'birthday'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -16410,32 +13832,6 @@ export namespace Prisma {
   };
 
   export type UserSettingsScalarFieldEnum = (typeof UserSettingsScalarFieldEnum)[keyof typeof UserSettingsScalarFieldEnum]
-
-
-  export const AlbumScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    description: 'description',
-    coverImage: 'coverImage',
-    isPrivate: 'isPrivate',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    userId: 'userId',
-    musicId: 'musicId'
-  };
-
-  export type AlbumScalarFieldEnum = (typeof AlbumScalarFieldEnum)[keyof typeof AlbumScalarFieldEnum]
-
-
-  export const PhotoScalarFieldEnum: {
-    id: 'id',
-    imageUrl: 'imageUrl',
-    caption: 'caption',
-    createdAt: 'createdAt',
-    albumId: 'albumId'
-  };
-
-  export type PhotoScalarFieldEnum = (typeof PhotoScalarFieldEnum)[keyof typeof PhotoScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -16561,8 +13957,8 @@ export namespace Prisma {
     coverImage?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    isProfilePrivate?: BoolFilter<"User"> | boolean
-    Album?: AlbumListRelationFilter
+    isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
+    birthday?: DateTimeFilter<"User"> | Date | string
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
     followers?: FollowListRelationFilter
@@ -16585,8 +13981,8 @@ export namespace Prisma {
     coverImage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    isProfilePrivate?: SortOrder
-    Album?: AlbumOrderByRelationAggregateInput
+    isProfilePrivate?: SortOrderInput | SortOrder
+    birthday?: SortOrder
     createdCircles?: CircleOrderByRelationAggregateInput
     comments?: CommentOrderByRelationAggregateInput
     followers?: FollowOrderByRelationAggregateInput
@@ -16612,8 +14008,8 @@ export namespace Prisma {
     coverImage?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    isProfilePrivate?: BoolFilter<"User"> | boolean
-    Album?: AlbumListRelationFilter
+    isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
+    birthday?: DateTimeFilter<"User"> | Date | string
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
     followers?: FollowListRelationFilter
@@ -16636,7 +14032,8 @@ export namespace Prisma {
     coverImage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    isProfilePrivate?: SortOrder
+    isProfilePrivate?: SortOrderInput | SortOrder
+    birthday?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -16658,7 +14055,8 @@ export namespace Prisma {
     coverImage?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    isProfilePrivate?: BoolWithAggregatesFilter<"User"> | boolean
+    isProfilePrivate?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
+    birthday?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type CircleWhereInput = {
@@ -16911,7 +14309,6 @@ export namespace Prisma {
     duration?: IntNullableFilter<"Music"> | number | null
     createdAt?: DateTimeFilter<"Music"> | Date | string
     updatedAt?: DateTimeFilter<"Music"> | Date | string
-    Album?: AlbumListRelationFilter
     posts?: PostListRelationFilter
     savedBy?: SavedMusicListRelationFilter
   }
@@ -16925,7 +14322,6 @@ export namespace Prisma {
     duration?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    Album?: AlbumOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
     savedBy?: SavedMusicOrderByRelationAggregateInput
   }
@@ -16942,7 +14338,6 @@ export namespace Prisma {
     duration?: IntNullableFilter<"Music"> | number | null
     createdAt?: DateTimeFilter<"Music"> | Date | string
     updatedAt?: DateTimeFilter<"Music"> | Date | string
-    Album?: AlbumListRelationFilter
     posts?: PostListRelationFilter
     savedBy?: SavedMusicListRelationFilter
   }, "id">
@@ -17312,146 +14707,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"UserSettings"> | Date | string
   }
 
-  export type AlbumWhereInput = {
-    AND?: AlbumWhereInput | AlbumWhereInput[]
-    OR?: AlbumWhereInput[]
-    NOT?: AlbumWhereInput | AlbumWhereInput[]
-    id?: IntFilter<"Album"> | number
-    name?: StringFilter<"Album"> | string
-    description?: StringNullableFilter<"Album"> | string | null
-    coverImage?: StringFilter<"Album"> | string
-    isPrivate?: BoolFilter<"Album"> | boolean
-    createdAt?: DateTimeFilter<"Album"> | Date | string
-    updatedAt?: DateTimeFilter<"Album"> | Date | string
-    userId?: IntFilter<"Album"> | number
-    musicId?: IntNullableFilter<"Album"> | number | null
-    Music?: XOR<MusicNullableScalarRelationFilter, MusicWhereInput> | null
-    User?: XOR<UserScalarRelationFilter, UserWhereInput>
-    Photo?: PhotoListRelationFilter
-  }
-
-  export type AlbumOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    coverImage?: SortOrder
-    isPrivate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrderInput | SortOrder
-    Music?: MusicOrderByWithRelationInput
-    User?: UserOrderByWithRelationInput
-    Photo?: PhotoOrderByRelationAggregateInput
-  }
-
-  export type AlbumWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: AlbumWhereInput | AlbumWhereInput[]
-    OR?: AlbumWhereInput[]
-    NOT?: AlbumWhereInput | AlbumWhereInput[]
-    name?: StringFilter<"Album"> | string
-    description?: StringNullableFilter<"Album"> | string | null
-    coverImage?: StringFilter<"Album"> | string
-    isPrivate?: BoolFilter<"Album"> | boolean
-    createdAt?: DateTimeFilter<"Album"> | Date | string
-    updatedAt?: DateTimeFilter<"Album"> | Date | string
-    userId?: IntFilter<"Album"> | number
-    musicId?: IntNullableFilter<"Album"> | number | null
-    Music?: XOR<MusicNullableScalarRelationFilter, MusicWhereInput> | null
-    User?: XOR<UserScalarRelationFilter, UserWhereInput>
-    Photo?: PhotoListRelationFilter
-  }, "id">
-
-  export type AlbumOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    coverImage?: SortOrder
-    isPrivate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrderInput | SortOrder
-    _count?: AlbumCountOrderByAggregateInput
-    _avg?: AlbumAvgOrderByAggregateInput
-    _max?: AlbumMaxOrderByAggregateInput
-    _min?: AlbumMinOrderByAggregateInput
-    _sum?: AlbumSumOrderByAggregateInput
-  }
-
-  export type AlbumScalarWhereWithAggregatesInput = {
-    AND?: AlbumScalarWhereWithAggregatesInput | AlbumScalarWhereWithAggregatesInput[]
-    OR?: AlbumScalarWhereWithAggregatesInput[]
-    NOT?: AlbumScalarWhereWithAggregatesInput | AlbumScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Album"> | number
-    name?: StringWithAggregatesFilter<"Album"> | string
-    description?: StringNullableWithAggregatesFilter<"Album"> | string | null
-    coverImage?: StringWithAggregatesFilter<"Album"> | string
-    isPrivate?: BoolWithAggregatesFilter<"Album"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"Album"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Album"> | Date | string
-    userId?: IntWithAggregatesFilter<"Album"> | number
-    musicId?: IntNullableWithAggregatesFilter<"Album"> | number | null
-  }
-
-  export type PhotoWhereInput = {
-    AND?: PhotoWhereInput | PhotoWhereInput[]
-    OR?: PhotoWhereInput[]
-    NOT?: PhotoWhereInput | PhotoWhereInput[]
-    id?: IntFilter<"Photo"> | number
-    imageUrl?: StringFilter<"Photo"> | string
-    caption?: StringNullableFilter<"Photo"> | string | null
-    createdAt?: DateTimeFilter<"Photo"> | Date | string
-    albumId?: IntFilter<"Photo"> | number
-    Album?: XOR<AlbumScalarRelationFilter, AlbumWhereInput>
-  }
-
-  export type PhotoOrderByWithRelationInput = {
-    id?: SortOrder
-    imageUrl?: SortOrder
-    caption?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    albumId?: SortOrder
-    Album?: AlbumOrderByWithRelationInput
-  }
-
-  export type PhotoWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: PhotoWhereInput | PhotoWhereInput[]
-    OR?: PhotoWhereInput[]
-    NOT?: PhotoWhereInput | PhotoWhereInput[]
-    imageUrl?: StringFilter<"Photo"> | string
-    caption?: StringNullableFilter<"Photo"> | string | null
-    createdAt?: DateTimeFilter<"Photo"> | Date | string
-    albumId?: IntFilter<"Photo"> | number
-    Album?: XOR<AlbumScalarRelationFilter, AlbumWhereInput>
-  }, "id">
-
-  export type PhotoOrderByWithAggregationInput = {
-    id?: SortOrder
-    imageUrl?: SortOrder
-    caption?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    albumId?: SortOrder
-    _count?: PhotoCountOrderByAggregateInput
-    _avg?: PhotoAvgOrderByAggregateInput
-    _max?: PhotoMaxOrderByAggregateInput
-    _min?: PhotoMinOrderByAggregateInput
-    _sum?: PhotoSumOrderByAggregateInput
-  }
-
-  export type PhotoScalarWhereWithAggregatesInput = {
-    AND?: PhotoScalarWhereWithAggregatesInput | PhotoScalarWhereWithAggregatesInput[]
-    OR?: PhotoScalarWhereWithAggregatesInput[]
-    NOT?: PhotoScalarWhereWithAggregatesInput | PhotoScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Photo"> | number
-    imageUrl?: StringWithAggregatesFilter<"Photo"> | string
-    caption?: StringNullableWithAggregatesFilter<"Photo"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Photo"> | Date | string
-    albumId?: IntWithAggregatesFilter<"Photo"> | number
-  }
-
   export type UserCreateInput = {
     email: string
     name?: string | null
@@ -17462,8 +14717,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -17486,8 +14741,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -17509,8 +14764,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -17533,8 +14788,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -17557,7 +14812,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
   }
 
   export type UserUpdateManyMutationInput = {
@@ -17570,7 +14826,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -17584,7 +14841,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CircleCreateInput = {
@@ -17827,7 +15085,6 @@ export namespace Prisma {
     duration?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Album?: AlbumCreateNestedManyWithoutMusicInput
     posts?: PostCreateNestedManyWithoutMusicInput
     savedBy?: SavedMusicCreateNestedManyWithoutMusicInput
   }
@@ -17841,7 +15098,6 @@ export namespace Prisma {
     duration?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Album?: AlbumUncheckedCreateNestedManyWithoutMusicInput
     posts?: PostUncheckedCreateNestedManyWithoutMusicInput
     savedBy?: SavedMusicUncheckedCreateNestedManyWithoutMusicInput
   }
@@ -17854,7 +15110,6 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Album?: AlbumUpdateManyWithoutMusicNestedInput
     posts?: PostUpdateManyWithoutMusicNestedInput
     savedBy?: SavedMusicUpdateManyWithoutMusicNestedInput
   }
@@ -17868,7 +15123,6 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Album?: AlbumUncheckedUpdateManyWithoutMusicNestedInput
     posts?: PostUncheckedUpdateManyWithoutMusicNestedInput
     savedBy?: SavedMusicUncheckedUpdateManyWithoutMusicNestedInput
   }
@@ -18210,141 +15464,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AlbumCreateInput = {
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    Music?: MusicCreateNestedOneWithoutAlbumInput
-    User: UserCreateNestedOneWithoutAlbumInput
-    Photo?: PhotoCreateNestedManyWithoutAlbumInput
-  }
-
-  export type AlbumUncheckedCreateInput = {
-    id?: number
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    userId: number
-    musicId?: number | null
-    Photo?: PhotoUncheckedCreateNestedManyWithoutAlbumInput
-  }
-
-  export type AlbumUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Music?: MusicUpdateOneWithoutAlbumNestedInput
-    User?: UserUpdateOneRequiredWithoutAlbumNestedInput
-    Photo?: PhotoUpdateManyWithoutAlbumNestedInput
-  }
-
-  export type AlbumUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-    musicId?: NullableIntFieldUpdateOperationsInput | number | null
-    Photo?: PhotoUncheckedUpdateManyWithoutAlbumNestedInput
-  }
-
-  export type AlbumCreateManyInput = {
-    id?: number
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    userId: number
-    musicId?: number | null
-  }
-
-  export type AlbumUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AlbumUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-    musicId?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type PhotoCreateInput = {
-    imageUrl: string
-    caption?: string | null
-    createdAt?: Date | string
-    Album: AlbumCreateNestedOneWithoutPhotoInput
-  }
-
-  export type PhotoUncheckedCreateInput = {
-    id?: number
-    imageUrl: string
-    caption?: string | null
-    createdAt?: Date | string
-    albumId: number
-  }
-
-  export type PhotoUpdateInput = {
-    imageUrl?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Album?: AlbumUpdateOneRequiredWithoutPhotoNestedInput
-  }
-
-  export type PhotoUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    imageUrl?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    albumId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type PhotoCreateManyInput = {
-    id?: number
-    imageUrl: string
-    caption?: string | null
-    createdAt?: Date | string
-    albumId: number
-  }
-
-  export type PhotoUpdateManyMutationInput = {
-    imageUrl?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PhotoUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    imageUrl?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    albumId?: IntFieldUpdateOperationsInput | number
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -18397,15 +15516,9 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type AlbumListRelationFilter = {
-    every?: AlbumWhereInput
-    some?: AlbumWhereInput
-    none?: AlbumWhereInput
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type CircleListRelationFilter = {
@@ -18460,10 +15573,6 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type AlbumOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type CircleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -18504,6 +15613,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrder
+    birthday?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -18522,6 +15632,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrder
+    birthday?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -18536,6 +15647,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrder
+    birthday?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -18608,12 +15720,17 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type UserScalarRelationFilter = {
@@ -18665,6 +15782,14 @@ export namespace Prisma {
   export type CircleSumOrderByAggregateInput = {
     id?: SortOrder
     creatorId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumRoleFilter<$PrismaModel = never> = {
@@ -19077,115 +16202,6 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
-  export type MusicNullableScalarRelationFilter = {
-    is?: MusicWhereInput | null
-    isNot?: MusicWhereInput | null
-  }
-
-  export type PhotoListRelationFilter = {
-    every?: PhotoWhereInput
-    some?: PhotoWhereInput
-    none?: PhotoWhereInput
-  }
-
-  export type PhotoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AlbumCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    coverImage?: SortOrder
-    isPrivate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-  }
-
-  export type AlbumAvgOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-  }
-
-  export type AlbumMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    coverImage?: SortOrder
-    isPrivate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-  }
-
-  export type AlbumMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    coverImage?: SortOrder
-    isPrivate?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-  }
-
-  export type AlbumSumOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-  }
-
-  export type AlbumScalarRelationFilter = {
-    is?: AlbumWhereInput
-    isNot?: AlbumWhereInput
-  }
-
-  export type PhotoCountOrderByAggregateInput = {
-    id?: SortOrder
-    imageUrl?: SortOrder
-    caption?: SortOrder
-    createdAt?: SortOrder
-    albumId?: SortOrder
-  }
-
-  export type PhotoAvgOrderByAggregateInput = {
-    id?: SortOrder
-    albumId?: SortOrder
-  }
-
-  export type PhotoMaxOrderByAggregateInput = {
-    id?: SortOrder
-    imageUrl?: SortOrder
-    caption?: SortOrder
-    createdAt?: SortOrder
-    albumId?: SortOrder
-  }
-
-  export type PhotoMinOrderByAggregateInput = {
-    id?: SortOrder
-    imageUrl?: SortOrder
-    caption?: SortOrder
-    createdAt?: SortOrder
-    albumId?: SortOrder
-  }
-
-  export type PhotoSumOrderByAggregateInput = {
-    id?: SortOrder
-    albumId?: SortOrder
-  }
-
-  export type AlbumCreateNestedManyWithoutUserInput = {
-    create?: XOR<AlbumCreateWithoutUserInput, AlbumUncheckedCreateWithoutUserInput> | AlbumCreateWithoutUserInput[] | AlbumUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutUserInput | AlbumCreateOrConnectWithoutUserInput[]
-    createMany?: AlbumCreateManyUserInputEnvelope
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-  }
-
   export type CircleCreateNestedManyWithoutCreatorInput = {
     create?: XOR<CircleCreateWithoutCreatorInput, CircleUncheckedCreateWithoutCreatorInput> | CircleCreateWithoutCreatorInput[] | CircleUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: CircleCreateOrConnectWithoutCreatorInput | CircleCreateOrConnectWithoutCreatorInput[]
@@ -19246,13 +16262,6 @@ export namespace Prisma {
     create?: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserSettingsCreateOrConnectWithoutUserInput
     connect?: UserSettingsWhereUniqueInput
-  }
-
-  export type AlbumUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<AlbumCreateWithoutUserInput, AlbumUncheckedCreateWithoutUserInput> | AlbumCreateWithoutUserInput[] | AlbumUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutUserInput | AlbumCreateOrConnectWithoutUserInput[]
-    createMany?: AlbumCreateManyUserInputEnvelope
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
   }
 
   export type CircleUncheckedCreateNestedManyWithoutCreatorInput = {
@@ -19329,22 +16338,8 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type AlbumUpdateManyWithoutUserNestedInput = {
-    create?: XOR<AlbumCreateWithoutUserInput, AlbumUncheckedCreateWithoutUserInput> | AlbumCreateWithoutUserInput[] | AlbumUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutUserInput | AlbumCreateOrConnectWithoutUserInput[]
-    upsert?: AlbumUpsertWithWhereUniqueWithoutUserInput | AlbumUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: AlbumCreateManyUserInputEnvelope
-    set?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    disconnect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    delete?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    update?: AlbumUpdateWithWhereUniqueWithoutUserInput | AlbumUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: AlbumUpdateManyWithWhereWithoutUserInput | AlbumUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
   }
 
   export type CircleUpdateManyWithoutCreatorNestedInput = {
@@ -19475,20 +16470,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type AlbumUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<AlbumCreateWithoutUserInput, AlbumUncheckedCreateWithoutUserInput> | AlbumCreateWithoutUserInput[] | AlbumUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutUserInput | AlbumCreateOrConnectWithoutUserInput[]
-    upsert?: AlbumUpsertWithWhereUniqueWithoutUserInput | AlbumUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: AlbumCreateManyUserInputEnvelope
-    set?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    disconnect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    delete?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    update?: AlbumUpdateWithWhereUniqueWithoutUserInput | AlbumUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: AlbumUpdateManyWithWhereWithoutUserInput | AlbumUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
   }
 
   export type CircleUncheckedUpdateManyWithoutCreatorNestedInput = {
@@ -19645,6 +16626,10 @@ export namespace Prisma {
     connectOrCreate?: PostCreateOrConnectWithoutCircleInput | PostCreateOrConnectWithoutCircleInput[]
     createMany?: PostCreateManyCircleInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutCreatedCirclesNestedInput = {
@@ -19869,13 +16854,6 @@ export namespace Prisma {
     deleteMany?: LikeScalarWhereInput | LikeScalarWhereInput[]
   }
 
-  export type AlbumCreateNestedManyWithoutMusicInput = {
-    create?: XOR<AlbumCreateWithoutMusicInput, AlbumUncheckedCreateWithoutMusicInput> | AlbumCreateWithoutMusicInput[] | AlbumUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutMusicInput | AlbumCreateOrConnectWithoutMusicInput[]
-    createMany?: AlbumCreateManyMusicInputEnvelope
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-  }
-
   export type PostCreateNestedManyWithoutMusicInput = {
     create?: XOR<PostCreateWithoutMusicInput, PostUncheckedCreateWithoutMusicInput> | PostCreateWithoutMusicInput[] | PostUncheckedCreateWithoutMusicInput[]
     connectOrCreate?: PostCreateOrConnectWithoutMusicInput | PostCreateOrConnectWithoutMusicInput[]
@@ -19888,13 +16866,6 @@ export namespace Prisma {
     connectOrCreate?: SavedMusicCreateOrConnectWithoutMusicInput | SavedMusicCreateOrConnectWithoutMusicInput[]
     createMany?: SavedMusicCreateManyMusicInputEnvelope
     connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-  }
-
-  export type AlbumUncheckedCreateNestedManyWithoutMusicInput = {
-    create?: XOR<AlbumCreateWithoutMusicInput, AlbumUncheckedCreateWithoutMusicInput> | AlbumCreateWithoutMusicInput[] | AlbumUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutMusicInput | AlbumCreateOrConnectWithoutMusicInput[]
-    createMany?: AlbumCreateManyMusicInputEnvelope
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
   }
 
   export type PostUncheckedCreateNestedManyWithoutMusicInput = {
@@ -19917,20 +16888,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type AlbumUpdateManyWithoutMusicNestedInput = {
-    create?: XOR<AlbumCreateWithoutMusicInput, AlbumUncheckedCreateWithoutMusicInput> | AlbumCreateWithoutMusicInput[] | AlbumUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutMusicInput | AlbumCreateOrConnectWithoutMusicInput[]
-    upsert?: AlbumUpsertWithWhereUniqueWithoutMusicInput | AlbumUpsertWithWhereUniqueWithoutMusicInput[]
-    createMany?: AlbumCreateManyMusicInputEnvelope
-    set?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    disconnect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    delete?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    update?: AlbumUpdateWithWhereUniqueWithoutMusicInput | AlbumUpdateWithWhereUniqueWithoutMusicInput[]
-    updateMany?: AlbumUpdateManyWithWhereWithoutMusicInput | AlbumUpdateManyWithWhereWithoutMusicInput[]
-    deleteMany?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
   }
 
   export type PostUpdateManyWithoutMusicNestedInput = {
@@ -19959,20 +16916,6 @@ export namespace Prisma {
     update?: SavedMusicUpdateWithWhereUniqueWithoutMusicInput | SavedMusicUpdateWithWhereUniqueWithoutMusicInput[]
     updateMany?: SavedMusicUpdateManyWithWhereWithoutMusicInput | SavedMusicUpdateManyWithWhereWithoutMusicInput[]
     deleteMany?: SavedMusicScalarWhereInput | SavedMusicScalarWhereInput[]
-  }
-
-  export type AlbumUncheckedUpdateManyWithoutMusicNestedInput = {
-    create?: XOR<AlbumCreateWithoutMusicInput, AlbumUncheckedCreateWithoutMusicInput> | AlbumCreateWithoutMusicInput[] | AlbumUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutMusicInput | AlbumCreateOrConnectWithoutMusicInput[]
-    upsert?: AlbumUpsertWithWhereUniqueWithoutMusicInput | AlbumUpsertWithWhereUniqueWithoutMusicInput[]
-    createMany?: AlbumCreateManyMusicInputEnvelope
-    set?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    disconnect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    delete?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    update?: AlbumUpdateWithWhereUniqueWithoutMusicInput | AlbumUpdateWithWhereUniqueWithoutMusicInput[]
-    updateMany?: AlbumUpdateManyWithWhereWithoutMusicInput | AlbumUpdateManyWithWhereWithoutMusicInput[]
-    deleteMany?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
   }
 
   export type PostUncheckedUpdateManyWithoutMusicNestedInput = {
@@ -20129,92 +17072,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSettingsInput, UserUpdateWithoutSettingsInput>, UserUncheckedUpdateWithoutSettingsInput>
   }
 
-  export type MusicCreateNestedOneWithoutAlbumInput = {
-    create?: XOR<MusicCreateWithoutAlbumInput, MusicUncheckedCreateWithoutAlbumInput>
-    connectOrCreate?: MusicCreateOrConnectWithoutAlbumInput
-    connect?: MusicWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutAlbumInput = {
-    create?: XOR<UserCreateWithoutAlbumInput, UserUncheckedCreateWithoutAlbumInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAlbumInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type PhotoCreateNestedManyWithoutAlbumInput = {
-    create?: XOR<PhotoCreateWithoutAlbumInput, PhotoUncheckedCreateWithoutAlbumInput> | PhotoCreateWithoutAlbumInput[] | PhotoUncheckedCreateWithoutAlbumInput[]
-    connectOrCreate?: PhotoCreateOrConnectWithoutAlbumInput | PhotoCreateOrConnectWithoutAlbumInput[]
-    createMany?: PhotoCreateManyAlbumInputEnvelope
-    connect?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-  }
-
-  export type PhotoUncheckedCreateNestedManyWithoutAlbumInput = {
-    create?: XOR<PhotoCreateWithoutAlbumInput, PhotoUncheckedCreateWithoutAlbumInput> | PhotoCreateWithoutAlbumInput[] | PhotoUncheckedCreateWithoutAlbumInput[]
-    connectOrCreate?: PhotoCreateOrConnectWithoutAlbumInput | PhotoCreateOrConnectWithoutAlbumInput[]
-    createMany?: PhotoCreateManyAlbumInputEnvelope
-    connect?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-  }
-
-  export type MusicUpdateOneWithoutAlbumNestedInput = {
-    create?: XOR<MusicCreateWithoutAlbumInput, MusicUncheckedCreateWithoutAlbumInput>
-    connectOrCreate?: MusicCreateOrConnectWithoutAlbumInput
-    upsert?: MusicUpsertWithoutAlbumInput
-    disconnect?: MusicWhereInput | boolean
-    delete?: MusicWhereInput | boolean
-    connect?: MusicWhereUniqueInput
-    update?: XOR<XOR<MusicUpdateToOneWithWhereWithoutAlbumInput, MusicUpdateWithoutAlbumInput>, MusicUncheckedUpdateWithoutAlbumInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutAlbumNestedInput = {
-    create?: XOR<UserCreateWithoutAlbumInput, UserUncheckedCreateWithoutAlbumInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAlbumInput
-    upsert?: UserUpsertWithoutAlbumInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAlbumInput, UserUpdateWithoutAlbumInput>, UserUncheckedUpdateWithoutAlbumInput>
-  }
-
-  export type PhotoUpdateManyWithoutAlbumNestedInput = {
-    create?: XOR<PhotoCreateWithoutAlbumInput, PhotoUncheckedCreateWithoutAlbumInput> | PhotoCreateWithoutAlbumInput[] | PhotoUncheckedCreateWithoutAlbumInput[]
-    connectOrCreate?: PhotoCreateOrConnectWithoutAlbumInput | PhotoCreateOrConnectWithoutAlbumInput[]
-    upsert?: PhotoUpsertWithWhereUniqueWithoutAlbumInput | PhotoUpsertWithWhereUniqueWithoutAlbumInput[]
-    createMany?: PhotoCreateManyAlbumInputEnvelope
-    set?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    disconnect?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    delete?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    connect?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    update?: PhotoUpdateWithWhereUniqueWithoutAlbumInput | PhotoUpdateWithWhereUniqueWithoutAlbumInput[]
-    updateMany?: PhotoUpdateManyWithWhereWithoutAlbumInput | PhotoUpdateManyWithWhereWithoutAlbumInput[]
-    deleteMany?: PhotoScalarWhereInput | PhotoScalarWhereInput[]
-  }
-
-  export type PhotoUncheckedUpdateManyWithoutAlbumNestedInput = {
-    create?: XOR<PhotoCreateWithoutAlbumInput, PhotoUncheckedCreateWithoutAlbumInput> | PhotoCreateWithoutAlbumInput[] | PhotoUncheckedCreateWithoutAlbumInput[]
-    connectOrCreate?: PhotoCreateOrConnectWithoutAlbumInput | PhotoCreateOrConnectWithoutAlbumInput[]
-    upsert?: PhotoUpsertWithWhereUniqueWithoutAlbumInput | PhotoUpsertWithWhereUniqueWithoutAlbumInput[]
-    createMany?: PhotoCreateManyAlbumInputEnvelope
-    set?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    disconnect?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    delete?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    connect?: PhotoWhereUniqueInput | PhotoWhereUniqueInput[]
-    update?: PhotoUpdateWithWhereUniqueWithoutAlbumInput | PhotoUpdateWithWhereUniqueWithoutAlbumInput[]
-    updateMany?: PhotoUpdateManyWithWhereWithoutAlbumInput | PhotoUpdateManyWithWhereWithoutAlbumInput[]
-    deleteMany?: PhotoScalarWhereInput | PhotoScalarWhereInput[]
-  }
-
-  export type AlbumCreateNestedOneWithoutPhotoInput = {
-    create?: XOR<AlbumCreateWithoutPhotoInput, AlbumUncheckedCreateWithoutPhotoInput>
-    connectOrCreate?: AlbumCreateOrConnectWithoutPhotoInput
-    connect?: AlbumWhereUniqueInput
-  }
-
-  export type AlbumUpdateOneRequiredWithoutPhotoNestedInput = {
-    create?: XOR<AlbumCreateWithoutPhotoInput, AlbumUncheckedCreateWithoutPhotoInput>
-    connectOrCreate?: AlbumCreateOrConnectWithoutPhotoInput
-    upsert?: AlbumUpsertWithoutPhotoInput
-    connect?: AlbumWhereUniqueInput
-    update?: XOR<XOR<AlbumUpdateToOneWithWhereWithoutPhotoInput, AlbumUpdateWithoutPhotoInput>, AlbumUncheckedUpdateWithoutPhotoInput>
-  }
-
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20265,9 +17122,9 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -20356,6 +17213,19 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -20406,39 +17276,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type AlbumCreateWithoutUserInput = {
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    Music?: MusicCreateNestedOneWithoutAlbumInput
-    Photo?: PhotoCreateNestedManyWithoutAlbumInput
-  }
-
-  export type AlbumUncheckedCreateWithoutUserInput = {
-    id?: number
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    musicId?: number | null
-    Photo?: PhotoUncheckedCreateNestedManyWithoutAlbumInput
-  }
-
-  export type AlbumCreateOrConnectWithoutUserInput = {
-    where: AlbumWhereUniqueInput
-    create: XOR<AlbumCreateWithoutUserInput, AlbumUncheckedCreateWithoutUserInput>
-  }
-
-  export type AlbumCreateManyUserInputEnvelope = {
-    data: AlbumCreateManyUserInput | AlbumCreateManyUserInput[]
-    skipDuplicates?: boolean
   }
 
   export type CircleCreateWithoutCreatorInput = {
@@ -20679,37 +17516,6 @@ export namespace Prisma {
   export type UserSettingsCreateOrConnectWithoutUserInput = {
     where: UserSettingsWhereUniqueInput
     create: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
-  }
-
-  export type AlbumUpsertWithWhereUniqueWithoutUserInput = {
-    where: AlbumWhereUniqueInput
-    update: XOR<AlbumUpdateWithoutUserInput, AlbumUncheckedUpdateWithoutUserInput>
-    create: XOR<AlbumCreateWithoutUserInput, AlbumUncheckedCreateWithoutUserInput>
-  }
-
-  export type AlbumUpdateWithWhereUniqueWithoutUserInput = {
-    where: AlbumWhereUniqueInput
-    data: XOR<AlbumUpdateWithoutUserInput, AlbumUncheckedUpdateWithoutUserInput>
-  }
-
-  export type AlbumUpdateManyWithWhereWithoutUserInput = {
-    where: AlbumScalarWhereInput
-    data: XOR<AlbumUpdateManyMutationInput, AlbumUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type AlbumScalarWhereInput = {
-    AND?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
-    OR?: AlbumScalarWhereInput[]
-    NOT?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
-    id?: IntFilter<"Album"> | number
-    name?: StringFilter<"Album"> | string
-    description?: StringNullableFilter<"Album"> | string | null
-    coverImage?: StringFilter<"Album"> | string
-    isPrivate?: BoolFilter<"Album"> | boolean
-    createdAt?: DateTimeFilter<"Album"> | Date | string
-    updatedAt?: DateTimeFilter<"Album"> | Date | string
-    userId?: IntFilter<"Album"> | number
-    musicId?: IntNullableFilter<"Album"> | number | null
   }
 
   export type CircleUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -20976,8 +17782,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
@@ -20999,8 +17805,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -21097,8 +17903,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
@@ -21120,8 +17926,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -21204,8 +18010,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -21227,8 +18033,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -21301,8 +18107,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -21324,8 +18130,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -21420,7 +18226,6 @@ export namespace Prisma {
     duration?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Album?: AlbumCreateNestedManyWithoutMusicInput
     savedBy?: SavedMusicCreateNestedManyWithoutMusicInput
   }
 
@@ -21433,7 +18238,6 @@ export namespace Prisma {
     duration?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Album?: AlbumUncheckedCreateNestedManyWithoutMusicInput
     savedBy?: SavedMusicUncheckedCreateNestedManyWithoutMusicInput
   }
 
@@ -21452,8 +18256,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -21475,8 +18279,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -21579,7 +18383,6 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Album?: AlbumUpdateManyWithoutMusicNestedInput
     savedBy?: SavedMusicUpdateManyWithoutMusicNestedInput
   }
 
@@ -21592,7 +18395,6 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Album?: AlbumUncheckedUpdateManyWithoutMusicNestedInput
     savedBy?: SavedMusicUncheckedUpdateManyWithoutMusicNestedInput
   }
 
@@ -21617,8 +18419,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -21640,8 +18442,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -21650,39 +18452,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-  }
-
-  export type AlbumCreateWithoutMusicInput = {
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    User: UserCreateNestedOneWithoutAlbumInput
-    Photo?: PhotoCreateNestedManyWithoutAlbumInput
-  }
-
-  export type AlbumUncheckedCreateWithoutMusicInput = {
-    id?: number
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    userId: number
-    Photo?: PhotoUncheckedCreateNestedManyWithoutAlbumInput
-  }
-
-  export type AlbumCreateOrConnectWithoutMusicInput = {
-    where: AlbumWhereUniqueInput
-    create: XOR<AlbumCreateWithoutMusicInput, AlbumUncheckedCreateWithoutMusicInput>
-  }
-
-  export type AlbumCreateManyMusicInputEnvelope = {
-    data: AlbumCreateManyMusicInput | AlbumCreateManyMusicInput[]
-    skipDuplicates?: boolean
   }
 
   export type PostCreateWithoutMusicInput = {
@@ -21741,22 +18510,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type AlbumUpsertWithWhereUniqueWithoutMusicInput = {
-    where: AlbumWhereUniqueInput
-    update: XOR<AlbumUpdateWithoutMusicInput, AlbumUncheckedUpdateWithoutMusicInput>
-    create: XOR<AlbumCreateWithoutMusicInput, AlbumUncheckedCreateWithoutMusicInput>
-  }
-
-  export type AlbumUpdateWithWhereUniqueWithoutMusicInput = {
-    where: AlbumWhereUniqueInput
-    data: XOR<AlbumUpdateWithoutMusicInput, AlbumUncheckedUpdateWithoutMusicInput>
-  }
-
-  export type AlbumUpdateManyWithWhereWithoutMusicInput = {
-    where: AlbumScalarWhereInput
-    data: XOR<AlbumUpdateManyMutationInput, AlbumUncheckedUpdateManyWithoutMusicInput>
-  }
-
   export type PostUpsertWithWhereUniqueWithoutMusicInput = {
     where: PostWhereUniqueInput
     update: XOR<PostUpdateWithoutMusicInput, PostUncheckedUpdateWithoutMusicInput>
@@ -21797,7 +18550,6 @@ export namespace Prisma {
     duration?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Album?: AlbumCreateNestedManyWithoutMusicInput
     posts?: PostCreateNestedManyWithoutMusicInput
   }
 
@@ -21810,7 +18562,6 @@ export namespace Prisma {
     duration?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    Album?: AlbumUncheckedCreateNestedManyWithoutMusicInput
     posts?: PostUncheckedCreateNestedManyWithoutMusicInput
   }
 
@@ -21829,8 +18580,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -21852,8 +18603,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -21888,7 +18639,6 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Album?: AlbumUpdateManyWithoutMusicNestedInput
     posts?: PostUpdateManyWithoutMusicNestedInput
   }
 
@@ -21901,7 +18651,6 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Album?: AlbumUncheckedUpdateManyWithoutMusicNestedInput
     posts?: PostUncheckedUpdateManyWithoutMusicNestedInput
   }
 
@@ -21926,8 +18675,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -21949,8 +18698,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -22001,8 +18750,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
@@ -22024,8 +18773,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -22098,8 +18847,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
@@ -22121,8 +18870,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -22173,8 +18922,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -22196,8 +18945,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -22270,8 +19019,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -22293,8 +19042,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -22315,8 +19064,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     following?: FollowCreateNestedManyWithoutFollowingInput
@@ -22338,8 +19087,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -22365,8 +19114,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -22388,8 +19137,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -22426,8 +19175,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
@@ -22449,8 +19198,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -22482,8 +19231,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -22505,8 +19254,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -22527,8 +19276,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -22550,8 +19299,8 @@ export namespace Prisma {
     coverImage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    Album?: AlbumUncheckedCreateNestedManyWithoutUserInput
+    isProfilePrivate?: boolean | null
+    birthday: Date | string
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -22588,8 +19337,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -22611,8 +19360,8 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    Album?: AlbumUncheckedUpdateManyWithoutUserNestedInput
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -22621,301 +19370,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type MusicCreateWithoutAlbumInput = {
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostCreateNestedManyWithoutMusicInput
-    savedBy?: SavedMusicCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicUncheckedCreateWithoutAlbumInput = {
-    id?: number
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutMusicInput
-    savedBy?: SavedMusicUncheckedCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicCreateOrConnectWithoutAlbumInput = {
-    where: MusicWhereUniqueInput
-    create: XOR<MusicCreateWithoutAlbumInput, MusicUncheckedCreateWithoutAlbumInput>
-  }
-
-  export type UserCreateWithoutAlbumInput = {
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    createdCircles?: CircleCreateNestedManyWithoutCreatorInput
-    comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
-    likes?: LikeCreateNestedManyWithoutUserInput
-    memberships?: MembershipCreateNestedManyWithoutUserInput
-    posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
-    settings?: UserSettingsCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutAlbumInput = {
-    id?: number
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean
-    createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
-    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
-    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
-    memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
-    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutAlbumInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutAlbumInput, UserUncheckedCreateWithoutAlbumInput>
-  }
-
-  export type PhotoCreateWithoutAlbumInput = {
-    imageUrl: string
-    caption?: string | null
-    createdAt?: Date | string
-  }
-
-  export type PhotoUncheckedCreateWithoutAlbumInput = {
-    id?: number
-    imageUrl: string
-    caption?: string | null
-    createdAt?: Date | string
-  }
-
-  export type PhotoCreateOrConnectWithoutAlbumInput = {
-    where: PhotoWhereUniqueInput
-    create: XOR<PhotoCreateWithoutAlbumInput, PhotoUncheckedCreateWithoutAlbumInput>
-  }
-
-  export type PhotoCreateManyAlbumInputEnvelope = {
-    data: PhotoCreateManyAlbumInput | PhotoCreateManyAlbumInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type MusicUpsertWithoutAlbumInput = {
-    update: XOR<MusicUpdateWithoutAlbumInput, MusicUncheckedUpdateWithoutAlbumInput>
-    create: XOR<MusicCreateWithoutAlbumInput, MusicUncheckedCreateWithoutAlbumInput>
-    where?: MusicWhereInput
-  }
-
-  export type MusicUpdateToOneWithWhereWithoutAlbumInput = {
-    where?: MusicWhereInput
-    data: XOR<MusicUpdateWithoutAlbumInput, MusicUncheckedUpdateWithoutAlbumInput>
-  }
-
-  export type MusicUpdateWithoutAlbumInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUpdateManyWithoutMusicNestedInput
-    savedBy?: SavedMusicUpdateManyWithoutMusicNestedInput
-  }
-
-  export type MusicUncheckedUpdateWithoutAlbumInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutMusicNestedInput
-    savedBy?: SavedMusicUncheckedUpdateManyWithoutMusicNestedInput
-  }
-
-  export type UserUpsertWithoutAlbumInput = {
-    update: XOR<UserUpdateWithoutAlbumInput, UserUncheckedUpdateWithoutAlbumInput>
-    create: XOR<UserCreateWithoutAlbumInput, UserUncheckedCreateWithoutAlbumInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutAlbumInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutAlbumInput, UserUncheckedUpdateWithoutAlbumInput>
-  }
-
-  export type UserUpdateWithoutAlbumInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUpdateManyWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutAlbumInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-  }
-
-  export type PhotoUpsertWithWhereUniqueWithoutAlbumInput = {
-    where: PhotoWhereUniqueInput
-    update: XOR<PhotoUpdateWithoutAlbumInput, PhotoUncheckedUpdateWithoutAlbumInput>
-    create: XOR<PhotoCreateWithoutAlbumInput, PhotoUncheckedCreateWithoutAlbumInput>
-  }
-
-  export type PhotoUpdateWithWhereUniqueWithoutAlbumInput = {
-    where: PhotoWhereUniqueInput
-    data: XOR<PhotoUpdateWithoutAlbumInput, PhotoUncheckedUpdateWithoutAlbumInput>
-  }
-
-  export type PhotoUpdateManyWithWhereWithoutAlbumInput = {
-    where: PhotoScalarWhereInput
-    data: XOR<PhotoUpdateManyMutationInput, PhotoUncheckedUpdateManyWithoutAlbumInput>
-  }
-
-  export type PhotoScalarWhereInput = {
-    AND?: PhotoScalarWhereInput | PhotoScalarWhereInput[]
-    OR?: PhotoScalarWhereInput[]
-    NOT?: PhotoScalarWhereInput | PhotoScalarWhereInput[]
-    id?: IntFilter<"Photo"> | number
-    imageUrl?: StringFilter<"Photo"> | string
-    caption?: StringNullableFilter<"Photo"> | string | null
-    createdAt?: DateTimeFilter<"Photo"> | Date | string
-    albumId?: IntFilter<"Photo"> | number
-  }
-
-  export type AlbumCreateWithoutPhotoInput = {
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    Music?: MusicCreateNestedOneWithoutAlbumInput
-    User: UserCreateNestedOneWithoutAlbumInput
-  }
-
-  export type AlbumUncheckedCreateWithoutPhotoInput = {
-    id?: number
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    userId: number
-    musicId?: number | null
-  }
-
-  export type AlbumCreateOrConnectWithoutPhotoInput = {
-    where: AlbumWhereUniqueInput
-    create: XOR<AlbumCreateWithoutPhotoInput, AlbumUncheckedCreateWithoutPhotoInput>
-  }
-
-  export type AlbumUpsertWithoutPhotoInput = {
-    update: XOR<AlbumUpdateWithoutPhotoInput, AlbumUncheckedUpdateWithoutPhotoInput>
-    create: XOR<AlbumCreateWithoutPhotoInput, AlbumUncheckedCreateWithoutPhotoInput>
-    where?: AlbumWhereInput
-  }
-
-  export type AlbumUpdateToOneWithWhereWithoutPhotoInput = {
-    where?: AlbumWhereInput
-    data: XOR<AlbumUpdateWithoutPhotoInput, AlbumUncheckedUpdateWithoutPhotoInput>
-  }
-
-  export type AlbumUpdateWithoutPhotoInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Music?: MusicUpdateOneWithoutAlbumNestedInput
-    User?: UserUpdateOneRequiredWithoutAlbumNestedInput
-  }
-
-  export type AlbumUncheckedUpdateWithoutPhotoInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-    musicId?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type AlbumCreateManyUserInput = {
-    id?: number
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    musicId?: number | null
   }
 
   export type CircleCreateManyCreatorInput = {
@@ -22978,40 +19432,6 @@ export namespace Prisma {
     id?: number
     musicId: number
     createdAt?: Date | string
-  }
-
-  export type AlbumUpdateWithoutUserInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Music?: MusicUpdateOneWithoutAlbumNestedInput
-    Photo?: PhotoUpdateManyWithoutAlbumNestedInput
-  }
-
-  export type AlbumUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    musicId?: NullableIntFieldUpdateOperationsInput | number | null
-    Photo?: PhotoUncheckedUpdateManyWithoutAlbumNestedInput
-  }
-
-  export type AlbumUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    musicId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type CircleUpdateWithoutCreatorInput = {
@@ -23332,17 +19752,6 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type AlbumCreateManyMusicInput = {
-    id?: number
-    name: string
-    description?: string | null
-    coverImage: string
-    isPrivate?: boolean
-    createdAt?: Date | string
-    updatedAt: Date | string
-    userId: number
-  }
-
   export type PostCreateManyMusicInput = {
     id?: number
     content: string
@@ -23358,40 +19767,6 @@ export namespace Prisma {
     id?: number
     userId: number
     createdAt?: Date | string
-  }
-
-  export type AlbumUpdateWithoutMusicInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User?: UserUpdateOneRequiredWithoutAlbumNestedInput
-    Photo?: PhotoUpdateManyWithoutAlbumNestedInput
-  }
-
-  export type AlbumUncheckedUpdateWithoutMusicInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-    Photo?: PhotoUncheckedUpdateManyWithoutAlbumNestedInput
-  }
-
-  export type AlbumUncheckedUpdateManyWithoutMusicInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: StringFieldUpdateOperationsInput | string
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type PostUpdateWithoutMusicInput = {
@@ -23444,33 +19819,6 @@ export namespace Prisma {
   export type SavedMusicUncheckedUpdateManyWithoutMusicInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PhotoCreateManyAlbumInput = {
-    id?: number
-    imageUrl: string
-    caption?: string | null
-    createdAt?: Date | string
-  }
-
-  export type PhotoUpdateWithoutAlbumInput = {
-    imageUrl?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PhotoUncheckedUpdateWithoutAlbumInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    imageUrl?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PhotoUncheckedUpdateManyWithoutAlbumInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    imageUrl?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
