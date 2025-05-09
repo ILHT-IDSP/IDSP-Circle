@@ -1,18 +1,18 @@
 export interface IFormData {
-    email: string;
-    confirmEmail: string;
-    password: string;
-    confirmPassword: string;
-    birthday: string;
-    fullName: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    profileImage: string;
+    email?: string;
+    confirmEmail?: string;
+    password?: string;
+    confirmPassword?: string;
+    birthday?: string;
+    fullName?: string;
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+    profileImage?: string;
 }
 
 export interface IFormDataProps {
-    formData: IformData;
+    formData: IFormData;
     setFormData: React.Dispatch<React.SetStateAction<IFormData>>;
     onNext: () => void;
 }

@@ -20,7 +20,8 @@ export default function AddProfilePicture({formData, setFormData, onNext}: IForm
 
     const handleSkip = async () => {
         try {
-            const response = await fetch("/api/auth/[...nextauth]", {
+            console.log("Form Data @ pressing skip", formData);
+            const response = await fetch("/api/register", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({formData}),
@@ -29,8 +30,8 @@ export default function AddProfilePicture({formData, setFormData, onNext}: IForm
             if (!response.ok) throw new Error("Failed creating session");
 
             const data = await response.json();
-
-            console.log("Session created: ", data);
+            console.log(data.username);
+            console.log("FORM DATA AFTER REGISTER", data);
             router.push("/profile");
         } catch (err) {
             console.error("Failed to skip profile picture step", err);

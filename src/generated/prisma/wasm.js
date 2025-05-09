@@ -125,12 +125,14 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   name: 'name',
   username: 'username',
+  password: 'password',
   bio: 'bio',
   profileImage: 'profileImage',
   coverImage: 'coverImage',
-  isProfilePrivate: 'isProfilePrivate',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isProfilePrivate: 'isProfilePrivate',
+  birthday: 'birthday'
 };
 
 exports.Prisma.CircleScalarFieldEnum = {

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -14,47 +8,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Define your models here
 model User {
-  id               Int      @id @default(autoincrement())
-  email            String   @unique
+  id               Int           @id @default(autoincrement())
+  email            String        @unique
   name             String?
-  username         String   @unique
+  username         String        @unique
+  password         String
   bio              String?
-  profileImage     String? // URL to profile image
-  coverImage       String? // URL to cover image
-  isProfilePrivate Boolean  @default(false) // Controls if profile is private
-  burfday		   DateTime
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  // Relations
-  posts          Post[] // User's posts
-  comments       Comment[] // User's comments
-  likes          Like[] // User's likes
-  createdCircles Circle[] // Circles created by the user
-  memberships    Membership[] // Circles the user is a member of
-  savedMusic     SavedMusic[] // Music saved by the user
-  followers      Follow[]      @relation("Follower")
-  following      Follow[]      @relation("Following")
-  settings       UserSettings? // User's settings
+  profileImage     String?
+  coverImage       String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  isProfilePrivate Boolean?      @default(false)
+  birthday         DateTime
+  createdCircles   Circle[]
+  comments         Comment[]
+  followers        Follow[]      @relation("Follower")
+  following        Follow[]      @relation("Following")
+  likes            Like[]
+  memberships      Membership[]
+  posts            Post[]
+  savedMusic       SavedMusic[]
+  settings         UserSettings?
 }
 
 model Circle {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
   description String?
-  avatar      String? // URL to circle avatar
-  coverImage  String? // URL to circle cover image
-  isPrivate   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  avatar      String?
+  coverImage  String?
+  isPrivate   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   creatorId   Int
-
-  // Relations
-  creator User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  members Membership[] // Users who are members of this circle
-  posts   Post[] // Posts in this circle
+  creator     User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  members     Membership[]
+  posts       Post[]
 
   @@index([creatorId])
 }
@@ -66,39 +56,29 @@ model Membership {
   role      Role     @default(MEMBER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  circle Circle @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  circle    Circle   @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, circleId])
   @@index([userId])
   @@index([circleId])
 }
 
-enum Role {
-  MEMBER
-  MODERATOR
-  ADMIN
-}
-
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   content   String
-  imageUrl  String? // URL to post image (optional)
-  videoUrl  String? // URL to post video (optional)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  imageUrl  String?
+  videoUrl  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   userId    Int
   circleId  Int
-  musicId   Int // Every post must have music attached
-
-  // Relations
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  circle   Circle    @relation(fields: [circleId], references: [id], onDelete: Cascade)
-  music    Music     @relation(fields: [musicId], references: [id])
-  comments Comment[]
-  likes    Like[]
+  musicId   Int
+  comments  Comment[]
+  likes     Like[]
+  circle    Circle    @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  music     Music     @relation(fields: [musicId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([circleId])
@@ -106,18 +86,16 @@ model Post {
 }
 
 model Music {
-  id         Int      @id @default(autoincrement())
+  id         Int          @id @default(autoincrement())
   title      String
   artist     String
-  albumCover String? // URL to album cover
-  audioUrl   String // URL to music file or external service link
-  duration   Int? // Duration in seconds
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  // Relations
-  posts   Post[] // Posts using this music
-  savedBy SavedMusic[] // Users who saved this music
+  albumCover String?
+  audioUrl   String
+  duration   Int?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  posts      Post[]
+  savedBy    SavedMusic[]
 }
 
 model SavedMusic {
@@ -125,10 +103,8 @@ model SavedMusic {
   userId    Int
   musicId   Int
   createdAt DateTime @default(now())
-
-  // Relations
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  music Music @relation(fields: [musicId], references: [id], onDelete: Cascade)
+  music     Music    @relation(fields: [musicId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, musicId])
   @@index([userId])
@@ -142,10 +118,8 @@ model Comment {
   updatedAt DateTime @updatedAt
   userId    Int
   postId    Int
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([postId])
@@ -156,10 +130,8 @@ model Like {
   createdAt DateTime @default(now())
   userId    Int
   postId    Int
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
   @@index([userId])
@@ -171,43 +143,36 @@ model Follow {
   followerId  Int
   followingId Int
   createdAt   DateTime @default(now())
-
-  // Relations
-  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
-  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
 }
 
-// User settings model to store all user preferences and settings
 model UserSettings {
-  id     Int @id @default(autoincrement())
-  userId Int @unique
-
-  // Accessibility settings
-  darkMode     Boolean @default(true)
-  highContrast Boolean @default(false)
-  fontSize     String  @default("medium") // small, medium, large
-
-  // Album settings
-  defaultAlbumPrivacy Boolean @default(true) // true = private, false = public
-  muteAlbumContent    Boolean @default(false)
-  muteAlbumComments   Boolean @default(false)
-
-  // Notification settings
-  enableNotifications  Boolean @default(true)
-  notifyNewMessages    Boolean @default(true)
-  notifyFriendRequests Boolean @default(true)
-  notifyCircleInvites  Boolean @default(true)
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                   Int      @id @default(autoincrement())
+  userId               Int      @unique
+  darkMode             Boolean  @default(true)
+  highContrast         Boolean  @default(false)
+  fontSize             String   @default("medium")
+  defaultAlbumPrivacy  Boolean  @default(true)
+  muteAlbumContent     Boolean  @default(false)
+  muteAlbumComments    Boolean  @default(false)
+  enableNotifications  Boolean  @default(true)
+  notifyNewMessages    Boolean  @default(true)
+  notifyFriendRequests Boolean  @default(true)
+  notifyCircleInvites  Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+enum Role {
+  MEMBER
+  MODERATOR
+  ADMIN
 }

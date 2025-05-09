@@ -10,13 +10,18 @@ import CirclesLogo from "../Circles_Logo";
 import {OrDivider} from "./or_divider";
 import {AlternativeLogins} from "./alternative_login";
 import {DontHaveAnAccountSignUp} from "./dont_have_an_account";
+import {signIn} from "next-auth/react";
+import {signInSchema} from "@/lib/zod";
 
 export function LoginForm() {
+    const credentialsActions = (formData: FormData) => {
+        signIn("credentials", {redirectTo: "/profile", ...formData});
+    };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
         try {
-            // Login form submission logic here
             console.log("Form submitted");
         } catch (error) {
             console.error("Login failed", error);
@@ -29,7 +34,8 @@ export function LoginForm() {
                 <CirclesLogo />
             </div>
             <form
-                onSubmit={handleSubmit}
+                action={credentialsActions}
+                // onSubmit={handleSubmit}
                 className="w-full max-w-md"
             >
                 <div className="flex flex-col gap-2">
@@ -42,7 +48,7 @@ export function LoginForm() {
                     <ForgotPassword />
                 </div>
 
-                <LoginButton onClick={() => {}} />
+                <LoginButton />
 
                 <OrDivider />
                 <AlternativeLogins />
