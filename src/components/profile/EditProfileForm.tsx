@@ -5,7 +5,7 @@ import {useState} from "react";
 
 export default function EditProfileForm({session}: {session: Session | null}) {
     const [editing, setEditing] = useState(false);
-    const [name, setName] = useState(session?.user?.name ?? "");
+    const [name, setName] = useState(session?.user?.username ?? "");
     const [email, setEmail] = useState(session?.user?.email ?? "");
 
     const handleSubmit = async (e: React.FormEvent) => {

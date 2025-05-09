@@ -14,12 +14,13 @@ import {signIn} from "next-auth/react";
 import {signInSchema} from "@/lib/zod";
 
 export function LoginForm() {
-    const credentialsActions = (formData: FormData) => {
-        signIn("credentials", {redirectTo: "/profile", ...formData});
-    };
-
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+
+        await signIn("credentials", {redirectTo: "/profile"});
 
         try {
             console.log("Form submitted");
@@ -34,7 +35,7 @@ export function LoginForm() {
                 <CirclesLogo />
             </div>
             <form
-                action={credentialsActions}
+                onSubmit={handleSubmit}
                 // onSubmit={handleSubmit}
                 className="w-full max-w-md"
             >
@@ -48,7 +49,7 @@ export function LoginForm() {
                     <ForgotPassword />
                 </div>
 
-                <LoginButton />
+                <LoginButton onClick={async () => await signIn("credentials", {redirectTo: "/profile"})} />
 
                 <OrDivider />
                 <AlternativeLogins />

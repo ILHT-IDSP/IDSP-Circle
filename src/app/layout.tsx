@@ -1,7 +1,6 @@
 import type {Metadata} from "next";
 import "./globals.css";
 import NextThemeProvider from "../components/theme/NextThemeProvider";
-import SessionWrapper from "./session-wrapper";
 
 export const metadata: Metadata = {
     title: "Circles",
@@ -15,9 +14,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
             suppressHydrationWarning
         >
             <body className="antialiased">
-                <NextThemeProvider>
-                    <SessionWrapper>{children}</SessionWrapper>
-                </NextThemeProvider>
+                <NextThemeProvider>{children}</NextThemeProvider>
             </body>
         </html>
     );

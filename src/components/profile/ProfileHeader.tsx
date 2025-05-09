@@ -36,7 +36,7 @@ export default function ProfileHeader({session}: {session: Session | null}) {
                 className="w-24 h-24 rounded-full object-cover cursor-pointer"
                 onClick={handleClick}
             />
-            <p className="text-lg font-semibold mt-2">@{session?.user?.name}</p>
+            <p className="text-lg font-semibold mt-2">@{session?.user?.username}</p>
             <Link
                 href="/settings"
                 className="absolute right-0 top-0"

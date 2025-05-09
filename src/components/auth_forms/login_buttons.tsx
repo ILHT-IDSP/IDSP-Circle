@@ -1,5 +1,6 @@
 "use client";
 
+import {signIn} from "next-auth/react";
 interface LoginButtonProps {
     onClick?: () => void;
     isLoading?: boolean;
@@ -15,6 +16,7 @@ export function LoginButton({onClick, isLoading = false, disabled = false}: Logi
             type="submit"
             disabled={disabled || isLoading}
             aria-busy={isLoading}
+            onClick={onClick}
         >
             {isLoading ? "Logging in..." : "Log in"}
         </button>

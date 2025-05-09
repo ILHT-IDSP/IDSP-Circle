@@ -1,7 +1,14 @@
 export default function NextButton() {
-	return (
-		<>
-			<button className={`text-lg sm:text-xl md:text-2xl text-center rounded-full p-2 sm:p-3 w-full max-w-full transition-opacity hover:opacity-90 bg-primary text-background`}>Next</button>
-		</>
-	);
+    return (
+        <>
+            <footer className="absolute w-full bottom-16">
+                <button
+                    type="submit"
+                    className={`bg-blue-800 text-2xl text-white text-center rounded-full p-3 m-au w-full max-w-full transition-colors`}
+                >
+                    Next
+                </button>
+            </footer>
+        </>
+    );
 }
