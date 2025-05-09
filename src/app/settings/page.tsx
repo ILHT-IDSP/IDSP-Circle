@@ -7,7 +7,7 @@ export default function SettingsPage() {
     <div className="w-full max-w-2xl mx-auto text-white min-h-screen p-6">
       <header className="mb-6">
         <h1 className="text-3xl font-bold">Settings</h1>
-        <p className="text-gray-400">@keonaur — keonaasik@gmail.com</p>
+        <p className="text-gray-400">@adnan — adnanchahin@gmail.com</p>
       </header>
 
       <SettingsCategory title="Albums">
