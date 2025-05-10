@@ -2,12 +2,8 @@
 "use server";
 
 import CredentialsProvider from "next-auth/providers/credentials"; // have to use this one <----
-<<<<<<< HEAD
-import Credentials from "next-auth/providers/credentials"; // not this one <--
-=======
 // import Credentials from "next-auth/providers/credentials";
 
->>>>>>> bd1ef4ae7eada3fa1c0686834797d4ff6f7954af
 import {signInSchema} from "./lib/zod";
 import prisma from "./lib/prisma";
 // import {PrismaAdapter} from "@auth/prisma-adapter";
@@ -31,6 +27,7 @@ declare module "next-auth" {
         } & DefaultSession["user"];
     }
 }
+// import {PrismaAdapter} from "@auth/prisma-adapter";
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
     // adapter pos to work but dont
@@ -54,28 +51,18 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
 
                     // Find the user by email
                     const user = await prisma.user.findUnique({
-                        where: {email: email, password: password},
+                        where: {
+                            email: email,
+                            password: password,
+                        },
                     });
 
-<<<<<<< HEAD
-                    if (!user) {
-                        return null;
-=======
                     // const response = await fetch("/");
 
                     if (user) {
                         return user as any;
->>>>>>> bd1ef4ae7eada3fa1c0686834797d4ff6f7954af
                     }
-
-                    // Return user data (exclude password)
-                    return {
-                        id: user.id,
-                        name: user.name,
-                        email: user.email,
-                        username: user.username,
-                        image: user.profileImage,
-                    } as any;
+                    return user;
                 } catch (err) {
                     console.error("Authorization error:", err);
                     return null;
