@@ -2,11 +2,11 @@
 "use server";
 
 import CredentialsProvider from "next-auth/providers/credentials"; // have to use this one <----
-// import Credentials from "next-auth/providers/credentials";
+import Credentials from "next-auth/providers/credentials";
 
 import {signInSchema} from "./lib/zod";
 import prisma from "./lib/prisma";
-// import {PrismaAdapter} from "@auth/prisma-adapter";
+import {PrismaAdapter} from "@auth/prisma-adapter";
 
 import NextAuth, {type DefaultSession} from "next-auth";
 
@@ -27,7 +27,6 @@ declare module "next-auth" {
         } & DefaultSession["user"];
     }
 }
-// import {PrismaAdapter} from "@auth/prisma-adapter";
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
     // adapter pos to work but dont
@@ -62,7 +61,6 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                     if (user) {
                         return user as any;
                     }
-                    return user;
                 } catch (err) {
                     console.error("Authorization error:", err);
                     return null;

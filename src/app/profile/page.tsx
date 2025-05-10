@@ -1,4 +1,5 @@
 import ProfileScreen from "@/components/profile/ProfileScreen";
+import {auth} from "@/auth";
 
 export default async function ProfilePage() {
     const session = await auth();
