@@ -71,10 +71,10 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
     pages: {
         signIn: "/auth/login",
     },
-    callbacks: {
-        authorized: async ({auth}) => {
-            return !!auth;
-        },
-    },
+    // callbacks: {
+    //     authorized: async ({auth}) => {
+    //         return !!auth;
+    //     },
+    // },
     trustHost: true,
 });

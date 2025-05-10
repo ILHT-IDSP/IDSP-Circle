@@ -21,6 +21,7 @@ model User {
   updatedAt        DateTime      @updatedAt
   isProfilePrivate Boolean?      @default(false)
   birthday         DateTime
+  Album            Album[]
   createdCircles   Circle[]
   comments         Comment[]
   followers        Follow[]      @relation("Follower")
@@ -30,7 +31,6 @@ model User {
   posts            Post[]
   savedMusic       SavedMusic[]
   settings         UserSettings?
-  Album            Album[]
 }
 
 model Circle {
@@ -161,9 +161,6 @@ model Album {
   updatedAt   DateTime @updatedAt
   creatorId   Int
   creator     User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  // Optionally, relate to posts or music if needed:
-  // posts     Post[]
-  // music     Music[]
 
   @@index([creatorId])
 }

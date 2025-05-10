@@ -1,5 +1,3 @@
-"use client";
-
 import {FormEvent} from "react";
 import {LoginButton} from "./login_buttons";
 import {UsernameEmailOrPhoneNumberLoginInput} from "./username_email_phonenumber_input";
@@ -15,15 +13,15 @@ import {signInSchema} from "@/lib/zod";
 
 export function LoginForm() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        "use server";
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        await signIn("credentials", {redirectTo: "/profile"});
-
         try {
             console.log("Form submitted");
+            await signIn("credentials", {redirectTo: "/profile"});
         } catch (error) {
             console.error("Login failed", error);
         }
@@ -49,7 +47,7 @@ export function LoginForm() {
                     <ForgotPassword />
                 </div>
 
-                <LoginButton onClick={async () => await signIn("credentials", {redirectTo: "/profile"})} />
+                <LoginButton />
 
                 <OrDivider />
                 <AlternativeLogins />

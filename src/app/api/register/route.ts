@@ -10,7 +10,7 @@ export async function GET() {}
 export async function POST(req: Request) {
     try {
         const {formData} = await req.json();
-        console.log("FORM DATA IN THE BACKEND: ", formData);
+        console.log("SERVER SUCCESSFULLY RECIEVED FORMDATA: ", formData);
         const user = await prisma.user.create({
             data: {
                 email: formData.email,
@@ -24,22 +24,18 @@ export async function POST(req: Request) {
             },
         });
 
-        // await signIn("credentials", {
-        //     email: formData.email,
-        //     password: formData.password,
-        //     redirectTo: "/profile",
-        // });
+        console.log(`Account ${user.username} successfully created `);
 
         if (!user) throw new Error("User not found");
 
         return NextResponse.json(
             {
                 message: "Registration Success",
-                user: {id: user.id, email: user.email, username: user.username},
             },
             {status: 200}
         );
     } catch (err) {
+        console.log("Failed to create user into prisma db");
         return NextResponse.json({error: "Failed to handle registration"}, {status: 500});
     }
 }
