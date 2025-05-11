@@ -54,11 +54,11 @@ export default function ProfileHeader({session}: {session: Session | null}) {
             {/* circles / friends*/}
             <div className="flex space-x-8 mt-3">
                 <div className="text-center">
-                    <p className="text-circles-dark-blue font-semibold">{0 /* need to add # of circles to db */}</p>
+                    <p className="text-circles-dark-blue font-semibold">{session?.user.circleCount || 0 /* need to add # of circles to db */}</p>
                     <p className="text-circles-dark text-sm">circles</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-circles-dark-blue font-semibold">{0 /* need to add # of friends to db */}</p>
+                    <p className="text-circles-dark-blue font-semibold">{session?.user.albumCount || 0 /* need to add # of friends to db */}</p>
                     <p className="text-circles-dark text-sm">friends</p>
                 </div>
             </div>

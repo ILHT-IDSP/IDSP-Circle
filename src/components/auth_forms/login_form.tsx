@@ -8,33 +8,24 @@ import CirclesLogo from "../Circles_Logo";
 import {OrDivider} from "./or_divider";
 import {AlternativeLogins} from "./alternative_login";
 import {DontHaveAnAccountSignUp} from "./dont_have_an_account";
-import {signIn} from "next-auth/react";
+import {signIn} from "@/auth";
 import {signInSchema} from "@/lib/zod";
 
 export function LoginForm() {
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        "use server";
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-
-        try {
-            console.log("Form submitted");
-            await signIn("credentials", {redirectTo: "/profile", formData});
-        } catch (error) {
-            console.error("Login failed", error);
-        }
-    };
-
     return (
         <div className="flex flex-col items-center pt-20">
             <div className="mb-6">
                 <CirclesLogo />
             </div>
             <form
-                onSubmit={handleSubmit}
-                // onSubmit={handleSubmit}
+                action={async (formData) => {
+                    "use server";
+                    try {
+                        await signIn("credentials", formData, {redirectTo: "/profile"});
+                    } catch (error) {
+                        console.error("An error occurred during login", error);
+                    }
+                }}
                 className="w-full max-w-md"
             >
                 <div className="flex flex-col gap-2">

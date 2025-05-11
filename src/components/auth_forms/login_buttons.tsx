@@ -1,13 +1,10 @@
-"use client";
-
-import {signIn} from "next-auth/react";
 interface LoginButtonProps {
     onClick?: () => void;
     isLoading?: boolean;
     disabled?: boolean;
 }
 
-export function LoginButton({onClick, isLoading = false, disabled = false}: LoginButtonProps = {}) {
+export function LoginButton({isLoading = false, disabled = false}: LoginButtonProps = {}) {
     return (
         <button
             className={`text-lg sm:text-xl md:text-2xl text-center rounded-full p-2 sm:p-3 w-full max-w-full m-auto transition-all font-semibold !bg-[#0044cc] dark:!bg-[#689bff] !text-white shadow-md hover:shadow-lg ${
@@ -16,7 +13,6 @@ export function LoginButton({onClick, isLoading = false, disabled = false}: Logi
             type="submit"
             disabled={disabled || isLoading}
             aria-busy={isLoading}
-            onClick={onClick}
         >
             {isLoading ? "Logging in..." : "Log in"}
         </button>
