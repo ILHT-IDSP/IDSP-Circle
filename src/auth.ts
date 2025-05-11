@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use server";
 
 import CredentialsProvider from "next-auth/providers/credentials"; // have to use this one <----
 import Credentials from "next-auth/providers/credentials";
@@ -52,14 +51,29 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                     const user = await prisma.user.findUnique({
                         where: {
                             email: email,
-                            password: password,
+                        },
+                        include: {
+                            _count: {
+                                select: {createdCircles: true, Album: true},
+                            },
                         },
                     });
+
+                    if (user && user.password === password) {
+                    }
 
                     // const response = await fetch("/");
 
                     if (user) {
-                        return user as any;
+                        return {
+                            name: user.name,
+                            email: user.email,
+                            id: user.id,
+                            image: user.profileImage,
+                            username: user.username,
+                            circleCount: user._count.createdCircles,
+                            albumCount: user._count.Album,
+                        } as any;
                     }
                 } catch (err) {
                     console.error("Authorization error:", err);
@@ -71,10 +85,26 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
     pages: {
         signIn: "/auth/login",
     },
-    // callbacks: {
-    //     authorized: async ({auth}) => {
-    //         return !!auth;
-    //     },
-    // },
+    callbacks: {
+        // async session({session, token}) {
+        //     if (token) {
+        //         session.user.id = token.id as string;
+        //         session.user.username = token.username as string;
+        //         session.user.image = token.image as string;
+        //     }
+        //     return session;
+        // },
+        async jwt({token, user}) {
+            if (user) {
+                token.id = user.id;
+                token.username = user.username;
+                token.image = user.image;
+                token.name = user.name;
+                // token.circleCount = user.circleCount
+            }
+            return token;
+        },
+    },
+
     trustHost: true,
 });

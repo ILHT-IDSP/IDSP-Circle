@@ -21,7 +21,7 @@ export function LoginForm() {
 
         try {
             console.log("Form submitted");
-            await signIn("credentials", {redirectTo: "/profile"});
+            await signIn("credentials", {redirectTo: "/profile", formData});
         } catch (error) {
             console.error("Login failed", error);
         }

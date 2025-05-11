@@ -4,15 +4,17 @@
 import {Settings} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import {Session} from "next-auth";
 
-interface User {
-    name: string;
-    username: string;
-    image: string;
-    circlesCount: number;
-    friendsCount: number;
-}
-export default function ProfileHeader({user}: {user: User}) {
+// interface User {
+//     name: string;
+//     username: string;
+//     image: string;
+//     circlesCount: number;
+//     friendsCount: number;
+// }
+
+export default function ProfileHeader({session}: {session: Session | null}) {
     const handleClick = () => {
         document.getElementById("upload-profile-pic")?.click();
     };
@@ -38,7 +40,7 @@ export default function ProfileHeader({user}: {user: User}) {
 
             {/* Profile picture*/}
             <Image
-                src={user.image || "/default-avatar.png"}
+                src={session?.user.image || "/default-avatar.png"}
                 alt="Profile"
                 width={96}
                 height={96}
@@ -47,16 +49,16 @@ export default function ProfileHeader({user}: {user: User}) {
             />
 
             {/* Username*/}
-            <p className="text-xl font-bold text-circles-dark mt-2">@{user.username}</p>
+            <p className="text-xl font-bold text-circles-dark mt-2">@{session?.user.username}</p>
 
             {/* circles / friends*/}
             <div className="flex space-x-8 mt-3">
                 <div className="text-center">
-                    <p className="text-circles-dark-blue font-semibold">{user.circlesCount}</p>
+                    <p className="text-circles-dark-blue font-semibold">{0 /* need to add # of circles to db */}</p>
                     <p className="text-circles-dark text-sm">circles</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-circles-dark-blue font-semibold">{user.friendsCount}</p>
+                    <p className="text-circles-dark-blue font-semibold">{0 /* need to add # of friends to db */}</p>
                     <p className="text-circles-dark text-sm">friends</p>
                 </div>
             </div>

@@ -80,7 +80,7 @@ export default function Register() {
         const adjustedAge: number = monthDifference > 0 || (monthDifference === 0 && dayDifference >= 0) ? age : age - 1;
 
         // if (isNaN(birthdayDate.getTime())) {
-        //     throw new Error("Invalid date format. Please enter a valid date.");
+        //     throw new Error("Invalid date format. Please enter a valid date.")n     ;
         // }
 
         // make sure to uncomment this tbh tbh idk idk 👺🍔🍌

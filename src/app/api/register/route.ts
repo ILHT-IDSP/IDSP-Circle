@@ -3,22 +3,29 @@ import prisma from "../../../lib/prisma";
 import {signIn} from "next-auth/react";
 // bcrypt password hashing shi goes here
 const now = new Date();
-export const runtime = "nodejs";
+// export const runtime = "nodejs";
 
 export async function GET() {}
 
 export async function POST(req: Request) {
     try {
         const {formData} = await req.json();
+        const existingUser = await prisma.user.findUnique({where: {email: formData.email}});
+
+        if (existingUser) {
+            return NextResponse.json({error: "Email already in use"}, {status: 400});
+        }
+
         console.log("SERVER SUCCESSFULLY RECIEVED FORMDATA: ", formData);
+        console.log("Creating user...");
         const user = await prisma.user.create({
             data: {
                 email: formData.email,
                 name: formData.fullName,
                 username: formData.username,
                 password: formData.password,
-                birthday: formData.birtdhay,
-                profileImage: formData.profileImg || null,
+                birthday: new Date(formData.birthday), // check to see if this makes db work first ozobozo
+                profileImage: formData.profileImage || null,
                 createdAt: now,
                 updatedAt: now,
             },
