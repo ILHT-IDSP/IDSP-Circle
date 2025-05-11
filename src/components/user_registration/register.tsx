@@ -1,34 +1,34 @@
 "use client";
 
-import {SetStateAction, useState} from "react";
+import {useState} from "react";
 import {useRouter} from "next/navigation";
 
-import RegisterEmailDescription from "./enter_email/email_description";
-import RegisterEmailHeader from "./enter_email/email_header";
-import {BackButton} from "./back_button";
-import EnterEmail from "./enter_email/enter_email";
-import {RegisterPasswordHeader} from "./create_password/password_header";
-import RegisterPasswordDescription from "./create_password/password_description";
-import CreatePassword from "./create_password/create_password";
-import RegisterBirthdayHeader from "./enter_birthday/birthday_header";
+import RegisterEmailDescription from "@/components/user_registration/enter_email/email_description";
+import RegisterEmailHeader from "@/components/user_registration/enter_email/email_header";
+import {BackButton} from "@/components/user_registration/back_button";
+import EnterEmail from "@/components/user_registration/enter_email/enter_email";
+import {RegisterPasswordHeader} from "@/components/user_registration/create_password/password_header";
+import RegisterPasswordDescription from "@/components/user_registration/create_password/password_description";
+import CreatePassword from "@/components/user_registration/create_password/create_password";
+import RegisterBirthdayHeader from "@/components/user_registration/enter_birthday/birthday_header";
 import RegisterBirthdayDescription from "@/components/user_registration/enter_birthday/birthday_description";
-import EnterBirthday from "./enter_birthday/enter_birthday";
-import RegisterFullnameHeader from "./enter_fullname/fullname_header";
-import RegisterFullnameDescription from "./enter_fullname/fullname_description";
-import EnterFullname from "./enter_fullname/enter_fullname";
-import RegisterUsernameDescription from "./create_username/username_description";
-import RegisterUsernameHeader from "./create_username/username_header";
-import CreateUsername from "./create_username/create_username";
-import AddProfilePicture from "./add_profilepicture/add_profilepicture";
-import RegisterProfileImageHeader from "./add_profilepicture/profilepicture_header";
+import EnterBirthday from "@/components/user_registration/enter_birthday/enter_birthday";
+import RegisterFullnameHeader from "@/components/user_registration/enter_fullname/fullname_header";
+import RegisterFullnameDescription from "@/components/user_registration/enter_fullname/fullname_description";
+import EnterFullname from "@/components/user_registration/enter_fullname/enter_fullname";
+import RegisterUsernameDescription from "@/components/user_registration/create_username/username_description";
+import RegisterUsernameHeader from "@/components/user_registration/create_username/username_header";
+import CreateUsername from "@/components/user_registration/create_username/create_username";
+import AddProfilePicture from "@/components/user_registration/add_profilepicture/add_profilepicture";
+import {set} from "date-fns";
 import RegisterProfileImageDescription from "./add_profilepicture/profilepicture_description";
-import {IFormData} from "./register_types";
+import RegisterProfileImageHeader from "./add_profilepicture/profilepicture_header";
 
 export default function Register() {
-    const router = useRouter();
     const now = new Date(Date.now());
 
-    const [formData, setFormData] = useState<IFormData>({
+    const router = useRouter();
+    const [formData, setFormData] = useState({
         email: "",
         confirmEmail: "",
         password: "",
@@ -43,7 +43,6 @@ export default function Register() {
 
     const [step, setStep] = useState(1);
 
-    // handle back
     const handleBack = () => {
         if (step === 1) {
             router.push("/auth/login");
@@ -52,12 +51,12 @@ export default function Register() {
 
         setStep((prev) => prev - 1);
     };
-    // handle email
+
     const handleRegisterEmail = () => {
         console.log(`STEP: 1 ${formData.email}`);
         console.log(`STEP ${formData.confirmEmail}`);
 
-        if (formData.email?.length === 0 || formData.confirmEmail?.length === 0) {
+        if (formData.email.length === 0 || formData.confirmEmail.length === 0) {
             throw new Error("Must enter an email");
         }
 
@@ -69,19 +68,19 @@ export default function Register() {
             setStep((prev) => prev + 1);
         }
     };
-    // handle birthday
+
     const handleRegisterBirthday = () => {
         console.log("STEP 3: ", formData.birthday);
         console.log("STEP 3: ", formData.birthday);
 
-        const birthdayDate: Date = new Date(formData.birthday || "");
+        const birthdayDate: Date = new Date(formData.birthday);
         const age: number = now.getFullYear() - birthdayDate.getFullYear();
         const monthDifference: number = now.getMonth() - birthdayDate.getMonth();
         const dayDifference: number = now.getDate() - birthdayDate.getDate();
         const adjustedAge: number = monthDifference > 0 || (monthDifference === 0 && dayDifference >= 0) ? age : age - 1;
 
         // if (isNaN(birthdayDate.getTime())) {
-        //     throw new Error("Invalid date format. Please enter a valid date.");
+        //     throw new Error("Invalid date format. Please enter a valid date.")n     ;
         // }
 
         // make sure to uncomment this tbh tbh idk idk 👺🍔🍌
@@ -93,7 +92,7 @@ export default function Register() {
             setStep((prev) => prev + 1);
         }
     };
-    // handle password
+
     const handleRegisterPassword = () => {
         console.log("STEP 2", formData.password);
         console.log("STEP 2", formData.confirmPassword);
@@ -102,7 +101,7 @@ export default function Register() {
             router.push("/auth/login");
         }
 
-        if (formData?.password?.length === 0 || formData?.password?.length === 0) {
+        if (formData.password.length === 0 || formData.password.length === 0) {
             throw new Error("Must enter a password");
         }
 
@@ -115,34 +114,34 @@ export default function Register() {
         }
     };
 
-    // handle fullname
     const handleRegisterFullname = () => {
         console.log("STEP 4", formData.fullName);
         console.log("STEP 4", formData.firstName);
         console.log("STEP 4", formData.lastName);
 
-        if (formData?.fullName?.includes("123456789")) {
+        if (!formData.fullName) {
+            throw new Error("Enter your full name");
+        }
+
+        if (formData.fullName.includes("123456789")) {
             throw new Error("Alphabetical characters only");
         }
 
         if (step === 4) return setStep((prev) => prev + 1);
     };
 
-    // handle username creation
     const handleCreateUsername = () => {
         console.log("STEP 5 ", formData.username);
-        if (!formData?.username || formData.username.length <= 0) throw new Error("Enter a username");
+        if (formData.username.length <= 0 || !formData.username) throw new Error("Enter a username");
         if (step === 5 && formData.username) return setStep((prev) => prev + 1);
     };
 
-    // handle uploading a profile picture
     const handleUploadProfileImage = () => {
         console.log("STEP 6", formData.profileImage);
-        console.log("FORM DATA BEFORE SUBMISSION", formData);
 
-        // if (!formData.profileImage) {
-        //     throw new Error("Please upload a profile image");
-        // }
+        if (!formData.profileImage) {
+            throw new Error("Please upload a profile image");
+        }
 
         if (step === 6) {
             setStep((prev) => prev + 1);

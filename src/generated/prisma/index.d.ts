@@ -1797,6 +1797,7 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    Album: number
     createdCircles: number
     comments: number
     followers: number
@@ -1805,10 +1806,10 @@ export namespace Prisma {
     memberships: number
     posts: number
     savedMusic: number
-    Album: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Album?: boolean | UserCountOutputTypeCountAlbumArgs
     createdCircles?: boolean | UserCountOutputTypeCountCreatedCirclesArgs
     comments?: boolean | UserCountOutputTypeCountCommentsArgs
     followers?: boolean | UserCountOutputTypeCountFollowersArgs
@@ -1817,7 +1818,6 @@ export namespace Prisma {
     memberships?: boolean | UserCountOutputTypeCountMembershipsArgs
     posts?: boolean | UserCountOutputTypeCountPostsArgs
     savedMusic?: boolean | UserCountOutputTypeCountSavedMusicArgs
-    Album?: boolean | UserCountOutputTypeCountAlbumArgs
   }
 
   // Custom InputTypes
@@ -1829,6 +1829,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AlbumWhereInput
   }
 
   /**
@@ -1885,13 +1892,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSavedMusicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SavedMusicWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountAlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AlbumWhereInput
   }
 
 
@@ -2273,6 +2273,7 @@ export namespace Prisma {
     updatedAt?: boolean
     isProfilePrivate?: boolean
     birthday?: boolean
+    Album?: boolean | User$AlbumArgs<ExtArgs>
     createdCircles?: boolean | User$createdCirclesArgs<ExtArgs>
     comments?: boolean | User$commentsArgs<ExtArgs>
     followers?: boolean | User$followersArgs<ExtArgs>
@@ -2282,7 +2283,6 @@ export namespace Prisma {
     posts?: boolean | User$postsArgs<ExtArgs>
     savedMusic?: boolean | User$savedMusicArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
-    Album?: boolean | User$AlbumArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2333,6 +2333,7 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "bio" | "profileImage" | "coverImage" | "createdAt" | "updatedAt" | "isProfilePrivate" | "birthday", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Album?: boolean | User$AlbumArgs<ExtArgs>
     createdCircles?: boolean | User$createdCirclesArgs<ExtArgs>
     comments?: boolean | User$commentsArgs<ExtArgs>
     followers?: boolean | User$followersArgs<ExtArgs>
@@ -2342,7 +2343,6 @@ export namespace Prisma {
     posts?: boolean | User$postsArgs<ExtArgs>
     savedMusic?: boolean | User$savedMusicArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
-    Album?: boolean | User$AlbumArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2351,6 +2351,7 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      Album: Prisma.$AlbumPayload<ExtArgs>[]
       createdCircles: Prisma.$CirclePayload<ExtArgs>[]
       comments: Prisma.$CommentPayload<ExtArgs>[]
       followers: Prisma.$FollowPayload<ExtArgs>[]
@@ -2360,7 +2361,6 @@ export namespace Prisma {
       posts: Prisma.$PostPayload<ExtArgs>[]
       savedMusic: Prisma.$SavedMusicPayload<ExtArgs>[]
       settings: Prisma.$UserSettingsPayload<ExtArgs> | null
-      Album: Prisma.$AlbumPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2769,6 +2769,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    Album<T extends User$AlbumArgs<ExtArgs> = {}>(args?: Subset<T, User$AlbumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdCircles<T extends User$createdCirclesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCirclesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     comments<T extends User$commentsArgs<ExtArgs> = {}>(args?: Subset<T, User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     followers<T extends User$followersArgs<ExtArgs> = {}>(args?: Subset<T, User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2778,7 +2779,6 @@ export namespace Prisma {
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     savedMusic<T extends User$savedMusicArgs<ExtArgs> = {}>(args?: Subset<T, User$savedMusicArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    Album<T extends User$AlbumArgs<ExtArgs> = {}>(args?: Subset<T, User$AlbumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3208,6 +3208,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.Album
+   */
+  export type User$AlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Album
+     */
+    select?: AlbumSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Album
+     */
+    omit?: AlbumOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AlbumInclude<ExtArgs> | null
+    where?: AlbumWhereInput
+    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
+    cursor?: AlbumWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AlbumScalarFieldEnum | AlbumScalarFieldEnum[]
+  }
+
+  /**
    * User.createdCircles
    */
   export type User$createdCirclesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3416,30 +3440,6 @@ export namespace Prisma {
      */
     include?: UserSettingsInclude<ExtArgs> | null
     where?: UserSettingsWhereInput
-  }
-
-  /**
-   * User.Album
-   */
-  export type User$AlbumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Album
-     */
-    select?: AlbumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Album
-     */
-    omit?: AlbumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AlbumInclude<ExtArgs> | null
-    where?: AlbumWhereInput
-    orderBy?: AlbumOrderByWithRelationInput | AlbumOrderByWithRelationInput[]
-    cursor?: AlbumWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AlbumScalarFieldEnum | AlbumScalarFieldEnum[]
   }
 
   /**
@@ -15222,6 +15222,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
     birthday?: DateTimeFilter<"User"> | Date | string
+    Album?: AlbumListRelationFilter
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
     followers?: FollowListRelationFilter
@@ -15231,7 +15232,6 @@ export namespace Prisma {
     posts?: PostListRelationFilter
     savedMusic?: SavedMusicListRelationFilter
     settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
-    Album?: AlbumListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -15247,6 +15247,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrderInput | SortOrder
     birthday?: SortOrder
+    Album?: AlbumOrderByRelationAggregateInput
     createdCircles?: CircleOrderByRelationAggregateInput
     comments?: CommentOrderByRelationAggregateInput
     followers?: FollowOrderByRelationAggregateInput
@@ -15256,7 +15257,6 @@ export namespace Prisma {
     posts?: PostOrderByRelationAggregateInput
     savedMusic?: SavedMusicOrderByRelationAggregateInput
     settings?: UserSettingsOrderByWithRelationInput
-    Album?: AlbumOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -15275,6 +15275,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
     birthday?: DateTimeFilter<"User"> | Date | string
+    Album?: AlbumListRelationFilter
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
     followers?: FollowListRelationFilter
@@ -15284,7 +15285,6 @@ export namespace Prisma {
     posts?: PostListRelationFilter
     savedMusic?: SavedMusicListRelationFilter
     settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
-    Album?: AlbumListRelationFilter
   }, "id" | "email" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -16052,6 +16052,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -16061,7 +16062,6 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -16077,6 +16077,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -16086,7 +16087,6 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUpdateInput = {
@@ -16101,6 +16101,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -16110,7 +16111,6 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -16126,6 +16126,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -16135,7 +16136,6 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -16924,6 +16924,12 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
+  export type AlbumListRelationFilter = {
+    every?: AlbumWhereInput
+    some?: AlbumWhereInput
+    none?: AlbumWhereInput
+  }
+
   export type CircleListRelationFilter = {
     every?: CircleWhereInput
     some?: CircleWhereInput
@@ -16971,15 +16977,13 @@ export namespace Prisma {
     isNot?: UserSettingsWhereInput | null
   }
 
-  export type AlbumListRelationFilter = {
-    every?: AlbumWhereInput
-    some?: AlbumWhereInput
-    none?: AlbumWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type AlbumOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type CircleOrderByRelationAggregateInput = {
@@ -17007,10 +17011,6 @@ export namespace Prisma {
   }
 
   export type SavedMusicOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AlbumOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17655,6 +17655,13 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
+  export type AlbumCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
+    createMany?: AlbumCreateManyCreatorInputEnvelope
+    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
+  }
+
   export type CircleCreateNestedManyWithoutCreatorInput = {
     create?: XOR<CircleCreateWithoutCreatorInput, CircleUncheckedCreateWithoutCreatorInput> | CircleCreateWithoutCreatorInput[] | CircleUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: CircleCreateOrConnectWithoutCreatorInput | CircleCreateOrConnectWithoutCreatorInput[]
@@ -17717,7 +17724,7 @@ export namespace Prisma {
     connect?: UserSettingsWhereUniqueInput
   }
 
-  export type AlbumCreateNestedManyWithoutCreatorInput = {
+  export type AlbumUncheckedCreateNestedManyWithoutCreatorInput = {
     create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
     createMany?: AlbumCreateManyCreatorInputEnvelope
@@ -17786,13 +17793,6 @@ export namespace Prisma {
     connect?: UserSettingsWhereUniqueInput
   }
 
-  export type AlbumUncheckedCreateNestedManyWithoutCreatorInput = {
-    create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
-    createMany?: AlbumCreateManyCreatorInputEnvelope
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-  }
-
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -17807,6 +17807,20 @@ export namespace Prisma {
 
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
+  }
+
+  export type AlbumUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
+    upsert?: AlbumUpsertWithWhereUniqueWithoutCreatorInput | AlbumUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: AlbumCreateManyCreatorInputEnvelope
+    set?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
+    disconnect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
+    delete?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
+    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
+    update?: AlbumUpdateWithWhereUniqueWithoutCreatorInput | AlbumUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: AlbumUpdateManyWithWhereWithoutCreatorInput | AlbumUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
   }
 
   export type CircleUpdateManyWithoutCreatorNestedInput = {
@@ -17931,7 +17945,15 @@ export namespace Prisma {
     update?: XOR<XOR<UserSettingsUpdateToOneWithWhereWithoutUserInput, UserSettingsUpdateWithoutUserInput>, UserSettingsUncheckedUpdateWithoutUserInput>
   }
 
-  export type AlbumUpdateManyWithoutCreatorNestedInput = {
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type AlbumUncheckedUpdateManyWithoutCreatorNestedInput = {
     create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
     upsert?: AlbumUpsertWithWhereUniqueWithoutCreatorInput | AlbumUpsertWithWhereUniqueWithoutCreatorInput[]
@@ -17943,14 +17965,6 @@ export namespace Prisma {
     update?: AlbumUpdateWithWhereUniqueWithoutCreatorInput | AlbumUpdateWithWhereUniqueWithoutCreatorInput[]
     updateMany?: AlbumUpdateManyWithWhereWithoutCreatorInput | AlbumUpdateManyWithWhereWithoutCreatorInput[]
     deleteMany?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type CircleUncheckedUpdateManyWithoutCreatorNestedInput = {
@@ -18073,20 +18087,6 @@ export namespace Prisma {
     delete?: UserSettingsWhereInput | boolean
     connect?: UserSettingsWhereUniqueInput
     update?: XOR<XOR<UserSettingsUpdateToOneWithWhereWithoutUserInput, UserSettingsUpdateWithoutUserInput>, UserSettingsUncheckedUpdateWithoutUserInput>
-  }
-
-  export type AlbumUncheckedUpdateManyWithoutCreatorNestedInput = {
-    create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
-    upsert?: AlbumUpsertWithWhereUniqueWithoutCreatorInput | AlbumUpsertWithWhereUniqueWithoutCreatorInput[]
-    createMany?: AlbumCreateManyCreatorInputEnvelope
-    set?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    disconnect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    delete?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    connect?: AlbumWhereUniqueInput | AlbumWhereUniqueInput[]
-    update?: AlbumUpdateWithWhereUniqueWithoutCreatorInput | AlbumUpdateWithWhereUniqueWithoutCreatorInput[]
-    updateMany?: AlbumUpdateManyWithWhereWithoutCreatorInput | AlbumUpdateManyWithWhereWithoutCreatorInput[]
-    deleteMany?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedCirclesInput = {
@@ -18787,6 +18787,33 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type AlbumCreateWithoutCreatorInput = {
+    title: string
+    description?: string | null
+    coverImage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AlbumUncheckedCreateWithoutCreatorInput = {
+    id?: number
+    title: string
+    description?: string | null
+    coverImage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AlbumCreateOrConnectWithoutCreatorInput = {
+    where: AlbumWhereUniqueInput
+    create: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type AlbumCreateManyCreatorInputEnvelope = {
+    data: AlbumCreateManyCreatorInput | AlbumCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CircleCreateWithoutCreatorInput = {
     name: string
     description?: string | null
@@ -19027,31 +19054,33 @@ export namespace Prisma {
     create: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
   }
 
-  export type AlbumCreateWithoutCreatorInput = {
-    title: string
-    description?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AlbumUncheckedCreateWithoutCreatorInput = {
-    id?: number
-    title: string
-    description?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AlbumCreateOrConnectWithoutCreatorInput = {
+  export type AlbumUpsertWithWhereUniqueWithoutCreatorInput = {
     where: AlbumWhereUniqueInput
+    update: XOR<AlbumUpdateWithoutCreatorInput, AlbumUncheckedUpdateWithoutCreatorInput>
     create: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput>
   }
 
-  export type AlbumCreateManyCreatorInputEnvelope = {
-    data: AlbumCreateManyCreatorInput | AlbumCreateManyCreatorInput[]
-    skipDuplicates?: boolean
+  export type AlbumUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: AlbumWhereUniqueInput
+    data: XOR<AlbumUpdateWithoutCreatorInput, AlbumUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type AlbumUpdateManyWithWhereWithoutCreatorInput = {
+    where: AlbumScalarWhereInput
+    data: XOR<AlbumUpdateManyMutationInput, AlbumUncheckedUpdateManyWithoutCreatorInput>
+  }
+
+  export type AlbumScalarWhereInput = {
+    AND?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
+    OR?: AlbumScalarWhereInput[]
+    NOT?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
+    id?: IntFilter<"Album"> | number
+    title?: StringFilter<"Album"> | string
+    description?: StringNullableFilter<"Album"> | string | null
+    coverImage?: StringNullableFilter<"Album"> | string | null
+    createdAt?: DateTimeFilter<"Album"> | Date | string
+    updatedAt?: DateTimeFilter<"Album"> | Date | string
+    creatorId?: IntFilter<"Album"> | number
   }
 
   export type CircleUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -19308,35 +19337,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AlbumUpsertWithWhereUniqueWithoutCreatorInput = {
-    where: AlbumWhereUniqueInput
-    update: XOR<AlbumUpdateWithoutCreatorInput, AlbumUncheckedUpdateWithoutCreatorInput>
-    create: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput>
-  }
-
-  export type AlbumUpdateWithWhereUniqueWithoutCreatorInput = {
-    where: AlbumWhereUniqueInput
-    data: XOR<AlbumUpdateWithoutCreatorInput, AlbumUncheckedUpdateWithoutCreatorInput>
-  }
-
-  export type AlbumUpdateManyWithWhereWithoutCreatorInput = {
-    where: AlbumScalarWhereInput
-    data: XOR<AlbumUpdateManyMutationInput, AlbumUncheckedUpdateManyWithoutCreatorInput>
-  }
-
-  export type AlbumScalarWhereInput = {
-    AND?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
-    OR?: AlbumScalarWhereInput[]
-    NOT?: AlbumScalarWhereInput | AlbumScalarWhereInput[]
-    id?: IntFilter<"Album"> | number
-    title?: StringFilter<"Album"> | string
-    description?: StringNullableFilter<"Album"> | string | null
-    coverImage?: StringNullableFilter<"Album"> | string | null
-    createdAt?: DateTimeFilter<"Album"> | Date | string
-    updatedAt?: DateTimeFilter<"Album"> | Date | string
-    creatorId?: IntFilter<"Album"> | number
-  }
-
   export type UserCreateWithoutCreatedCirclesInput = {
     email: string
     name?: string | null
@@ -19349,6 +19349,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
@@ -19357,7 +19358,6 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCirclesInput = {
@@ -19373,6 +19373,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -19381,7 +19382,6 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCirclesInput = {
@@ -19472,6 +19472,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
@@ -19480,7 +19481,6 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCirclesInput = {
@@ -19496,6 +19496,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -19504,7 +19505,6 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type MembershipUpsertWithWhereUniqueWithoutCircleInput = {
@@ -19581,6 +19581,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -19589,7 +19590,6 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -19605,6 +19605,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -19613,7 +19614,6 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -19680,6 +19680,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -19688,7 +19689,6 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -19704,6 +19704,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -19712,7 +19713,6 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type CommentCreateWithoutPostInput = {
@@ -19831,6 +19831,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -19839,7 +19840,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -19855,6 +19855,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -19863,7 +19864,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -19996,6 +19996,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -20004,7 +20005,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -20020,6 +20020,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -20028,7 +20029,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type PostCreateWithoutMusicInput = {
@@ -20159,6 +20159,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -20167,7 +20168,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutSavedMusicInput = {
@@ -20183,6 +20183,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -20191,7 +20192,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutSavedMusicInput = {
@@ -20256,6 +20256,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -20264,7 +20265,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSavedMusicInput = {
@@ -20280,6 +20280,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -20288,7 +20289,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type PostCreateWithoutCommentsInput = {
@@ -20333,6 +20333,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
     following?: FollowCreateNestedManyWithoutFollowingInput
@@ -20341,7 +20342,6 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
@@ -20357,6 +20357,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -20365,7 +20366,6 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutCommentsInput = {
@@ -20432,6 +20432,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
@@ -20440,7 +20441,6 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -20456,6 +20456,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -20464,7 +20465,6 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type PostCreateWithoutLikesInput = {
@@ -20509,6 +20509,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -20517,7 +20518,6 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutLikesInput = {
@@ -20533,6 +20533,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -20541,7 +20542,6 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutLikesInput = {
@@ -20608,6 +20608,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -20616,7 +20617,6 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLikesInput = {
@@ -20632,6 +20632,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -20640,7 +20641,6 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateWithoutFollowersInput = {
@@ -20655,6 +20655,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     following?: FollowCreateNestedManyWithoutFollowingInput
@@ -20663,7 +20664,6 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutFollowersInput = {
@@ -20679,6 +20679,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
@@ -20687,7 +20688,6 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutFollowersInput = {
@@ -20707,6 +20707,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -20715,7 +20716,6 @@ export namespace Prisma {
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutFollowingInput = {
@@ -20731,6 +20731,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -20739,7 +20740,6 @@ export namespace Prisma {
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutFollowingInput = {
@@ -20770,6 +20770,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     following?: FollowUpdateManyWithoutFollowingNestedInput
@@ -20778,7 +20779,6 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -20794,6 +20794,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
@@ -20802,7 +20803,6 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUpsertWithoutFollowingInput = {
@@ -20828,6 +20828,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -20836,7 +20837,6 @@ export namespace Prisma {
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -20852,6 +20852,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -20860,7 +20861,6 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserCreateWithoutAlbumInput = {
@@ -20985,6 +20985,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -20993,7 +20994,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
   }
 
   export type UserUncheckedCreateWithoutSettingsInput = {
@@ -21009,6 +21009,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
     birthday: Date | string
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -21017,7 +21018,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type UserCreateOrConnectWithoutSettingsInput = {
@@ -21048,6 +21048,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -21056,7 +21057,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettingsInput = {
@@ -21072,6 +21072,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -21080,7 +21081,15 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type AlbumCreateManyCreatorInput = {
+    id?: number
+    title: string
+    description?: string | null
+    coverImage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CircleCreateManyCreatorInput = {
@@ -21145,13 +21154,30 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type AlbumCreateManyCreatorInput = {
-    id?: number
-    title: string
-    description?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type AlbumUpdateWithoutCreatorInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AlbumUncheckedUpdateWithoutCreatorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AlbumUncheckedUpdateManyWithoutCreatorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CircleUpdateWithoutCreatorInput = {
@@ -21338,32 +21364,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     musicId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AlbumUpdateWithoutCreatorInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AlbumUncheckedUpdateWithoutCreatorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AlbumUncheckedUpdateManyWithoutCreatorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MembershipCreateManyCircleInput = {

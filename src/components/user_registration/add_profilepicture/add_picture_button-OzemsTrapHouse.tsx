@@ -1,4 +1,4 @@
-export default function NextButton() {
+export default function AddPictureButton() {
     return (
         <>
             <footer className="absolute w-full bottom-16">

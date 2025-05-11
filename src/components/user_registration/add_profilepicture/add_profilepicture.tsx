@@ -1,4 +1,3 @@
-"use client";
 import {IFormDataProps, IFormData} from "../register_types";
 import AddPictureButton from "./add_picture_button";
 import SkipButton from "./skip_button";
@@ -13,29 +12,22 @@ export default function AddProfilePicture({formData, setFormData, onNext}: IForm
         }
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSkip = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        onNext();
-    };
 
-    const handleSkip = async () => {
-        try {
-            console.log("Form Data @ pressing skip", formData);
-            const response = await fetch("/api/register", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({formData}),
-            });
+        const response = await fetch("/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({formData}),
+        });
 
-            if (!response.ok) throw new Error("Failed creating session");
-
-            const data = await response.json();
-            console.log(data.username);
-            console.log("FORM DATA AFTER REGISTER", data);
-            router.push("/profile");
-        } catch (err) {
-            console.error("Failed to skip profile picture step", err);
+        if (response.ok) {
+            console.log("User created!");
             router.push("/auth/login");
+        } else {
+            console.error("Failure to create user");
         }
     };
 
@@ -48,14 +40,13 @@ export default function AddProfilePicture({formData, setFormData, onNext}: IForm
                 >
                     {/* default pfp goes here */}
                     <img
-                        src="/POOP"
+                        src=""
                         alt="poopfilepeekchur"
                     />
                 </div>
-                <footer className="absolute w-full bottom-16 flex flex-col gap-6">
-                    <AddPictureButton />
-                    <SkipButton onClick={handleSkip} />
-                </footer>
+
+                <AddPictureButton />
+                <SkipButton onClick={handleSkip} />
             </div>
         </>
     );

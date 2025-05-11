@@ -1,7 +1,11 @@
 import ProfileScreen from "@/components/profile/ProfileScreen";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function ProfilePage() {
-    // const {data: session} = useSession();
-    // if (!session?.user) throw new Error("not authed bro");
-return (<ProfileScreen/>)
+export default async function ProfilePage() {
+    const session = await auth();
+    if (!session) {
+        redirect("/auth/login");
+    }
+    return <ProfileScreen session={session} />;
 }
