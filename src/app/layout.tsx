@@ -1,23 +1,20 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 import "./globals.css";
 import NextThemeProvider from "../components/theme/NextThemeProvider";
-// import SessionWrapper from "./session-wrapper";
 
 export const metadata: Metadata = {
     title: "Circles",
     description: "A social media app for connecting with friends",
 };
 
-export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html
-            lang="en"
-            suppressHydrationWarning
-        >
+        <html lang="en" suppressHydrationWarning>
             <body className="antialiased">
                 <NextThemeProvider>
-                    {children}
-                    {/* <SessionWrapper>{children}</SessionWrapper> */}
+                    <div className="mobile-container">
+                        {children}
+                    </div>
                 </NextThemeProvider>
             </body>
         </html>
