@@ -18,8 +18,9 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumImage, albumName, userProfil
 				<Image
 					src={albumImage}
 					alt={`${albumName} album cover`}
+					quality={90}
 					fill
-					className='object-cover'
+					className='object-cover w-full h-auto'
 				/>
 				<div className='absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-foreground/30' />
 

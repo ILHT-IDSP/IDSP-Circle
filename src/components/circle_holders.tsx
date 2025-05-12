@@ -14,17 +14,22 @@ const CircleHolder: React.FC<CircleHolderProps> = ({ imageSrc, name, altText, ci
 
 	return (
 		<div className={`flex flex-col items-center ${className}`}>
-			{' '}
-			<div className='rounded-full overflow-hidden flex items-center justify-center border'>
+			<div
+				className='rounded-full overflow-hidden flex items-center justify-center border'
+				style={{ width: baseSize, height: baseSize }}
+			>
 				<Image
 					src={imageSrc}
 					alt={altText || `${name}'s profile picture`}
 					width={baseSize}
 					height={baseSize}
-					className='w-full h-full object-cover aspect-square'
+					quality={90}
+					className='object-cover'
+					sizes={`${baseSize}px`}
+					priority
 				/>
-			</div>{' '}
-			{showName && name && <h3 className='mt-1 sm:mt-2 text-center font-medium text-sm sm:text-base '>{name}</h3>}
+			</div>
+			{showName && name && <h3 className='mt-1 sm:mt-2 text-center font-medium text-sm sm:text-base'>{name}</h3>}
 		</div>
 	);
 };
