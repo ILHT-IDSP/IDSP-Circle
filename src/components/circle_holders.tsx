@@ -29,7 +29,15 @@ const CircleHolder: React.FC<CircleHolderProps> = ({ imageSrc, name, altText, ci
 					priority
 				/>
 			</div>
-			{showName && name && <h3 className='mt-1 sm:mt-2 text-center font-medium text-sm sm:text-base'>{name}</h3>}
+			{showName && name && (
+				<h3
+					className='mt-1 sm:mt-2 text-center text-sm'
+					// this style tag makes it so that if the name is too long it gets cut off and ends with '...'
+					style={{ maxWidth: `${baseSize}px`, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}
+				>
+					{name}
+				</h3>
+			)}
 		</div>
 	);
 };

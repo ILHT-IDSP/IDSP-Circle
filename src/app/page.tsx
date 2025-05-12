@@ -27,7 +27,7 @@ export default async function Home() {
                                 <CircleHolder
                                     imageSrc={circle.avatar || "/images/default-avatar.png"}
                                     name={circle.name}
-                                    circleSize={70}
+                                    circleSize={80}
                                 />
                             </div>
                         ))}

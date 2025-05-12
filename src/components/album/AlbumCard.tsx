@@ -22,9 +22,9 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumImage, albumName, userProfil
 					fill
 					className='object-cover w-full h-auto'
 				/>
-				<div className='absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-foreground/30' />
-
-				<div className='absolute top-3 right-3 z-10'>
+				<div
+				  className="absolute left-0 right-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"
+				/>				<div className='absolute top-3 right-3 z-10'>
 					<CircleHolder
 						imageSrc={userProfileImage}
 						circleSize={40}

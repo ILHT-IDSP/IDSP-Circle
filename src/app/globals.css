@@ -3,94 +3,101 @@
 
 /* Base Styles */
 body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: var(--background);
-    color: var(--foreground);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    margin: 0;
-    padding: 0;
+	font-family: 'DM Sans', sans-serif;
+	background-color: var(--background);
+	color: var(--foreground);
+	transition: background-color 0.3s ease, color 0.3s ease;
+	margin: 0;
+	padding: 0;
 }
 
 /* Headers */
 h1 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    line-height: 2.5rem;
-    margin-bottom: 1rem;
+	font-size: 1.75rem;
+	font-weight: 600;
+	line-height: 2.5rem;
+	margin-bottom: 1rem;
 }
 
 h2 {
-    font-size: 1.25rem;
-    font-weight: 500;
-    line-height: 2rem;
-    margin-bottom: 0.75rem;
+	font-size: 1.25rem;
+	font-weight: 500;
+	line-height: 2rem;
+	margin-bottom: 0.75rem;
 }
 
 p {
-    line-height: 1.5rem;
-    margin-bottom: 0.5rem;
+	line-height: 1.5rem;
+	margin-bottom: 0.5rem;
 }
 
 /* Color Variables */
 :root {
-    --circles-dark-blue: #0044cc;
-    --circles-light-blue: #689bff;
-    --circles-dark: #0e0e0e;
-    --circles-light: #f8f4ea;
-    --groovy-green: #14aa3e;
-    --groovy-red: #e8083e;
-    --groovy-gray: #737373;
+	--circles-dark-blue: #0044cc;
+	--circles-light-blue: #689bff;
+	--circles-dark: #0e0e0e;
+	--circles-light: #f8f4ea;
+	--groovy-green: #14aa3e;
+	--groovy-red: #e8083e;
+	--groovy-gray: #737373;
 
-    --background: var(--circles-light);
-    --foreground: var(--circles-dark);
-    --primary: var(--circles-dark-blue);
-    --primary-hover: var(--circles-light-blue);
-    --accent: var(--circles-light-blue);
+	--background: var(--circles-light);
+	--foreground: var(--circles-dark);
+	--primary: var(--circles-dark-blue);
+	--primary-hover: var(--circles-light-blue);
+	--accent: var(--circles-light-blue);
 
-    --foreground-rgb: 14, 14, 14;
-    --background-rgb: 248, 244, 234;
+	--foreground-rgb: 14, 14, 14;
+	--background-rgb: 248, 244, 234;
 }
 
 .dark {
-    --background: var(--circles-dark);
-    --foreground: var(--circles-light);
-    --primary: var(--circles-light-blue);
-    --primary-hover: var(--circles-dark-blue);
-    --accent: var(--circles-dark-blue);
+	--background: var(--circles-dark);
+	--foreground: var(--circles-light);
+	--primary: var(--circles-light-blue);
+	--primary-hover: var(--circles-dark-blue);
+	--accent: var(--circles-dark-blue);
 
-    --foreground-rgb: 248, 244, 234;
-    --background-rgb: 14, 14, 14;
+	--foreground-rgb: 248, 244, 234;
+	--background-rgb: 14, 14, 14;
 }
 
 /* Mobile Container */
 .mobile-container {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 0 16px;
+	max-width: 640px;
+	margin: 0 auto;
+	padding: 0 16px;
 }
 
 /* Prevent horizontal scrolling */
 body {
-    overflow-x: hidden;
+	overflow-x: hidden;
 }
 
 /* Navbar Styles */
 .navbar {
-    background-color: var(--background);
-    border-top: 1px solid var(--foreground);
-    padding: 0.75rem 1rem;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
+	background-color: var(--background);
+	border-top: 1px solid var(--foreground);
+	padding: 0.75rem 1rem;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
 }
 
 .navbar a {
-    color: var(--foreground);
-    font-size: 0.875rem;
+	color: var(--foreground);
+	font-size: 0.875rem;
 }
 
 .navbar a.active {
-    color: var(--primary);
+	color: var(--primary);
+}
+
+.black-outline {
+	color: #fff;
+	/* -webkit-text-stroke: 1px #000; */
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	font-weight: 800;
 }
