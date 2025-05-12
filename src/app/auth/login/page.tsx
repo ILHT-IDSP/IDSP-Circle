@@ -1,6 +1,12 @@
 import {LoginForm} from "@/components/auth_forms/login_form";
+import {redirect} from "next/navigation";
+import {auth} from "@/auth";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+    const session = await auth();
+    if (session) {
+        redirect("/profile");
+    }
     return (
         <>
             <div
