@@ -2,6 +2,7 @@ import SettingsCategory from "@/components/settings_form/SettingsCategory";
 import SettingsItem from "@/components/settings_form/SettingsItem";
 import {FaBell, FaUserFriends, FaAdjust, FaImages, FaSignOutAlt} from "react-icons/fa";
 import {signOut} from "@/auth";
+// import {signOut} from "next-auth/react";
 import {redirect} from "next/navigation";
 import {FormEvent} from "react";
 
@@ -50,26 +51,21 @@ export default function SettingsPage() {
                     icon={<FaUserFriends />}
                     href="/settings/friends"
                 />
-                <form
-                    onSubmit={async (e) => {
+
+                <SettingsItem
+                    onClick={async () => {
                         "use server";
-                        e.stopPropagation();
-                        await signOut();
-                        console.log("Logged Out!");
-                        redirect("/auth/login");
+                        try {
+                            await signOut();
+                            console.log("Logged Out!");
+                            redirect("/auth/login");
+                        } catch (err) {
+                            redirect("/auth/login");
+                        }
                     }}
-                >
-                    <button
-                        type="submit"
-                        className="w-full text-left"
-                    >
-                        <SettingsItem
-                            label="Logout"
-                            icon={<FaSignOutAlt />}
-                            href="#"
-                        />
-                    </button>
-                </form>
+                    label="Logout"
+                    icon={<FaSignOutAlt />}
+                />
             </SettingsCategory>
         </div>
     );
