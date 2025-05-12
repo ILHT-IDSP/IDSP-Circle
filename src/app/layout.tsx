@@ -16,7 +16,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
         >
             <body className="antialiased">
                 <NextThemeProvider>
-					{children}
+                    {children}
                     {/* <SessionWrapper>{children}</SessionWrapper> */}
                 </NextThemeProvider>
             </body>
