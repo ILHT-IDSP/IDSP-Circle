@@ -1,4 +1,3 @@
-import {MouseEventHandler} from "react";
 interface SkipButtonProps {
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }

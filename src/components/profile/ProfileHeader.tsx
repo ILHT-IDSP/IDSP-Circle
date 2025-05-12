@@ -40,7 +40,7 @@ export default function ProfileHeader({session}: {session: Session | null}) {
 
             {/* Profile picture*/}
             <Image
-                src={session?.user.image || "/default-avatar.png"}
+                src={session?.user.profileImage || "/images/default-avatar.png"}
                 alt="Profile"
                 width={96}
                 height={96}

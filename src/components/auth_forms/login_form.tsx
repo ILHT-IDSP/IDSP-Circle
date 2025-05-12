@@ -1,4 +1,4 @@
-import {FormEvent} from "react";
+// import {FormEvent} from "react";
 import {LoginButton} from "./login_buttons";
 import {UsernameEmailOrPhoneNumberLoginInput} from "./username_email_phonenumber_input";
 import {PasswordInput} from "./password_input";
@@ -9,7 +9,7 @@ import {OrDivider} from "./or_divider";
 import {AlternativeLogins} from "./alternative_login";
 import {DontHaveAnAccountSignUp} from "./dont_have_an_account";
 import {signIn} from "@/auth";
-import {signInSchema} from "@/lib/zod";
+// import {signInSchema} from "@/lib/zod";
 
 export function LoginForm() {
     return (

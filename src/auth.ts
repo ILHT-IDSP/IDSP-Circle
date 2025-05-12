@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import CredentialsProvider from "next-auth/providers/credentials"; // have to use this one <----
@@ -36,6 +37,7 @@ declare module "next-auth" {
         image: string;
         circleCount: number;
         albumCount: number;
+		profileImage?: string;
     }
 }
 
