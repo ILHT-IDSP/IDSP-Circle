@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
 
 /* Base Styles */
 body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: "DM Sans", sans-serif;
     background-color: var(--background);
     color: var(--foreground);
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -93,4 +93,13 @@ body {
 
 .navbar a.active {
     color: var(--primary);
+}
+
+#circle-icon-container,
+#album-icon-container {
+    background-color: var(--circles-dark-blue);
+}
+
+#create-circle-bg {
+    background-color: var(--circles-dark);
 }

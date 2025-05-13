@@ -34,21 +34,21 @@ export default async function Home() {
                     </div>
                 </section>
 
-				<section className='w-full my-32'>
-					<h2 className='text-lg font-bold mb-2'>Albums</h2>
-					<div className='grid grid-cols-2 gap-4'>
-						{albums.map(album => (
-							<AlbumCard
-								key={album.id}
-								albumImage={album.coverImage || '/images/albums/year1.jpeg'}
-								albumName={album.title}
-								userProfileImage={album.creator?.profileImage || '/images/default-avatar.png'}
-							/>
-						))}
-					</div>
-				</section>
-			</main>
-			<NavBar/>
-		</>
-	);
+                <section className="w-full my-32">
+                    <h2 className="text-lg font-bold mb-2">Albums</h2>
+                    <div className="grid grid-cols-2 gap-4">
+                        {albums.map((album) => (
+                            <AlbumCard
+                                key={album.id}
+                                albumImage={album.coverImage || "/images/albums/year1.jpeg"}
+                                albumName={album.title}
+                                userProfileImage={album.creator?.profileImage || "/images/default-avatar.png"}
+                            />
+                        ))}
+                    </div>
+                </section>
+            </main>
+            <NavBar />
+        </>
+    );
 }

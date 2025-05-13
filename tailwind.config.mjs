@@ -5,7 +5,7 @@ const config = {
     theme: {
         extend: {
             colors: {
-                "circles-dark-blue": "#0044cc",
+                "circles-dark-blue": "#0044CC",
                 "circles-light-blue": "#689bff",
                 "circles-dark": "#0e0e0e",
                 "circles-light": "#f8f4ea",

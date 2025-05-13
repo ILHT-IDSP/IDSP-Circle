@@ -10,13 +10,8 @@ import {AlternativeLogins} from "./alternative_login";
 import {DontHaveAnAccountSignUp} from "./dont_have_an_account";
 import {signIn} from "@/auth";
 import {signInSchema} from "@/lib/zod";
-import {redirect} from "next/navigation";
-import {auth} from "@/auth";
 
-export default async function LoginForm() {
-    const session = await auth();
-    if (session) return redirect("/profile");
-
+export function LoginForm() {
     return (
         <div className="flex flex-col items-center pt-20">
             <div className="mb-6">
