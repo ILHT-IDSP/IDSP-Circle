@@ -14,8 +14,9 @@ export function PasswordInput({onChange, id = "password-input"}: PasswordInputPr
         setPassword(e.target.value);
         onChange?.(e.target.value);
     };
-      return (
-        <div className="p-1 sm:p-2">            <div className="rounded-3xl w-full flex justify-between border border-foreground/20">
+    return (
+        <div className="p-1 sm:p-2">
+            <div className="rounded-3xl w-full bg-white flex justify-between outline-gray-500 outline-2">
                 <input
                     id={id}
                     name="password"
@@ -23,7 +24,7 @@ export function PasswordInput({onChange, id = "password-input"}: PasswordInputPr
                     placeholder="Password"
                     value={password}
                     onChange={handleChange}
-                    className="w-full indent-3 sm:indent-4 border-0 outline-none rounded-3xl text-sm sm:text-base"
+                    className="rounded-3xl w-full bg-white placeholder-black indent-2 p-1.5 focus:outline-none"
                     required
                 />
 

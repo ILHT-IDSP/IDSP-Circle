@@ -28,6 +28,7 @@ export default function ProfileHeader({session}: {session: Session | null}) {
         window.location.reload();
     };
 
+    console.log(session?.user.circleCount);
     return (
         <div className="relative flex flex-col items-center mb-6 bg-circles-light rounded-2xl py-4 px-6 shadow-lg">
             <input

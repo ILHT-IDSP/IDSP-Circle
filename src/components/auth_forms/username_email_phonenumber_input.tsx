@@ -14,20 +14,22 @@ export function UsernameEmailOrPhoneNumberLoginInput({onChange}: UsernameEmailOr
     };
     return (
         <>
-            <div
-                id="login-username-input"
-                className="p-1 sm:p-2"
-            >
-                {" "}
-                <input
-                    type="text"
-                    name="email"
-                    placeholder="Phone number, email, or username"
-                    value={value}
-                    onChange={handleChange}
-                    className="form-input indent-3 sm:indent-4 text-sm sm:text-base"
-                    required
-                />
+            <div className="p-1 sm:p-2">
+                <div
+                    id="login-username-input"
+                    className="rounded-3xl w-full bg-white flex justify-between"
+                >
+                    {" "}
+                    <input
+                        type="text"
+                        name="email"
+                        placeholder="Phone number, email, or username"
+                        value={value}
+                        onChange={handleChange}
+                        className="rounded-3xl w-full bg-white placeholder-black indent-2 p-1.5 outline-gray-500 outline-2"
+                        required
+                    />
+                </div>
             </div>
         </>
     );

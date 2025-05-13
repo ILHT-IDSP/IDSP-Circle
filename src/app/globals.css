@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
 
 /* Base Styles */
 body {
@@ -100,4 +100,13 @@ body {
 	/* -webkit-text-stroke: 1px #000; */
 	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 	font-weight: 800;
+}
+
+#circle-icon-container,
+#album-icon-container {
+    background-color: var(--circles-dark-blue);
+}
+
+#create-circle-bg {
+    background-color: var(--circles-dark);
 }

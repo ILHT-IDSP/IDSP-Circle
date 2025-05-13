@@ -1,0 +1,41 @@
+"use client";
+import {AwesomeIcon} from "../../../public/icons";
+import {faX} from "@fortawesome/free-solid-svg-icons";
+import CreateCircleIcon from "./circle_icon";
+import CreateAlbumIcon from "./album_icon";
+
+export default function CreateContainer({isVisible, onClose}: {isVisible: boolean; onClose: () => void}) {
+    return (
+        <>
+            {isVisible && (
+                <div
+                    className="fixed inset-0 bg-transparent bg-opacity-90 z-49"
+                    onClick={onClose}
+                ></div>
+            )}
+
+            {/* Create Container */}
+            <div
+                id="create-container"
+                className={`fixed bottom-0 left-0 right-0 bg-gray-950 border-2 rounded-t-2xl max-w-full w-full mx-auto p-4 z-50 transform ${isVisible ? "translate-y-0" : "translate-y-full"} transition-transform duration-300 h-65`}
+            >
+                <div className="max-w-full w-full flex justify-end">
+                    <AwesomeIcon
+                        icon={faX}
+                        className="text-white p-3 m-2 text-2xl"
+                    />
+                </div>
+                {/* Add your content here */}
+
+                <ul className="flex flex-row gap-20 justify-center">
+                    <li>
+                        <CreateAlbumIcon />
+                    </li>
+                    <li>
+                        <CreateCircleIcon />
+                    </li>
+                </ul>
+            </div>
+        </>
+    );
+}
