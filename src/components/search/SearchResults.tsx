@@ -22,7 +22,6 @@ export default function SearchResults() {
 
     return (
         <div>
-            {/* Search Bar */}
             <input
                 type="text"
                 placeholder="Search for users..."
@@ -31,7 +30,6 @@ export default function SearchResults() {
                 className="w-full mb-4 p-3 rounded-lg bg-circles-light text-circles-dark placeholder-gray-500"
             />
 
-            {/* Search Results */}
             {filteredUsers.length > 0 ? (
                 <div className="space-y-4">
                     {filteredUsers.map((user) => (
