@@ -1,53 +1,116 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Session } from 'next-auth';
 
-// interface User {
-//     name: string;
-//     email: string;
-//     image: string;
-// }
+interface UserProfile {
+	name?: string | null;
+	email?: string | null;
+	bio?: string | null;
+	profileImage?: string | null;
+	username?: string;
+}
+
 export default function EditProfileForm({ session }: { session: Session | null }) {
-	const [name, setName] = useState(session?.user.name ?? '');
-	const [email, setEmail] = useState(session?.user.email ?? '');
-	const [avatar, setAvatar] = useState(session?.user.image ?? '');
+	const [name, setName] = useState(session?.user?.name || '');
+	const [email, setEmail] = useState(session?.user?.email || '');
+	const [bio, setBio] = useState('');
+	const [avatar, setAvatar] = useState(session?.user?.image || '');
+	const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 	const router = useRouter();
 	const [error, setError] = useState<string | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	// Fetch user profile data including bio
+	useEffect(() => {
+		const fetchUserProfile = async () => {
+			if (!session?.user?.username) {
+				setLoading(false);
+				return;
+			}
 
+			try {
+				const res = await fetch(`/api/users/${session.user.username}`);
+				if (res.ok) {
+					const data = await res.json();
+					setUserProfile(data);
+					if (data.bio) setBio(data.bio);
+				}
+			} catch (error) {
+				console.error('Error fetching user profile:', error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchUserProfile();
+	}, [session]);
 	const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
+
+		// Create local preview
 		setAvatar(URL.createObjectURL(file));
 
-		const uploadData = new FormData();
-		uploadData.append('file', file);
+		// Upload to server
+		const formData = new FormData();
+		formData.append('avatar', file);
 
-		const res = await fetch('/api/upload', {
-			method: 'POST',
-			body: uploadData,
-		});
+		try {
+			const response = await fetch('/api/user/avatar', {
+				method: 'POST',
+				body: formData,
+			});
 
-		const data = await res.json();
-		if (data.url) setAvatar(data.url);
-		else setError('failed to upload image')
+			const data = await response.json();
+			if (data.success && data.imageUrl) {
+				setAvatar(data.imageUrl);
+			} else {
+				setError('Failed to upload image');
+			}
+		} catch (error) {
+			console.error('Avatar upload error:', error);
+			setError('Failed to upload image');
+		}
 	};
-
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		if (!name.trim() || !email.trim() || !avatar.trim()) {
-			setError('All fields are required.');
+		if (!name.trim()) {
+			setError('Name is required.');
 			return;
 		}
-		setError(null);
 
-		const res = await fetch('/api/editProfile', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name, email, avatar }),
-		});
+		setError(null);
+		setIsSubmitting(true);
+
+		try {
+			const res = await fetch('/api/user/profile', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ name, bio }),
+			});
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				setError(data.error || 'Failed to update profile');
+				return;
+			}
+
+			// Redirect back to profile page
+			if (session?.user?.username) {
+				router.push(`/${session.user.username}`);
+			} else {
+				router.push('/profile');
+			}
+		} catch (error) {
+			setError('An error occurred while updating your profile.');
+			console.error('Profile update error:', error);
+		} finally {
+			setIsSubmitting(false);
+		}
 
 		if (res.ok) router.push('/profile');
 		else {
