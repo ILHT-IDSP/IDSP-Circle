@@ -17,7 +17,7 @@ export default function CreateContainer({isVisible, onClose}: {isVisible: boolea
             {/* Create Container */}
             <div
                 id="create-container"
-                className={`fixed bottom-0 left-0 right-0 bg-gray-950 border-2 rounded-t-2xl max-w-full w-full mx-auto p-4 z-50 transform ${isVisible ? "translate-y-0" : "translate-y-full"} transition-transform duration-300 h-65`}
+                className={`fixed bottom-0 left-0 right-0 border-2 rounded-t-2xl max-w-full w-full mx-auto p-4 z-50 transform ${isVisible ? "translate-y-0" : "translate-y-full"} transition-transform duration-300 h-65`}
             >
                 <div className="max-w-full w-full flex justify-end">
                     <AwesomeIcon
