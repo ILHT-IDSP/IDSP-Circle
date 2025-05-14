@@ -18,11 +18,15 @@ export default function NavBar() {
 		{ name: 'Activity', path: '/activity', icon: FaBell },
 		{ name: 'Profile', path: '/profile', icon: FaUser },
 	]);
-
 	// Update the profile path when session is available
 	useEffect(() => {
-		if (session?.user?.username) {
-			setNavItems(prev => prev.map(item => (item.name === 'Profile' ? { ...item, path: `/${session.user?.username}` } : item)));
+		// Use type assertion to handle the username property
+		interface ExtendedUser {
+			username?: string;
+		}
+		const user = session?.user as ExtendedUser | undefined;
+		if (user?.username) {
+			setNavItems(prev => prev.map(item => (item.name === 'Profile' ? { ...item, path: `/${user.username}` } : item)));
 		}
 	}, [session]);
 
