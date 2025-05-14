@@ -1,24 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserCard from "@/components/search/UserCard";
 
-const fakeUsers = [
-    { id: 1, name: "Adnan", username: "adnan" },
-    { id: 2, name: "Chelsea Woo", username: "chelsea.w" },
-    { id: 3, name: "Ding Dong Duong", username: "tina" },
-    { id: 4, name: "Noshow Max", username: "max" },
-    { id: 5, name: "Irinaa", username: "irinaa" },
-    { id: 6, name: "Anguss Beef", username: "anguss.beef" },
-];
-
+interface User {
+    id: number;
+    name: string;
+    username: string;
+    profileImage?: string;
+}
 export default function SearchResults() {
     const [query, setQuery] = useState("");
+    const [users, setUsers] = useState<User[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+    // FETCH ALL USERS OFF RIP 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const res = await fetch(`/api/users?q=${query}`);
+                const data = await res.json();
+                if (res.ok) setUsers(data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
 
-    const filteredUsers = fakeUsers.filter((user) =>
-        user.name.toLowerCase().includes(query.toLowerCase()) ||
-        user.username.toLowerCase().includes(query.toLowerCase())
-    );
+        fetchUsers();
+    }, [query]);
+
+    // Filter users BASED ON QUERY
+    useEffect(() => {
+        if (query.trim() === "") {
+            setFilteredUsers(users);
+        } else {
+            const lowercasedQuery = query.toLowerCase();
+            const filtered = users.filter(
+                (user) =>
+                    user.name.toLowerCase().includes(lowercasedQuery) ||
+                    user.username.toLowerCase().includes(lowercasedQuery)
+            );
+            setFilteredUsers(filtered);}
+    }, [query, users]);
 
     return (
         <div>
