@@ -4,7 +4,7 @@ import { Settings, Check, X } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Session } from 'next-auth';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ProfileUser {
 	id: number;
@@ -22,9 +22,24 @@ interface ProfileUser {
 	isOwnProfile: boolean;
 }
 
-export default function ProfileHeader({ profileData, session }: { profileData: ProfileUser; session: Session | null }) {
+interface ProfileHeaderProps {
+	profileData: ProfileUser;
+	session: Session | null;
+	onFollowUpdate: (isFollowing: boolean) => void;
+}
+
+export default function ProfileHeader({ profileData, session, onFollowUpdate }: ProfileHeaderProps) {
 	const [isFollowing, setIsFollowing] = useState(profileData.isFollowing);
 	const [showUnfollowConfirm, setShowUnfollowConfirm] = useState(false);
+	const [followersCount, setFollowersCount] = useState(profileData.followersCount);
+	const [followingCount, setFollowingCount] = useState(profileData.followingCount);
+
+	// Update local state when profileData changes
+	useEffect(() => {
+		setIsFollowing(profileData.isFollowing);
+		setFollowersCount(profileData.followersCount);
+		setFollowingCount(profileData.followingCount);
+	}, [profileData]);
 
 	const handleUploadClick = () => {
 		// Only allow upload if it's the user's own profile
@@ -41,7 +56,6 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 		await fetch('/api/user/avatar', { method: 'POST', body: formData });
 		window.location.reload();
 	};
-
 	const handleFollowAction = async () => {
 		if (!session) {
 			// Redirect to login if not authenticated
@@ -54,9 +68,15 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 			setShowUnfollowConfirm(false);
 			setIsFollowing(false);
 
+			// Update follower count immediately for better UX
+			setFollowersCount(count => Math.max(0, count - 1));
+
+			// Notify parent component
+			onFollowUpdate(false);
+
 			// Call API to unfollow
 			try {
-				await fetch('/api/users/follow', {
+				const response = await fetch('/api/users/follow', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -66,10 +86,23 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 						action: 'unfollow',
 					}),
 				});
+
+				if (response.ok) {
+					const data = await response.json();
+					// Update with the accurate count from the server
+					if (data.followerCount !== undefined) {
+						setFollowersCount(data.followerCount);
+					}
+					if (data.followingCount !== undefined) {
+						setFollowingCount(data.followingCount);
+					}
+				}
 			} catch (error) {
 				console.error('Error unfollowing user:', error);
 				// Revert UI state on error
 				setIsFollowing(true);
+				setFollowersCount(count => count + 1);
+				onFollowUpdate(true);
 			}
 			return;
 		}
@@ -81,8 +114,14 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 			// Follow user
 			setIsFollowing(true);
 
+			// Update follower count immediately for better UX
+			setFollowersCount(count => count + 1);
+
+			// Notify parent component
+			onFollowUpdate(true);
+
 			try {
-				await fetch('/api/users/follow', {
+				const response = await fetch('/api/users/follow', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -92,10 +131,23 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 						action: 'follow',
 					}),
 				});
+
+				if (response.ok) {
+					const data = await response.json();
+					// Update with the accurate count from the server
+					if (data.followerCount !== undefined) {
+						setFollowersCount(data.followerCount);
+					}
+					if (data.followingCount !== undefined) {
+						setFollowingCount(data.followingCount);
+					}
+				}
 			} catch (error) {
 				console.error('Error following user:', error);
 				// Revert UI state on error
 				setIsFollowing(false);
+				setFollowersCount(count => Math.max(0, count - 1));
+				onFollowUpdate(false);
 			}
 		}
 	};
@@ -111,7 +163,6 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 					onChange={handleChange}
 				/>
 			)}
-
 			{/* Profile picture */}
 			<Image
 				src={profileData.profileImage || '/images/default-avatar.png'}
@@ -121,17 +172,12 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 				className={`w-24 h-24 rounded-full object-cover border-4 border-circles-dark-blue ${profileData.isOwnProfile ? 'cursor-pointer' : ''}`}
 				onClick={handleUploadClick}
 			/>
-
 			{/* Name (if available) */}
 			{profileData.name && <p className='text-lg font-semibold text-circles-dark mt-2'>{profileData.name}</p>}
-
 			{/* Username */}
 			<p className='text-xl font-bold text-circles-dark mt-1'>@{profileData.username}</p>
-
 			{/* Bio (if available) */}
-			{profileData.bio && <p className='text-circles-dark mt-2 text-center'>{profileData.bio}</p>}
-
-			{/* circles / albums / followers / following */}
+			{profileData.bio && <p className='text-circles-dark mt-2 text-center'>{profileData.bio}</p>} {/* circles / albums / followers / following */}
 			<div className='flex space-x-6 mt-3'>
 				<div className='text-center'>
 					<p className='text-circles-dark-blue font-semibold'>{profileData.circlesCount}</p>
@@ -139,18 +185,17 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 				</div>
 				<div className='text-center'>
 					<p className='text-circles-dark-blue font-semibold'>{profileData.albumsCount}</p>
-					<p className='text-circles-dark text-sm'>albums</p>
-				</div>
+					<p className='text-circles-dark text-sm'>albums</p>{' '}
+				</div>{' '}
 				<div className='text-center'>
-					<p className='text-circles-dark-blue font-semibold'>{profileData.followersCount}</p>
+					<p className='text-circles-dark-blue font-semibold'>{followersCount}</p>
 					<p className='text-circles-dark text-sm'>followers</p>
 				</div>
 				<div className='text-center'>
-					<p className='text-circles-dark-blue font-semibold'>{profileData.followingCount}</p>
+					<p className='text-circles-dark-blue font-semibold'>{followingCount}</p>
 					<p className='text-circles-dark text-sm'>following</p>
 				</div>
 			</div>
-
 			{/* Display Settings button only if it's the user's own profile */}
 			{profileData.isOwnProfile && (
 				<Link
@@ -160,7 +205,6 @@ export default function ProfileHeader({ profileData, session }: { profileData: P
 					<Settings className='w-6 h-6 text-circles-dark-blue' />
 				</Link>
 			)}
-
 			{/* Action button based on whether it's the user's own profile or not */}
 			{profileData.isOwnProfile ? (
 				<Link

@@ -131,8 +131,7 @@ exports.Prisma.UserScalarFieldEnum = {
   coverImage: 'coverImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  isProfilePrivate: 'isProfilePrivate',
-  birthday: 'birthday'
+  isProfilePrivate: 'isProfilePrivate'
 };
 
 exports.Prisma.CircleScalarFieldEnum = {
@@ -164,26 +163,7 @@ exports.Prisma.PostScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',
-  circleId: 'circleId',
-  musicId: 'musicId'
-};
-
-exports.Prisma.MusicScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  artist: 'artist',
-  albumCover: 'albumCover',
-  audioUrl: 'audioUrl',
-  duration: 'duration',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.SavedMusicScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  musicId: 'musicId',
-  createdAt: 'createdAt'
+  circleId: 'circleId'
 };
 
 exports.Prisma.CommentScalarFieldEnum = {
@@ -261,8 +241,6 @@ exports.Prisma.ModelName = {
   Circle: 'Circle',
   Membership: 'Membership',
   Post: 'Post',
-  Music: 'Music',
-  SavedMusic: 'SavedMusic',
   Comment: 'Comment',
   Like: 'Like',
   Follow: 'Follow',

@@ -3,16 +3,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Session } from 'next-auth';
+import { Pencil } from 'lucide-react';
 
-interface UserProfile {
-	name?: string | null;
-	email?: string | null;
-	bio?: string | null;
-	profileImage?: string | null;
-	username?: string;
-}
 
-// Extended user interface to include username property
 interface ExtendedUser {
 	id?: string;
 	name?: string | null;
@@ -21,33 +14,29 @@ interface ExtendedUser {
 	username?: string;
 }
 
-export default function EditProfileForm({ session }: { session: Session | null }) {	const [name, setName] = useState(session?.user?.name || '');
+export default function EditProfileForm({ session }: { session: Session | null }) {
+	const [name, setName] = useState(session?.user?.name || '');
 	const [email, setEmail] = useState(session?.user?.email || '');
 	const [bio, setBio] = useState('');
-	const [avatar, setAvatar] = useState(session?.user?.image || '');const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+	const [avatar, setAvatar] = useState(session?.user?.image || '');
 	const router = useRouter();
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	// Fetch user profile data including bio
 	useEffect(() => {
 		const fetchUserProfile = async () => {
 			if (!session?.user?.username) {
 				setLoading(false);
 				return;
 			}
-			
+
 			try {
-				// Properly cast username to avoid type errors
 				const username = (session.user as ExtendedUser).username;
 				const response = await fetch(`/api/users/${username}`);
 				if (response.ok) {
 					const data = await response.json();
-					setUserProfile(data);
-					
-					// Update form fields with fetched data
+
 					if (data.bio) setBio(data.bio);
-					// We could use other fields from userProfile if needed in the future
 				}
 			} catch (error: unknown) {
 				console.error('Error fetching user profile:', error);
@@ -63,10 +52,8 @@ export default function EditProfileForm({ session }: { session: Session | null }
 		const file = e.target.files?.[0];
 		if (!file) return;
 
-		// Create local preview
 		setAvatar(URL.createObjectURL(file));
 
-		// Upload to server
 		const formData = new FormData();
 		formData.append('avatar', file);
 
@@ -76,7 +63,8 @@ export default function EditProfileForm({ session }: { session: Session | null }
 				body: formData,
 			});
 
-			const data = await response.json();			if (data.success && data.imageUrl) {
+			const data = await response.json();
+			if (data.success && data.imageUrl) {
 				setAvatar(data.imageUrl);
 			} else {
 				setError('Failed to upload image');
@@ -105,12 +93,12 @@ export default function EditProfileForm({ session }: { session: Session | null }
 				body: JSON.stringify({ name, bio }),
 			});
 
-			const data = await res.json();			if (!res.ok) {
+			const data = await res.json();
+			if (!res.ok) {
 				setError(data.error || 'Failed to update profile');
 				return;
 			}
-			
-			// Redirect back to profile page
+
 			if (session?.user) {
 				const username = (session.user as ExtendedUser).username;
 				if (username) {
@@ -118,7 +106,8 @@ export default function EditProfileForm({ session }: { session: Session | null }
 				} else {
 					router.push('/profile');
 				}
-			} else {				router.push('/profile');
+			} else {
+				router.push('/profile');
 			}
 		} catch (error: unknown) {
 			setError('An error occurred while updating your profile.');
@@ -128,19 +117,14 @@ export default function EditProfileForm({ session }: { session: Session | null }
 		}
 	};
 	if (loading) {
-		return <div className="flex justify-center p-4">Loading profile data...</div>;
+		return <div className='flex justify-center p-4'>Loading profile data...</div>;
 	}
-		return (
+	return (
 		<form
 			onSubmit={handleSubmit}
 			className='flex flex-col items-center p-4 bg-circles-light rounded-2xl shadow-lg'
 		>
 			{error && <div className='text-red-600 mb-2'>{error}</div>}
-			{userProfile && userProfile.username && (
-				<div className="w-full mb-2 text-sm text-gray-600">
-					Editing profile for @{userProfile.username}
-				</div>
-			)}
 			<label className='relative cursor-pointer mb-4'>
 				<input
 					type='file'
@@ -155,7 +139,10 @@ export default function EditProfileForm({ session }: { session: Session | null }
 					height={96}
 					className='w-24 h-24 rounded-full object-cover border-4 border-circles-dark-blue'
 				/>
-				<span className='absolute bottom-0 right-0 bg-circles-dark-blue text-circles-light text-xs rounded-full px-2 py-1'>Change</span>
+				<div className="absolute bottom-0 right-0 bg-black rounded-full p-1 shadow-md">
+					<Pencil size={16} className='text-white' />
+				</div>
+
 			</label>
 
 			{/* Username*/}
@@ -191,7 +178,7 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			<button
 				type='submit'
 				disabled={isSubmitting}
-				className='bg-circles-dark-blue text-circles-light font-semibold py-2 px-4 rounded-lg w-full'
+				className='bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg w-full'
 			>
 				{isSubmitting ? 'Saving...' : 'Save'}
 			</button>
@@ -200,7 +187,7 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			<button
 				type='button'
 				onClick={() => router.push('/profile')}
-				className='mt-2 bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg w-full'
+				className='mt-2 bg-black text-white font-semibold py-2 px-4 rounded-lg w-full'
 			>
 				Cancel
 			</button>

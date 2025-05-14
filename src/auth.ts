@@ -4,8 +4,6 @@ import NextAuth from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from './lib/prisma';
 
-// Since we're having TypeScript issues with NextAuth v5 beta, we'll use a workaround.
-// Type 'any' is used to bypass the errors while maintaining functionality.
 export const { handlers, signIn, signOut, auth } = (NextAuth as any)({
   secret: process.env.AUTH_SECRET,
   providers: [

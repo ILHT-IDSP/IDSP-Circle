@@ -20,16 +20,15 @@ model User {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
   isProfilePrivate Boolean?      @default(false)
-  birthday         DateTime?
   Album            Album[]
   createdCircles   Circle[]
-  comments         Comment[]
-  followers        Follow[]      @relation("Follower")
-  following        Follow[]      @relation("Following")
+  comments         Comment[] // This user is being followed by others (those who have this user as followingId) 
+  followers        Follow[]      @relation("Following")
+  // This user follows others (those who have this user as followerId)
+  following        Follow[]      @relation("Follower")
   likes            Like[]
   memberships      Membership[]
   posts            Post[]
-  savedMusic       SavedMusic[]
   settings         UserSettings?
 }
 
@@ -74,42 +73,13 @@ model Post {
   updatedAt DateTime  @updatedAt
   userId    Int
   circleId  Int
-  musicId   Int
   comments  Comment[]
   likes     Like[]
   circle    Circle    @relation(fields: [circleId], references: [id], onDelete: Cascade)
-  music     Music     @relation(fields: [musicId], references: [id])
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([circleId])
-  @@index([musicId])
-}
-
-model Music {
-  id         Int          @id @default(autoincrement())
-  title      String
-  artist     String
-  albumCover String?
-  audioUrl   String
-  duration   Int?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  posts      Post[]
-  savedBy    SavedMusic[]
-}
-
-model SavedMusic {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  musicId   Int
-  createdAt DateTime @default(now())
-  music     Music    @relation(fields: [musicId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, musicId])
-  @@index([userId])
-  @@index([musicId])
 }
 
 model Comment {

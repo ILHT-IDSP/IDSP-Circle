@@ -32,6 +32,17 @@ export default function ProfileScreen({ session }: { session: Session | null }) 
 	// Get username from URL params
 	const username = typeof params?.username === 'string' ? params.username : Array.isArray(params?.username) ? params.username[0] : null;
 
+	// Add function to handle follower count updates
+	const handleFollowUpdate = (isFollowing: boolean) => {
+		if (profileData) {
+			setProfileData({
+				...profileData,
+				followersCount: isFollowing ? profileData.followersCount + 1 : Math.max(0, profileData.followersCount - 1),
+				isFollowing: isFollowing,
+			});
+		}
+	};
+
 	useEffect(() => {
 		const fetchProfileData = async () => {
 			try {
@@ -88,6 +99,7 @@ export default function ProfileScreen({ session }: { session: Session | null }) 
 			<ProfileHeader
 				profileData={profileData}
 				session={session}
+				onFollowUpdate={handleFollowUpdate}
 			/>
 			<ProfileTabs />
 		</div>

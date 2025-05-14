@@ -31,7 +31,6 @@ export async function POST(request: NextRequest) {
 		if (!targetUser) {
 			return NextResponse.json({ error: 'Target user not found' }, { status: 404 });
 		}
-
 		if (action === 'follow') {
 			// Create follow record if it doesn't exist
 			await prisma.follow.upsert({
@@ -48,7 +47,26 @@ export async function POST(request: NextRequest) {
 				},
 			});
 
-			return NextResponse.json({ success: true, action: 'followed' });
+			// Get updated follower and following counts
+			const [followerCount, followingCount] = await Promise.all([
+				prisma.follow.count({
+					where: {
+						followingId: targetUserId,
+					},
+				}),
+				prisma.follow.count({
+					where: {
+						followerId: targetUserId,
+					},
+				}),
+			]);
+
+			return NextResponse.json({
+				success: true,
+				action: 'followed',
+				followerCount,
+				followingCount,
+			});
 		} else if (action === 'unfollow') {
 			// Delete follow record if it exists
 			await prisma.follow.deleteMany({
@@ -58,7 +76,26 @@ export async function POST(request: NextRequest) {
 				},
 			});
 
-			return NextResponse.json({ success: true, action: 'unfollowed' });
+			// Get updated follower and following counts
+			const [followerCount, followingCount] = await Promise.all([
+				prisma.follow.count({
+					where: {
+						followingId: targetUserId,
+					},
+				}),
+				prisma.follow.count({
+					where: {
+						followerId: targetUserId,
+					},
+				}),
+			]);
+
+			return NextResponse.json({
+				success: true,
+				action: 'unfollowed',
+				followerCount,
+				followingCount,
+			});
 		}
 
 		return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

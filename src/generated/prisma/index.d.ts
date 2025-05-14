@@ -34,16 +34,6 @@ export type Membership = $Result.DefaultSelection<Prisma.$MembershipPayload>
  */
 export type Post = $Result.DefaultSelection<Prisma.$PostPayload>
 /**
- * Model Music
- * 
- */
-export type Music = $Result.DefaultSelection<Prisma.$MusicPayload>
-/**
- * Model SavedMusic
- * 
- */
-export type SavedMusic = $Result.DefaultSelection<Prisma.$SavedMusicPayload>
-/**
  * Model Comment
  * 
  */
@@ -251,26 +241,6 @@ export class PrismaClient<
     * ```
     */
   get post(): Prisma.PostDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.music`: Exposes CRUD operations for the **Music** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Music
-    * const music = await prisma.music.findMany()
-    * ```
-    */
-  get music(): Prisma.MusicDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.savedMusic`: Exposes CRUD operations for the **SavedMusic** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more SavedMusics
-    * const savedMusics = await prisma.savedMusic.findMany()
-    * ```
-    */
-  get savedMusic(): Prisma.SavedMusicDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.comment`: Exposes CRUD operations for the **Comment** model.
@@ -765,8 +735,6 @@ export namespace Prisma {
     Circle: 'Circle',
     Membership: 'Membership',
     Post: 'Post',
-    Music: 'Music',
-    SavedMusic: 'SavedMusic',
     Comment: 'Comment',
     Like: 'Like',
     Follow: 'Follow',
@@ -790,7 +758,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "circle" | "membership" | "post" | "music" | "savedMusic" | "comment" | "like" | "follow" | "album" | "userSettings"
+      modelProps: "user" | "circle" | "membership" | "post" | "comment" | "like" | "follow" | "album" | "userSettings"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1087,154 +1055,6 @@ export namespace Prisma {
           count: {
             args: Prisma.PostCountArgs<ExtArgs>
             result: $Utils.Optional<PostCountAggregateOutputType> | number
-          }
-        }
-      }
-      Music: {
-        payload: Prisma.$MusicPayload<ExtArgs>
-        fields: Prisma.MusicFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.MusicFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.MusicFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>
-          }
-          findFirst: {
-            args: Prisma.MusicFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.MusicFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>
-          }
-          findMany: {
-            args: Prisma.MusicFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>[]
-          }
-          create: {
-            args: Prisma.MusicCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>
-          }
-          createMany: {
-            args: Prisma.MusicCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.MusicCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>[]
-          }
-          delete: {
-            args: Prisma.MusicDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>
-          }
-          update: {
-            args: Prisma.MusicUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>
-          }
-          deleteMany: {
-            args: Prisma.MusicDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.MusicUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.MusicUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>[]
-          }
-          upsert: {
-            args: Prisma.MusicUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MusicPayload>
-          }
-          aggregate: {
-            args: Prisma.MusicAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMusic>
-          }
-          groupBy: {
-            args: Prisma.MusicGroupByArgs<ExtArgs>
-            result: $Utils.Optional<MusicGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.MusicCountArgs<ExtArgs>
-            result: $Utils.Optional<MusicCountAggregateOutputType> | number
-          }
-        }
-      }
-      SavedMusic: {
-        payload: Prisma.$SavedMusicPayload<ExtArgs>
-        fields: Prisma.SavedMusicFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.SavedMusicFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.SavedMusicFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>
-          }
-          findFirst: {
-            args: Prisma.SavedMusicFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.SavedMusicFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>
-          }
-          findMany: {
-            args: Prisma.SavedMusicFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>[]
-          }
-          create: {
-            args: Prisma.SavedMusicCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>
-          }
-          createMany: {
-            args: Prisma.SavedMusicCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.SavedMusicCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>[]
-          }
-          delete: {
-            args: Prisma.SavedMusicDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>
-          }
-          update: {
-            args: Prisma.SavedMusicUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>
-          }
-          deleteMany: {
-            args: Prisma.SavedMusicDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.SavedMusicUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.SavedMusicUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>[]
-          }
-          upsert: {
-            args: Prisma.SavedMusicUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedMusicPayload>
-          }
-          aggregate: {
-            args: Prisma.SavedMusicAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSavedMusic>
-          }
-          groupBy: {
-            args: Prisma.SavedMusicGroupByArgs<ExtArgs>
-            result: $Utils.Optional<SavedMusicGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.SavedMusicCountArgs<ExtArgs>
-            result: $Utils.Optional<SavedMusicCountAggregateOutputType> | number
           }
         }
       }
@@ -1696,8 +1516,6 @@ export namespace Prisma {
     circle?: CircleOmit
     membership?: MembershipOmit
     post?: PostOmit
-    music?: MusicOmit
-    savedMusic?: SavedMusicOmit
     comment?: CommentOmit
     like?: LikeOmit
     follow?: FollowOmit
@@ -1805,7 +1623,6 @@ export namespace Prisma {
     likes: number
     memberships: number
     posts: number
-    savedMusic: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1817,7 +1634,6 @@ export namespace Prisma {
     likes?: boolean | UserCountOutputTypeCountLikesArgs
     memberships?: boolean | UserCountOutputTypeCountMembershipsArgs
     posts?: boolean | UserCountOutputTypeCountPostsArgs
-    savedMusic?: boolean | UserCountOutputTypeCountSavedMusicArgs
   }
 
   // Custom InputTypes
@@ -1885,13 +1701,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountSavedMusicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SavedMusicWhereInput
   }
 
 
@@ -1976,46 +1785,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type MusicCountOutputType
-   */
-
-  export type MusicCountOutputType = {
-    posts: number
-    savedBy: number
-  }
-
-  export type MusicCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    posts?: boolean | MusicCountOutputTypeCountPostsArgs
-    savedBy?: boolean | MusicCountOutputTypeCountSavedByArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * MusicCountOutputType without action
-   */
-  export type MusicCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MusicCountOutputType
-     */
-    select?: MusicCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * MusicCountOutputType without action
-   */
-  export type MusicCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostWhereInput
-  }
-
-  /**
-   * MusicCountOutputType without action
-   */
-  export type MusicCountOutputTypeCountSavedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SavedMusicWhereInput
-  }
-
-
-  /**
    * Models
    */
 
@@ -2051,7 +1820,6 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isProfilePrivate: boolean | null
-    birthday: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2066,7 +1834,6 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isProfilePrivate: boolean | null
-    birthday: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2081,7 +1848,6 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     isProfilePrivate: number
-    birthday: number
     _all: number
   }
 
@@ -2106,7 +1872,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isProfilePrivate?: true
-    birthday?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2121,7 +1886,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isProfilePrivate?: true
-    birthday?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2136,7 +1900,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isProfilePrivate?: true
-    birthday?: true
     _all?: true
   }
 
@@ -2238,7 +2001,6 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     isProfilePrivate: boolean | null
-    birthday: Date | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2272,7 +2034,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
-    birthday?: boolean
     Album?: boolean | User$AlbumArgs<ExtArgs>
     createdCircles?: boolean | User$createdCirclesArgs<ExtArgs>
     comments?: boolean | User$commentsArgs<ExtArgs>
@@ -2281,7 +2042,6 @@ export namespace Prisma {
     likes?: boolean | User$likesArgs<ExtArgs>
     memberships?: boolean | User$membershipsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
-    savedMusic?: boolean | User$savedMusicArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -2298,7 +2058,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
-    birthday?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2313,7 +2072,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
-    birthday?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2328,10 +2086,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isProfilePrivate?: boolean
-    birthday?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "bio" | "profileImage" | "coverImage" | "createdAt" | "updatedAt" | "isProfilePrivate" | "birthday", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "bio" | "profileImage" | "coverImage" | "createdAt" | "updatedAt" | "isProfilePrivate", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Album?: boolean | User$AlbumArgs<ExtArgs>
     createdCircles?: boolean | User$createdCirclesArgs<ExtArgs>
@@ -2341,7 +2098,6 @@ export namespace Prisma {
     likes?: boolean | User$likesArgs<ExtArgs>
     memberships?: boolean | User$membershipsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
-    savedMusic?: boolean | User$savedMusicArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2359,7 +2115,6 @@ export namespace Prisma {
       likes: Prisma.$LikePayload<ExtArgs>[]
       memberships: Prisma.$MembershipPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
-      savedMusic: Prisma.$SavedMusicPayload<ExtArgs>[]
       settings: Prisma.$UserSettingsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2374,7 +2129,6 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       isProfilePrivate: boolean | null
-      birthday: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2777,7 +2531,6 @@ export namespace Prisma {
     likes<T extends User$likesArgs<ExtArgs> = {}>(args?: Subset<T, User$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     memberships<T extends User$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    savedMusic<T extends User$savedMusicArgs<ExtArgs> = {}>(args?: Subset<T, User$savedMusicArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2819,7 +2572,6 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly isProfilePrivate: FieldRef<"User", 'Boolean'>
-    readonly birthday: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -3397,30 +3149,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
-  }
-
-  /**
-   * User.savedMusic
-   */
-  export type User$savedMusicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    where?: SavedMusicWhereInput
-    orderBy?: SavedMusicOrderByWithRelationInput | SavedMusicOrderByWithRelationInput[]
-    cursor?: SavedMusicWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SavedMusicScalarFieldEnum | SavedMusicScalarFieldEnum[]
   }
 
   /**
@@ -5804,14 +5532,12 @@ export namespace Prisma {
     id: number | null
     userId: number | null
     circleId: number | null
-    musicId: number | null
   }
 
   export type PostSumAggregateOutputType = {
     id: number | null
     userId: number | null
     circleId: number | null
-    musicId: number | null
   }
 
   export type PostMinAggregateOutputType = {
@@ -5823,7 +5549,6 @@ export namespace Prisma {
     updatedAt: Date | null
     userId: number | null
     circleId: number | null
-    musicId: number | null
   }
 
   export type PostMaxAggregateOutputType = {
@@ -5835,7 +5560,6 @@ export namespace Prisma {
     updatedAt: Date | null
     userId: number | null
     circleId: number | null
-    musicId: number | null
   }
 
   export type PostCountAggregateOutputType = {
@@ -5847,7 +5571,6 @@ export namespace Prisma {
     updatedAt: number
     userId: number
     circleId: number
-    musicId: number
     _all: number
   }
 
@@ -5856,14 +5579,12 @@ export namespace Prisma {
     id?: true
     userId?: true
     circleId?: true
-    musicId?: true
   }
 
   export type PostSumAggregateInputType = {
     id?: true
     userId?: true
     circleId?: true
-    musicId?: true
   }
 
   export type PostMinAggregateInputType = {
@@ -5875,7 +5596,6 @@ export namespace Prisma {
     updatedAt?: true
     userId?: true
     circleId?: true
-    musicId?: true
   }
 
   export type PostMaxAggregateInputType = {
@@ -5887,7 +5607,6 @@ export namespace Prisma {
     updatedAt?: true
     userId?: true
     circleId?: true
-    musicId?: true
   }
 
   export type PostCountAggregateInputType = {
@@ -5899,7 +5618,6 @@ export namespace Prisma {
     updatedAt?: true
     userId?: true
     circleId?: true
-    musicId?: true
     _all?: true
   }
 
@@ -5998,7 +5716,6 @@ export namespace Prisma {
     updatedAt: Date
     userId: number
     circleId: number
-    musicId: number
     _count: PostCountAggregateOutputType | null
     _avg: PostAvgAggregateOutputType | null
     _sum: PostSumAggregateOutputType | null
@@ -6029,11 +5746,9 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     circleId?: boolean
-    musicId?: boolean
     comments?: boolean | Post$commentsArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     circle?: boolean | CircleDefaultArgs<ExtArgs>
-    music?: boolean | MusicDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
@@ -6047,9 +5762,7 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     circleId?: boolean
-    musicId?: boolean
     circle?: boolean | CircleDefaultArgs<ExtArgs>
-    music?: boolean | MusicDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -6062,9 +5775,7 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     circleId?: boolean
-    musicId?: boolean
     circle?: boolean | CircleDefaultArgs<ExtArgs>
-    music?: boolean | MusicDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -6077,26 +5788,22 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     circleId?: boolean
-    musicId?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "imageUrl" | "videoUrl" | "createdAt" | "updatedAt" | "userId" | "circleId" | "musicId", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "imageUrl" | "videoUrl" | "createdAt" | "updatedAt" | "userId" | "circleId", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     comments?: boolean | Post$commentsArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     circle?: boolean | CircleDefaultArgs<ExtArgs>
-    music?: boolean | MusicDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     circle?: boolean | CircleDefaultArgs<ExtArgs>
-    music?: boolean | MusicDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type PostIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     circle?: boolean | CircleDefaultArgs<ExtArgs>
-    music?: boolean | MusicDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
@@ -6106,7 +5813,6 @@ export namespace Prisma {
       comments: Prisma.$CommentPayload<ExtArgs>[]
       likes: Prisma.$LikePayload<ExtArgs>[]
       circle: Prisma.$CirclePayload<ExtArgs>
-      music: Prisma.$MusicPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6118,7 +5824,6 @@ export namespace Prisma {
       updatedAt: Date
       userId: number
       circleId: number
-      musicId: number
     }, ExtArgs["result"]["post"]>
     composites: {}
   }
@@ -6516,7 +6221,6 @@ export namespace Prisma {
     comments<T extends Post$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     likes<T extends Post$likesArgs<ExtArgs> = {}>(args?: Subset<T, Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     circle<T extends CircleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CircleDefaultArgs<ExtArgs>>): Prisma__CircleClient<$Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    music<T extends MusicDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MusicDefaultArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6555,7 +6259,6 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Post", 'DateTime'>
     readonly userId: FieldRef<"Post", 'Int'>
     readonly circleId: FieldRef<"Post", 'Int'>
-    readonly musicId: FieldRef<"Post", 'Int'>
   }
     
 
@@ -7015,2276 +6718,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PostInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Music
-   */
-
-  export type AggregateMusic = {
-    _count: MusicCountAggregateOutputType | null
-    _avg: MusicAvgAggregateOutputType | null
-    _sum: MusicSumAggregateOutputType | null
-    _min: MusicMinAggregateOutputType | null
-    _max: MusicMaxAggregateOutputType | null
-  }
-
-  export type MusicAvgAggregateOutputType = {
-    id: number | null
-    duration: number | null
-  }
-
-  export type MusicSumAggregateOutputType = {
-    id: number | null
-    duration: number | null
-  }
-
-  export type MusicMinAggregateOutputType = {
-    id: number | null
-    title: string | null
-    artist: string | null
-    albumCover: string | null
-    audioUrl: string | null
-    duration: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type MusicMaxAggregateOutputType = {
-    id: number | null
-    title: string | null
-    artist: string | null
-    albumCover: string | null
-    audioUrl: string | null
-    duration: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type MusicCountAggregateOutputType = {
-    id: number
-    title: number
-    artist: number
-    albumCover: number
-    audioUrl: number
-    duration: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type MusicAvgAggregateInputType = {
-    id?: true
-    duration?: true
-  }
-
-  export type MusicSumAggregateInputType = {
-    id?: true
-    duration?: true
-  }
-
-  export type MusicMinAggregateInputType = {
-    id?: true
-    title?: true
-    artist?: true
-    albumCover?: true
-    audioUrl?: true
-    duration?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type MusicMaxAggregateInputType = {
-    id?: true
-    title?: true
-    artist?: true
-    albumCover?: true
-    audioUrl?: true
-    duration?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type MusicCountAggregateInputType = {
-    id?: true
-    title?: true
-    artist?: true
-    albumCover?: true
-    audioUrl?: true
-    duration?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type MusicAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Music to aggregate.
-     */
-    where?: MusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Music to fetch.
-     */
-    orderBy?: MusicOrderByWithRelationInput | MusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: MusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Music from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Music.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Music
-    **/
-    _count?: true | MusicCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: MusicAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: MusicSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: MusicMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: MusicMaxAggregateInputType
-  }
-
-  export type GetMusicAggregateType<T extends MusicAggregateArgs> = {
-        [P in keyof T & keyof AggregateMusic]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateMusic[P]>
-      : GetScalarType<T[P], AggregateMusic[P]>
-  }
-
-
-
-
-  export type MusicGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MusicWhereInput
-    orderBy?: MusicOrderByWithAggregationInput | MusicOrderByWithAggregationInput[]
-    by: MusicScalarFieldEnum[] | MusicScalarFieldEnum
-    having?: MusicScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: MusicCountAggregateInputType | true
-    _avg?: MusicAvgAggregateInputType
-    _sum?: MusicSumAggregateInputType
-    _min?: MusicMinAggregateInputType
-    _max?: MusicMaxAggregateInputType
-  }
-
-  export type MusicGroupByOutputType = {
-    id: number
-    title: string
-    artist: string
-    albumCover: string | null
-    audioUrl: string
-    duration: number | null
-    createdAt: Date
-    updatedAt: Date
-    _count: MusicCountAggregateOutputType | null
-    _avg: MusicAvgAggregateOutputType | null
-    _sum: MusicSumAggregateOutputType | null
-    _min: MusicMinAggregateOutputType | null
-    _max: MusicMaxAggregateOutputType | null
-  }
-
-  type GetMusicGroupByPayload<T extends MusicGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<MusicGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof MusicGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], MusicGroupByOutputType[P]>
-            : GetScalarType<T[P], MusicGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type MusicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    artist?: boolean
-    albumCover?: boolean
-    audioUrl?: boolean
-    duration?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    posts?: boolean | Music$postsArgs<ExtArgs>
-    savedBy?: boolean | Music$savedByArgs<ExtArgs>
-    _count?: boolean | MusicCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["music"]>
-
-  export type MusicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    artist?: boolean
-    albumCover?: boolean
-    audioUrl?: boolean
-    duration?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["music"]>
-
-  export type MusicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    artist?: boolean
-    albumCover?: boolean
-    audioUrl?: boolean
-    duration?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["music"]>
-
-  export type MusicSelectScalar = {
-    id?: boolean
-    title?: boolean
-    artist?: boolean
-    albumCover?: boolean
-    audioUrl?: boolean
-    duration?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type MusicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "artist" | "albumCover" | "audioUrl" | "duration" | "createdAt" | "updatedAt", ExtArgs["result"]["music"]>
-  export type MusicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    posts?: boolean | Music$postsArgs<ExtArgs>
-    savedBy?: boolean | Music$savedByArgs<ExtArgs>
-    _count?: boolean | MusicCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type MusicIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type MusicIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $MusicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Music"
-    objects: {
-      posts: Prisma.$PostPayload<ExtArgs>[]
-      savedBy: Prisma.$SavedMusicPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      title: string
-      artist: string
-      albumCover: string | null
-      audioUrl: string
-      duration: number | null
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["music"]>
-    composites: {}
-  }
-
-  type MusicGetPayload<S extends boolean | null | undefined | MusicDefaultArgs> = $Result.GetResult<Prisma.$MusicPayload, S>
-
-  type MusicCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<MusicFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: MusicCountAggregateInputType | true
-    }
-
-  export interface MusicDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Music'], meta: { name: 'Music' } }
-    /**
-     * Find zero or one Music that matches the filter.
-     * @param {MusicFindUniqueArgs} args - Arguments to find a Music
-     * @example
-     * // Get one Music
-     * const music = await prisma.music.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends MusicFindUniqueArgs>(args: SelectSubset<T, MusicFindUniqueArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Music that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {MusicFindUniqueOrThrowArgs} args - Arguments to find a Music
-     * @example
-     * // Get one Music
-     * const music = await prisma.music.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends MusicFindUniqueOrThrowArgs>(args: SelectSubset<T, MusicFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Music that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MusicFindFirstArgs} args - Arguments to find a Music
-     * @example
-     * // Get one Music
-     * const music = await prisma.music.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends MusicFindFirstArgs>(args?: SelectSubset<T, MusicFindFirstArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Music that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MusicFindFirstOrThrowArgs} args - Arguments to find a Music
-     * @example
-     * // Get one Music
-     * const music = await prisma.music.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends MusicFindFirstOrThrowArgs>(args?: SelectSubset<T, MusicFindFirstOrThrowArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Music that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MusicFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Music
-     * const music = await prisma.music.findMany()
-     * 
-     * // Get first 10 Music
-     * const music = await prisma.music.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const musicWithIdOnly = await prisma.music.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends MusicFindManyArgs>(args?: SelectSubset<T, MusicFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Music.
-     * @param {MusicCreateArgs} args - Arguments to create a Music.
-     * @example
-     * // Create one Music
-     * const Music = await prisma.music.create({
-     *   data: {
-     *     // ... data to create a Music
-     *   }
-     * })
-     * 
-     */
-    create<T extends MusicCreateArgs>(args: SelectSubset<T, MusicCreateArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Music.
-     * @param {MusicCreateManyArgs} args - Arguments to create many Music.
-     * @example
-     * // Create many Music
-     * const music = await prisma.music.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends MusicCreateManyArgs>(args?: SelectSubset<T, MusicCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Music and returns the data saved in the database.
-     * @param {MusicCreateManyAndReturnArgs} args - Arguments to create many Music.
-     * @example
-     * // Create many Music
-     * const music = await prisma.music.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Music and only return the `id`
-     * const musicWithIdOnly = await prisma.music.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends MusicCreateManyAndReturnArgs>(args?: SelectSubset<T, MusicCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Music.
-     * @param {MusicDeleteArgs} args - Arguments to delete one Music.
-     * @example
-     * // Delete one Music
-     * const Music = await prisma.music.delete({
-     *   where: {
-     *     // ... filter to delete one Music
-     *   }
-     * })
-     * 
-     */
-    delete<T extends MusicDeleteArgs>(args: SelectSubset<T, MusicDeleteArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Music.
-     * @param {MusicUpdateArgs} args - Arguments to update one Music.
-     * @example
-     * // Update one Music
-     * const music = await prisma.music.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends MusicUpdateArgs>(args: SelectSubset<T, MusicUpdateArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Music.
-     * @param {MusicDeleteManyArgs} args - Arguments to filter Music to delete.
-     * @example
-     * // Delete a few Music
-     * const { count } = await prisma.music.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends MusicDeleteManyArgs>(args?: SelectSubset<T, MusicDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Music.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MusicUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Music
-     * const music = await prisma.music.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends MusicUpdateManyArgs>(args: SelectSubset<T, MusicUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Music and returns the data updated in the database.
-     * @param {MusicUpdateManyAndReturnArgs} args - Arguments to update many Music.
-     * @example
-     * // Update many Music
-     * const music = await prisma.music.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Music and only return the `id`
-     * const musicWithIdOnly = await prisma.music.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends MusicUpdateManyAndReturnArgs>(args: SelectSubset<T, MusicUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Music.
-     * @param {MusicUpsertArgs} args - Arguments to update or create a Music.
-     * @example
-     * // Update or create a Music
-     * const music = await prisma.music.upsert({
-     *   create: {
-     *     // ... data to create a Music
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Music we want to update
-     *   }
-     * })
-     */
-    upsert<T extends MusicUpsertArgs>(args: SelectSubset<T, MusicUpsertArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Music.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MusicCountArgs} args - Arguments to filter Music to count.
-     * @example
-     * // Count the number of Music
-     * const count = await prisma.music.count({
-     *   where: {
-     *     // ... the filter for the Music we want to count
-     *   }
-     * })
-    **/
-    count<T extends MusicCountArgs>(
-      args?: Subset<T, MusicCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], MusicCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Music.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MusicAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends MusicAggregateArgs>(args: Subset<T, MusicAggregateArgs>): Prisma.PrismaPromise<GetMusicAggregateType<T>>
-
-    /**
-     * Group by Music.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MusicGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends MusicGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: MusicGroupByArgs['orderBy'] }
-        : { orderBy?: MusicGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, MusicGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMusicGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Music model
-   */
-  readonly fields: MusicFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Music.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__MusicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    posts<T extends Music$postsArgs<ExtArgs> = {}>(args?: Subset<T, Music$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    savedBy<T extends Music$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Music$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Music model
-   */
-  interface MusicFieldRefs {
-    readonly id: FieldRef<"Music", 'Int'>
-    readonly title: FieldRef<"Music", 'String'>
-    readonly artist: FieldRef<"Music", 'String'>
-    readonly albumCover: FieldRef<"Music", 'String'>
-    readonly audioUrl: FieldRef<"Music", 'String'>
-    readonly duration: FieldRef<"Music", 'Int'>
-    readonly createdAt: FieldRef<"Music", 'DateTime'>
-    readonly updatedAt: FieldRef<"Music", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Music findUnique
-   */
-  export type MusicFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * Filter, which Music to fetch.
-     */
-    where: MusicWhereUniqueInput
-  }
-
-  /**
-   * Music findUniqueOrThrow
-   */
-  export type MusicFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * Filter, which Music to fetch.
-     */
-    where: MusicWhereUniqueInput
-  }
-
-  /**
-   * Music findFirst
-   */
-  export type MusicFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * Filter, which Music to fetch.
-     */
-    where?: MusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Music to fetch.
-     */
-    orderBy?: MusicOrderByWithRelationInput | MusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Music.
-     */
-    cursor?: MusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Music from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Music.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Music.
-     */
-    distinct?: MusicScalarFieldEnum | MusicScalarFieldEnum[]
-  }
-
-  /**
-   * Music findFirstOrThrow
-   */
-  export type MusicFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * Filter, which Music to fetch.
-     */
-    where?: MusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Music to fetch.
-     */
-    orderBy?: MusicOrderByWithRelationInput | MusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Music.
-     */
-    cursor?: MusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Music from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Music.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Music.
-     */
-    distinct?: MusicScalarFieldEnum | MusicScalarFieldEnum[]
-  }
-
-  /**
-   * Music findMany
-   */
-  export type MusicFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * Filter, which Music to fetch.
-     */
-    where?: MusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Music to fetch.
-     */
-    orderBy?: MusicOrderByWithRelationInput | MusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Music.
-     */
-    cursor?: MusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Music from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Music.
-     */
-    skip?: number
-    distinct?: MusicScalarFieldEnum | MusicScalarFieldEnum[]
-  }
-
-  /**
-   * Music create
-   */
-  export type MusicCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Music.
-     */
-    data: XOR<MusicCreateInput, MusicUncheckedCreateInput>
-  }
-
-  /**
-   * Music createMany
-   */
-  export type MusicCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Music.
-     */
-    data: MusicCreateManyInput | MusicCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Music createManyAndReturn
-   */
-  export type MusicCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * The data used to create many Music.
-     */
-    data: MusicCreateManyInput | MusicCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Music update
-   */
-  export type MusicUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Music.
-     */
-    data: XOR<MusicUpdateInput, MusicUncheckedUpdateInput>
-    /**
-     * Choose, which Music to update.
-     */
-    where: MusicWhereUniqueInput
-  }
-
-  /**
-   * Music updateMany
-   */
-  export type MusicUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Music.
-     */
-    data: XOR<MusicUpdateManyMutationInput, MusicUncheckedUpdateManyInput>
-    /**
-     * Filter which Music to update
-     */
-    where?: MusicWhereInput
-    /**
-     * Limit how many Music to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Music updateManyAndReturn
-   */
-  export type MusicUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * The data used to update Music.
-     */
-    data: XOR<MusicUpdateManyMutationInput, MusicUncheckedUpdateManyInput>
-    /**
-     * Filter which Music to update
-     */
-    where?: MusicWhereInput
-    /**
-     * Limit how many Music to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Music upsert
-   */
-  export type MusicUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Music to update in case it exists.
-     */
-    where: MusicWhereUniqueInput
-    /**
-     * In case the Music found by the `where` argument doesn't exist, create a new Music with this data.
-     */
-    create: XOR<MusicCreateInput, MusicUncheckedCreateInput>
-    /**
-     * In case the Music was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<MusicUpdateInput, MusicUncheckedUpdateInput>
-  }
-
-  /**
-   * Music delete
-   */
-  export type MusicDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-    /**
-     * Filter which Music to delete.
-     */
-    where: MusicWhereUniqueInput
-  }
-
-  /**
-   * Music deleteMany
-   */
-  export type MusicDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Music to delete
-     */
-    where?: MusicWhereInput
-    /**
-     * Limit how many Music to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Music.posts
-   */
-  export type Music$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Post
-     */
-    select?: PostSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Post
-     */
-    omit?: PostOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PostInclude<ExtArgs> | null
-    where?: PostWhereInput
-    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
-    cursor?: PostWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
-  }
-
-  /**
-   * Music.savedBy
-   */
-  export type Music$savedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    where?: SavedMusicWhereInput
-    orderBy?: SavedMusicOrderByWithRelationInput | SavedMusicOrderByWithRelationInput[]
-    cursor?: SavedMusicWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SavedMusicScalarFieldEnum | SavedMusicScalarFieldEnum[]
-  }
-
-  /**
-   * Music without action
-   */
-  export type MusicDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Music
-     */
-    select?: MusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Music
-     */
-    omit?: MusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MusicInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model SavedMusic
-   */
-
-  export type AggregateSavedMusic = {
-    _count: SavedMusicCountAggregateOutputType | null
-    _avg: SavedMusicAvgAggregateOutputType | null
-    _sum: SavedMusicSumAggregateOutputType | null
-    _min: SavedMusicMinAggregateOutputType | null
-    _max: SavedMusicMaxAggregateOutputType | null
-  }
-
-  export type SavedMusicAvgAggregateOutputType = {
-    id: number | null
-    userId: number | null
-    musicId: number | null
-  }
-
-  export type SavedMusicSumAggregateOutputType = {
-    id: number | null
-    userId: number | null
-    musicId: number | null
-  }
-
-  export type SavedMusicMinAggregateOutputType = {
-    id: number | null
-    userId: number | null
-    musicId: number | null
-    createdAt: Date | null
-  }
-
-  export type SavedMusicMaxAggregateOutputType = {
-    id: number | null
-    userId: number | null
-    musicId: number | null
-    createdAt: Date | null
-  }
-
-  export type SavedMusicCountAggregateOutputType = {
-    id: number
-    userId: number
-    musicId: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type SavedMusicAvgAggregateInputType = {
-    id?: true
-    userId?: true
-    musicId?: true
-  }
-
-  export type SavedMusicSumAggregateInputType = {
-    id?: true
-    userId?: true
-    musicId?: true
-  }
-
-  export type SavedMusicMinAggregateInputType = {
-    id?: true
-    userId?: true
-    musicId?: true
-    createdAt?: true
-  }
-
-  export type SavedMusicMaxAggregateInputType = {
-    id?: true
-    userId?: true
-    musicId?: true
-    createdAt?: true
-  }
-
-  export type SavedMusicCountAggregateInputType = {
-    id?: true
-    userId?: true
-    musicId?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type SavedMusicAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which SavedMusic to aggregate.
-     */
-    where?: SavedMusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SavedMusics to fetch.
-     */
-    orderBy?: SavedMusicOrderByWithRelationInput | SavedMusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: SavedMusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SavedMusics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SavedMusics.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned SavedMusics
-    **/
-    _count?: true | SavedMusicCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: SavedMusicAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: SavedMusicSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: SavedMusicMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: SavedMusicMaxAggregateInputType
-  }
-
-  export type GetSavedMusicAggregateType<T extends SavedMusicAggregateArgs> = {
-        [P in keyof T & keyof AggregateSavedMusic]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSavedMusic[P]>
-      : GetScalarType<T[P], AggregateSavedMusic[P]>
-  }
-
-
-
-
-  export type SavedMusicGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SavedMusicWhereInput
-    orderBy?: SavedMusicOrderByWithAggregationInput | SavedMusicOrderByWithAggregationInput[]
-    by: SavedMusicScalarFieldEnum[] | SavedMusicScalarFieldEnum
-    having?: SavedMusicScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: SavedMusicCountAggregateInputType | true
-    _avg?: SavedMusicAvgAggregateInputType
-    _sum?: SavedMusicSumAggregateInputType
-    _min?: SavedMusicMinAggregateInputType
-    _max?: SavedMusicMaxAggregateInputType
-  }
-
-  export type SavedMusicGroupByOutputType = {
-    id: number
-    userId: number
-    musicId: number
-    createdAt: Date
-    _count: SavedMusicCountAggregateOutputType | null
-    _avg: SavedMusicAvgAggregateOutputType | null
-    _sum: SavedMusicSumAggregateOutputType | null
-    _min: SavedMusicMinAggregateOutputType | null
-    _max: SavedMusicMaxAggregateOutputType | null
-  }
-
-  type GetSavedMusicGroupByPayload<T extends SavedMusicGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<SavedMusicGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof SavedMusicGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], SavedMusicGroupByOutputType[P]>
-            : GetScalarType<T[P], SavedMusicGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type SavedMusicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    musicId?: boolean
-    createdAt?: boolean
-    music?: boolean | MusicDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["savedMusic"]>
-
-  export type SavedMusicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    musicId?: boolean
-    createdAt?: boolean
-    music?: boolean | MusicDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["savedMusic"]>
-
-  export type SavedMusicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    musicId?: boolean
-    createdAt?: boolean
-    music?: boolean | MusicDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["savedMusic"]>
-
-  export type SavedMusicSelectScalar = {
-    id?: boolean
-    userId?: boolean
-    musicId?: boolean
-    createdAt?: boolean
-  }
-
-  export type SavedMusicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "musicId" | "createdAt", ExtArgs["result"]["savedMusic"]>
-  export type SavedMusicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    music?: boolean | MusicDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type SavedMusicIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    music?: boolean | MusicDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type SavedMusicIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    music?: boolean | MusicDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $SavedMusicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "SavedMusic"
-    objects: {
-      music: Prisma.$MusicPayload<ExtArgs>
-      user: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      userId: number
-      musicId: number
-      createdAt: Date
-    }, ExtArgs["result"]["savedMusic"]>
-    composites: {}
-  }
-
-  type SavedMusicGetPayload<S extends boolean | null | undefined | SavedMusicDefaultArgs> = $Result.GetResult<Prisma.$SavedMusicPayload, S>
-
-  type SavedMusicCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SavedMusicFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: SavedMusicCountAggregateInputType | true
-    }
-
-  export interface SavedMusicDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SavedMusic'], meta: { name: 'SavedMusic' } }
-    /**
-     * Find zero or one SavedMusic that matches the filter.
-     * @param {SavedMusicFindUniqueArgs} args - Arguments to find a SavedMusic
-     * @example
-     * // Get one SavedMusic
-     * const savedMusic = await prisma.savedMusic.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends SavedMusicFindUniqueArgs>(args: SelectSubset<T, SavedMusicFindUniqueArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one SavedMusic that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {SavedMusicFindUniqueOrThrowArgs} args - Arguments to find a SavedMusic
-     * @example
-     * // Get one SavedMusic
-     * const savedMusic = await prisma.savedMusic.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends SavedMusicFindUniqueOrThrowArgs>(args: SelectSubset<T, SavedMusicFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first SavedMusic that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedMusicFindFirstArgs} args - Arguments to find a SavedMusic
-     * @example
-     * // Get one SavedMusic
-     * const savedMusic = await prisma.savedMusic.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends SavedMusicFindFirstArgs>(args?: SelectSubset<T, SavedMusicFindFirstArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first SavedMusic that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedMusicFindFirstOrThrowArgs} args - Arguments to find a SavedMusic
-     * @example
-     * // Get one SavedMusic
-     * const savedMusic = await prisma.savedMusic.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends SavedMusicFindFirstOrThrowArgs>(args?: SelectSubset<T, SavedMusicFindFirstOrThrowArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more SavedMusics that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedMusicFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all SavedMusics
-     * const savedMusics = await prisma.savedMusic.findMany()
-     * 
-     * // Get first 10 SavedMusics
-     * const savedMusics = await prisma.savedMusic.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const savedMusicWithIdOnly = await prisma.savedMusic.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends SavedMusicFindManyArgs>(args?: SelectSubset<T, SavedMusicFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a SavedMusic.
-     * @param {SavedMusicCreateArgs} args - Arguments to create a SavedMusic.
-     * @example
-     * // Create one SavedMusic
-     * const SavedMusic = await prisma.savedMusic.create({
-     *   data: {
-     *     // ... data to create a SavedMusic
-     *   }
-     * })
-     * 
-     */
-    create<T extends SavedMusicCreateArgs>(args: SelectSubset<T, SavedMusicCreateArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many SavedMusics.
-     * @param {SavedMusicCreateManyArgs} args - Arguments to create many SavedMusics.
-     * @example
-     * // Create many SavedMusics
-     * const savedMusic = await prisma.savedMusic.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends SavedMusicCreateManyArgs>(args?: SelectSubset<T, SavedMusicCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many SavedMusics and returns the data saved in the database.
-     * @param {SavedMusicCreateManyAndReturnArgs} args - Arguments to create many SavedMusics.
-     * @example
-     * // Create many SavedMusics
-     * const savedMusic = await prisma.savedMusic.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many SavedMusics and only return the `id`
-     * const savedMusicWithIdOnly = await prisma.savedMusic.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends SavedMusicCreateManyAndReturnArgs>(args?: SelectSubset<T, SavedMusicCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a SavedMusic.
-     * @param {SavedMusicDeleteArgs} args - Arguments to delete one SavedMusic.
-     * @example
-     * // Delete one SavedMusic
-     * const SavedMusic = await prisma.savedMusic.delete({
-     *   where: {
-     *     // ... filter to delete one SavedMusic
-     *   }
-     * })
-     * 
-     */
-    delete<T extends SavedMusicDeleteArgs>(args: SelectSubset<T, SavedMusicDeleteArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one SavedMusic.
-     * @param {SavedMusicUpdateArgs} args - Arguments to update one SavedMusic.
-     * @example
-     * // Update one SavedMusic
-     * const savedMusic = await prisma.savedMusic.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends SavedMusicUpdateArgs>(args: SelectSubset<T, SavedMusicUpdateArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more SavedMusics.
-     * @param {SavedMusicDeleteManyArgs} args - Arguments to filter SavedMusics to delete.
-     * @example
-     * // Delete a few SavedMusics
-     * const { count } = await prisma.savedMusic.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends SavedMusicDeleteManyArgs>(args?: SelectSubset<T, SavedMusicDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SavedMusics.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedMusicUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many SavedMusics
-     * const savedMusic = await prisma.savedMusic.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends SavedMusicUpdateManyArgs>(args: SelectSubset<T, SavedMusicUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SavedMusics and returns the data updated in the database.
-     * @param {SavedMusicUpdateManyAndReturnArgs} args - Arguments to update many SavedMusics.
-     * @example
-     * // Update many SavedMusics
-     * const savedMusic = await prisma.savedMusic.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more SavedMusics and only return the `id`
-     * const savedMusicWithIdOnly = await prisma.savedMusic.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends SavedMusicUpdateManyAndReturnArgs>(args: SelectSubset<T, SavedMusicUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one SavedMusic.
-     * @param {SavedMusicUpsertArgs} args - Arguments to update or create a SavedMusic.
-     * @example
-     * // Update or create a SavedMusic
-     * const savedMusic = await prisma.savedMusic.upsert({
-     *   create: {
-     *     // ... data to create a SavedMusic
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the SavedMusic we want to update
-     *   }
-     * })
-     */
-    upsert<T extends SavedMusicUpsertArgs>(args: SelectSubset<T, SavedMusicUpsertArgs<ExtArgs>>): Prisma__SavedMusicClient<$Result.GetResult<Prisma.$SavedMusicPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of SavedMusics.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedMusicCountArgs} args - Arguments to filter SavedMusics to count.
-     * @example
-     * // Count the number of SavedMusics
-     * const count = await prisma.savedMusic.count({
-     *   where: {
-     *     // ... the filter for the SavedMusics we want to count
-     *   }
-     * })
-    **/
-    count<T extends SavedMusicCountArgs>(
-      args?: Subset<T, SavedMusicCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], SavedMusicCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a SavedMusic.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedMusicAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends SavedMusicAggregateArgs>(args: Subset<T, SavedMusicAggregateArgs>): Prisma.PrismaPromise<GetSavedMusicAggregateType<T>>
-
-    /**
-     * Group by SavedMusic.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedMusicGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends SavedMusicGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SavedMusicGroupByArgs['orderBy'] }
-        : { orderBy?: SavedMusicGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, SavedMusicGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSavedMusicGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the SavedMusic model
-   */
-  readonly fields: SavedMusicFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for SavedMusic.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__SavedMusicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    music<T extends MusicDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MusicDefaultArgs<ExtArgs>>): Prisma__MusicClient<$Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the SavedMusic model
-   */
-  interface SavedMusicFieldRefs {
-    readonly id: FieldRef<"SavedMusic", 'Int'>
-    readonly userId: FieldRef<"SavedMusic", 'Int'>
-    readonly musicId: FieldRef<"SavedMusic", 'Int'>
-    readonly createdAt: FieldRef<"SavedMusic", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * SavedMusic findUnique
-   */
-  export type SavedMusicFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * Filter, which SavedMusic to fetch.
-     */
-    where: SavedMusicWhereUniqueInput
-  }
-
-  /**
-   * SavedMusic findUniqueOrThrow
-   */
-  export type SavedMusicFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * Filter, which SavedMusic to fetch.
-     */
-    where: SavedMusicWhereUniqueInput
-  }
-
-  /**
-   * SavedMusic findFirst
-   */
-  export type SavedMusicFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * Filter, which SavedMusic to fetch.
-     */
-    where?: SavedMusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SavedMusics to fetch.
-     */
-    orderBy?: SavedMusicOrderByWithRelationInput | SavedMusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SavedMusics.
-     */
-    cursor?: SavedMusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SavedMusics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SavedMusics.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SavedMusics.
-     */
-    distinct?: SavedMusicScalarFieldEnum | SavedMusicScalarFieldEnum[]
-  }
-
-  /**
-   * SavedMusic findFirstOrThrow
-   */
-  export type SavedMusicFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * Filter, which SavedMusic to fetch.
-     */
-    where?: SavedMusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SavedMusics to fetch.
-     */
-    orderBy?: SavedMusicOrderByWithRelationInput | SavedMusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SavedMusics.
-     */
-    cursor?: SavedMusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SavedMusics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SavedMusics.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SavedMusics.
-     */
-    distinct?: SavedMusicScalarFieldEnum | SavedMusicScalarFieldEnum[]
-  }
-
-  /**
-   * SavedMusic findMany
-   */
-  export type SavedMusicFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * Filter, which SavedMusics to fetch.
-     */
-    where?: SavedMusicWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SavedMusics to fetch.
-     */
-    orderBy?: SavedMusicOrderByWithRelationInput | SavedMusicOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing SavedMusics.
-     */
-    cursor?: SavedMusicWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SavedMusics from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SavedMusics.
-     */
-    skip?: number
-    distinct?: SavedMusicScalarFieldEnum | SavedMusicScalarFieldEnum[]
-  }
-
-  /**
-   * SavedMusic create
-   */
-  export type SavedMusicCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * The data needed to create a SavedMusic.
-     */
-    data: XOR<SavedMusicCreateInput, SavedMusicUncheckedCreateInput>
-  }
-
-  /**
-   * SavedMusic createMany
-   */
-  export type SavedMusicCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many SavedMusics.
-     */
-    data: SavedMusicCreateManyInput | SavedMusicCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * SavedMusic createManyAndReturn
-   */
-  export type SavedMusicCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * The data used to create many SavedMusics.
-     */
-    data: SavedMusicCreateManyInput | SavedMusicCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * SavedMusic update
-   */
-  export type SavedMusicUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * The data needed to update a SavedMusic.
-     */
-    data: XOR<SavedMusicUpdateInput, SavedMusicUncheckedUpdateInput>
-    /**
-     * Choose, which SavedMusic to update.
-     */
-    where: SavedMusicWhereUniqueInput
-  }
-
-  /**
-   * SavedMusic updateMany
-   */
-  export type SavedMusicUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update SavedMusics.
-     */
-    data: XOR<SavedMusicUpdateManyMutationInput, SavedMusicUncheckedUpdateManyInput>
-    /**
-     * Filter which SavedMusics to update
-     */
-    where?: SavedMusicWhereInput
-    /**
-     * Limit how many SavedMusics to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * SavedMusic updateManyAndReturn
-   */
-  export type SavedMusicUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * The data used to update SavedMusics.
-     */
-    data: XOR<SavedMusicUpdateManyMutationInput, SavedMusicUncheckedUpdateManyInput>
-    /**
-     * Filter which SavedMusics to update
-     */
-    where?: SavedMusicWhereInput
-    /**
-     * Limit how many SavedMusics to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * SavedMusic upsert
-   */
-  export type SavedMusicUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * The filter to search for the SavedMusic to update in case it exists.
-     */
-    where: SavedMusicWhereUniqueInput
-    /**
-     * In case the SavedMusic found by the `where` argument doesn't exist, create a new SavedMusic with this data.
-     */
-    create: XOR<SavedMusicCreateInput, SavedMusicUncheckedCreateInput>
-    /**
-     * In case the SavedMusic was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<SavedMusicUpdateInput, SavedMusicUncheckedUpdateInput>
-  }
-
-  /**
-   * SavedMusic delete
-   */
-  export type SavedMusicDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
-    /**
-     * Filter which SavedMusic to delete.
-     */
-    where: SavedMusicWhereUniqueInput
-  }
-
-  /**
-   * SavedMusic deleteMany
-   */
-  export type SavedMusicDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which SavedMusics to delete
-     */
-    where?: SavedMusicWhereInput
-    /**
-     * Limit how many SavedMusics to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * SavedMusic without action
-   */
-  export type SavedMusicDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SavedMusic
-     */
-    select?: SavedMusicSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SavedMusic
-     */
-    omit?: SavedMusicOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SavedMusicInclude<ExtArgs> | null
   }
 
 
@@ -14959,8 +12392,7 @@ export namespace Prisma {
     coverImage: 'coverImage',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    isProfilePrivate: 'isProfilePrivate',
-    birthday: 'birthday'
+    isProfilePrivate: 'isProfilePrivate'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -15001,35 +12433,10 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId',
-    circleId: 'circleId',
-    musicId: 'musicId'
+    circleId: 'circleId'
   };
 
   export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
-
-
-  export const MusicScalarFieldEnum: {
-    id: 'id',
-    title: 'title',
-    artist: 'artist',
-    albumCover: 'albumCover',
-    audioUrl: 'audioUrl',
-    duration: 'duration',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type MusicScalarFieldEnum = (typeof MusicScalarFieldEnum)[keyof typeof MusicScalarFieldEnum]
-
-
-  export const SavedMusicScalarFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    musicId: 'musicId',
-    createdAt: 'createdAt'
-  };
-
-  export type SavedMusicScalarFieldEnum = (typeof SavedMusicScalarFieldEnum)[keyof typeof SavedMusicScalarFieldEnum]
 
 
   export const CommentScalarFieldEnum: {
@@ -15221,7 +12628,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
-    birthday?: DateTimeNullableFilter<"User"> | Date | string | null
     Album?: AlbumListRelationFilter
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
@@ -15230,7 +12636,6 @@ export namespace Prisma {
     likes?: LikeListRelationFilter
     memberships?: MembershipListRelationFilter
     posts?: PostListRelationFilter
-    savedMusic?: SavedMusicListRelationFilter
     settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
   }
 
@@ -15246,7 +12651,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrderInput | SortOrder
-    birthday?: SortOrderInput | SortOrder
     Album?: AlbumOrderByRelationAggregateInput
     createdCircles?: CircleOrderByRelationAggregateInput
     comments?: CommentOrderByRelationAggregateInput
@@ -15255,7 +12659,6 @@ export namespace Prisma {
     likes?: LikeOrderByRelationAggregateInput
     memberships?: MembershipOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
-    savedMusic?: SavedMusicOrderByRelationAggregateInput
     settings?: UserSettingsOrderByWithRelationInput
   }
 
@@ -15274,7 +12677,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
-    birthday?: DateTimeNullableFilter<"User"> | Date | string | null
     Album?: AlbumListRelationFilter
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
@@ -15283,7 +12685,6 @@ export namespace Prisma {
     likes?: LikeListRelationFilter
     memberships?: MembershipListRelationFilter
     posts?: PostListRelationFilter
-    savedMusic?: SavedMusicListRelationFilter
     settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
   }, "id" | "email" | "username">
 
@@ -15299,7 +12700,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrderInput | SortOrder
-    birthday?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -15322,7 +12722,6 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
-    birthday?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type CircleWhereInput = {
@@ -15486,11 +12885,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     userId?: IntFilter<"Post"> | number
     circleId?: IntFilter<"Post"> | number
-    musicId?: IntFilter<"Post"> | number
     comments?: CommentListRelationFilter
     likes?: LikeListRelationFilter
     circle?: XOR<CircleScalarRelationFilter, CircleWhereInput>
-    music?: XOR<MusicScalarRelationFilter, MusicWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -15503,11 +12900,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     circleId?: SortOrder
-    musicId?: SortOrder
     comments?: CommentOrderByRelationAggregateInput
     likes?: LikeOrderByRelationAggregateInput
     circle?: CircleOrderByWithRelationInput
-    music?: MusicOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -15523,11 +12918,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     userId?: IntFilter<"Post"> | number
     circleId?: IntFilter<"Post"> | number
-    musicId?: IntFilter<"Post"> | number
     comments?: CommentListRelationFilter
     likes?: LikeListRelationFilter
     circle?: XOR<CircleScalarRelationFilter, CircleWhereInput>
-    music?: XOR<MusicScalarRelationFilter, MusicWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -15540,7 +12933,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     circleId?: SortOrder
-    musicId?: SortOrder
     _count?: PostCountOrderByAggregateInput
     _avg?: PostAvgOrderByAggregateInput
     _max?: PostMaxOrderByAggregateInput
@@ -15560,138 +12952,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     userId?: IntWithAggregatesFilter<"Post"> | number
     circleId?: IntWithAggregatesFilter<"Post"> | number
-    musicId?: IntWithAggregatesFilter<"Post"> | number
-  }
-
-  export type MusicWhereInput = {
-    AND?: MusicWhereInput | MusicWhereInput[]
-    OR?: MusicWhereInput[]
-    NOT?: MusicWhereInput | MusicWhereInput[]
-    id?: IntFilter<"Music"> | number
-    title?: StringFilter<"Music"> | string
-    artist?: StringFilter<"Music"> | string
-    albumCover?: StringNullableFilter<"Music"> | string | null
-    audioUrl?: StringFilter<"Music"> | string
-    duration?: IntNullableFilter<"Music"> | number | null
-    createdAt?: DateTimeFilter<"Music"> | Date | string
-    updatedAt?: DateTimeFilter<"Music"> | Date | string
-    posts?: PostListRelationFilter
-    savedBy?: SavedMusicListRelationFilter
-  }
-
-  export type MusicOrderByWithRelationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    artist?: SortOrder
-    albumCover?: SortOrderInput | SortOrder
-    audioUrl?: SortOrder
-    duration?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    posts?: PostOrderByRelationAggregateInput
-    savedBy?: SavedMusicOrderByRelationAggregateInput
-  }
-
-  export type MusicWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: MusicWhereInput | MusicWhereInput[]
-    OR?: MusicWhereInput[]
-    NOT?: MusicWhereInput | MusicWhereInput[]
-    title?: StringFilter<"Music"> | string
-    artist?: StringFilter<"Music"> | string
-    albumCover?: StringNullableFilter<"Music"> | string | null
-    audioUrl?: StringFilter<"Music"> | string
-    duration?: IntNullableFilter<"Music"> | number | null
-    createdAt?: DateTimeFilter<"Music"> | Date | string
-    updatedAt?: DateTimeFilter<"Music"> | Date | string
-    posts?: PostListRelationFilter
-    savedBy?: SavedMusicListRelationFilter
-  }, "id">
-
-  export type MusicOrderByWithAggregationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    artist?: SortOrder
-    albumCover?: SortOrderInput | SortOrder
-    audioUrl?: SortOrder
-    duration?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: MusicCountOrderByAggregateInput
-    _avg?: MusicAvgOrderByAggregateInput
-    _max?: MusicMaxOrderByAggregateInput
-    _min?: MusicMinOrderByAggregateInput
-    _sum?: MusicSumOrderByAggregateInput
-  }
-
-  export type MusicScalarWhereWithAggregatesInput = {
-    AND?: MusicScalarWhereWithAggregatesInput | MusicScalarWhereWithAggregatesInput[]
-    OR?: MusicScalarWhereWithAggregatesInput[]
-    NOT?: MusicScalarWhereWithAggregatesInput | MusicScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Music"> | number
-    title?: StringWithAggregatesFilter<"Music"> | string
-    artist?: StringWithAggregatesFilter<"Music"> | string
-    albumCover?: StringNullableWithAggregatesFilter<"Music"> | string | null
-    audioUrl?: StringWithAggregatesFilter<"Music"> | string
-    duration?: IntNullableWithAggregatesFilter<"Music"> | number | null
-    createdAt?: DateTimeWithAggregatesFilter<"Music"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Music"> | Date | string
-  }
-
-  export type SavedMusicWhereInput = {
-    AND?: SavedMusicWhereInput | SavedMusicWhereInput[]
-    OR?: SavedMusicWhereInput[]
-    NOT?: SavedMusicWhereInput | SavedMusicWhereInput[]
-    id?: IntFilter<"SavedMusic"> | number
-    userId?: IntFilter<"SavedMusic"> | number
-    musicId?: IntFilter<"SavedMusic"> | number
-    createdAt?: DateTimeFilter<"SavedMusic"> | Date | string
-    music?: XOR<MusicScalarRelationFilter, MusicWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }
-
-  export type SavedMusicOrderByWithRelationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-    createdAt?: SortOrder
-    music?: MusicOrderByWithRelationInput
-    user?: UserOrderByWithRelationInput
-  }
-
-  export type SavedMusicWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    userId_musicId?: SavedMusicUserIdMusicIdCompoundUniqueInput
-    AND?: SavedMusicWhereInput | SavedMusicWhereInput[]
-    OR?: SavedMusicWhereInput[]
-    NOT?: SavedMusicWhereInput | SavedMusicWhereInput[]
-    userId?: IntFilter<"SavedMusic"> | number
-    musicId?: IntFilter<"SavedMusic"> | number
-    createdAt?: DateTimeFilter<"SavedMusic"> | Date | string
-    music?: XOR<MusicScalarRelationFilter, MusicWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "userId_musicId">
-
-  export type SavedMusicOrderByWithAggregationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-    createdAt?: SortOrder
-    _count?: SavedMusicCountOrderByAggregateInput
-    _avg?: SavedMusicAvgOrderByAggregateInput
-    _max?: SavedMusicMaxOrderByAggregateInput
-    _min?: SavedMusicMinOrderByAggregateInput
-    _sum?: SavedMusicSumOrderByAggregateInput
-  }
-
-  export type SavedMusicScalarWhereWithAggregatesInput = {
-    AND?: SavedMusicScalarWhereWithAggregatesInput | SavedMusicScalarWhereWithAggregatesInput[]
-    OR?: SavedMusicScalarWhereWithAggregatesInput[]
-    NOT?: SavedMusicScalarWhereWithAggregatesInput | SavedMusicScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"SavedMusic"> | number
-    userId?: IntWithAggregatesFilter<"SavedMusic"> | number
-    musicId?: IntWithAggregatesFilter<"SavedMusic"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"SavedMusic"> | Date | string
   }
 
   export type CommentWhereInput = {
@@ -16051,16 +13311,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -16076,16 +13334,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -16100,16 +13356,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -16125,16 +13379,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -16150,7 +13402,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -16164,7 +13415,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -16179,7 +13429,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CircleCreateInput = {
@@ -16337,7 +13586,6 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutPostInput
     likes?: LikeCreateNestedManyWithoutPostInput
     circle: CircleCreateNestedOneWithoutPostsInput
-    music: MusicCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
   }
 
@@ -16350,7 +13598,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     userId: number
     circleId: number
-    musicId: number
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
   }
@@ -16364,7 +13611,6 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutPostNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     circle?: CircleUpdateOneRequiredWithoutPostsNestedInput
-    music?: MusicUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
   }
 
@@ -16377,7 +13623,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
     circleId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
   }
@@ -16391,7 +13636,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     userId: number
     circleId: number
-    musicId: number
   }
 
   export type PostUpdateManyMutationInput = {
@@ -16411,133 +13655,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
     circleId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type MusicCreateInput = {
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostCreateNestedManyWithoutMusicInput
-    savedBy?: SavedMusicCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicUncheckedCreateInput = {
-    id?: number
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutMusicInput
-    savedBy?: SavedMusicUncheckedCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicUpdateInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUpdateManyWithoutMusicNestedInput
-    savedBy?: SavedMusicUpdateManyWithoutMusicNestedInput
-  }
-
-  export type MusicUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutMusicNestedInput
-    savedBy?: SavedMusicUncheckedUpdateManyWithoutMusicNestedInput
-  }
-
-  export type MusicCreateManyInput = {
-    id?: number
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MusicUpdateManyMutationInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MusicUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SavedMusicCreateInput = {
-    createdAt?: Date | string
-    music: MusicCreateNestedOneWithoutSavedByInput
-    user: UserCreateNestedOneWithoutSavedMusicInput
-  }
-
-  export type SavedMusicUncheckedCreateInput = {
-    id?: number
-    userId: number
-    musicId: number
-    createdAt?: Date | string
-  }
-
-  export type SavedMusicUpdateInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    music?: MusicUpdateOneRequiredWithoutSavedByNestedInput
-    user?: UserUpdateOneRequiredWithoutSavedMusicNestedInput
-  }
-
-  export type SavedMusicUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SavedMusicCreateManyInput = {
-    id?: number
-    userId: number
-    musicId: number
-    createdAt?: Date | string
-  }
-
-  export type SavedMusicUpdateManyMutationInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SavedMusicUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CommentCreateInput = {
@@ -16644,8 +13761,8 @@ export namespace Prisma {
 
   export type FollowCreateInput = {
     createdAt?: Date | string
-    follower: UserCreateNestedOneWithoutFollowersInput
-    following: UserCreateNestedOneWithoutFollowingInput
+    follower: UserCreateNestedOneWithoutFollowingInput
+    following: UserCreateNestedOneWithoutFollowersInput
   }
 
   export type FollowUncheckedCreateInput = {
@@ -16657,8 +13774,8 @@ export namespace Prisma {
 
   export type FollowUpdateInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    follower?: UserUpdateOneRequiredWithoutFollowersNestedInput
-    following?: UserUpdateOneRequiredWithoutFollowingNestedInput
+    follower?: UserUpdateOneRequiredWithoutFollowingNestedInput
+    following?: UserUpdateOneRequiredWithoutFollowersNestedInput
   }
 
   export type FollowUncheckedUpdateInput = {
@@ -16924,17 +14041,6 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type AlbumListRelationFilter = {
     every?: AlbumWhereInput
     some?: AlbumWhereInput
@@ -16977,12 +14083,6 @@ export namespace Prisma {
     none?: PostWhereInput
   }
 
-  export type SavedMusicListRelationFilter = {
-    every?: SavedMusicWhereInput
-    some?: SavedMusicWhereInput
-    none?: SavedMusicWhereInput
-  }
-
   export type UserSettingsNullableScalarRelationFilter = {
     is?: UserSettingsWhereInput | null
     isNot?: UserSettingsWhereInput | null
@@ -17021,10 +14121,6 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type SavedMusicOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
@@ -17037,7 +14133,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrder
-    birthday?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -17056,7 +14151,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrder
-    birthday?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -17071,7 +14165,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrder
-    birthday?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -17150,20 +14243,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -17296,11 +14375,6 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type MusicScalarRelationFilter = {
-    is?: MusicWhereInput
-    isNot?: MusicWhereInput
-  }
-
   export type PostCountOrderByAggregateInput = {
     id?: SortOrder
     content?: SortOrder
@@ -17310,14 +14384,12 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     circleId?: SortOrder
-    musicId?: SortOrder
   }
 
   export type PostAvgOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     circleId?: SortOrder
-    musicId?: SortOrder
   }
 
   export type PostMaxOrderByAggregateInput = {
@@ -17329,7 +14401,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     circleId?: SortOrder
-    musicId?: SortOrder
   }
 
   export type PostMinOrderByAggregateInput = {
@@ -17341,122 +14412,12 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     circleId?: SortOrder
-    musicId?: SortOrder
   }
 
   export type PostSumOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     circleId?: SortOrder
-    musicId?: SortOrder
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type MusicCountOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    artist?: SortOrder
-    albumCover?: SortOrder
-    audioUrl?: SortOrder
-    duration?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type MusicAvgOrderByAggregateInput = {
-    id?: SortOrder
-    duration?: SortOrder
-  }
-
-  export type MusicMaxOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    artist?: SortOrder
-    albumCover?: SortOrder
-    audioUrl?: SortOrder
-    duration?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type MusicMinOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    artist?: SortOrder
-    albumCover?: SortOrder
-    audioUrl?: SortOrder
-    duration?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type MusicSumOrderByAggregateInput = {
-    id?: SortOrder
-    duration?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type SavedMusicUserIdMusicIdCompoundUniqueInput = {
-    userId: number
-    musicId: number
-  }
-
-  export type SavedMusicCountOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type SavedMusicAvgOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-  }
-
-  export type SavedMusicMaxOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type SavedMusicMinOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type SavedMusicSumOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    musicId?: SortOrder
   }
 
   export type PostScalarRelationFilter = {
@@ -17701,17 +14662,17 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
   }
 
-  export type FollowCreateNestedManyWithoutFollowerInput = {
-    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
-    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
-    createMany?: FollowCreateManyFollowerInputEnvelope
-    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-  }
-
   export type FollowCreateNestedManyWithoutFollowingInput = {
     create?: XOR<FollowCreateWithoutFollowingInput, FollowUncheckedCreateWithoutFollowingInput> | FollowCreateWithoutFollowingInput[] | FollowUncheckedCreateWithoutFollowingInput[]
     connectOrCreate?: FollowCreateOrConnectWithoutFollowingInput | FollowCreateOrConnectWithoutFollowingInput[]
     createMany?: FollowCreateManyFollowingInputEnvelope
+    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+  }
+
+  export type FollowCreateNestedManyWithoutFollowerInput = {
+    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
+    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
+    createMany?: FollowCreateManyFollowerInputEnvelope
     connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
   }
 
@@ -17734,13 +14695,6 @@ export namespace Prisma {
     connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
     createMany?: PostCreateManyUserInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type SavedMusicCreateNestedManyWithoutUserInput = {
-    create?: XOR<SavedMusicCreateWithoutUserInput, SavedMusicUncheckedCreateWithoutUserInput> | SavedMusicCreateWithoutUserInput[] | SavedMusicUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutUserInput | SavedMusicCreateOrConnectWithoutUserInput[]
-    createMany?: SavedMusicCreateManyUserInputEnvelope
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
   }
 
   export type UserSettingsCreateNestedOneWithoutUserInput = {
@@ -17770,17 +14724,17 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
   }
 
-  export type FollowUncheckedCreateNestedManyWithoutFollowerInput = {
-    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
-    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
-    createMany?: FollowCreateManyFollowerInputEnvelope
-    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-  }
-
   export type FollowUncheckedCreateNestedManyWithoutFollowingInput = {
     create?: XOR<FollowCreateWithoutFollowingInput, FollowUncheckedCreateWithoutFollowingInput> | FollowCreateWithoutFollowingInput[] | FollowUncheckedCreateWithoutFollowingInput[]
     connectOrCreate?: FollowCreateOrConnectWithoutFollowingInput | FollowCreateOrConnectWithoutFollowingInput[]
     createMany?: FollowCreateManyFollowingInputEnvelope
+    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+  }
+
+  export type FollowUncheckedCreateNestedManyWithoutFollowerInput = {
+    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
+    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
+    createMany?: FollowCreateManyFollowerInputEnvelope
     connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
   }
 
@@ -17805,13 +14759,6 @@ export namespace Prisma {
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
-  export type SavedMusicUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<SavedMusicCreateWithoutUserInput, SavedMusicUncheckedCreateWithoutUserInput> | SavedMusicCreateWithoutUserInput[] | SavedMusicUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutUserInput | SavedMusicCreateOrConnectWithoutUserInput[]
-    createMany?: SavedMusicCreateManyUserInputEnvelope
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-  }
-
   export type UserSettingsUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserSettingsCreateOrConnectWithoutUserInput
@@ -17832,10 +14779,6 @@ export namespace Prisma {
 
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type AlbumUpdateManyWithoutCreatorNestedInput = {
@@ -17880,20 +14823,6 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
-  export type FollowUpdateManyWithoutFollowerNestedInput = {
-    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
-    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
-    upsert?: FollowUpsertWithWhereUniqueWithoutFollowerInput | FollowUpsertWithWhereUniqueWithoutFollowerInput[]
-    createMany?: FollowCreateManyFollowerInputEnvelope
-    set?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    disconnect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    delete?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    update?: FollowUpdateWithWhereUniqueWithoutFollowerInput | FollowUpdateWithWhereUniqueWithoutFollowerInput[]
-    updateMany?: FollowUpdateManyWithWhereWithoutFollowerInput | FollowUpdateManyWithWhereWithoutFollowerInput[]
-    deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
-  }
-
   export type FollowUpdateManyWithoutFollowingNestedInput = {
     create?: XOR<FollowCreateWithoutFollowingInput, FollowUncheckedCreateWithoutFollowingInput> | FollowCreateWithoutFollowingInput[] | FollowUncheckedCreateWithoutFollowingInput[]
     connectOrCreate?: FollowCreateOrConnectWithoutFollowingInput | FollowCreateOrConnectWithoutFollowingInput[]
@@ -17905,6 +14834,20 @@ export namespace Prisma {
     connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
     update?: FollowUpdateWithWhereUniqueWithoutFollowingInput | FollowUpdateWithWhereUniqueWithoutFollowingInput[]
     updateMany?: FollowUpdateManyWithWhereWithoutFollowingInput | FollowUpdateManyWithWhereWithoutFollowingInput[]
+    deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
+  }
+
+  export type FollowUpdateManyWithoutFollowerNestedInput = {
+    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
+    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
+    upsert?: FollowUpsertWithWhereUniqueWithoutFollowerInput | FollowUpsertWithWhereUniqueWithoutFollowerInput[]
+    createMany?: FollowCreateManyFollowerInputEnvelope
+    set?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    disconnect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    delete?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    update?: FollowUpdateWithWhereUniqueWithoutFollowerInput | FollowUpdateWithWhereUniqueWithoutFollowerInput[]
+    updateMany?: FollowUpdateManyWithWhereWithoutFollowerInput | FollowUpdateManyWithWhereWithoutFollowerInput[]
     deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
   }
 
@@ -17948,20 +14891,6 @@ export namespace Prisma {
     update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type SavedMusicUpdateManyWithoutUserNestedInput = {
-    create?: XOR<SavedMusicCreateWithoutUserInput, SavedMusicUncheckedCreateWithoutUserInput> | SavedMusicCreateWithoutUserInput[] | SavedMusicUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutUserInput | SavedMusicCreateOrConnectWithoutUserInput[]
-    upsert?: SavedMusicUpsertWithWhereUniqueWithoutUserInput | SavedMusicUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: SavedMusicCreateManyUserInputEnvelope
-    set?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    disconnect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    delete?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    update?: SavedMusicUpdateWithWhereUniqueWithoutUserInput | SavedMusicUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: SavedMusicUpdateManyWithWhereWithoutUserInput | SavedMusicUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: SavedMusicScalarWhereInput | SavedMusicScalarWhereInput[]
   }
 
   export type UserSettingsUpdateOneWithoutUserNestedInput = {
@@ -18024,20 +14953,6 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
-  export type FollowUncheckedUpdateManyWithoutFollowerNestedInput = {
-    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
-    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
-    upsert?: FollowUpsertWithWhereUniqueWithoutFollowerInput | FollowUpsertWithWhereUniqueWithoutFollowerInput[]
-    createMany?: FollowCreateManyFollowerInputEnvelope
-    set?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    disconnect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    delete?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
-    update?: FollowUpdateWithWhereUniqueWithoutFollowerInput | FollowUpdateWithWhereUniqueWithoutFollowerInput[]
-    updateMany?: FollowUpdateManyWithWhereWithoutFollowerInput | FollowUpdateManyWithWhereWithoutFollowerInput[]
-    deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
-  }
-
   export type FollowUncheckedUpdateManyWithoutFollowingNestedInput = {
     create?: XOR<FollowCreateWithoutFollowingInput, FollowUncheckedCreateWithoutFollowingInput> | FollowCreateWithoutFollowingInput[] | FollowUncheckedCreateWithoutFollowingInput[]
     connectOrCreate?: FollowCreateOrConnectWithoutFollowingInput | FollowCreateOrConnectWithoutFollowingInput[]
@@ -18049,6 +14964,20 @@ export namespace Prisma {
     connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
     update?: FollowUpdateWithWhereUniqueWithoutFollowingInput | FollowUpdateWithWhereUniqueWithoutFollowingInput[]
     updateMany?: FollowUpdateManyWithWhereWithoutFollowingInput | FollowUpdateManyWithWhereWithoutFollowingInput[]
+    deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
+  }
+
+  export type FollowUncheckedUpdateManyWithoutFollowerNestedInput = {
+    create?: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput> | FollowCreateWithoutFollowerInput[] | FollowUncheckedCreateWithoutFollowerInput[]
+    connectOrCreate?: FollowCreateOrConnectWithoutFollowerInput | FollowCreateOrConnectWithoutFollowerInput[]
+    upsert?: FollowUpsertWithWhereUniqueWithoutFollowerInput | FollowUpsertWithWhereUniqueWithoutFollowerInput[]
+    createMany?: FollowCreateManyFollowerInputEnvelope
+    set?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    disconnect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    delete?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    connect?: FollowWhereUniqueInput | FollowWhereUniqueInput[]
+    update?: FollowUpdateWithWhereUniqueWithoutFollowerInput | FollowUpdateWithWhereUniqueWithoutFollowerInput[]
+    updateMany?: FollowUpdateManyWithWhereWithoutFollowerInput | FollowUpdateManyWithWhereWithoutFollowerInput[]
     deleteMany?: FollowScalarWhereInput | FollowScalarWhereInput[]
   }
 
@@ -18092,20 +15021,6 @@ export namespace Prisma {
     update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type SavedMusicUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<SavedMusicCreateWithoutUserInput, SavedMusicUncheckedCreateWithoutUserInput> | SavedMusicCreateWithoutUserInput[] | SavedMusicUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutUserInput | SavedMusicCreateOrConnectWithoutUserInput[]
-    upsert?: SavedMusicUpsertWithWhereUniqueWithoutUserInput | SavedMusicUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: SavedMusicCreateManyUserInputEnvelope
-    set?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    disconnect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    delete?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    update?: SavedMusicUpdateWithWhereUniqueWithoutUserInput | SavedMusicUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: SavedMusicUpdateManyWithWhereWithoutUserInput | SavedMusicUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: SavedMusicScalarWhereInput | SavedMusicScalarWhereInput[]
   }
 
   export type UserSettingsUncheckedUpdateOneWithoutUserNestedInput = {
@@ -18272,12 +15187,6 @@ export namespace Prisma {
     connect?: CircleWhereUniqueInput
   }
 
-  export type MusicCreateNestedOneWithoutPostsInput = {
-    create?: XOR<MusicCreateWithoutPostsInput, MusicUncheckedCreateWithoutPostsInput>
-    connectOrCreate?: MusicCreateOrConnectWithoutPostsInput
-    connect?: MusicWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutPostsInput = {
     create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
     connectOrCreate?: UserCreateOrConnectWithoutPostsInput
@@ -18334,14 +15243,6 @@ export namespace Prisma {
     update?: XOR<XOR<CircleUpdateToOneWithWhereWithoutPostsInput, CircleUpdateWithoutPostsInput>, CircleUncheckedUpdateWithoutPostsInput>
   }
 
-  export type MusicUpdateOneRequiredWithoutPostsNestedInput = {
-    create?: XOR<MusicCreateWithoutPostsInput, MusicUncheckedCreateWithoutPostsInput>
-    connectOrCreate?: MusicCreateOrConnectWithoutPostsInput
-    upsert?: MusicUpsertWithoutPostsInput
-    connect?: MusicWhereUniqueInput
-    update?: XOR<XOR<MusicUpdateToOneWithWhereWithoutPostsInput, MusicUpdateWithoutPostsInput>, MusicUncheckedUpdateWithoutPostsInput>
-  }
-
   export type UserUpdateOneRequiredWithoutPostsNestedInput = {
     create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
     connectOrCreate?: UserCreateOrConnectWithoutPostsInput
@@ -18376,126 +15277,6 @@ export namespace Prisma {
     update?: LikeUpdateWithWhereUniqueWithoutPostInput | LikeUpdateWithWhereUniqueWithoutPostInput[]
     updateMany?: LikeUpdateManyWithWhereWithoutPostInput | LikeUpdateManyWithWhereWithoutPostInput[]
     deleteMany?: LikeScalarWhereInput | LikeScalarWhereInput[]
-  }
-
-  export type PostCreateNestedManyWithoutMusicInput = {
-    create?: XOR<PostCreateWithoutMusicInput, PostUncheckedCreateWithoutMusicInput> | PostCreateWithoutMusicInput[] | PostUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMusicInput | PostCreateOrConnectWithoutMusicInput[]
-    createMany?: PostCreateManyMusicInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type SavedMusicCreateNestedManyWithoutMusicInput = {
-    create?: XOR<SavedMusicCreateWithoutMusicInput, SavedMusicUncheckedCreateWithoutMusicInput> | SavedMusicCreateWithoutMusicInput[] | SavedMusicUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutMusicInput | SavedMusicCreateOrConnectWithoutMusicInput[]
-    createMany?: SavedMusicCreateManyMusicInputEnvelope
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-  }
-
-  export type PostUncheckedCreateNestedManyWithoutMusicInput = {
-    create?: XOR<PostCreateWithoutMusicInput, PostUncheckedCreateWithoutMusicInput> | PostCreateWithoutMusicInput[] | PostUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMusicInput | PostCreateOrConnectWithoutMusicInput[]
-    createMany?: PostCreateManyMusicInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type SavedMusicUncheckedCreateNestedManyWithoutMusicInput = {
-    create?: XOR<SavedMusicCreateWithoutMusicInput, SavedMusicUncheckedCreateWithoutMusicInput> | SavedMusicCreateWithoutMusicInput[] | SavedMusicUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutMusicInput | SavedMusicCreateOrConnectWithoutMusicInput[]
-    createMany?: SavedMusicCreateManyMusicInputEnvelope
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type PostUpdateManyWithoutMusicNestedInput = {
-    create?: XOR<PostCreateWithoutMusicInput, PostUncheckedCreateWithoutMusicInput> | PostCreateWithoutMusicInput[] | PostUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMusicInput | PostCreateOrConnectWithoutMusicInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutMusicInput | PostUpsertWithWhereUniqueWithoutMusicInput[]
-    createMany?: PostCreateManyMusicInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutMusicInput | PostUpdateWithWhereUniqueWithoutMusicInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutMusicInput | PostUpdateManyWithWhereWithoutMusicInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type SavedMusicUpdateManyWithoutMusicNestedInput = {
-    create?: XOR<SavedMusicCreateWithoutMusicInput, SavedMusicUncheckedCreateWithoutMusicInput> | SavedMusicCreateWithoutMusicInput[] | SavedMusicUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutMusicInput | SavedMusicCreateOrConnectWithoutMusicInput[]
-    upsert?: SavedMusicUpsertWithWhereUniqueWithoutMusicInput | SavedMusicUpsertWithWhereUniqueWithoutMusicInput[]
-    createMany?: SavedMusicCreateManyMusicInputEnvelope
-    set?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    disconnect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    delete?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    update?: SavedMusicUpdateWithWhereUniqueWithoutMusicInput | SavedMusicUpdateWithWhereUniqueWithoutMusicInput[]
-    updateMany?: SavedMusicUpdateManyWithWhereWithoutMusicInput | SavedMusicUpdateManyWithWhereWithoutMusicInput[]
-    deleteMany?: SavedMusicScalarWhereInput | SavedMusicScalarWhereInput[]
-  }
-
-  export type PostUncheckedUpdateManyWithoutMusicNestedInput = {
-    create?: XOR<PostCreateWithoutMusicInput, PostUncheckedCreateWithoutMusicInput> | PostCreateWithoutMusicInput[] | PostUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutMusicInput | PostCreateOrConnectWithoutMusicInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutMusicInput | PostUpsertWithWhereUniqueWithoutMusicInput[]
-    createMany?: PostCreateManyMusicInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutMusicInput | PostUpdateWithWhereUniqueWithoutMusicInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutMusicInput | PostUpdateManyWithWhereWithoutMusicInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type SavedMusicUncheckedUpdateManyWithoutMusicNestedInput = {
-    create?: XOR<SavedMusicCreateWithoutMusicInput, SavedMusicUncheckedCreateWithoutMusicInput> | SavedMusicCreateWithoutMusicInput[] | SavedMusicUncheckedCreateWithoutMusicInput[]
-    connectOrCreate?: SavedMusicCreateOrConnectWithoutMusicInput | SavedMusicCreateOrConnectWithoutMusicInput[]
-    upsert?: SavedMusicUpsertWithWhereUniqueWithoutMusicInput | SavedMusicUpsertWithWhereUniqueWithoutMusicInput[]
-    createMany?: SavedMusicCreateManyMusicInputEnvelope
-    set?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    disconnect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    delete?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    connect?: SavedMusicWhereUniqueInput | SavedMusicWhereUniqueInput[]
-    update?: SavedMusicUpdateWithWhereUniqueWithoutMusicInput | SavedMusicUpdateWithWhereUniqueWithoutMusicInput[]
-    updateMany?: SavedMusicUpdateManyWithWhereWithoutMusicInput | SavedMusicUpdateManyWithWhereWithoutMusicInput[]
-    deleteMany?: SavedMusicScalarWhereInput | SavedMusicScalarWhereInput[]
-  }
-
-  export type MusicCreateNestedOneWithoutSavedByInput = {
-    create?: XOR<MusicCreateWithoutSavedByInput, MusicUncheckedCreateWithoutSavedByInput>
-    connectOrCreate?: MusicCreateOrConnectWithoutSavedByInput
-    connect?: MusicWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutSavedMusicInput = {
-    create?: XOR<UserCreateWithoutSavedMusicInput, UserUncheckedCreateWithoutSavedMusicInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSavedMusicInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type MusicUpdateOneRequiredWithoutSavedByNestedInput = {
-    create?: XOR<MusicCreateWithoutSavedByInput, MusicUncheckedCreateWithoutSavedByInput>
-    connectOrCreate?: MusicCreateOrConnectWithoutSavedByInput
-    upsert?: MusicUpsertWithoutSavedByInput
-    connect?: MusicWhereUniqueInput
-    update?: XOR<XOR<MusicUpdateToOneWithWhereWithoutSavedByInput, MusicUpdateWithoutSavedByInput>, MusicUncheckedUpdateWithoutSavedByInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutSavedMusicNestedInput = {
-    create?: XOR<UserCreateWithoutSavedMusicInput, UserUncheckedCreateWithoutSavedMusicInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSavedMusicInput
-    upsert?: UserUpsertWithoutSavedMusicInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSavedMusicInput, UserUpdateWithoutSavedMusicInput>, UserUncheckedUpdateWithoutSavedMusicInput>
   }
 
   export type PostCreateNestedOneWithoutCommentsInput = {
@@ -18554,24 +15335,16 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLikesInput, UserUpdateWithoutLikesInput>, UserUncheckedUpdateWithoutLikesInput>
   }
 
-  export type UserCreateNestedOneWithoutFollowersInput = {
-    create?: XOR<UserCreateWithoutFollowersInput, UserUncheckedCreateWithoutFollowersInput>
-    connectOrCreate?: UserCreateOrConnectWithoutFollowersInput
-    connect?: UserWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutFollowingInput = {
     create?: XOR<UserCreateWithoutFollowingInput, UserUncheckedCreateWithoutFollowingInput>
     connectOrCreate?: UserCreateOrConnectWithoutFollowingInput
     connect?: UserWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutFollowersNestedInput = {
+  export type UserCreateNestedOneWithoutFollowersInput = {
     create?: XOR<UserCreateWithoutFollowersInput, UserUncheckedCreateWithoutFollowersInput>
     connectOrCreate?: UserCreateOrConnectWithoutFollowersInput
-    upsert?: UserUpsertWithoutFollowersInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFollowersInput, UserUpdateWithoutFollowersInput>, UserUncheckedUpdateWithoutFollowersInput>
   }
 
   export type UserUpdateOneRequiredWithoutFollowingNestedInput = {
@@ -18580,6 +15353,14 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutFollowingInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFollowingInput, UserUpdateWithoutFollowingInput>, UserUncheckedUpdateWithoutFollowingInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFollowersNestedInput = {
+    create?: XOR<UserCreateWithoutFollowersInput, UserUncheckedCreateWithoutFollowersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFollowersInput
+    upsert?: UserUpsertWithoutFollowersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFollowersInput, UserUpdateWithoutFollowersInput>, UserUncheckedUpdateWithoutFollowersInput>
   }
 
   export type UserCreateNestedOneWithoutAlbumInput = {
@@ -18663,17 +15444,6 @@ export namespace Prisma {
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -18770,20 +15540,6 @@ export namespace Prisma {
     _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -18812,33 +15568,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type AlbumCreateWithoutCreatorInput = {
@@ -18928,30 +15657,9 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type FollowCreateWithoutFollowerInput = {
-    createdAt?: Date | string
-    following: UserCreateNestedOneWithoutFollowingInput
-  }
-
-  export type FollowUncheckedCreateWithoutFollowerInput = {
-    id?: number
-    followingId: number
-    createdAt?: Date | string
-  }
-
-  export type FollowCreateOrConnectWithoutFollowerInput = {
-    where: FollowWhereUniqueInput
-    create: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput>
-  }
-
-  export type FollowCreateManyFollowerInputEnvelope = {
-    data: FollowCreateManyFollowerInput | FollowCreateManyFollowerInput[]
-    skipDuplicates?: boolean
-  }
-
   export type FollowCreateWithoutFollowingInput = {
     createdAt?: Date | string
-    follower: UserCreateNestedOneWithoutFollowersInput
+    follower: UserCreateNestedOneWithoutFollowingInput
   }
 
   export type FollowUncheckedCreateWithoutFollowingInput = {
@@ -18967,6 +15675,27 @@ export namespace Prisma {
 
   export type FollowCreateManyFollowingInputEnvelope = {
     data: FollowCreateManyFollowingInput | FollowCreateManyFollowingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FollowCreateWithoutFollowerInput = {
+    createdAt?: Date | string
+    following: UserCreateNestedOneWithoutFollowersInput
+  }
+
+  export type FollowUncheckedCreateWithoutFollowerInput = {
+    id?: number
+    followingId: number
+    createdAt?: Date | string
+  }
+
+  export type FollowCreateOrConnectWithoutFollowerInput = {
+    where: FollowWhereUniqueInput
+    create: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput>
+  }
+
+  export type FollowCreateManyFollowerInputEnvelope = {
+    data: FollowCreateManyFollowerInput | FollowCreateManyFollowerInput[]
     skipDuplicates?: boolean
   }
 
@@ -19025,7 +15754,6 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutPostInput
     likes?: LikeCreateNestedManyWithoutPostInput
     circle: CircleCreateNestedOneWithoutPostsInput
-    music: MusicCreateNestedOneWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutUserInput = {
@@ -19036,7 +15764,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     circleId: number
-    musicId: number
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
   }
@@ -19048,27 +15775,6 @@ export namespace Prisma {
 
   export type PostCreateManyUserInputEnvelope = {
     data: PostCreateManyUserInput | PostCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type SavedMusicCreateWithoutUserInput = {
-    createdAt?: Date | string
-    music: MusicCreateNestedOneWithoutSavedByInput
-  }
-
-  export type SavedMusicUncheckedCreateWithoutUserInput = {
-    id?: number
-    musicId: number
-    createdAt?: Date | string
-  }
-
-  export type SavedMusicCreateOrConnectWithoutUserInput = {
-    where: SavedMusicWhereUniqueInput
-    create: XOR<SavedMusicCreateWithoutUserInput, SavedMusicUncheckedCreateWithoutUserInput>
-  }
-
-  export type SavedMusicCreateManyUserInputEnvelope = {
-    data: SavedMusicCreateManyUserInput | SavedMusicCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -19196,32 +15902,6 @@ export namespace Prisma {
     postId?: IntFilter<"Comment"> | number
   }
 
-  export type FollowUpsertWithWhereUniqueWithoutFollowerInput = {
-    where: FollowWhereUniqueInput
-    update: XOR<FollowUpdateWithoutFollowerInput, FollowUncheckedUpdateWithoutFollowerInput>
-    create: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput>
-  }
-
-  export type FollowUpdateWithWhereUniqueWithoutFollowerInput = {
-    where: FollowWhereUniqueInput
-    data: XOR<FollowUpdateWithoutFollowerInput, FollowUncheckedUpdateWithoutFollowerInput>
-  }
-
-  export type FollowUpdateManyWithWhereWithoutFollowerInput = {
-    where: FollowScalarWhereInput
-    data: XOR<FollowUpdateManyMutationInput, FollowUncheckedUpdateManyWithoutFollowerInput>
-  }
-
-  export type FollowScalarWhereInput = {
-    AND?: FollowScalarWhereInput | FollowScalarWhereInput[]
-    OR?: FollowScalarWhereInput[]
-    NOT?: FollowScalarWhereInput | FollowScalarWhereInput[]
-    id?: IntFilter<"Follow"> | number
-    followerId?: IntFilter<"Follow"> | number
-    followingId?: IntFilter<"Follow"> | number
-    createdAt?: DateTimeFilter<"Follow"> | Date | string
-  }
-
   export type FollowUpsertWithWhereUniqueWithoutFollowingInput = {
     where: FollowWhereUniqueInput
     update: XOR<FollowUpdateWithoutFollowingInput, FollowUncheckedUpdateWithoutFollowingInput>
@@ -19236,6 +15916,32 @@ export namespace Prisma {
   export type FollowUpdateManyWithWhereWithoutFollowingInput = {
     where: FollowScalarWhereInput
     data: XOR<FollowUpdateManyMutationInput, FollowUncheckedUpdateManyWithoutFollowingInput>
+  }
+
+  export type FollowScalarWhereInput = {
+    AND?: FollowScalarWhereInput | FollowScalarWhereInput[]
+    OR?: FollowScalarWhereInput[]
+    NOT?: FollowScalarWhereInput | FollowScalarWhereInput[]
+    id?: IntFilter<"Follow"> | number
+    followerId?: IntFilter<"Follow"> | number
+    followingId?: IntFilter<"Follow"> | number
+    createdAt?: DateTimeFilter<"Follow"> | Date | string
+  }
+
+  export type FollowUpsertWithWhereUniqueWithoutFollowerInput = {
+    where: FollowWhereUniqueInput
+    update: XOR<FollowUpdateWithoutFollowerInput, FollowUncheckedUpdateWithoutFollowerInput>
+    create: XOR<FollowCreateWithoutFollowerInput, FollowUncheckedCreateWithoutFollowerInput>
+  }
+
+  export type FollowUpdateWithWhereUniqueWithoutFollowerInput = {
+    where: FollowWhereUniqueInput
+    data: XOR<FollowUpdateWithoutFollowerInput, FollowUncheckedUpdateWithoutFollowerInput>
+  }
+
+  export type FollowUpdateManyWithWhereWithoutFollowerInput = {
+    where: FollowScalarWhereInput
+    data: XOR<FollowUpdateManyMutationInput, FollowUncheckedUpdateManyWithoutFollowerInput>
   }
 
   export type LikeUpsertWithWhereUniqueWithoutUserInput = {
@@ -19320,33 +16026,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     userId?: IntFilter<"Post"> | number
     circleId?: IntFilter<"Post"> | number
-    musicId?: IntFilter<"Post"> | number
-  }
-
-  export type SavedMusicUpsertWithWhereUniqueWithoutUserInput = {
-    where: SavedMusicWhereUniqueInput
-    update: XOR<SavedMusicUpdateWithoutUserInput, SavedMusicUncheckedUpdateWithoutUserInput>
-    create: XOR<SavedMusicCreateWithoutUserInput, SavedMusicUncheckedCreateWithoutUserInput>
-  }
-
-  export type SavedMusicUpdateWithWhereUniqueWithoutUserInput = {
-    where: SavedMusicWhereUniqueInput
-    data: XOR<SavedMusicUpdateWithoutUserInput, SavedMusicUncheckedUpdateWithoutUserInput>
-  }
-
-  export type SavedMusicUpdateManyWithWhereWithoutUserInput = {
-    where: SavedMusicScalarWhereInput
-    data: XOR<SavedMusicUpdateManyMutationInput, SavedMusicUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type SavedMusicScalarWhereInput = {
-    AND?: SavedMusicScalarWhereInput | SavedMusicScalarWhereInput[]
-    OR?: SavedMusicScalarWhereInput[]
-    NOT?: SavedMusicScalarWhereInput | SavedMusicScalarWhereInput[]
-    id?: IntFilter<"SavedMusic"> | number
-    userId?: IntFilter<"SavedMusic"> | number
-    musicId?: IntFilter<"SavedMusic"> | number
-    createdAt?: DateTimeFilter<"SavedMusic"> | Date | string
   }
 
   export type UserSettingsUpsertWithoutUserInput = {
@@ -19402,15 +16081,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -19426,15 +16103,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -19476,7 +16151,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     comments?: CommentCreateNestedManyWithoutPostInput
     likes?: LikeCreateNestedManyWithoutPostInput
-    music: MusicCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
   }
 
@@ -19488,7 +16162,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: number
-    musicId: number
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
   }
@@ -19525,15 +16198,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -19549,15 +16220,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -19634,15 +16303,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     likes?: LikeCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -19658,15 +16325,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -19733,15 +16398,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -19757,15 +16420,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -19845,34 +16506,6 @@ export namespace Prisma {
     create: XOR<CircleCreateWithoutPostsInput, CircleUncheckedCreateWithoutPostsInput>
   }
 
-  export type MusicCreateWithoutPostsInput = {
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    savedBy?: SavedMusicCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicUncheckedCreateWithoutPostsInput = {
-    id?: number
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    savedBy?: SavedMusicUncheckedCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicCreateOrConnectWithoutPostsInput = {
-    where: MusicWhereUniqueInput
-    create: XOR<MusicCreateWithoutPostsInput, MusicUncheckedCreateWithoutPostsInput>
-  }
-
   export type UserCreateWithoutPostsInput = {
     email: string
     name?: string | null
@@ -19884,15 +16517,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -19908,15 +16539,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -19993,40 +16622,6 @@ export namespace Prisma {
     members?: MembershipUncheckedUpdateManyWithoutCircleNestedInput
   }
 
-  export type MusicUpsertWithoutPostsInput = {
-    update: XOR<MusicUpdateWithoutPostsInput, MusicUncheckedUpdateWithoutPostsInput>
-    create: XOR<MusicCreateWithoutPostsInput, MusicUncheckedCreateWithoutPostsInput>
-    where?: MusicWhereInput
-  }
-
-  export type MusicUpdateToOneWithWhereWithoutPostsInput = {
-    where?: MusicWhereInput
-    data: XOR<MusicUpdateWithoutPostsInput, MusicUncheckedUpdateWithoutPostsInput>
-  }
-
-  export type MusicUpdateWithoutPostsInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    savedBy?: SavedMusicUpdateManyWithoutMusicNestedInput
-  }
-
-  export type MusicUncheckedUpdateWithoutPostsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    savedBy?: SavedMusicUncheckedUpdateManyWithoutMusicNestedInput
-  }
-
   export type UserUpsertWithoutPostsInput = {
     update: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
     create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
@@ -20049,15 +16644,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -20073,275 +16666,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-  }
-
-  export type PostCreateWithoutMusicInput = {
-    content: string
-    imageUrl?: string | null
-    videoUrl?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    comments?: CommentCreateNestedManyWithoutPostInput
-    likes?: LikeCreateNestedManyWithoutPostInput
-    circle: CircleCreateNestedOneWithoutPostsInput
-    user: UserCreateNestedOneWithoutPostsInput
-  }
-
-  export type PostUncheckedCreateWithoutMusicInput = {
-    id?: number
-    content: string
-    imageUrl?: string | null
-    videoUrl?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId: number
-    circleId: number
-    comments?: CommentUncheckedCreateNestedManyWithoutPostInput
-    likes?: LikeUncheckedCreateNestedManyWithoutPostInput
-  }
-
-  export type PostCreateOrConnectWithoutMusicInput = {
-    where: PostWhereUniqueInput
-    create: XOR<PostCreateWithoutMusicInput, PostUncheckedCreateWithoutMusicInput>
-  }
-
-  export type PostCreateManyMusicInputEnvelope = {
-    data: PostCreateManyMusicInput | PostCreateManyMusicInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type SavedMusicCreateWithoutMusicInput = {
-    createdAt?: Date | string
-    user: UserCreateNestedOneWithoutSavedMusicInput
-  }
-
-  export type SavedMusicUncheckedCreateWithoutMusicInput = {
-    id?: number
-    userId: number
-    createdAt?: Date | string
-  }
-
-  export type SavedMusicCreateOrConnectWithoutMusicInput = {
-    where: SavedMusicWhereUniqueInput
-    create: XOR<SavedMusicCreateWithoutMusicInput, SavedMusicUncheckedCreateWithoutMusicInput>
-  }
-
-  export type SavedMusicCreateManyMusicInputEnvelope = {
-    data: SavedMusicCreateManyMusicInput | SavedMusicCreateManyMusicInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PostUpsertWithWhereUniqueWithoutMusicInput = {
-    where: PostWhereUniqueInput
-    update: XOR<PostUpdateWithoutMusicInput, PostUncheckedUpdateWithoutMusicInput>
-    create: XOR<PostCreateWithoutMusicInput, PostUncheckedCreateWithoutMusicInput>
-  }
-
-  export type PostUpdateWithWhereUniqueWithoutMusicInput = {
-    where: PostWhereUniqueInput
-    data: XOR<PostUpdateWithoutMusicInput, PostUncheckedUpdateWithoutMusicInput>
-  }
-
-  export type PostUpdateManyWithWhereWithoutMusicInput = {
-    where: PostScalarWhereInput
-    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutMusicInput>
-  }
-
-  export type SavedMusicUpsertWithWhereUniqueWithoutMusicInput = {
-    where: SavedMusicWhereUniqueInput
-    update: XOR<SavedMusicUpdateWithoutMusicInput, SavedMusicUncheckedUpdateWithoutMusicInput>
-    create: XOR<SavedMusicCreateWithoutMusicInput, SavedMusicUncheckedCreateWithoutMusicInput>
-  }
-
-  export type SavedMusicUpdateWithWhereUniqueWithoutMusicInput = {
-    where: SavedMusicWhereUniqueInput
-    data: XOR<SavedMusicUpdateWithoutMusicInput, SavedMusicUncheckedUpdateWithoutMusicInput>
-  }
-
-  export type SavedMusicUpdateManyWithWhereWithoutMusicInput = {
-    where: SavedMusicScalarWhereInput
-    data: XOR<SavedMusicUpdateManyMutationInput, SavedMusicUncheckedUpdateManyWithoutMusicInput>
-  }
-
-  export type MusicCreateWithoutSavedByInput = {
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicUncheckedCreateWithoutSavedByInput = {
-    id?: number
-    title: string
-    artist: string
-    albumCover?: string | null
-    audioUrl: string
-    duration?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutMusicInput
-  }
-
-  export type MusicCreateOrConnectWithoutSavedByInput = {
-    where: MusicWhereUniqueInput
-    create: XOR<MusicCreateWithoutSavedByInput, MusicUncheckedCreateWithoutSavedByInput>
-  }
-
-  export type UserCreateWithoutSavedMusicInput = {
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
-    createdCircles?: CircleCreateNestedManyWithoutCreatorInput
-    comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
-    likes?: LikeCreateNestedManyWithoutUserInput
-    memberships?: MembershipCreateNestedManyWithoutUserInput
-    posts?: PostCreateNestedManyWithoutUserInput
-    settings?: UserSettingsCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutSavedMusicInput = {
-    id?: number
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
-    createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
-    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
-    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
-    memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutSavedMusicInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutSavedMusicInput, UserUncheckedCreateWithoutSavedMusicInput>
-  }
-
-  export type MusicUpsertWithoutSavedByInput = {
-    update: XOR<MusicUpdateWithoutSavedByInput, MusicUncheckedUpdateWithoutSavedByInput>
-    create: XOR<MusicCreateWithoutSavedByInput, MusicUncheckedCreateWithoutSavedByInput>
-    where?: MusicWhereInput
-  }
-
-  export type MusicUpdateToOneWithWhereWithoutSavedByInput = {
-    where?: MusicWhereInput
-    data: XOR<MusicUpdateWithoutSavedByInput, MusicUncheckedUpdateWithoutSavedByInput>
-  }
-
-  export type MusicUpdateWithoutSavedByInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUpdateManyWithoutMusicNestedInput
-  }
-
-  export type MusicUncheckedUpdateWithoutSavedByInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    artist?: StringFieldUpdateOperationsInput | string
-    albumCover?: NullableStringFieldUpdateOperationsInput | string | null
-    audioUrl?: StringFieldUpdateOperationsInput | string
-    duration?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutMusicNestedInput
-  }
-
-  export type UserUpsertWithoutSavedMusicInput = {
-    update: XOR<UserUpdateWithoutSavedMusicInput, UserUncheckedUpdateWithoutSavedMusicInput>
-    create: XOR<UserCreateWithoutSavedMusicInput, UserUncheckedCreateWithoutSavedMusicInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutSavedMusicInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutSavedMusicInput, UserUncheckedUpdateWithoutSavedMusicInput>
-  }
-
-  export type UserUpdateWithoutSavedMusicInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
-    createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUpdateManyWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutSavedMusicInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
-    createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -20353,7 +16684,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     likes?: LikeCreateNestedManyWithoutPostInput
     circle: CircleCreateNestedOneWithoutPostsInput
-    music: MusicCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
   }
 
@@ -20366,7 +16696,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     userId: number
     circleId: number
-    musicId: number
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
   }
 
@@ -20386,15 +16715,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -20410,15 +16737,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -20446,7 +16771,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     likes?: LikeUpdateManyWithoutPostNestedInput
     circle?: CircleUpdateOneRequiredWithoutPostsNestedInput
-    music?: MusicUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
   }
 
@@ -20459,7 +16783,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
     circleId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
   }
 
@@ -20485,15 +16808,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -20509,15 +16830,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -20529,7 +16848,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     comments?: CommentCreateNestedManyWithoutPostInput
     circle: CircleCreateNestedOneWithoutPostsInput
-    music: MusicCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
   }
 
@@ -20542,7 +16860,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     userId: number
     circleId: number
-    musicId: number
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
   }
 
@@ -20562,15 +16879,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -20586,15 +16901,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -20622,7 +16935,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUpdateManyWithoutPostNestedInput
     circle?: CircleUpdateOneRequiredWithoutPostsNestedInput
-    music?: MusicUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
   }
 
@@ -20635,7 +16947,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
     circleId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
   }
 
@@ -20661,15 +16972,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -20685,68 +16994,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserCreateWithoutFollowersInput = {
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
-    createdCircles?: CircleCreateNestedManyWithoutCreatorInput
-    comments?: CommentCreateNestedManyWithoutUserInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
-    likes?: LikeCreateNestedManyWithoutUserInput
-    memberships?: MembershipCreateNestedManyWithoutUserInput
-    posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
-    settings?: UserSettingsCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutFollowersInput = {
-    id?: number
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
-    createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
-    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
-    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
-    memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
-    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutFollowersInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutFollowersInput, UserUncheckedCreateWithoutFollowersInput>
   }
 
   export type UserCreateWithoutFollowingInput = {
@@ -20760,15 +17015,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -20784,15 +17037,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -20801,62 +17052,52 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutFollowingInput, UserUncheckedCreateWithoutFollowingInput>
   }
 
-  export type UserUpsertWithoutFollowersInput = {
-    update: XOR<UserUpdateWithoutFollowersInput, UserUncheckedUpdateWithoutFollowersInput>
+  export type UserCreateWithoutFollowersInput = {
+    email: string
+    name?: string | null
+    username: string
+    password: string
+    bio?: string | null
+    profileImage?: string | null
+    coverImage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isProfilePrivate?: boolean | null
+    Album?: AlbumCreateNestedManyWithoutCreatorInput
+    createdCircles?: CircleCreateNestedManyWithoutCreatorInput
+    comments?: CommentCreateNestedManyWithoutUserInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    memberships?: MembershipCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    settings?: UserSettingsCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFollowersInput = {
+    id?: number
+    email: string
+    name?: string | null
+    username: string
+    password: string
+    bio?: string | null
+    profileImage?: string | null
+    coverImage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isProfilePrivate?: boolean | null
+    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
+    createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
+    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFollowersInput = {
+    where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutFollowersInput, UserUncheckedCreateWithoutFollowersInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutFollowersInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutFollowersInput, UserUncheckedUpdateWithoutFollowersInput>
-  }
-
-  export type UserUpdateWithoutFollowersInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
-    createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUpdateManyWithoutUserNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUpdateManyWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutFollowersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
-    createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFollowingInput = {
@@ -20881,15 +17122,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -20905,15 +17144,67 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
+    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithoutFollowersInput = {
+    update: XOR<UserUpdateWithoutFollowersInput, UserUncheckedUpdateWithoutFollowersInput>
+    create: XOR<UserCreateWithoutFollowersInput, UserUncheckedCreateWithoutFollowersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFollowersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFollowersInput, UserUncheckedUpdateWithoutFollowersInput>
+  }
+
+  export type UserUpdateWithoutFollowersInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Album?: AlbumUpdateManyWithoutCreatorNestedInput
+    createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
+    comments?: CommentUpdateManyWithoutUserNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    memberships?: MembershipUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    settings?: UserSettingsUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFollowersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
+    createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -20928,15 +17219,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
   }
 
@@ -20952,15 +17241,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -20991,15 +17278,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -21015,15 +17300,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -21038,16 +17321,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
-    followers?: FollowCreateNestedManyWithoutFollowerInput
-    following?: FollowCreateNestedManyWithoutFollowingInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSettingsInput = {
@@ -21062,16 +17343,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    savedMusic?: SavedMusicUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSettingsInput = {
@@ -21101,16 +17380,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
-    followers?: FollowUpdateManyWithoutFollowerNestedInput
-    following?: FollowUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettingsInput = {
@@ -21125,16 +17402,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    savedMusic?: SavedMusicUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AlbumCreateManyCreatorInput = {
@@ -21165,15 +17440,15 @@ export namespace Prisma {
     postId: number
   }
 
-  export type FollowCreateManyFollowerInput = {
-    id?: number
-    followingId: number
-    createdAt?: Date | string
-  }
-
   export type FollowCreateManyFollowingInput = {
     id?: number
     followerId: number
+    createdAt?: Date | string
+  }
+
+  export type FollowCreateManyFollowerInput = {
+    id?: number
+    followingId: number
     createdAt?: Date | string
   }
 
@@ -21199,13 +17474,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     circleId: number
-    musicId: number
-  }
-
-  export type SavedMusicCreateManyUserInput = {
-    id?: number
-    musicId: number
-    createdAt?: Date | string
   }
 
   export type AlbumUpdateWithoutCreatorInput = {
@@ -21293,26 +17561,9 @@ export namespace Prisma {
     postId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type FollowUpdateWithoutFollowerInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    following?: UserUpdateOneRequiredWithoutFollowingNestedInput
-  }
-
-  export type FollowUncheckedUpdateWithoutFollowerInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    followingId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FollowUncheckedUpdateManyWithoutFollowerInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    followingId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type FollowUpdateWithoutFollowingInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    follower?: UserUpdateOneRequiredWithoutFollowersNestedInput
+    follower?: UserUpdateOneRequiredWithoutFollowingNestedInput
   }
 
   export type FollowUncheckedUpdateWithoutFollowingInput = {
@@ -21324,6 +17575,23 @@ export namespace Prisma {
   export type FollowUncheckedUpdateManyWithoutFollowingInput = {
     id?: IntFieldUpdateOperationsInput | number
     followerId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FollowUpdateWithoutFollowerInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    following?: UserUpdateOneRequiredWithoutFollowersNestedInput
+  }
+
+  export type FollowUncheckedUpdateWithoutFollowerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    followingId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FollowUncheckedUpdateManyWithoutFollowerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    followingId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -21376,7 +17644,6 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutPostNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     circle?: CircleUpdateOneRequiredWithoutPostsNestedInput
-    music?: MusicUpdateOneRequiredWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutUserInput = {
@@ -21387,7 +17654,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     circleId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
   }
@@ -21400,24 +17666,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     circleId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type SavedMusicUpdateWithoutUserInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    music?: MusicUpdateOneRequiredWithoutSavedByNestedInput
-  }
-
-  export type SavedMusicUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SavedMusicUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MembershipCreateManyCircleInput = {
@@ -21436,7 +17684,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: number
-    musicId: number
   }
 
   export type MembershipUpdateWithoutCircleInput = {
@@ -21470,7 +17717,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUpdateManyWithoutPostNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
-    music?: MusicUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
   }
 
@@ -21482,7 +17728,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
   }
@@ -21495,7 +17740,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
-    musicId?: IntFieldUpdateOperationsInput | number
   }
 
   export type CommentCreateManyPostInput = {
@@ -21550,76 +17794,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type PostCreateManyMusicInput = {
-    id?: number
-    content: string
-    imageUrl?: string | null
-    videoUrl?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId: number
-    circleId: number
-  }
-
-  export type SavedMusicCreateManyMusicInput = {
-    id?: number
-    userId: number
-    createdAt?: Date | string
-  }
-
-  export type PostUpdateWithoutMusicInput = {
-    content?: StringFieldUpdateOperationsInput | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    comments?: CommentUpdateManyWithoutPostNestedInput
-    likes?: LikeUpdateManyWithoutPostNestedInput
-    circle?: CircleUpdateOneRequiredWithoutPostsNestedInput
-    user?: UserUpdateOneRequiredWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutMusicInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    content?: StringFieldUpdateOperationsInput | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-    circleId?: IntFieldUpdateOperationsInput | number
-    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
-    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
-  }
-
-  export type PostUncheckedUpdateManyWithoutMusicInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    content?: StringFieldUpdateOperationsInput | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-    circleId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type SavedMusicUpdateWithoutMusicInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutSavedMusicNestedInput
-  }
-
-  export type SavedMusicUncheckedUpdateWithoutMusicInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SavedMusicUncheckedUpdateManyWithoutMusicInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

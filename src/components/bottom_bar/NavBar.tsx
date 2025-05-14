@@ -12,15 +12,13 @@ export default function NavBar() {
 	const { data: session } = useSession({ required: false });
 	const [createVisibility, setCreateVisibility] = useState(false);
 	const [navItems, setNavItems] = useState([
-		{ name: 'Explore', path: '/', icon: FaHome },
+		{ name: 'home', path: '/', icon: FaHome },
 		{ name: 'Search', path: '/search', icon: FaSearch },
 		{ name: 'New', path: '/new', icon: FaPlusCircle },
 		{ name: 'Activity', path: '/activity', icon: FaBell },
 		{ name: 'Profile', path: '/profile', icon: FaUser },
 	]);
-	// Update the profile path when session is available
 	useEffect(() => {
-		// Use type assertion to handle the username property
 		interface ExtendedUser {
 			username?: string;
 		}
@@ -39,8 +37,6 @@ export default function NavBar() {
 			<nav className='fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] flex justify-center'>
 				<div className='w-full max-w-xl p-3 flex justify-between px-1'>
 					{navItems.map(item => {
-						// Check if path matches the base of the current path
-						// For profile, this means checking if we're in a username route
 						const isProfileItem = item.name === 'Profile';
 						const isActive = isProfileItem ? pathname === item.path || (pathname.startsWith('/profile/') && item.path === '/profile') : pathname === item.path;
 

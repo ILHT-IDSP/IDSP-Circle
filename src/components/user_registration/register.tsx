@@ -26,7 +26,6 @@ export default function Register() {
 		confirmEmail: '',
 		password: '',
 		confirmPassword: '',
-		birthday: '',
 		fullName: '',
 		firstName: '',
 		lastName: '',
@@ -34,9 +33,9 @@ export default function Register() {
 		profileImage: '',
 	});
 
-const [step, setStep] = useState(1);
-const [loading, setLoading] = useState(false);
-const [success, setSuccess] = useState(false);
+	const [step, setStep] = useState(1);
+	const [loading, setLoading] = useState(false);
+	const [success, setSuccess] = useState(false);
 
 	const handleBack = () => {
 		if (step === 1) {
@@ -63,7 +62,6 @@ const [success, setSuccess] = useState(false);
 			setStep(prev => prev + 1);
 		}
 	};
-
 
 	const handleRegisterPassword = () => {
 		console.log('STEP 2', formData.password);
@@ -108,30 +106,29 @@ const [success, setSuccess] = useState(false);
 		if (step === 4 && formData.username) return setStep(prev => prev + 1);
 	};
 
+	const handleUploadProfileImage = () => {
+		setStep(prev => prev + 1);
+	};
 
-const handleUploadProfileImage = () => {
-	setStep(prev => prev + 1);
-};
-
-const handleCreateProfile = async () => {
-	setLoading(true);
-	setSuccess(false);
-	try {
-		const response = await fetch('/api/register', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ formData }),
-		});
-		if (response.ok) {
-			setSuccess(true);
-			setTimeout(() => router.push('/auth/login'), 2000);
-		} else {
-			setSuccess(false);
+	const handleCreateProfile = async () => {
+		setLoading(true);
+		setSuccess(false);
+		try {
+			const response = await fetch('/api/register', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ formData }),
+			});
+			if (response.ok) {
+				setSuccess(true);
+				setTimeout(() => router.push('/auth/login'), 2000);
+			} else {
+				setSuccess(false);
+			}
+		} finally {
+			setLoading(false);
 		}
-	} finally {
-		setLoading(false);
-	}
-};
+	};
 
 	return (
 		<div
@@ -203,32 +200,32 @@ const handleCreateProfile = async () => {
 					/>
 				</div>
 			)}
-		   {step === 5 && (
-			   <div id='step-six'>
-				   <div className='mb-20'>
-					   <h1 className='register-headers'>Add a profile picture</h1>
-					   <div
-						   className='register-descriptions'
-						   id='register-profileimage-descriptions'
-					   >
-						   <p>Add a profile picture so your friends know it&apos;s you. Everyone will be able to see your picture</p>
-					   </div>
-				   </div>
-				   <AddProfilePicture
-					   formData={formData}
-					   setFormData={setFormData}
-					   onNext={handleUploadProfileImage}
-				   />
-			   </div>
-		   )}
-		   {step === 6 && (
-			   <Confirmation
-				   formData={formData}
-				   onSubmit={handleCreateProfile}
-				   loading={loading}
-				   success={success}
-			   />
-		   )}
+			{step === 5 && (
+				<div id='step-six'>
+					<div className='mb-20'>
+						<h1 className='register-headers'>Add a profile picture</h1>
+						<div
+							className='register-descriptions'
+							id='register-profileimage-descriptions'
+						>
+							<p>Add a profile picture so your friends know it&apos;s you. Everyone will be able to see your picture</p>
+						</div>
+					</div>
+					<AddProfilePicture
+						formData={formData}
+						setFormData={setFormData}
+						onNext={handleUploadProfileImage}
+					/>
+				</div>
+			)}
+			{step === 6 && (
+				<Confirmation
+					formData={formData}
+					onSubmit={handleCreateProfile}
+					loading={loading}
+					success={success}
+				/>
+			)}
 		</div>
 	);
 }
