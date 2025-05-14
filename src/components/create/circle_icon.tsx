@@ -5,7 +5,10 @@ export default function CreateCircleIcon() {
     return (
         <>
             <div className="flex flex-col items-center">
-                <a href="/create/circle">
+                <a
+                    href="/create/circle"
+                    className="flex flex-col items-center justify-items-center gap-2"
+                >
                     <div
                         id="circle-icon-container"
                         className="bg-circles-dark-blue p-3 flex items-center h-20 w-20 rounded-2xl"

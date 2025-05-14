@@ -4,7 +4,10 @@ export default function CreateAlbumIcon() {
     return (
         <>
             <div className="flex flex-col items-center">
-                <a href="/create/album">
+                <a
+                    href="/create/album"
+                    className="flex flex-col items-center gap-2"
+                >
                     <div
                         id="album-icon-container"
                         className="bg-circles-dark-blue p-3 flex items-center h-20 w-20 rounded-2xl"
