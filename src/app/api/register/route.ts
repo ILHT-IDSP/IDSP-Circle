@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import prisma from "../../../lib/prisma";
-import {signIn} from "next-auth/react";
+// import {signIn} from "next-auth/react";
 // bcrypt password hashing shi goes here
 const now = new Date();
 // export const runtime = "nodejs";
@@ -24,7 +24,6 @@ export async function POST(req: Request) {
                 name: formData.fullName,
                 username: formData.username,
                 password: formData.password,
-                birthday: new Date(formData.birthday), // check to see if this makes db work first ozobozo
                 profileImage: formData.profileImage || null,
                 createdAt: now,
                 updatedAt: now,
@@ -42,7 +41,7 @@ export async function POST(req: Request) {
             {status: 200}
         );
     } catch (err) {
-        console.log("Failed to create user into prisma db");
-        return NextResponse.json({error: "Failed to handle registration"}, {status: 500});
+        console.log("Failed to create user into prisma db" + err);
+        return NextResponse.json({error: err}, {status: 500});
     }
 }

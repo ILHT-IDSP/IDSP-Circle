@@ -14,7 +14,7 @@ export default function FullnameInput({value, onChange}: IInputProps) {
                         name="fullName"
                         value={value}
                         onChange={onChange}
-                        className="rounded-3xl w-full bg-white placeholder-black indent-2 p-1.5 outline-gray-500 outline-2"
+                        className="rounded-3xl w-full bg-white text-black placeholder-black indent-2 p-1.5 outline-gray-500 outline-2"
                     />
                 </div>
             </div>

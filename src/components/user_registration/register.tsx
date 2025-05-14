@@ -10,9 +10,6 @@ import EnterEmail from '@/components/user_registration/enter_email/enter_email';
 import { RegisterPasswordHeader } from '@/components/user_registration/create_password/password_header';
 import RegisterPasswordDescription from '@/components/user_registration/create_password/password_description';
 import CreatePassword from '@/components/user_registration/create_password/create_password';
-import RegisterBirthdayHeader from '@/components/user_registration/enter_birthday/birthday_header';
-import RegisterBirthdayDescription from '@/components/user_registration/enter_birthday/birthday_description';
-import EnterBirthday from '@/components/user_registration/enter_birthday/enter_birthday';
 import RegisterFullnameHeader from '@/components/user_registration/enter_fullname/fullname_header';
 import RegisterFullnameDescription from '@/components/user_registration/enter_fullname/fullname_description';
 import EnterFullname from '@/components/user_registration/enter_fullname/enter_fullname';
@@ -20,6 +17,7 @@ import RegisterUsernameDescription from '@/components/user_registration/create_u
 import RegisterUsernameHeader from '@/components/user_registration/create_username/username_header';
 import CreateUsername from '@/components/user_registration/create_username/create_username';
 import AddProfilePicture from '@/components/user_registration/add_profilepicture/add_profilepicture';
+import Confirmation from '@/components/user_registration/confirmation';
 
 export default function Register() {
 	const router = useRouter();
@@ -36,7 +34,9 @@ export default function Register() {
 		profileImage: '',
 	});
 
-	const [step, setStep] = useState(1);
+const [step, setStep] = useState(1);
+const [loading, setLoading] = useState(false);
+const [success, setSuccess] = useState(false);
 
 	const handleBack = () => {
 		if (step === 1) {
@@ -64,23 +64,6 @@ export default function Register() {
 		}
 	};
 
-	const handleRegisterBirthday = () => {
-		console.log('STEP 3: ', formData.birthday);
-		console.log('STEP 3: ', formData.birthday);
-
-		// if (isNaN(birthdayDate.getTime())) {
-		//     throw new Error("Invalid date format. Please enter a valid date.")n     ;
-		// }
-
-		// make sure to uncomment this tbh tbh idk idk 👺🍔🍌
-		// if (adjustedAge < 18) {
-		//     throw new Error("Must be 18 to sign up");
-		// }
-
-		if (step === 3 /* &&  adjustedAge >= 18 */) {
-			setStep(prev => prev + 1);
-		}
-	};
 
 	const handleRegisterPassword = () => {
 		console.log('STEP 2', formData.password);
@@ -116,26 +99,39 @@ export default function Register() {
 			throw new Error('Alphabetical characters only');
 		}
 
-		if (step === 4) return setStep(prev => prev + 1);
+		if (step === 3) return setStep(prev => prev + 1);
 	};
 
 	const handleCreateUsername = () => {
 		console.log('STEP 5 ', formData.username);
 		if (formData.username.length <= 0 || !formData.username) throw new Error('Enter a username');
-		if (step === 5 && formData.username) return setStep(prev => prev + 1);
+		if (step === 4 && formData.username) return setStep(prev => prev + 1);
 	};
 
-	const handleUploadProfileImage = () => {
-		console.log('STEP 6', formData.profileImage);
 
-		if (!formData.profileImage) {
-			throw new Error('Please upload a profile image');
-		}
+const handleUploadProfileImage = () => {
+	setStep(prev => prev + 1);
+};
 
-		if (step === 6) {
-			setStep(prev => prev + 1);
+const handleCreateProfile = async () => {
+	setLoading(true);
+	setSuccess(false);
+	try {
+		const response = await fetch('/api/register', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ formData }),
+		});
+		if (response.ok) {
+			setSuccess(true);
+			setTimeout(() => router.push('/auth/login'), 2000);
+		} else {
+			setSuccess(false);
 		}
-	};
+	} finally {
+		setLoading(false);
+	}
+};
 
 	return (
 		<div
@@ -182,19 +178,6 @@ export default function Register() {
 				</>
 			)}
 			{step === 3 && (
-				<div id='step-three'>
-					<div className='mb-20'>
-						<RegisterBirthdayHeader />
-						<RegisterBirthdayDescription />
-					</div>
-					<EnterBirthday
-						formData={formData}
-						setFormData={setFormData}
-						onNext={handleRegisterBirthday}
-					/>
-				</div>
-			)}
-			{step === 4 && (
 				<div id='step-four'>
 					<div className='mb-20'>
 						<RegisterFullnameHeader />
@@ -207,7 +190,7 @@ export default function Register() {
 					/>
 				</div>
 			)}
-			{step === 5 && (
+			{step === 4 && (
 				<div id='step-five'>
 					<div className='mb-20'>
 						<RegisterUsernameHeader />
@@ -220,24 +203,32 @@ export default function Register() {
 					/>
 				</div>
 			)}
-			{step === 6 && (
-				<div id='step-six'>
-					<div className='mb-20'>
-						<h1 className='register-headers'>Add a profile picture</h1>
-						<div
-							className='register-descriptions'
-							id='register-profileimage-descriptions'
-						>
-							<p>Add a profile picture so your friends know it&apos;s you. Everyone will be able to see your picture</p>
-						</div>
-					</div>
-					<AddProfilePicture
-						formData={formData}
-						setFormData={setFormData}
-						onNext={handleUploadProfileImage}
-					/>
-				</div>
-			)}
+		   {step === 5 && (
+			   <div id='step-six'>
+				   <div className='mb-20'>
+					   <h1 className='register-headers'>Add a profile picture</h1>
+					   <div
+						   className='register-descriptions'
+						   id='register-profileimage-descriptions'
+					   >
+						   <p>Add a profile picture so your friends know it&apos;s you. Everyone will be able to see your picture</p>
+					   </div>
+				   </div>
+				   <AddProfilePicture
+					   formData={formData}
+					   setFormData={setFormData}
+					   onNext={handleUploadProfileImage}
+				   />
+			   </div>
+		   )}
+		   {step === 6 && (
+			   <Confirmation
+				   formData={formData}
+				   onSubmit={handleCreateProfile}
+				   loading={loading}
+				   success={success}
+			   />
+		   )}
 		</div>
 	);
 }

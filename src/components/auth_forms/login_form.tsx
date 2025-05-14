@@ -21,7 +21,8 @@ export function LoginForm() {
                 action={async (formData) => {
                     "use server";
                     try {
-                        await signIn("credentials", formData, {redirectTo: "/profile"});
+                        // Always redirect to /profile after login
+                        await signIn("credentials", formData, { callbackUrl: "/profile" });
                     } catch (error) {
                         console.error("An error occurred during login", error);
                     }

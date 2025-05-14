@@ -55,7 +55,6 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			setError(data.error || 'Failed to update profile');
 		}
 
-		// back to profile
 		router.push('/profile');
 	};
 
@@ -65,7 +64,6 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			className='flex flex-col items-center p-4 bg-circles-light rounded-2xl shadow-lg'
 		>
 			{error && <div className='text-red-600 mb-2'>{error}</div>}
-			{/* Profile Pic*/}
 			<label className='relative cursor-pointer mb-4'>
 				<input
 					type='file'

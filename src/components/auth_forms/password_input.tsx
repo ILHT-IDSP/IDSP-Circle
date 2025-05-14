@@ -24,7 +24,7 @@ export function PasswordInput({onChange, id = "password-input"}: PasswordInputPr
                     placeholder="Password"
                     value={password}
                     onChange={handleChange}
-                    className="rounded-3xl w-full bg-white placeholder-black indent-2 p-1.5 focus:outline-none"
+                    className="rounded-3xl w-full bg-white text-black placeholder-black indent-2 p-1.5 focus:outline-none"
                     required
                 />
 

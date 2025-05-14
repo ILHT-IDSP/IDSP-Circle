@@ -20,7 +20,7 @@ model User {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
   isProfilePrivate Boolean?      @default(false)
-  birthday         DateTime
+  birthday         DateTime?
   Album            Album[]
   createdCircles   Circle[]
   comments         Comment[]

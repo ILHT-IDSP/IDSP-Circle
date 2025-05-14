@@ -2238,7 +2238,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     isProfilePrivate: boolean | null
-    birthday: Date
+    birthday: Date | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2374,7 +2374,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       isProfilePrivate: boolean | null
-      birthday: Date
+      birthday: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -15221,7 +15221,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
-    birthday?: DateTimeFilter<"User"> | Date | string
+    birthday?: DateTimeNullableFilter<"User"> | Date | string | null
     Album?: AlbumListRelationFilter
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
@@ -15246,7 +15246,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrderInput | SortOrder
-    birthday?: SortOrder
+    birthday?: SortOrderInput | SortOrder
     Album?: AlbumOrderByRelationAggregateInput
     createdCircles?: CircleOrderByRelationAggregateInput
     comments?: CommentOrderByRelationAggregateInput
@@ -15274,7 +15274,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableFilter<"User"> | boolean | null
-    birthday?: DateTimeFilter<"User"> | Date | string
+    birthday?: DateTimeNullableFilter<"User"> | Date | string | null
     Album?: AlbumListRelationFilter
     createdCircles?: CircleListRelationFilter
     comments?: CommentListRelationFilter
@@ -15299,7 +15299,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isProfilePrivate?: SortOrderInput | SortOrder
-    birthday?: SortOrder
+    birthday?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -15322,7 +15322,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     isProfilePrivate?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
-    birthday?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    birthday?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type CircleWhereInput = {
@@ -16051,7 +16051,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -16076,7 +16076,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -16100,7 +16100,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -16125,7 +16125,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -16150,7 +16150,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -16164,7 +16164,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -16179,7 +16179,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CircleCreateInput = {
@@ -16924,6 +16924,17 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type AlbumListRelationFilter = {
     every?: AlbumWhereInput
     some?: AlbumWhereInput
@@ -17139,6 +17150,20 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -17807,6 +17832,10 @@ export namespace Prisma {
 
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type AlbumUpdateManyWithoutCreatorNestedInput = {
@@ -18636,6 +18665,17 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -18728,6 +18768,20 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -19348,7 +19402,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -19372,7 +19426,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -19471,7 +19525,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -19495,7 +19549,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -19580,7 +19634,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -19604,7 +19658,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -19679,7 +19733,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -19703,7 +19757,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -19830,7 +19884,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -19854,7 +19908,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -19995,7 +20049,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -20019,7 +20073,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -20158,7 +20212,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -20182,7 +20236,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -20255,7 +20309,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -20279,7 +20333,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -20332,7 +20386,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -20356,7 +20410,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -20431,7 +20485,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -20455,7 +20509,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -20508,7 +20562,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -20532,7 +20586,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -20607,7 +20661,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -20631,7 +20685,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -20654,7 +20708,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -20678,7 +20732,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -20706,7 +20760,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -20730,7 +20784,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -20769,7 +20823,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -20793,7 +20847,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -20827,7 +20881,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -20851,7 +20905,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -20874,7 +20928,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
     followers?: FollowCreateNestedManyWithoutFollowerInput
@@ -20898,7 +20952,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     followers?: FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -20937,7 +20991,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     followers?: FollowUpdateManyWithoutFollowerNestedInput
@@ -20961,7 +21015,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     followers?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -20984,7 +21038,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleCreateNestedManyWithoutCreatorInput
     comments?: CommentCreateNestedManyWithoutUserInput
@@ -21008,7 +21062,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isProfilePrivate?: boolean | null
-    birthday: Date | string
+    birthday?: Date | string | null
     Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
     createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
@@ -21047,7 +21101,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
@@ -21071,7 +21125,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
     createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
