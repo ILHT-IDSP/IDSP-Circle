@@ -6,6 +6,7 @@ type SettingsItemProps = {
 	icon?: ReactNode;
 	href?: string;
 	onClick?: () => void;
+	mode?: string;
 };
 
 export default function SettingsItem({ label, icon, href, onClick }: SettingsItemProps) {
@@ -23,7 +24,7 @@ export default function SettingsItem({ label, icon, href, onClick }: SettingsIte
 	return href ? (
 		<Link
 			href={href}
-			className={`${classes} bg-foreground text-background border`}
+			className={`${classes} bg-foreground text-background border border-foreground/20`}
 		>
 			{content}
 		</Link>
