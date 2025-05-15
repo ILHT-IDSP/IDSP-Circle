@@ -1,5 +1,3 @@
-export interface ICreateCircle {}
-
 export interface ICreateCircleFormData {
     formData: any;
     setFormData: () => void;

@@ -1,11 +1,12 @@
 import {Circle} from "lucide-react";
 import CirclesLogo from "../Circles_Logo";
+import Link from "next/link";
 
 export default function CreateCircleIcon() {
     return (
         <>
             <div className="flex flex-col items-center">
-                <a
+                <Link
                     href="/create/circle"
                     className="flex flex-col items-center justify-items-center gap-2"
                 >
@@ -24,7 +25,7 @@ export default function CreateCircleIcon() {
                     <div>
                         <p className="text-white text-sm">create new circle</p>
                     </div>
-                </a>
+                </Link>
             </div>
         </>
     );
