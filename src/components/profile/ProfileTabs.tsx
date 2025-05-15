@@ -207,6 +207,7 @@ export default function ProfileTabs() {
 							circleSize={120}
 							className='mb-2'
 							altText={`${circle.name} circle`}
+							link={`/circle/${circle.id}`}
 						/>
 					))}
 				</div>

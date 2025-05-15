@@ -1,5 +1,4 @@
 import Image from "next/image";
-import AlbumsOwnedByCircle from "./albums_section";
 
 interface CircleProfilePicture {
     avatar?: string;

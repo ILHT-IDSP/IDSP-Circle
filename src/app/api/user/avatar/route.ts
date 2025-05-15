@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 		}
 		// Get form data with the image
 		const formData = await request.formData();
-		const file = formData.get('file') as File || formData.get('avatar') as File; // Check for both 'file' and 'avatar'
+		const file = (formData.get('file') as File) || (formData.get('avatar') as File); // Check for both 'file' and 'avatar'
 
 		if (!file) {
 			return NextResponse.json({ error: 'No image file provided' }, { status: 400 });

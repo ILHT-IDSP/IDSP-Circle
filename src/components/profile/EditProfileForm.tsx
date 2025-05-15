@@ -61,28 +61,30 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			const formData = new FormData();
 			formData.append('file', file); // Changed from 'avatar' to 'file' to match the API expectation
 
-			const response = await fetch('/api/upload', { // Changed from '/api/user/avatar' to '/api/upload'
+			const response = await fetch('/api/upload', {
+				// Changed from '/api/user/avatar' to '/api/upload'
 				method: 'POST',
 				body: formData,
 			});
 
 			const data = await response.json();
-			if (data.url) { // Changed from data.imageUrl to data.url
+			if (data.url) {
+				// Changed from data.imageUrl to data.url
 				setAvatar(data.url);
-				
+
 				// Update the user's avatar in the database
 				const updateResponse = await fetch('/api/user/profile', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ 
+					body: JSON.stringify({
 						profileImage: data.url,
 						// Send existing values to prevent overwriting them
 						name,
 						bio,
-						username 
+						username,
 					}),
 				});
-				
+
 				if (!updateResponse.ok) {
 					throw new Error('Failed to update profile with new avatar');
 				}
@@ -154,14 +156,15 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			onSubmit={handleSubmit}
 			className='flex flex-col items-center p-4 bg-circles-light rounded-2xl shadow-lg'
 		>
-			{error && <div className='text-red-600 mb-2'>{error}</div>}			<label className='relative cursor-pointer mb-4'>
+			{error && <div className='text-red-600 mb-2'>{error}</div>}{' '}
+			<label className='relative cursor-pointer mb-4'>
 				<input
 					type='file'
 					accept='image/*'
 					className='hidden'
 					onChange={handleAvatarChange}
 				/>
-				<div className="relative">
+				<div className='relative'>
 					<Image
 						src={avatar || '/images/default-avatar.png'}
 						alt='Profile'
