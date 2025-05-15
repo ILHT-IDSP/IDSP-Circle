@@ -9,6 +9,7 @@ export async function POST(req: Request) {
         console.log("Server hit!");
         console.log("backend: ", formData);
 
+        // frontend should console log formData if u coment out the whole ass query shi
         const newCircle = await prisma.circle.create({
             data: {
                 creatorId: formData.creatorId as number,
