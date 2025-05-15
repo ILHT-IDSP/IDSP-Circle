@@ -1,45 +1,47 @@
-"use client";
-import {AwesomeIcon} from "../../../../public/icons";
-import {faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
-import {useRef} from "react";
+'use client';
+import React from 'react';
 
-export default function CreateAlbumStepOne({setFormData}: {setFormData: (file: File) => void}) {
-    const fileInputRef = useRef<HTMLInputElement>(null);
+interface IAlbumFormData {
+	title: string;
+	coverImage: string;
+	isPrivate: boolean;
+	creatorId: string | undefined;
+	circleId: string | null;
+}
 
-    const handleIconClick = () => {
-        fileInputRef.current?.click();
-    };
+export default function CreateAlbumStepOne({ formData, setFormData, onSubmit }: { formData: IAlbumFormData; setFormData: React.Dispatch<React.SetStateAction<IAlbumFormData>>; onSubmit: () => void }) {
+	const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, title: e.target.value });
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setFormData(file); //
-        }
-    };
-    return (
-        <>
-            <div className="flex flex-col items-center justify-center max-w-full w-full h-[80vh]">
-                <div>
-                    <AwesomeIcon
-                        icon={faCloudArrowUp}
-                        className="text-3xl mb-6"
-                    />
-                </div>
-                <div>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        // className="hidden"
-                        onChange={handleFileChange}
-                    />
-                    <p className="text-center text-neutral-400 text-sm">
-                        drag and drop to <span className="underline">upload </span>
-                        <br />
-                        PNG, JPEG, JPG
-                    </p>
-                </div>
-            </div>
-        </>
-    );
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		onSubmit();
+	};
+
+	return (
+		<>
+			<form
+				onSubmit={handleSubmit}
+				className='w-full'
+			>
+				<label className='flex flex-row gap-3 relative border-b border-gray-700 w-full'>
+					<input
+						type='text'
+						name='title'
+						value={formData.title}
+						onChange={handleTitleChange}
+						className='focus:outline-none w-full text-base relative top-1 bg-transparent pb-2'
+						placeholder='Give your album a title...'
+						autoFocus
+					/>
+				</label>
+				<p className='mt-4 text-sm text-gray-400'>Albums are private by default. You can share photos with specific circles or keep them personal.</p>
+				<button
+					type='submit'
+					hidden
+				>
+					Submit
+				</button>
+			</form>
+		</>
+	);
 }
