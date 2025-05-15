@@ -54,11 +54,10 @@ export default function CirclePageView({ circleId, session }: { circleId: number
 			fetchCircleDetails();
 		}
 	}, [circleId, router]);
-
 	if (loading) {
 		return (
 			<div className='flex justify-center items-center min-h-screen'>
-				<div className='animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#689bff]'></div>
+				<div className='animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[var(--primary)]'></div>
 			</div>
 		);
 	}
@@ -67,19 +66,18 @@ export default function CirclePageView({ circleId, session }: { circleId: number
 		return (
 			<div className='flex flex-col items-center justify-center min-h-screen p-4'>
 				<h2 className='text-xl font-semibold text-red-500 mb-4'>Error</h2>
-				<p className='text-center'>{error || 'Circle not found'}</p>
+				<p className='text-center text-[var(--foreground)]'>{error || 'Circle not found'}</p>
 				<button
 					onClick={() => router.push('/profile')}
-					className='mt-6 px-6 py-2 rounded-full'
+					className='mt-6 px-6 py-2 rounded-full bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)]'
 				>
 					Back to Profile
 				</button>
 			</div>
 		);
 	}
-
 	return (
-		<div className='flex flex-col min-h-screen pb-20'>
+		<div className='flex flex-col min-h-screen pb-20 bg-[var(--background)] text-[var(--foreground)]'>
 			<CircleHeader
 				circle={circle}
 				session={session}
