@@ -72,7 +72,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 					fill
 					className='object-cover'
 				/>
-				<div className='absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-foreground/30' />
+				<div className='absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30' />
 
 				<div className='absolute top-3 right-3 z-10'>
 					<CircleHolder
@@ -98,7 +98,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 								</>
 							) : (
 								<>
-									<FaRegHeart className='text-xl' />
+									<FaRegHeart className='text-xl text-white text-shadow-black' />
 								</>
 							)}
 						</button>

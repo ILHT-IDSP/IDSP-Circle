@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { FaMoon, FaLowVision, FaFont } from 'react-icons/fa';
 import { useTheme } from 'next-themes';
+import NavBar from '@/components/bottom_bar/NavBar';
 
 export default function AccessibilityPage() {
 	const { theme, setTheme } = useTheme();
@@ -130,6 +131,7 @@ export default function AccessibilityPage() {
 					</div>
 				</>
 			)}
+			<NavBar/>
 		</div>
 	);
 }

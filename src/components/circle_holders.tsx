@@ -1,5 +1,4 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from 'next/image';import Link from 'next/link';
 
 interface CircleHolderProps {
 	imageSrc: string;
@@ -31,7 +30,7 @@ const CircleHolder: React.FC<CircleHolderProps> = ({ imageSrc, name, altText, ci
 							width={baseSize}
 							height={baseSize}
 							quality={90}
-							className='object-cover'
+							className='object-cover w-full h-full '
 							sizes={`${baseSize}px`}
 							priority
 						/>
@@ -43,7 +42,7 @@ const CircleHolder: React.FC<CircleHolderProps> = ({ imageSrc, name, altText, ci
 						width={baseSize}
 						height={baseSize}
 						quality={90}
-						className='object-cover'
+						className='object-cover w-full h-full'
 						sizes={`${baseSize}px`}
 						priority
 					/>
