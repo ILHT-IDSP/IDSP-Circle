@@ -48,31 +48,52 @@ export default function EditProfileForm({ session }: { session: Session | null }
 
 		fetchUserProfile();
 	}, [session]);
-
 	const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
+		// Show preview immediately
 		setAvatar(URL.createObjectURL(file));
-
-		const formData = new FormData();
-		formData.append('avatar', file);
+		setIsSubmitting(true); // Show loading state
 
 		try {
-			const response = await fetch('/api/user/avatar', {
+			// Use the same API endpoint as the circle component
+			const formData = new FormData();
+			formData.append('file', file); // Changed from 'avatar' to 'file' to match the API expectation
+
+			const response = await fetch('/api/upload', { // Changed from '/api/user/avatar' to '/api/upload'
 				method: 'POST',
 				body: formData,
 			});
 
 			const data = await response.json();
-			if (data.success && data.imageUrl) {
-				setAvatar(data.imageUrl);
+			if (data.url) { // Changed from data.imageUrl to data.url
+				setAvatar(data.url);
+				
+				// Update the user's avatar in the database
+				const updateResponse = await fetch('/api/user/profile', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ 
+						profileImage: data.url,
+						// Send existing values to prevent overwriting them
+						name,
+						bio,
+						username 
+					}),
+				});
+				
+				if (!updateResponse.ok) {
+					throw new Error('Failed to update profile with new avatar');
+				}
 			} else {
 				setError('Failed to upload image');
 			}
 		} catch (error: unknown) {
 			console.error('Avatar upload error:', error);
 			setError('Failed to upload image');
+		} finally {
+			setIsSubmitting(false); // Hide loading state
 		}
 	};
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -133,26 +154,32 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			onSubmit={handleSubmit}
 			className='flex flex-col items-center p-4 bg-circles-light rounded-2xl shadow-lg'
 		>
-			{error && <div className='text-red-600 mb-2'>{error}</div>}
-			<label className='relative cursor-pointer mb-4'>
+			{error && <div className='text-red-600 mb-2'>{error}</div>}			<label className='relative cursor-pointer mb-4'>
 				<input
 					type='file'
 					accept='image/*'
 					className='hidden'
 					onChange={handleAvatarChange}
 				/>
-				<Image
-					src={avatar || '/images/default-avatar.png'}
-					alt='Profile'
-					width={96}
-					height={96}
-					className='w-24 h-24 rounded-full object-cover border-4 border-circles-dark-blue'
-				/>
-				<div className='absolute bottom-0 right-0 bg-black rounded-full p-1 shadow-md'>
-					<Pencil
-						size={16}
-						className='text-white'
+				<div className="relative">
+					<Image
+						src={avatar || '/images/default-avatar.png'}
+						alt='Profile'
+						width={96}
+						height={96}
+						className='w-24 h-24 rounded-full object-cover border-4 border-circles-dark-blue'
 					/>
+					{isSubmitting && (
+						<div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-full'>
+							<div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white'></div>
+						</div>
+					)}
+					<div className='absolute bottom-0 right-0 bg-black rounded-full p-1 shadow-md'>
+						<Pencil
+							size={16}
+							className='text-white'
+						/>
+					</div>
 				</div>
 			</label>
 			{/* Name */}

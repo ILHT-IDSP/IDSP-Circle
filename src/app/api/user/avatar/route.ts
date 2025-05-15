@@ -28,10 +28,9 @@ export async function POST(request: NextRequest) {
 		if (!session?.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
-
 		// Get form data with the image
 		const formData = await request.formData();
-		const file = formData.get('avatar') as File;
+		const file = formData.get('file') as File || formData.get('avatar') as File; // Check for both 'file' and 'avatar'
 
 		if (!file) {
 			return NextResponse.json({ error: 'No image file provided' }, { status: 400 });
@@ -77,10 +76,10 @@ export async function POST(request: NextRequest) {
 				profileImage: imageUrl,
 			},
 		});
-
 		return NextResponse.json({
 			success: true,
 			imageUrl,
+			url: imageUrl, // Add the url field to match the /api/upload response format
 		});
 	} catch (error) {
 		console.error('Error uploading profile image:', error);

@@ -1,14 +1,22 @@
 import {AwesomeIcon} from "../../../../public/icons";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
-import {ICircleFormData} from "./circle_types";
 
-export default function CreateCircleTopBar({onClick, onClickTwo, step}: {onClick: () => void; onClickTwo: () => void; step: number}) {
+export default function CreateCircleTopBar({
+    onClick, 
+    onClickTwo, 
+    isSubmitting
+}: {
+    onClick: () => void; 
+    onClickTwo: () => void; 
+    isSubmitting?: boolean;
+}) {
     return (
         <>
             <header className="flex items-center justify-between px-4 py-3 w-full pt-6 relative">
                 <button
-                    className="flex items-center"
+                    className="flex items-center hover:cursor-pointer hover:opacity-70 transition-all"
                     onClick={onClickTwo}
+                    disabled={isSubmitting}
                 >
                     <AwesomeIcon
                         icon={faArrowLeft}
@@ -16,16 +24,14 @@ export default function CreateCircleTopBar({onClick, onClickTwo, step}: {onClick
                         height={25}
                     />
                 </button>
-                <div className="flex-1 text-center relative top-4">
-                    {/* <h2 className="text-lg font-semibold whitespace-nowrap">New Circle</h2> */}
-                    {step === 2 ? <h2 className="text-lg font-semibold whitespace-nowrap">Invite Friends</h2> : <h2 className="text-lg font-semibold whitespace-nowrap">New Circle</h2>}
-                </div>
+                    <span className=" text-2xl font-medium" >New Circle</span>
 
                 <button
                     onClick={onClick}
-                    className="text-base font-medium text-white"
+                    disabled={isSubmitting}
+                    className="font-medium hover:cursor-pointer hover:opacity-70 transition-all"
                 >
-                    {step === 3 ? <>Create</> : <>Next</>}
+                    {isSubmitting ? 'Creating...' : 'Create'}
                 </button>
             </header>
         </>

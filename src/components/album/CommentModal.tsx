@@ -124,16 +124,23 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 					>
 						<FaTimes />
 					</button>
-				</div>				{/* Comments List */}
+				</div>{' '}
+				{/* Comments List */}
 				<div className='comment-modal-body'>
 					{isLoading ? (
-						<div className='flex-center' style={{ padding: '32px 0' }}>
+						<div
+							className='flex-center'
+							style={{ padding: '32px 0' }}
+						>
 							<div className='loading-spinner'></div>
 						</div>
 					) : comments.length > 0 ? (
 						<ul className='comment-list'>
 							{comments.map(comment => (
-								<li key={comment.id} className='comment-item'>
+								<li
+									key={comment.id}
+									className='comment-item'
+								>
 									<div>
 										<Image
 											src={comment.User.profileImage || '/images/default-avatar.png'}
@@ -152,7 +159,8 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 									</div>
 								</li>
 							))}
-						</ul>					) : (
+						</ul>
+					) : (
 						<div className='empty-comments'>
 							<div style={{ textAlign: 'center', padding: '32px 0', color: 'gray' }}>
 								<p style={{ fontWeight: 500, marginBottom: '8px' }}>No comments yet</p>
@@ -161,7 +169,6 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 						</div>
 					)}
 				</div>
-
 				{/* Comment Form */}
 				<form
 					onSubmit={handleSubmitComment}

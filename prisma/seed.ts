@@ -220,8 +220,6 @@ async function createMemberships(users: User[], circles: Circle[]) {
 	}
 }
 
-
-
 // New function to create albums
 async function createAlbums(users: User[]) {
 	console.log('Creating albums...');
@@ -599,8 +597,6 @@ async function createUserSettings(users: User[]) {
 	}
 }
 
-
-
 async function createAlbumLikes(users: User[], albums: Album[]) {
 	console.log('Creating album likes...');
 
@@ -668,7 +664,7 @@ async function createAlbumComments(users: User[], albums: Album[]) {
 			updatedAt: new Date(),
 		},
 		{
-			content: 'You\'re so talented with watercolors',
+			content: "You're so talented with watercolors",
 			userId: users[3].id,
 			albumId: albums[6].id,
 			updatedAt: new Date(),

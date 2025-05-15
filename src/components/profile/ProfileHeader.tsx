@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Settings, Check, X } from 'lucide-react';
@@ -162,6 +163,38 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					<Settings className='w-6 h-6 text-circles-dark-blue' />
 				</Link>
 			)}
+			
+			<div className='mt-4'>
+				{profileData.isOwnProfile ? (
+					<Link href='/profile/edit-profile'>
+						<button className='px-6 py-2 bg-[#689bff] text-white hover:bg-[#0044CC] hover:cursor-pointer font-medium rounded-md hover:bg-opacity-90 transition'>
+							Edit Profile
+						</button>
+					</Link>
+				) : (
+					<button 
+						className={`px-6 py-2 rounded-full transition ${
+							showUnfollowConfirm 
+								? 'bg-red-500 text-white' 
+								: isFollowing 
+									? 'bg-circles-light text-circles-dark border border-circles-dark' 
+									: 'bg-[#689bff] text-circles-light'
+						}`}
+						onClick={handleFollowAction}
+					>
+						{showUnfollowConfirm ? (
+							<div className='flex items-center gap-2'>
+								<span>Unfollow?</span>
+								<Check className='w-4 h-4' />
+							</div>
+						) : isFollowing ? (
+							'Following'
+						) : (
+							'Follow'
+						)}
+					</button>
+				)}
+			</div>
 		</div>
 	);
 }

@@ -111,6 +111,7 @@ export default async function Home() {
 						<>
 							<h2 className='text-lg font-bold mb-2'>Your Circles</h2>
 							<div className='flex flex-row gap-4 overflow-x-auto pb-2'>
+								{' '}
 								{userCirclesFormatted.map(circle => (
 									<div
 										key={circle.id}
@@ -120,16 +121,21 @@ export default async function Home() {
 											imageSrc={circle.avatar || '/images/circles/default.svg'}
 											name={circle.name}
 											circleSize={80}
+											link={`/circle/${circle.id}`}
 										/>
 									</div>
 								))}
 							</div>
 						</>
-					) : (						<>							<h2 className='text-lg font-bold mb-2'>Suggested Circles</h2>
+					) : (
+						<>
+							{' '}
+							<h2 className='text-lg font-bold mb-2'>Suggested Circles</h2>
 							<p className='text-circles-light opacity-80 mb-3 text-sm'>You&apos;re not in any circles yet. Here are some you might like:</p>
 							{suggestedCircles.length > 0 ? (
 								<>
 									<div className='flex flex-row gap-4 overflow-x-auto pb-2'>
+										{' '}
 										{suggestedCircles.map(circle => (
 											<div
 												key={circle.id}
@@ -139,7 +145,9 @@ export default async function Home() {
 													imageSrc={circle.avatar || '/images/circles/default.svg'}
 													name={circle.name}
 													circleSize={80}
-												/>												<p className='text-xs text-center text-circles-light opacity-80 mt-1'>
+													link={`/circle/${circle.id}`}
+												/>{' '}
+												<p className='text-xs text-center text-circles-light opacity-80 mt-1'>
 													{circle._count.members} {circle._count.members === 1 ? 'member' : 'members'}
 												</p>
 											</div>
@@ -150,22 +158,25 @@ export default async function Home() {
 											href='/create/circle'
 											className='inline-block px-4 py-2 bg-circles-dark-blue text-sm rounded-lg hover:bg-opacity-90 transition'
 										>
-											<span className="text-circles-light">Create Your Own Circle</span>
+											<span className='text-circles-light'>Create Your Own Circle</span>
 										</Link>
 									</div>
 								</>
-							) : (								<div className='py-6 text-center bg-opacity-10 bg-circles-light rounded-lg'>
-									<p className='text-circles-light mb-3'>No circles found</p>									<Link									
-									href='/create/circle'
-									className='px-4 py-2 bg-circles-dark-blue rounded-lg text-sm hover:bg-opacity-90 transition'
+							) : (
+								<div className='py-6 text-center bg-opacity-10 bg-circles-light rounded-lg'>
+									<p className='text-circles-light mb-3'>No circles found</p>{' '}
+									<Link
+										href='/create/circle'
+										className='px-4 py-2 bg-circles-dark-blue rounded-lg text-sm hover:bg-opacity-90 transition'
 									>
-										<span className="text-circles-light">Create a Circle</span>
+										<span className='text-circles-light'>Create a Circle</span>
 									</Link>
 								</div>
 							)}
 						</>
 					)}
-				</section>				<section className='w-full my-8 mb-32'>
+				</section>{' '}
+				<section className='w-full my-8 mb-32'>
 					<h2 className='text-lg font-bold mb-2'>Albums</h2>
 					{followingAlbums.length > 0 ? (
 						<div className='grid grid-cols-2 gap-4'>
@@ -178,25 +189,29 @@ export default async function Home() {
 									userProfileImage={album.creator?.profileImage || '/images/default-avatar.png'}
 								/>
 							))}
-						</div>					) : (
+						</div>
+					) : (
 						<div className='py-6 text-center bg-opacity-10 bg-circles-light rounded-lg'>
 							<p className='text-circles-light mb-3'>No albums from your network yet</p>
 							<p className='text-sm text-circles-light opacity-70'>Follow more users or create your own album</p>
-							<div className='mt-3 flex justify-center space-x-3'>								<Link									
+							<div className='mt-3 flex justify-center space-x-3'>
+								{' '}
+								<Link
 									href='/search'
 									className='px-3 py-2 bg-circles-dark-blue rounded-lg text-sm hover:bg-opacity-90 transition'
 								>
-									<span className="text-circles-light">Find Users</span>
-								</Link>								<Link									
+									<span className='text-circles-light'>Find Users</span>
+								</Link>{' '}
+								<Link
 									href='/create/album'
 									className='px-3 py-2 bg-circles-dark-blue rounded-lg text-sm hover:bg-opacity-90 transition'
 								>
-									<span className="text-circles-light">Create Album</span>
+									<span className='text-circles-light'>Create Album</span>
 								</Link>
 							</div>
 						</div>
 					)}
-			<NavBar />
+					<NavBar />
 				</section>
 			</main>
 		</>

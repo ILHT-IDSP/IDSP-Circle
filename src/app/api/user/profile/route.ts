@@ -10,9 +10,8 @@ export async function POST(request: NextRequest) {
 		if (!session?.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
-
 		// Get profile data from request body
-		const { name, bio, username } = await request.json();
+		const { name, bio, username, profileImage } = await request.json();
 
 		// Validate the data
 		if (username && username !== session.user.username) {
@@ -35,6 +34,7 @@ export async function POST(request: NextRequest) {
 				name: name || undefined,
 				bio: bio || undefined,
 				username: username || undefined,
+				profileImage: profileImage || undefined, // Add profileImage field
 			},
 		});
 

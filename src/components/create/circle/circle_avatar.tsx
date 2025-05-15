@@ -1,58 +1,86 @@
-import Image from "next/image";
-import {useRef} from "react";
-import {ICircleFormData} from "./circle_types";
+import Image from 'next/image';
+import { useRef, useState } from 'react';
+import { ICircleFormData } from './circle_types';
 
 interface CircleAvatarProps {
-    avatar: string;
-    setFormData: React.Dispatch<React.SetStateAction<ICircleFormData>>;
-    formData: ICircleFormData;
+	avatar: string;
+	setFormData: React.Dispatch<React.SetStateAction<ICircleFormData>>;
 }
 
-export default function CircleAvatar({avatar, setFormData, formData}: CircleAvatarProps) {
-    const fileInputRef = useRef<HTMLInputElement>(null);
+export default function CircleAvatar({ avatar, setFormData }: CircleAvatarProps) {
+	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [preview, setPreview] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
-    const handleAvatarClick = () => {
-        fileInputRef.current?.click();
-    };
+	const handleAvatarClick = () => {
+		fileInputRef.current?.click();
+	};
 
-    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            setFormData((prev) => ({
-                ...prev,
-                avatar: event.target?.result as string,
-            }));
-        };
-        reader.readAsDataURL(file);
+	const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
 
-        setFormData({...formData, avatar});
-        console.log("IMAGE SAVED TO FORMDATA: ", formData.avatar);
-    };
+		// Show preview 
+		setPreview(URL.createObjectURL(file));
+		setIsLoading(true);
 
-    return (
-        <div className="flex flex-col items-center">
-            <div
-                className="relative cursor-pointer"
-                onClick={handleAvatarClick}
-            >
-                <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleAvatarChange}
-                    className="hidden"
-                />
-                <Image
-                    src={avatar || "/images/default-avatar.png"}
-                    alt="Profile"
-                    width={200}
-                    height={200}
-                    className="my-8 rounded-full object-cover border-4 border-circles-dark-blue"
-                    style={{aspectRatio: "1 / 1"}}
-                />
-            </div>
-        </div>
-    );
+		// Upload to Cloudinary
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+
+			const response = await fetch('/api/upload', {
+				method: 'POST',
+				body: formData,
+			});
+
+			const data = await response.json();
+
+			if (data.url) {
+				setFormData(prev => ({
+					...prev,
+					avatar: data.url,
+				}));
+				console.log('Image uploaded to Cloudinary: ', data.url);
+			} else {
+				console.error('Failed to upload image');
+			}
+		} catch (error) {
+			console.error('Error uploading image:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	return (
+		<div className='flex flex-col items-center'>
+			<div
+				className='relative cursor-pointer'
+				onClick={handleAvatarClick}
+			>
+				<input
+					type='file'
+					accept='image/*'
+					ref={fileInputRef}
+					onChange={handleAvatarChange}
+					className='hidden'
+				/>
+				<div className='relative'>
+					<Image
+						src={preview || avatar || '/images/default-avatar.png'}
+						alt='Circle Avatar'
+						width={200}
+						height={200}
+						className='my-8 rounded-full object-cover border-4 border-circles-dark-blue'
+						style={{ aspectRatio: '1 / 1' }}
+					/>
+					{isLoading && (
+						<div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-full'>
+							<div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white'></div>
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
 }
