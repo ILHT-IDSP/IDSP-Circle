@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#3B82F6" />
+  <text x="50%" y="50%" font-family="Arial" font-size="24" fill="white" text-anchor="middle" dominant-baseline="middle">Album</text>
+  <g fill="white" opacity="0.3">
+    <rect x="40" y="70" width="30" height="30" />
+    <rect x="80" y="70" width="30" height="30" />
+    <rect x="120" y="70" width="30" height="30" />
+    <rect x="40" y="110" width="30" height="30" />
+    <rect x="80" y="110" width="30" height="30" />
+    <rect x="120" y="110" width="30" height="30" />
+  </g>
+</svg>

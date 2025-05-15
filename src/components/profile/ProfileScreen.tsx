@@ -93,7 +93,6 @@ export default function ProfileScreen({ session }: { session: Session | null }) 
 			</div>
 		);
 	}
-
 	return (
 		<div className='min-h-screen bg-circles-dark px-4 pt-6 pb-20'>
 			<ProfileHeader

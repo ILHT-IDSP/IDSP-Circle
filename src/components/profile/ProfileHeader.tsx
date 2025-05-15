@@ -151,9 +151,8 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 			}
 		}
 	};
-
 	return (
-		<div className='relative flex flex-col items-center mb-6 bg-circles-light rounded-2xl py-4 px-6 shadow-lg'>
+		<div className='relative flex flex-col items-center mb-6  rounded-2xl py-4 px-6 '>
 			{profileData.isOwnProfile && (
 				<input
 					type='file'
@@ -204,12 +203,12 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 				>
 					<Settings className='w-6 h-6 text-circles-dark-blue' />
 				</Link>
-			)}
+			)}{' '}
 			{/* Action button based on whether it's the user's own profile or not */}
 			{profileData.isOwnProfile ? (
 				<Link
 					href='/profile/edit-profile'
-					className='mt-4 bg-circles-dark-blue text-circles-light text-sm font-semibold py-2 px-4 rounded-lg'
+					className='mt-4 bg-[#0055FF] text-white text-sm font-semibold py-2 px-4 rounded-lg hover:bg-[#004BE0] transition-colors'
 				>
 					Edit Profile
 				</Link>
@@ -219,7 +218,7 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 						<div className='mt-4 flex items-center space-x-2'>
 							<button
 								onClick={() => setShowUnfollowConfirm(false)}
-								className='bg-circles-dark-blue text-circles-light text-sm font-semibold py-2 px-4 rounded-l-lg flex items-center'
+								className='bg-[#0055FF] text-white text-sm font-semibold py-2 px-4 rounded-l-lg flex items-center hover:bg-[#004BE0] transition-colors'
 							>
 								<X
 									size={16}
@@ -229,7 +228,7 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 							</button>
 							<button
 								onClick={handleFollowAction}
-								className='bg-red-500 text-white text-sm font-semibold py-2 px-4 rounded-r-lg flex items-center'
+								className='bg-red-500 text-white text-sm font-semibold py-2 px-4 rounded-r-lg flex items-center hover:bg-red-600 transition-colors'
 							>
 								<Check
 									size={16}
@@ -241,7 +240,7 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					) : (
 						<button
 							onClick={handleFollowAction}
-							className={`mt-4 text-sm font-semibold py-2 px-4 rounded-lg ${isFollowing ? 'bg-circles-light border border-circles-dark-blue text-circles-dark-blue' : 'bg-circles-dark-blue text-circles-light'}`}
+							className={`mt-4 text-sm font-semibold py-2 px-4 rounded-lg transition-colors ${isFollowing ? 'bg-white border-2 border-[#0055FF] text-[#0055FF] hover:bg-gray-50' : 'bg-[#0055FF] text-white hover:bg-[#004BE0]'}`}
 						>
 							{isFollowing ? 'Following' : 'Follow'}
 						</button>
