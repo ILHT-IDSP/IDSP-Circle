@@ -21,12 +21,10 @@ interface ProfileUser {
 	isFollowing: boolean;
 	isOwnProfile: boolean;
 }
-
 interface ProfileHeaderProps {
 	profileData: ProfileUser;
 	session: Session | null;
-	onFollowUpdate: (isFollowing: boolean) => void;
-}
+	onFollowUpdate: (isFollowing: boolean) => void;}
 
 export default function ProfileHeader({ profileData, session, onFollowUpdate }: ProfileHeaderProps) {
 	const [isFollowing, setIsFollowing] = useState(profileData.isFollowing);
@@ -34,7 +32,7 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 	const [followersCount, setFollowersCount] = useState(profileData.followersCount);
 	const [followingCount, setFollowingCount] = useState(profileData.followingCount);
 
-	// Update local state when profileData changes
+	// Update local when profileData changes
 	useEffect(() => {
 		setIsFollowing(profileData.isFollowing);
 		setFollowersCount(profileData.followersCount);
@@ -42,12 +40,11 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 	}, [profileData]);
 
 	const handleUploadClick = () => {
-		// Only allow upload if it's the user's own profile
+		// Only allow upload if it's user's OWN profile
 		if (profileData.isOwnProfile) {
 			document.getElementById('upload-profile-pic')?.click();
 		}
 	};
-
 	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
@@ -56,50 +53,32 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 		await fetch('/api/user/avatar', { method: 'POST', body: formData });
 		window.location.reload();
 	};
+
 	const handleFollowAction = async () => {
 		if (!session) {
-			// Redirect to login if not authenticated
+			// Redirect to login if not authd
 			window.location.href = '/auth/login';
 			return;
 		}
 
 		if (showUnfollowConfirm) {
-			// User confirmed unfollow
+			// confirmed unfollow
 			setShowUnfollowConfirm(false);
 			setIsFollowing(false);
-
-			// Update follower count immediately for better UX
 			setFollowersCount(count => Math.max(0, count - 1));
-
-			// Notify parent component
 			onFollowUpdate(false);
 
-			// Call API to unfollow
 			try {
 				const response = await fetch('/api/users/follow', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						targetUserId: profileData.id,
-						action: 'unfollow',
-					}),
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ targetUserId: profileData.id, action: 'unfollow' }),
 				});
-
-				if (response.ok) {
-					const data = await response.json();
-					// Update with the accurate count from the server
-					if (data.followerCount !== undefined) {
-						setFollowersCount(data.followerCount);
-					}
-					if (data.followingCount !== undefined) {
-						setFollowingCount(data.followingCount);
-					}
-				}
+				const data = await response.json();
+				if (data.followerCount !== undefined) setFollowersCount(data.followerCount);
+				if (data.followingCount !== undefined) setFollowingCount(data.followingCount);
 			} catch (error) {
 				console.error('Error unfollowing user:', error);
-				// Revert UI state on error
 				setIsFollowing(true);
 				setFollowersCount(count => count + 1);
 				onFollowUpdate(true);
@@ -108,49 +87,29 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 		}
 
 		if (isFollowing) {
-			// Show confirmation before unfollowing
 			setShowUnfollowConfirm(true);
-		} else {
-			// Follow user
+	} else {
 			setIsFollowing(true);
-
-			// Update follower count immediately for better UX
 			setFollowersCount(count => count + 1);
-
-			// Notify parent component
-			onFollowUpdate(true);
+		onFollowUpdate(true);
 
 			try {
 				const response = await fetch('/api/users/follow', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						targetUserId: profileData.id,
-						action: 'follow',
-					}),
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ targetUserId: profileData.id, action: 'follow' }),
 				});
-
-				if (response.ok) {
-					const data = await response.json();
-					// Update with the accurate count from the server
-					if (data.followerCount !== undefined) {
-						setFollowersCount(data.followerCount);
-					}
-					if (data.followingCount !== undefined) {
-						setFollowingCount(data.followingCount);
-					}
-				}
+				const data = await response.json();
+				if (data.followerCount !== undefined) setFollowersCount(data.followerCount);
+				if (data.followingCount !== undefined) setFollowingCount(data.followingCount);
 			} catch (error) {
 				console.error('Error following user:', error);
-				// Revert UI state on error
 				setIsFollowing(false);
 				setFollowersCount(count => Math.max(0, count - 1));
 				onFollowUpdate(false);
 			}
-		}
-	};
+		}};
+
 	return (
 		<div className='relative flex flex-col items-center mb-6  rounded-2xl py-4 px-6 '>
 			{profileData.isOwnProfile && (
@@ -159,10 +118,9 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					id='upload-profile-pic'
 					className='hidden'
 					accept='image/*'
-					onChange={handleChange}
-				/>
-			)}
-			{/* Profile picture */}
+					onChange={handleChange}/>)}
+			
+			{/* Profile pic*/}
 			<Image
 				src={profileData.profileImage || '/images/default-avatar.png'}
 				alt='Profile'
@@ -171,12 +129,14 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 				className={`w-24 h-24 rounded-full object-cover border-4 border-circles-dark-blue ${profileData.isOwnProfile ? 'cursor-pointer' : ''}`}
 				onClick={handleUploadClick}
 			/>
-			{/* Name (if available) */}
+			{/* Name*/}
 			{profileData.name && <p className='text-lg font-semibold text-circles-dark mt-2'>{profileData.name}</p>}
 			{/* Username */}
 			<p className='text-xl font-bold text-circles-dark mt-1'>@{profileData.username}</p>
-			{/* Bio (if available) */}
-			{profileData.bio && <p className='text-circles-dark mt-2 text-center'>{profileData.bio}</p>} {/* circles / albums / followers / following */}
+			{/* Bio */}
+			{profileData.bio && <p className='text-circles-dark mt-2 text-center'>{profileData.bio}</p>}
+			
+			{/* circles / albums / followers / following */}
 			<div className='flex space-x-6 mt-3'>
 				<div className='text-center'>
 					<p className='text-circles-dark-blue font-semibold'>{profileData.circlesCount}</p>
@@ -184,68 +144,23 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 				</div>
 				<div className='text-center'>
 					<p className='text-circles-dark-blue font-semibold'>{profileData.albumsCount}</p>
-					<p className='text-circles-dark text-sm'>albums</p>{' '}
-				</div>{' '}
-				<div className='text-center'>
+					<p className='text-circles-dark text-sm'>albums</p>
+				</div>
+				<Link href={`/${profileData.username}/followers`} className='text-center'>
 					<p className='text-circles-dark-blue font-semibold'>{followersCount}</p>
 					<p className='text-circles-dark text-sm'>followers</p>
-				</div>
-				<div className='text-center'>
+				</Link>
+				<Link href={`/${profileData.username}/following`} className='text-center'>
 					<p className='text-circles-dark-blue font-semibold'>{followingCount}</p>
 					<p className='text-circles-dark text-sm'>following</p>
-				</div>
+				</Link>
 			</div>
-			{/* Display Settings button only if it's the user's own profile */}
+
+			{/* Settings button */}
 			{profileData.isOwnProfile && (
-				<Link
-					href='/settings'
-					className='absolute right-4 top-4'
-				>
+				<Link href='/settings' className='absolute right-4 top-4'>
 					<Settings className='w-6 h-6 text-circles-dark-blue' />
 				</Link>
-			)}{' '}
-			{/* Action button based on whether it's the user's own profile or not */}
-			{profileData.isOwnProfile ? (
-				<Link
-					href='/profile/edit-profile'
-					className='mt-4 bg-[#0055FF] text-white text-sm font-semibold py-2 px-4 rounded-lg hover:bg-[#004BE0] transition-colors'
-				>
-					Edit Profile
-				</Link>
-			) : (
-				<>
-					{showUnfollowConfirm ? (
-						<div className='mt-4 flex items-center space-x-2'>
-							<button
-								onClick={() => setShowUnfollowConfirm(false)}
-								className='bg-[#0055FF] text-white text-sm font-semibold py-2 px-4 rounded-l-lg flex items-center hover:bg-[#004BE0] transition-colors'
-							>
-								<X
-									size={16}
-									className='mr-1'
-								/>{' '}
-								Cancel
-							</button>
-							<button
-								onClick={handleFollowAction}
-								className='bg-red-500 text-white text-sm font-semibold py-2 px-4 rounded-r-lg flex items-center hover:bg-red-600 transition-colors'
-							>
-								<Check
-									size={16}
-									className='mr-1'
-								/>{' '}
-								Unfollow
-							</button>
-						</div>
-					) : (
-						<button
-							onClick={handleFollowAction}
-							className={`mt-4 text-sm font-semibold py-2 px-4 rounded-lg transition-colors ${isFollowing ? 'bg-white border-2 border-[#0055FF] text-[#0055FF] hover:bg-gray-50' : 'bg-[#0055FF] text-white hover:bg-[#004BE0]'}`}
-						>
-							{isFollowing ? 'Following' : 'Follow'}
-						</button>
-					)}
-				</>
 			)}
 		</div>
 	);
