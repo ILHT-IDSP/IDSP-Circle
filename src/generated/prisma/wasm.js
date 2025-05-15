@@ -196,9 +196,15 @@ exports.Prisma.AlbumScalarFieldEnum = {
   coverImage: 'coverImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+<<<<<<< HEAD
   isPrivate: 'isPrivate',
   creatorId: 'creatorId',
   circleId: 'circleId'
+=======
+  creatorId: 'creatorId',
+  circleId: 'circleId',
+  isPrivate: 'isPrivate'
+>>>>>>> origin/naldozburger
 };
 
 exports.Prisma.UserSettingsScalarFieldEnum = {
