@@ -1,5 +1,6 @@
 import {AwesomeIcon} from "../../../../public/icons";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import {ICircleFormData} from "./circle_types";
 
 export default function CreateCircleTopBar({onClick, onClickTwo, step}: {onClick: () => void; onClickTwo: () => void; step: number}) {
     return (
@@ -24,7 +25,7 @@ export default function CreateCircleTopBar({onClick, onClickTwo, step}: {onClick
                     onClick={onClick}
                     className="text-base font-medium text-white"
                 >
-                    Next
+                    {step === 3 ? <>Create</> : <>Next</>}
                 </button>
             </header>
         </>

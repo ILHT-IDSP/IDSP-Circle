@@ -9,7 +9,7 @@ export default async function CreateCirclePage() {
 
     return (
         <>
-            <CreateCircle />
+            <CreateCircle session={session} />
         </>
     );
 }

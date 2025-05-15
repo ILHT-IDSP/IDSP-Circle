@@ -196,7 +196,9 @@ exports.Prisma.AlbumScalarFieldEnum = {
   coverImage: 'coverImage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  creatorId: 'creatorId'
+  creatorId: 'creatorId',
+  circleId: 'circleId',
+  isPrivate: 'isPrivate'
 };
 
 exports.Prisma.UserSettingsScalarFieldEnum = {
@@ -214,6 +216,31 @@ exports.Prisma.UserSettingsScalarFieldEnum = {
   notifyCircleInvites: 'notifyCircleInvites',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AlbumCommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  albumId: 'albumId'
+};
+
+exports.Prisma.AlbumLikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  albumId: 'albumId'
+};
+
+exports.Prisma.PhotoScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  albumId: 'albumId'
 };
 
 exports.Prisma.SortOrder = {
@@ -245,7 +272,10 @@ exports.Prisma.ModelName = {
   Like: 'Like',
   Follow: 'Follow',
   Album: 'Album',
-  UserSettings: 'UserSettings'
+  UserSettings: 'UserSettings',
+  AlbumComment: 'AlbumComment',
+  AlbumLike: 'AlbumLike',
+  Photo: 'Photo'
 };
 
 /**
