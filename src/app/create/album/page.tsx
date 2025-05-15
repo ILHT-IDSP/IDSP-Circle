@@ -1,7 +1,14 @@
+import {redirect} from "next/navigation";
+import {auth} from "@/auth";
+import CreateAlbum from "@/components/create/create_album";
 export default async function CreateAlbumPage() {
+    const session = await auth();
+    if (!session || !session.user) {
+        redirect("/auth/login");
+    }
     return (
         <>
-            <h1>Create Album jitt</h1>
+            <CreateAlbum session={session} />
         </>
     );
 }

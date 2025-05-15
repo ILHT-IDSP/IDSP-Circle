@@ -12,3 +12,14 @@ export interface ICircleFormData {
     members: string[]; // or string[] if it's an array of members
     creatorId: string;
 }
+
+export interface Circle {
+    id: number;
+    name: string;
+    description?: string;
+    avatar: string;
+    isPrivate: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    creatorId: number;
+}
