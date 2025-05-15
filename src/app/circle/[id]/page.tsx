@@ -7,13 +7,15 @@ import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 
 interface PageParams {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
-	const id = parseInt(params.id);
+	// Await params before accessing its properties
+	const { id: paramId } = await params;
+	const id = parseInt(paramId);
 	if (isNaN(id)) return { title: 'Circle Not Found' };
 
 	try {
@@ -41,7 +43,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
 export default async function CirclePage({ params }: PageParams) {
 	const session = await auth();
 
-	const id = parseInt(params.id);
+	// Await params before accessing its properties
+	const { id: paramId } = await params;
+	const id = parseInt(paramId);
 	if (isNaN(id)) {
 		return notFound();
 	}

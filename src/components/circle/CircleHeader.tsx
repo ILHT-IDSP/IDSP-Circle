@@ -66,7 +66,6 @@ export default function CircleHeader({
 
   return (
     <div className="relative">
-      {/* Back button */}
       <div className="absolute top-4 left-4 z-10">
         <button 
           onClick={handleBack}
@@ -76,7 +75,6 @@ export default function CircleHeader({
         </button>
       </div>
 
-      {/* Settings button for circle creator */}
       {circle.isCreator && (
         <div className="absolute top-4 right-4 z-10">
           <button 
@@ -88,7 +86,6 @@ export default function CircleHeader({
         </div>
       )}
 
-      {/* Circle header content */}
       <div className="flex flex-col items-center pt-8 pb-4 px-4">
         <div className="w-28 h-28 rounded-full overflow-hidden mb-4 border-4 border-circles-dark-blue">
           <Image
@@ -116,7 +113,7 @@ export default function CircleHeader({
           <button
             onClick={handleJoinLeaveCircle}
             disabled={isJoining}
-            className={`px-6 py-2 rounded-full text-sm font-medium ${
+            className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${
               circle.isMember
                 ? 'bg-gray-700 text-white hover:bg-red-700'
                 : 'bg-circles-dark-blue text-white hover:bg-blue-700'

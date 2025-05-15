@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
 	try {
-		const session = await auth();
+		const [session, resolvedParams] = await Promise.all([auth(), params]);
+
 		if (!session || !session.user) {
 			return NextResponse.json({
 				canCreateAlbum: false,
@@ -16,7 +17,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 		}
 
 		const userId = parseInt(session.user.id, 10);
-		const circleId = parseInt(params.id, 10);
+		const circleId = parseInt(resolvedParams.id, 10);
 
 		if (isNaN(circleId)) {
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });
