@@ -166,12 +166,13 @@ export default async function Home() {
 						</>
 					)}
 				</section>				<section className='w-full my-8 mb-32'>
-					<h2 className='text-lg font-bold mb-2'>Albums From Your Network</h2>
+					<h2 className='text-lg font-bold mb-2'>Albums</h2>
 					{followingAlbums.length > 0 ? (
 						<div className='grid grid-cols-2 gap-4'>
 							{followingAlbums.map(album => (
 								<AlbumCard
 									key={album.id}
+									albumId={album.id}
 									albumImage={album.coverImage || '/images/albums/default.svg'}
 									albumName={album.title}
 									userProfileImage={album.creator?.profileImage || '/images/default-avatar.png'}
@@ -195,9 +196,9 @@ export default async function Home() {
 							</div>
 						</div>
 					)}
+			<NavBar />
 				</section>
 			</main>
-			<NavBar />
 		</>
 	);
 }

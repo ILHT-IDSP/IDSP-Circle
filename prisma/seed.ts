@@ -1,6 +1,6 @@
-import { PrismaClient, User, Circle, Post, Role } from '../src/generated/prisma';
+import { PrismaClient, User, Circle, Post, Role, Album } from '../src/generated/prisma';
 
-export const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
 async function main() {
 	console.log('Start seeding the database...');
@@ -18,7 +18,16 @@ async function main() {
 	await createMemberships(users, circles);
 
 	// Create albums
-	await createAlbums(users);
+	const albums = await createAlbums(users);
+
+	// Create photos for albums
+	await createPhotos(albums);
+
+	// Create album likes
+	await createAlbumLikes(users, albums);
+
+	// Create album comments
+	await createAlbumComments(users, albums);
 
 	// Create posts
 	const posts = await createPosts(users, circles);
@@ -44,12 +53,15 @@ async function cleanDatabase() {
 	// Delete in order to respect foreign key constraints
 	await prisma.like.deleteMany();
 	await prisma.comment.deleteMany();
+	await prisma.albumLike.deleteMany();
+	await prisma.albumComment.deleteMany();
 	await prisma.post.deleteMany();
+	await prisma.photo.deleteMany();
+	await prisma.album.deleteMany();
 	await prisma.membership.deleteMany();
 	await prisma.circle.deleteMany();
 	await prisma.follow.deleteMany();
 	await prisma.userSettings.deleteMany();
-	await prisma.album.deleteMany();
 	await prisma.user.deleteMany();
 }
 
@@ -58,49 +70,49 @@ async function createUsers() {
 
 	const userData = [
 		{
-			email: 'nikita@example.com',
-			name: 'Nikita',
-			username: 'nikita',
-			password: 'password123',
-			bio: 'Coding enthusiast and music lover',
+			email: 'john.doe@example.com',
+			name: 'John Doe',
+			username: 'johndoe',
+			password: 'password123', // In a real app, this should be hashed
+			bio: 'Music lover and avid concert-goer',
 			profileImage: '/images/profile1.jpg',
-			coverImage: '/images/albums/nightout.jpeg',
+			coverImage: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
 		},
 		{
-			email: 'adnan@example.com',
-			name: 'Adnan',
-			username: 'adnan',
+			email: 'jane.smith@example.com',
+			name: 'Jane Smith',
+			username: 'janesmith',
 			password: 'password123',
-			bio: 'Designer and photographer',
+			bio: 'Amateur DJ and electronic music producer',
 			profileImage: '/images/profile2.jpg',
-			coverImage: '/images/albums/sunsets.jpeg',
+			coverImage: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819',
 		},
 		{
-			email: 'naldoz@example.com',
-			name: 'Naldoz',
-			username: 'naldoz',
+			email: 'alex.johnson@example.com',
+			name: 'Alex Johnson',
+			username: 'alexj',
 			password: 'password123',
-			bio: 'ilht on top!!!',
-			profileImage: '/images/circles/naldoz.jpg',
-			coverImage: '/images/albums/sleeps.jpeg',
-		},
-		{
-			email: 'burgerboy@example.com',
-			name: 'Burger Boy',
-			username: 'burgerboy',
-			password: 'password123',
-			bio: 'Burger enthusiast and foodie',
+			bio: 'Rock music enthusiast and guitarist',
 			profileImage: '/images/profile3.jpg',
-			coverImage: '/images/albums/year1.jpeg',
+			coverImage: 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34',
 		},
 		{
-			email: 'pline@example.com',
-			name: 'Pline',
-			username: 'pline',
+			email: 'maria.garcia@example.com',
+			name: 'Maria Garcia',
+			username: 'mariag',
 			password: 'password123',
-			bio: 'Artist and illustrator',
-			profileImage: '/images/default-avatar.png',
-			coverImage: '/images/albums/dyson.png',
+			bio: 'Classical music lover and pianist',
+			profileImage: 'https://randomuser.me/api/portraits/women/44.jpg',
+			coverImage: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76',
+		},
+		{
+			email: 'david.wilson@example.com',
+			name: 'David Wilson',
+			username: 'davidw',
+			password: 'password123',
+			bio: 'Hip-hop producer and music collector',
+			profileImage: 'https://randomuser.me/api/portraits/men/46.jpg',
+			coverImage: 'https://images.unsplash.com/photo-1526328828355-69b01f8048b9',
 		},
 	];
 
@@ -121,44 +133,44 @@ async function createCircles(users: User[]) {
 
 	const circlesData = [
 		{
-			name: 'Altitude Attitudes',
-			description: 'A circle for mountain enthusiasts and hikers',
-			avatar: '/images/circles/altitude-attitudes.png',
-			coverImage: '/images/albums/nightout.jpeg',
+			name: 'Rock Enthusiasts',
+			description: 'A circle for fans of rock music from all eras',
+			avatar: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
+			coverImage: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3',
 			isPrivate: false,
 			creatorId: users[0].id,
 		},
 		{
-			name: 'Groovy Girls',
-			description: 'Music and dance enthusiasts sharing their favorite tunes',
-			avatar: '/images/circles/groovy-girls.jpg',
-			coverImage: '/images/albums/sunsets.jpeg',
+			name: 'Electronic Music Producers',
+			description: 'Share your tracks, get feedback, and collaborate',
+			avatar: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745',
+			coverImage: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81',
 			isPrivate: false,
 			creatorId: users[1].id,
 		},
 		{
-			name: 'Isaiah Fan Club',
-			description: 'Celebrating all things Isaiah',
-			avatar: '/images/circles/isaiah.png',
-			coverImage: '/images/albums/sleeps.jpeg',
+			name: 'Classical Music Appreciation',
+			description: 'Discussing the great composers and their works',
+			avatar: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76',
+			coverImage: 'https://images.unsplash.com/photo-1511735111819-9a3f7709049c',
 			isPrivate: false,
-			creatorId: users[2].id,
-		},
-		{
-			name: 'Work Gang',
-			description: 'Colleagues sharing work-life balance tips',
-			avatar: '/images/circles/work-gang.jpeg',
-			coverImage: '/images/albums/year1.jpeg',
-			isPrivate: true,
 			creatorId: users[3].id,
 		},
 		{
-			name: 'Baby Club',
-			description: 'New parents sharing tips and experiences',
-			avatar: '/images/circles/03-babies.jpeg',
-			coverImage: '/images/albums/dyson.png',
-			isPrivate: false,
+			name: 'Hip-Hop Collective',
+			description: 'Celebrating hip-hop culture and music',
+			avatar: 'https://images.unsplash.com/photo-1526328828355-69b01f8048b9',
+			coverImage: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a',
+			isPrivate: true,
 			creatorId: users[4].id,
+		},
+		{
+			name: 'Indie Music Discovery',
+			description: 'Find and share hidden gems in the indie music scene',
+			avatar: 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34',
+			coverImage: 'https://images.unsplash.com/photo-1532293064532-7083e5bd8974',
+			isPrivate: false,
+			creatorId: users[2].id,
 		},
 	];
 
@@ -208,40 +220,171 @@ async function createMemberships(users: User[], circles: Circle[]) {
 	}
 }
 
+
+
+// New function to create albums
 async function createAlbums(users: User[]) {
 	console.log('Creating albums...');
+
 	const albumsData = [
 		{
-			title: 'Night Out',
-			description: 'Photos from our wild night out!',
-			coverImage: '/images/albums/nightout.jpeg',
+			title: 'Summer Memories',
+			description: 'Photos from our beach trip',
+			coverImage: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
+			isPrivate: false,
 			creatorId: users[0].id,
 		},
 		{
-			title: 'Sunsets',
-			description: 'Best sunset moments.',
-			coverImage: '/images/albums/sunsets.jpeg',
+			title: 'Concert Night',
+			description: 'Amazing concert at the stadium',
+			coverImage: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3',
+			isPrivate: false,
 			creatorId: users[1].id,
 		},
 		{
-			title: 'Sleeps',
-			description: 'Caught sleeping everywhere.',
-			coverImage: '/images/albums/sleeps.jpeg',
+			title: 'Family Reunion',
+			description: 'Annual family get-together',
+			coverImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac',
+			isPrivate: true,
 			creatorId: users[2].id,
 		},
 		{
-			title: 'Year 1',
-			description: 'Our first year together!',
-			coverImage: '/images/albums/year1.jpeg',
+			title: 'City Exploration',
+			description: 'Walking through downtown',
+			coverImage: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b',
+			isPrivate: false,
 			creatorId: users[3].id,
 		},
+		{
+			title: 'Studio Sessions',
+			description: 'Recording new tracks',
+			coverImage: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04',
+			isPrivate: false,
+			creatorId: users[4].id,
+		},
+		// Add albums for friends to show on home page
+		{
+			title: 'Road Trip Adventures',
+			description: 'Cross-country adventures',
+			coverImage: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800',
+			isPrivate: false,
+			creatorId: users[1].id, // Friend of user[0]
+		},
+		{
+			title: 'Art Exhibition',
+			description: 'My artwork showcase',
+			coverImage: 'https://images.unsplash.com/photo-1536924940846-227afb31e2a5',
+			isPrivate: false,
+			creatorId: users[2].id, // Friend of user[0]
+		},
 	];
+
 	const albums = [];
+
 	for (const album of albumsData) {
-		const createdAlbum = await prisma.album.create({ data: album });
+		const createdAlbum = await prisma.album.create({
+			data: album,
+		});
 		albums.push(createdAlbum);
 	}
+
 	return albums;
+}
+
+// New function to create photos for albums
+async function createPhotos(albums: Album[]) {
+	console.log('Creating photos for albums...');
+
+	const photosData = [
+		// Photos for Summer Memories album
+		{
+			url: 'https://images.unsplash.com/photo-1520454974749-611b7248ffdb',
+			description: 'Beautiful sunset at the beach',
+			albumId: albums[0].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1506953823976-52e1fdc0149a',
+			description: 'Building sandcastles',
+			albumId: albums[0].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a',
+			description: 'Beach volleyball with friends',
+			albumId: albums[0].id,
+			updatedAt: new Date(),
+		},
+		// Photos for Concert Night album
+		{
+			url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14',
+			description: 'Main stage performance',
+			albumId: albums[1].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a',
+			description: 'Crowd going wild',
+			albumId: albums[1].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1563841930606-67e2bce48b78',
+			description: 'Backstage with the band',
+			albumId: albums[1].id,
+			updatedAt: new Date(),
+		},
+		// Photos for other albums...
+		{
+			url: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d',
+			description: 'Grandparents with the kids',
+			albumId: albums[2].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1517456793572-1d8efd6dc135',
+			description: 'Skyscrapers downtown',
+			albumId: albums[3].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81',
+			description: 'Studio mixing board',
+			albumId: albums[4].id,
+			updatedAt: new Date(),
+		},
+		// Add more photos for the friends' albums
+		{
+			url: 'https://images.unsplash.com/photo-1533227268428-f9ed0900fb3b',
+			description: 'Mountain stop during road trip',
+			albumId: albums[5].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1541300613936-40806962bdfd',
+			description: 'Desert sunrise',
+			albumId: albums[5].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1501554728187-ce583db33af7',
+			description: 'Watercolor painting',
+			albumId: albums[6].id,
+			updatedAt: new Date(),
+		},
+		{
+			url: 'https://images.unsplash.com/photo-1547891654-e66ed7ebb968',
+			description: 'Oil on canvas',
+			albumId: albums[6].id,
+			updatedAt: new Date(),
+		},
+	];
+
+	for (const photo of photosData) {
+		await prisma.photo.create({
+			data: photo,
+		});
+	}
 }
 
 async function createPosts(users: User[], circles: Circle[]) {
@@ -249,54 +392,54 @@ async function createPosts(users: User[], circles: Circle[]) {
 
 	const postsData = [
 		{
-			content: 'Just joined this amazing Circle community!',
+			content: 'Just discovered this amazing song! What do you think?',
 			userId: users[0].id,
 			circleId: circles[0].id,
 		},
 		{
-			content: 'Working on a new design project. Will share the results soon!',
+			content: 'Working on a new remix of this track. Will share the final version soon!',
 			userId: users[1].id,
 			circleId: circles[1].id,
-			imageUrl: '/images/albums/sunsets.jpeg',
+			imageUrl: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81',
 		},
 		{
-			content: 'This view is absolutely mind-blowing!',
+			content: 'This guitar solo is absolutely mind-blowing!',
 			userId: users[2].id,
 			circleId: circles[0].id,
 		},
 		{
-			content: "One of the most beautiful places I've visited. Where should I go next?",
+			content: "One of the most beautiful compositions of all time. What's your favorite movement?",
 			userId: users[3].id,
 			circleId: circles[2].id,
 		},
 		{
-			content: 'Throwback to this amazing hike last weekend.',
+			content: 'Throwback to this classic hip-hop track that changed the game.',
 			userId: users[4].id,
 			circleId: circles[3].id,
-			imageUrl: '/images/circles/naldoz.jpg',
+			imageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a',
 		},
 		{
-			content: 'Perfect day for outdoor activities!',
+			content: 'Perfect song for summer road trips!',
 			userId: users[0].id,
 			circleId: circles[4].id,
 		},
 		{
-			content: 'Been exploring new places all week.',
+			content: 'Been listening to this on repeat all week.',
 			userId: users[1].id,
 			circleId: circles[0].id,
 		},
 		{
-			content: "What's your favorite hiking trail?",
+			content: "What's your favorite indie track right now?",
 			userId: users[2].id,
 			circleId: circles[4].id,
 		},
 		{
-			content: 'Work-life balance tips anyone?',
+			content: 'Classical music helps me focus while working. Anyone else?',
 			userId: users[3].id,
 			circleId: circles[2].id,
 		},
 		{
-			content: "The best workout routine I've found!",
+			content: 'The best workout motivation song!',
 			userId: users[4].id,
 			circleId: circles[0].id,
 		},
@@ -319,62 +462,62 @@ async function createComments(users: User[], posts: Post[]) {
 
 	const commentsData = [
 		{
-			content: 'Welcome to the community!',
+			content: 'Totally agree! This is a masterpiece!',
 			userId: users[1].id,
 			postId: posts[0].id,
 		},
 		{
-			content: "Can't wait to see the results!",
+			content: "Can't wait to hear the final version!",
 			userId: users[2].id,
 			postId: posts[1].id,
 		},
 		{
-			content: 'Wow, where is this place?',
+			content: 'Best guitar solo of all time, hands down.',
 			userId: users[0].id,
 			postId: posts[2].id,
 		},
 		{
-			content: 'You should visit the Grand Canyon next.',
+			content: 'The third movement is my absolute favorite.',
 			userId: users[4].id,
 			postId: posts[3].id,
 		},
 		{
-			content: 'Looks like an amazing hike!',
+			content: 'This track never gets old!',
 			userId: users[3].id,
 			postId: posts[4].id,
 		},
 		{
-			content: 'The weather is perfect today!',
+			content: 'Added to my road trip playlist!',
 			userId: users[2].id,
 			postId: posts[5].id,
 		},
 		{
-			content: 'Any recommendations for places to visit?',
+			content: 'Such a classic tune.',
 			userId: users[3].id,
 			postId: posts[6].id,
 		},
 		{
-			content: "I've been loving the trails at Mount Rainier.",
+			content: "I've been loving the new album by Tame Impala.",
 			userId: users[0].id,
 			postId: posts[7].id,
 		},
 		{
-			content: 'Set clear boundaries and take regular breaks!',
+			content: 'Absolutely! Mozart works best for me.',
 			userId: users[1].id,
 			postId: posts[8].id,
 		},
 		{
-			content: 'Thanks for sharing your routine!',
+			content: 'This is my go-to gym song!',
 			userId: users[2].id,
 			postId: posts[9].id,
 		},
 		{
-			content: 'This community is so welcoming.',
+			content: 'The lyrics are so meaningful.',
 			userId: users[4].id,
 			postId: posts[0].id,
 		},
 		{
-			content: 'What tools are you using for your design work?',
+			content: 'What software are you using for the remix?',
 			userId: users[3].id,
 			postId: posts[1].id,
 		},
@@ -419,28 +562,17 @@ async function createLikes(users: User[], posts: Post[]) {
 async function createFollows(users: User[]) {
 	console.log('Creating follows...');
 
-	// For clarity:
-	// followerId: the person who is following (the active user)
-	// followingId: the person being followed (the passive user, profile being viewed)
 	const follows = [
-		// Nikita (0) is followed by Adnan (1) and Burger Boy (3)
-		{ followerId: users[1].id, followingId: users[0].id }, // Adnan follows Nikita
-		{ followerId: users[3].id, followingId: users[0].id }, // Burger Boy follows Nikita
-
-		// Adnan (1) is followed by Nikita (0) and Naldoz (2)
-		{ followerId: users[0].id, followingId: users[1].id }, // Nikita follows Adnan
-		{ followerId: users[2].id, followingId: users[1].id }, // Naldoz follows Adnan
-
-		// Naldoz (2) is followed by Pline (4) and Nikita (0)
-		{ followerId: users[4].id, followingId: users[2].id }, // Pline follows Naldoz
-		{ followerId: users[0].id, followingId: users[2].id }, // Nikita follows Naldoz
-
-		// Burger Boy (3) is followed by Adnan (1)
-		{ followerId: users[1].id, followingId: users[3].id }, // Adnan follows Burger Boy
-
-		// Pline (4) is followed by Burger Boy (3) and Naldoz (2)
-		{ followerId: users[3].id, followingId: users[4].id }, // Burger Boy follows Pline
-		{ followerId: users[2].id, followingId: users[4].id }, // Naldoz follows Pline
+		{ followerId: users[1].id, followingId: users[0].id },
+		{ followerId: users[2].id, followingId: users[0].id },
+		{ followerId: users[3].id, followingId: users[0].id },
+		{ followerId: users[0].id, followingId: users[1].id },
+		{ followerId: users[2].id, followingId: users[1].id },
+		{ followerId: users[0].id, followingId: users[2].id },
+		{ followerId: users[1].id, followingId: users[2].id },
+		{ followerId: users[4].id, followingId: users[2].id },
+		{ followerId: users[1].id, followingId: users[3].id },
+		{ followerId: users[2].id, followingId: users[4].id },
 	];
 
 	for (const follow of follows) {
@@ -463,6 +595,101 @@ async function createUserSettings(users: User[]) {
 				highContrast: Math.random() > 0.8, // 20% chance of high contrast
 				fontSize: Math.random() > 0.7 ? 'large' : Math.random() > 0.4 ? 'medium' : 'small',
 			},
+		});
+	}
+}
+
+
+
+async function createAlbumLikes(users: User[], albums: Album[]) {
+	console.log('Creating album likes...');
+
+	const albumLikes = [
+		{ userId: users[1].id, albumId: albums[0].id },
+		{ userId: users[2].id, albumId: albums[0].id },
+		{ userId: users[3].id, albumId: albums[0].id },
+		{ userId: users[0].id, albumId: albums[1].id },
+		{ userId: users[2].id, albumId: albums[1].id },
+		{ userId: users[0].id, albumId: albums[2].id },
+		{ userId: users[1].id, albumId: albums[2].id },
+		{ userId: users[4].id, albumId: albums[2].id },
+		{ userId: users[0].id, albumId: albums[3].id },
+		{ userId: users[4].id, albumId: albums[3].id },
+		{ userId: users[0].id, albumId: albums[4].id },
+		{ userId: users[2].id, albumId: albums[5].id },
+		{ userId: users[3].id, albumId: albums[6].id },
+	];
+
+	for (const like of albumLikes) {
+		await prisma.albumLike.create({
+			data: like,
+		});
+	}
+}
+
+async function createAlbumComments(users: User[], albums: Album[]) {
+	console.log('Creating album comments...');
+
+	const commentsData = [
+		{
+			content: 'Beautiful sunset photos!',
+			userId: users[1].id,
+			albumId: albums[0].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'Looks like an amazing concert!',
+			userId: users[2].id,
+			albumId: albums[1].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'Great family memories!',
+			userId: users[0].id,
+			albumId: albums[2].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'I love the city architecture',
+			userId: users[4].id,
+			albumId: albums[3].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'Nice studio setup!',
+			userId: users[3].id,
+			albumId: albums[4].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'That mountain view is breathtaking!',
+			userId: users[2].id,
+			albumId: albums[5].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'You\'re so talented with watercolors',
+			userId: users[3].id,
+			albumId: albums[6].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'When was this taken?',
+			userId: users[0].id,
+			albumId: albums[0].id,
+			updatedAt: new Date(),
+		},
+		{
+			content: 'Who was performing that night?',
+			userId: users[1].id,
+			albumId: albums[1].id,
+			updatedAt: new Date(),
+		},
+	];
+
+	for (const comment of commentsData) {
+		await prisma.albumComment.create({
+			data: comment,
 		});
 	}
 }

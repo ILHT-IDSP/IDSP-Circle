@@ -9,23 +9,24 @@ datasource db {
 }
 
 model User {
-  id               Int           @id @default(autoincrement())
-  email            String        @unique
+  id               Int            @id @default(autoincrement())
+  email            String         @unique
   name             String?
-  username         String        @unique
+  username         String         @unique
   password         String
   bio              String?
   profileImage     String?
   coverImage       String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  isProfilePrivate Boolean?      @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  isProfilePrivate Boolean?       @default(false)
   Album            Album[]
+  AlbumComment     AlbumComment[]
+  AlbumLike        AlbumLike[]
   createdCircles   Circle[]
-  comments         Comment[]  // This user is being followed by others (those who have this user as followingId) 
-  followers        Follow[]      @relation("Following")
-  // This user follows others (those who have this user as followerId)
-  following        Follow[]      @relation("Follower")
+  comments         Comment[]
+  following        Follow[]       @relation("Follower")
+  followers        Follow[]       @relation("Following")
   likes            Like[]
   memberships      Membership[]
   posts            Post[]
@@ -42,6 +43,7 @@ model Circle {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   creatorId   Int
+  Album       Album[]
   creator     User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   members     Membership[]
   posts       Post[]
@@ -81,8 +83,6 @@ model Post {
   @@index([userId])
   @@index([circleId])
 }
-
-
 
 model Comment {
   id        Int      @id @default(autoincrement())
@@ -125,16 +125,23 @@ model Follow {
 }
 
 model Album {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  coverImage  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  creatorId   Int
-  creator     User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  id           Int            @id @default(autoincrement())
+  title        String
+  description  String?
+  coverImage   String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  isPrivate    Boolean        @default(false)
+  creatorId    Int?
+  circleId     Int?
+  Circle       Circle?        @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  creator      User?          @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  AlbumComment AlbumComment[]
+  AlbumLike    AlbumLike[]
+  Photo        Photo[]
 
   @@index([creatorId])
+  @@index([circleId])
 }
 
 model UserSettings {
@@ -155,6 +162,45 @@ model UserSettings {
   user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model AlbumComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  userId    Int
+  albumId   Int
+  Album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([albumId])
+  @@index([userId])
+}
+
+model AlbumLike {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  albumId   Int
+  Album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, albumId])
+  @@index([albumId])
+  @@index([userId])
+}
+
+model Photo {
+  id          Int      @id @default(autoincrement())
+  url         String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+  albumId     Int
+  Album       Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+  @@index([albumId])
 }
 
 enum Role {
