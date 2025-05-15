@@ -9,15 +9,13 @@ const updateCircleSchema = z.object({
 	isPrivate: z.boolean(),
 });
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(request: Request, { params }) {
 	try {
 		const session = await auth();
 		if (!session || !session.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
-
-		const resolvedParams = await params;
-		const circleId = parseInt(resolvedParams.id, 10);
+		const circleId = parseInt(params.id, 10);
 		const userId = parseInt(session.user.id, 10);
 
 		if (isNaN(circleId)) {

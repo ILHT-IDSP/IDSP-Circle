@@ -13,16 +13,15 @@ interface Album {
 	id: number;
 	title: string;
 	coverImage: string | null;
-	creator?: {
+	creator: {
 		profileImage: string | null;
-	};
+	} | null;
 }
 
-export async function GET(request: Request, { params }: { params: Promise<{ username: string }> }) {
+export async function GET(request: Request, { params }) {
 	try {
-		// Await the params to get the username
-		const resolvedParams = await params;
-		const username = resolvedParams.username;
+		// Get the username from params
+		const username = params.username;
 
 		// Find the user
 		const user = await prisma.user.findUnique({

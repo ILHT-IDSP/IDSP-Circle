@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }) {
 	try {
 		const [session, resolvedParams] = await Promise.all([auth(), params]);
 
@@ -23,7 +23,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });
 		}
 
-		// Check if the circle exists
 		const circle = await prisma.circle.findUnique({
 			where: { id: circleId },
 			select: {
@@ -35,16 +34,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 			return NextResponse.json({ error: 'Circle not found' }, { status: 404 });
 		}
 
-		// Check user's role in the circle
-		let role = null;
+		let role: string | null;
 		let isCreator = false;
 
-		// If user is creator
 		if (circle.creatorId === userId) {
 			isCreator = true;
 			role = 'ADMIN';
 		} else {
-			// Otherwise check membership
 			const membership = await prisma.membership.findUnique({
 				where: {
 					userId_circleId: {
@@ -60,7 +56,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 			role = membership?.role || null;
 		}
 
-		// Determine permissions
 		const canCreateAlbum = role === 'ADMIN' || role === 'MODERATOR';
 		const canInviteMembers = !!role; // Any member can invite
 		const canRemoveMembers = role === 'ADMIN';

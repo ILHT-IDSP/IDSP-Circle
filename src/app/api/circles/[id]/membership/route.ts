@@ -2,16 +2,16 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: Request, { params }) {
 	try {
-		const [session, resolvedParams] = await Promise.all([auth(), params]);
+		const session = await auth();
 
 		if (!session || !session.user) {
 			return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
 		}
 
 		const userId = parseInt(session.user.id, 10);
-		const circleId = parseInt(resolvedParams.id, 10);
+		const circleId = parseInt(params.id, 10);
 
 		if (isNaN(circleId)) {
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });

@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, { params }) {
 	try {
 		const session = await auth();
 		if (!session?.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
 
-		const { id } = await params;
+		const { id } = params;
 		const albumId = parseInt(id);
 		if (isNaN(albumId)) {
 			return NextResponse.json({ error: 'Invalid album ID' }, { status: 400 });
@@ -66,14 +66,14 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 }
 
 // Get like status for the current user
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }) {
 	try {
 		const session = await auth();
 		if (!session?.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
 
-		const { id } = await params;
+		const { id } = params;
 		const albumId = parseInt(id);
 		if (isNaN(albumId)) {
 			return NextResponse.json({ error: 'Invalid album ID' }, { status: 400 });

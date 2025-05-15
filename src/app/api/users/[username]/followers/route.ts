@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
 
-export async function GET(request: NextRequest, { params }: { params: { username: string } }) {
+export async function GET(request: NextRequest, { params }) {
     try {
         const { username } = params;
 

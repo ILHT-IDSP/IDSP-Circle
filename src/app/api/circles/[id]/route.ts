@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }) {
 	try {
 		const [session, resolvedParams] = await Promise.all([auth(), params]);
 		const userId = session?.user?.id ? parseInt(session.user.id, 10) : null;

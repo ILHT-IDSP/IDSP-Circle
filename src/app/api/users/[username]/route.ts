@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ username: string }> }) {
+export async function GET(request: NextRequest, { params }) {
 	try {
-		const resolvedParams = await params;
-		const username = resolvedParams.username;
+		const username = params.username;
 		const session = await auth();
 
 		// Get the user data

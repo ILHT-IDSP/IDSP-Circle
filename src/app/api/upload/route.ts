@@ -24,9 +24,7 @@ export async function POST(req: NextRequest) {
 
 		return NextResponse.json({ url: result.secure_url });
 	} catch (error: unknown) {
-		if (error instanceof Error) return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
-		else {
-			return 'an unkown error occurred';
-		}
+		console.error('Upload error:', error);
+		return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
 	}
 }
