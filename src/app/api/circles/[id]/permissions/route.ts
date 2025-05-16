@@ -4,7 +4,8 @@ import prisma from '@/lib/prisma';
 
 export async function GET(request: Request, { params }) {
 	try {
-		const [session, resolvedParams] = await Promise.all([auth(), params]);
+		const session = await auth();
+		const resolvedParams = await params;
 
 		if (!session || !session.user) {
 			return NextResponse.json({

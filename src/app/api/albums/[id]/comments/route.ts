@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 // Get comments for an album
 export async function GET(request: NextRequest, { params }) {
 	try {
-		const { id } = params;
+		const { id } = await params;
 		const albumId = parseInt(id);
 		if (isNaN(albumId)) {
 			return NextResponse.json({ error: 'Invalid album ID' }, { status: 400 });
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest, { params }) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
 
-		const { id } = params;
+		const { id } = await params;
 		const albumId = parseInt(id);
 		if (isNaN(albumId)) {
 			return NextResponse.json({ error: 'Invalid album ID' }, { status: 400 });

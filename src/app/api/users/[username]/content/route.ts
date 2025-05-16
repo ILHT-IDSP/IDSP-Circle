@@ -21,7 +21,8 @@ interface Album {
 export async function GET(request: Request, { params }) {
 	try {
 		// Get the username from params
-		const username = params.username;
+		const resolvedParams = await params;
+		const username = resolvedParams.username;
 
 		// Find the user
 		const user = await prisma.user.findUnique({

@@ -10,13 +10,13 @@ export async function DELETE(request: Request, { params }) {
 		}
 
 		const userId = parseInt(session.user.id, 10);
-		const circleId = parseInt(params.id, 10);
+		const resolvedParams = await params;
+		const circleId = parseInt(resolvedParams.id, 10);
 
 		if (isNaN(circleId)) {
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });
 		}
 
-		// Check if the circle exists and user is the creator
 		const circle = await prisma.circle.findUnique({
 			where: { id: circleId },
 			select: { creatorId: true },
@@ -30,7 +30,6 @@ export async function DELETE(request: Request, { params }) {
 			return NextResponse.json({ error: 'Only the creator can delete this circle' }, { status: 403 });
 		}
 
-		// Delete the circle
 		await prisma.circle.delete({
 			where: { id: circleId },
 		});

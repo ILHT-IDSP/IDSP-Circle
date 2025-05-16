@@ -5,7 +5,6 @@ import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 
 export async function generateMetadata({ params }: { params: Promise<{ username: string }> }): Promise<Metadata> {
-	// Get the username from params
 	const resolvedParams = await params;
 	const username = resolvedParams.username;
 

@@ -4,7 +4,8 @@ import { auth } from '@/auth';
 
 export async function GET(request: NextRequest, { params }) {
 	try {
-		const { username } = params;
+		const resolvedParams = await params;
+		const { username } = resolvedParams;
 
 		// Find the user by username
 		const user = await prisma.user.findUnique({

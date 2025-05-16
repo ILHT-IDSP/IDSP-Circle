@@ -4,7 +4,7 @@ import { auth } from '@/auth';
 
 export async function GET(request: NextRequest, { params }) {
 	try {
-		const username = params.username;
+		const username = (await params).username;
 		const session = await auth();
 
 		// Get the user data

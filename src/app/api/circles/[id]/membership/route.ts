@@ -11,7 +11,8 @@ export async function POST(request: Request, { params }) {
 		}
 
 		const userId = parseInt(session.user.id, 10);
-		const circleId = parseInt(params.id, 10);
+		const resolvedParams = await params;
+		const circleId = parseInt(resolvedParams.id, 10);
 
 		if (isNaN(circleId)) {
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });

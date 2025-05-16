@@ -15,7 +15,8 @@ export async function PUT(request: Request, { params }) {
 		if (!session || !session.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
-		const circleId = parseInt(params.id, 10);
+		const resolvedParams = await params;
+		const circleId = parseInt(resolvedParams.id, 10);
 		const userId = parseInt(session.user.id, 10);
 
 		if (isNaN(circleId)) {
