@@ -9,7 +9,7 @@ export default function CircleNotFound() {
 				<p className='mb-8 text-gray-500'>The circle you&apos;re looking for doesn&apos;t exist or you don&apos;t have permission to view it.</p>
 				<Link
 					href='/profile'
-					className='bg-circles-dark-blue text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-colors'
+					className='bg-circles-dark-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors'
 				>
 					Back to Profile
 				</Link>

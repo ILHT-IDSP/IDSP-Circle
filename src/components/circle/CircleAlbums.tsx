@@ -11,6 +11,7 @@ interface Album {
 	title: string;
 	coverImage: string | null;
 	creatorImage: string | null;
+	photoCount: number;
 }
 
 export default function CircleAlbums({ circleId }: { circleId: number }) {
@@ -108,18 +109,16 @@ export default function CircleAlbums({ circleId }: { circleId: number }) {
 				</div>
 			) : (
 				<div className='grid grid-cols-2 gap-4'>
+					{' '}
 					{albums.map(album => (
-						<Link
-							href={`/album/${album.id}`}
+						<AlbumCard
+							albumId={album.id}
+							albumImage={album.coverImage || '/images/albums/default.svg'}
+							albumName={album.title}
+							userProfileImage={album.creatorImage || '/images/default-avatar.png'}
+							photoCount={album.photoCount}
 							key={album.id}
-						>
-							<AlbumCard
-								albumId={album.id}
-								albumImage={album.coverImage || '/images/albums/default.svg'}
-								albumName={album.title}
-								userProfileImage={album.creatorImage || '/images/default-avatar.png'}
-							/>
-						</Link>
+						/>
 					))}
 				</div>
 			)}

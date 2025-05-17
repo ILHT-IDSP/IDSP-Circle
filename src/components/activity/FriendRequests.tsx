@@ -16,10 +16,10 @@ export default function FriendRequests() {
                         <p className="text-circles-light text-sm">{request.username}</p>
                     </div>
                     <div className="flex space-x-2">
-                        <button className="bg-circles-dark-blue text-circles-light font-semibold py-1 px-4 rounded-full">
+                        <button className="bg-circles-dark-blue text-circles-light font-semibold py-1 px-4 rounded-lg">
                             accept
                         </button>
-                        <button className="bg-gray-600 text-circles-light font-semibold py-1 px-4 rounded-full">
+                        <button className="bg-gray-600 text-circles-light font-semibold py-1 px-4 rounded-lg">
                             decline
                         </button>
                     </div>

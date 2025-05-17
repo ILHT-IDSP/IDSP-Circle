@@ -30,9 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ username:
 	}
 }
 
-export default async function UserProfilePage() {
+export default async function UserProfilePage({ params }: { params: Promise<{ username: string }> }) {
 	const session = await auth();
-
+	const resolvedParams = await params;
 	return (
 		<>
 			<ProfileScreen session={session} />

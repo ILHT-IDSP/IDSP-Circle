@@ -193,7 +193,7 @@ export default function ProfileTabs() {
 							albumImage={album.image}
 							albumName={album.name}
 							userProfileImage={album.userProfileImage || '/images/default-avatar.png'}
-							albumId={0}
+							albumId={album.id}
 						/>
 					))}
 				</div>

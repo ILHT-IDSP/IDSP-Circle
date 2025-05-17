@@ -35,7 +35,7 @@ export async function GET(request: Request, { params }) {
 
 		if (!user) {
 			return NextResponse.json({ error: 'User not found' }, { status: 404 });
-		} // Get user's albums
+		} // Get user's albums with photo counts
 		const albums = await prisma.album.findMany({
 			where: {
 				creatorId: user.id,
@@ -47,6 +47,11 @@ export async function GET(request: Request, { params }) {
 				creator: {
 					select: {
 						profileImage: true,
+					},
+				},
+				_count: {
+					select: {
+						Photo: true,
 					},
 				},
 			},
@@ -86,11 +91,12 @@ export async function GET(request: Request, { params }) {
 
 		// Combine all circles
 		const allCircles = [...createdCircles, ...joinedCircles]; // Transform the data to match the expected format in the frontend
-		const formattedAlbums = albums.map((album: Album) => ({
+		const formattedAlbums = albums.map((album: any) => ({
 			id: album.id,
 			name: album.title,
 			image: album.coverImage || '/images/albums/default.svg',
 			userProfileImage: album.creator?.profileImage || '/images/default-avatar.png',
+			photoCount: album._count.Photo,
 		}));
 
 		const formattedCircles = allCircles.map(circle => ({

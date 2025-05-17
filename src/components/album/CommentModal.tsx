@@ -101,17 +101,16 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 			minute: 'numeric',
 		});
 	};
-
 	return (
 		<div
-			className='comment-modal-overlay'
+			className='fixed inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center z-50 p-4'
 			onClick={e => {
 				// Close when clicking outside the modal
 				if (e.target === e.currentTarget) onClose();
 			}}
 		>
 			<div
-				className='comment-modal-container'
+				className='bg-[var(--background)] rounded-xl max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden shadow-xl'
 				onClick={e => e.stopPropagation()}
 			>
 				{/* Header */}
@@ -162,9 +161,9 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 						</ul>
 					) : (
 						<div className='empty-comments'>
-							<div style={{ textAlign: 'center', padding: '32px 0', color: 'gray' }}>
-								<p style={{ fontWeight: 500, marginBottom: '8px' }}>No comments yet</p>
-								<p style={{ fontSize: '14px', opacity: 0.7 }}>Be the first to share your thoughts!</p>
+							<div className='text-center py-8 text-[var(--foreground)] opacity-60'>
+								<p className='font-medium mb-2'>No comments yet</p>
+								<p className='text-sm opacity-70'>Be the first to share your thoughts!</p>
 							</div>
 						</div>
 					)}

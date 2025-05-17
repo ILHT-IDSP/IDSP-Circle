@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 
-export async function GET(request: Request, { params }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
 	try {
 		const session = await auth();
-		const resolvedParams = await params;
 		const userId = session?.user?.id ? parseInt(session.user.id, 10) : null;
-		const circleId = parseInt(resolvedParams.id, 10);
+		const circleId = parseInt(params.id, 10);
 
 		if (isNaN(circleId)) {
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });
@@ -41,7 +40,6 @@ export async function GET(request: Request, { params }) {
 				return NextResponse.json({ error: 'Access denied to private circle' }, { status: 403 });
 			}
 		}
-
 		// Get all albums for this circle
 		const albums = await prisma.album.findMany({
 			where: { circleId },
@@ -49,6 +47,11 @@ export async function GET(request: Request, { params }) {
 				creator: {
 					select: {
 						profileImage: true,
+					},
+				},
+				_count: {
+					select: {
+						Photo: true,
 					},
 				},
 			},
@@ -59,6 +62,7 @@ export async function GET(request: Request, { params }) {
 			title: album.title,
 			coverImage: album.coverImage,
 			creatorImage: album.creator?.profileImage || null,
+			photoCount: album._count.Photo,
 		}));
 
 		return NextResponse.json(formattedAlbums);

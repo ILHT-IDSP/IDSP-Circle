@@ -1,8 +1,7 @@
 import { AwesomeIcon } from '../../../../public/icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-export default function CreateAlbumTopBar({ onClick, onClickTwo, isSubmitting }: { onClick: () => void; onClickTwo: () => void; isSubmitting?: boolean }) {
-	return (
+export default function CreateAlbumTopBar({ onClick, onClickTwo, isSubmitting, currentStep }: { onClick: () => void; onClickTwo: () => void; isSubmitting?: boolean; currentStep?: number }) {	return (
 		<>
 			<header className='flex items-center justify-between px-4 py-3 w-full pt-6 relative'>
 				<button
@@ -15,15 +14,14 @@ export default function CreateAlbumTopBar({ onClick, onClickTwo, isSubmitting }:
 						width={25}
 						height={25}
 					/>
-				</button>
-				<span className='text-2xl font-medium'>New Album</span>
+				</button>				<span className='text-2xl font-medium'>New Album {currentStep && `(Step ${currentStep}/3)`}</span>
 
 				<button
 					onClick={onClick}
 					disabled={isSubmitting}
 					className='font-medium hover:cursor-pointer hover:opacity-70 transition-all'
 				>
-					{isSubmitting ? 'Creating...' : 'Create'}
+					{isSubmitting ? 'Creating...' : currentStep === 3 ? 'Create' : 'Next'}
 				</button>
 			</header>
 		</>

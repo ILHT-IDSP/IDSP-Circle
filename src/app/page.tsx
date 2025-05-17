@@ -85,7 +85,6 @@ export default async function Home() {
 
 	// Extract the IDs of users being followed
 	const followingIds = following.map(f => f.following.id);
-
 	// Get albums from users that the current user follows
 	const followingAlbums = await prisma.album.findMany({
 		where: {
@@ -95,6 +94,11 @@ export default async function Home() {
 		},
 		include: {
 			creator: true,
+			_count: {
+				select: {
+					Photo: true,
+				},
+			},
 		},
 		orderBy: {
 			createdAt: 'desc',
@@ -180,6 +184,7 @@ export default async function Home() {
 					<h2 className='text-lg font-bold mb-2'>Albums</h2>
 					{followingAlbums.length > 0 ? (
 						<div className='grid grid-cols-2 gap-4'>
+							{' '}
 							{followingAlbums.map(album => (
 								<AlbumCard
 									key={album.id}
@@ -187,6 +192,7 @@ export default async function Home() {
 									albumImage={album.coverImage || '/images/albums/default.svg'}
 									albumName={album.title}
 									userProfileImage={album.creator?.profileImage || '/images/default-avatar.png'}
+									photoCount={album._count.Photo}
 								/>
 							))}
 						</div>

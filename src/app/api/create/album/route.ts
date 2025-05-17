@@ -12,12 +12,12 @@ export async function POST(req: Request) {
 		if (isNaN(creatorId)) {
 			return NextResponse.json({ error: 'Invalid creator ID' }, { status: 400 });
 		}
-
 		// Create the album
 		const newAlbum = await prisma.album.create({
 			data: {
 				creatorId,
 				title: formData.title,
+				description: formData.description || '',
 				coverImage: formData.coverImage || null,
 				isPrivate: formData.isPrivate || true,
 				circleId: formData.circleId ? parseInt(formData.circleId, 10) : null,
