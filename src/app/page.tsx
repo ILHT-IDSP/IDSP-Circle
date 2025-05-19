@@ -2,6 +2,7 @@ import DemoNavBar from '@/components/top_nav/DemoNavBar';
 import prisma from '@/lib/prisma';
 import CircleHolder from '@/components/circle_holders';
 import AlbumCard from '@/components/album/AlbumCard';
+import AlbumGrid from '@/components/album/AlbumGrid';
 import NavBar from '@/components/bottom_bar/NavBar';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
@@ -183,8 +184,7 @@ export default async function Home() {
 				<section className='w-full my-8 mb-32'>
 					<h2 className='text-lg font-bold mb-2'>Albums</h2>
 					{followingAlbums.length > 0 ? (
-						<div className='grid grid-cols-2 gap-4'>
-							{' '}
+						<AlbumGrid albumIds={followingAlbums.map(album => album.id)}>
 							{followingAlbums.map(album => (
 								<AlbumCard
 									key={album.id}
@@ -195,7 +195,7 @@ export default async function Home() {
 									photoCount={album._count.Photo}
 								/>
 							))}
-						</div>
+						</AlbumGrid>
 					) : (
 						<div className='py-6 text-center bg-opacity-10 bg-circles-light rounded-lg'>
 							<p className='text-circles-light mb-3'>No albums from your network yet</p>

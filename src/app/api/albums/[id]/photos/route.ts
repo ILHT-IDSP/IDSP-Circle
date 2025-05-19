@@ -149,11 +149,11 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
 		if (!canAddToPersonalAlbum && !canAddToCircleAlbum) {
 			return NextResponse.json({ error: 'You do not have permission to add photos to this album' }, { status: 403 });
-		}
-		// Process form data for photo upload
+		} // Process form data for photo upload
 		const formData = await request.formData();
 		const file = formData.get('file') as File;
 		const description = (formData.get('description') as string) || '';
+		const isCoverImage = formData.get('isCoverImage') === 'true';
 
 		if (!file) {
 			return NextResponse.json({ error: 'No file provided' }, { status: 400 });
@@ -194,9 +194,8 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 				albumId,
 				updatedAt: new Date(),
 			},
-		});
-		// Update the album's coverImage if it doesn't have one
-		if (!album.coverImage) {
+		}); // Update the album's coverImage if this is marked as cover image or if album doesn't have one
+		if (isCoverImage || !album.coverImage) {
 			await prisma.album.update({
 				where: { id: albumId },
 				data: {

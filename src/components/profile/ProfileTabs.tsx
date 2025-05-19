@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AlbumCard from '@/components/album/AlbumCard';
+import AlbumGrid from '@/components/album/AlbumGrid';
 import CircleHolder from '@/components/circle_holders';
 
 interface Item {
@@ -186,7 +187,7 @@ export default function ProfileTabs() {
 				</div>
 			)}
 			{activeTab === 'albums' && content.albums.length > 0 && (
-				<div className='grid grid-cols-2 gap-4 mb-16'>
+				<AlbumGrid albumIds={content.albums.map(album => album.id)}>
 					{content.albums.map(album => (
 						<AlbumCard
 							key={album.id}
@@ -196,7 +197,7 @@ export default function ProfileTabs() {
 							albumId={album.id}
 						/>
 					))}
-				</div>
+				</AlbumGrid>
 			)}
 			{activeTab === 'circles' && content.circles.length > 0 && (
 				<div className='grid grid-cols-3 gap-2 mb-16'>
