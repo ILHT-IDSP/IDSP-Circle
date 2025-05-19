@@ -121,10 +121,12 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 	return (
 		<div className='container mx-auto px-6 py-10 mb-32 max-w-screen-xl'>
 			{' '}
-			<div className='flex flex-col gap-8 mb-24'>
+			<div className='flex flex-col gap-8 mb-8'>
 				<div>
 					<h1 className='text-3xl font-bold'>{albumData.title}</h1>
-					<div className='flex items-center gap-6'>
+					{album.description && <p className='text-base text-[var(--foreground)] opacity-70 max-w-2xl'>{album.description}</p>}
+
+					<div className='flex items-center mt-8 gap-6'>
 						<button
 							className='flex items-center gap-2 hover:cursor-pointer hover:opacity-70 transition-opacity'
 							aria-label={isLiked ? 'Unlike album' : 'Like album'}
@@ -224,9 +226,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 							</div>
 						)}
 					</div>{' '}
-					
 				</div>
-				{album.description && <p className='text-base text-[var(--foreground)] opacity-70 max-w-2xl'>{album.description}</p>}
 			</div>
 			<h2>
 				{photos.length} photo{photos.length > 1 ? "'s" : ''}
