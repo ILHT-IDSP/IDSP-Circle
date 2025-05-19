@@ -109,7 +109,6 @@ export default async function Home() {
 
 	return (
 		<>
-			<DemoNavBar />
 			<main className='w-full max-w-xl mx-auto min-h-screen bg-background flex flex-col items-center px-2 pb-8'>
 				<section className='w-full mt-4'>
 					{userCirclesFormatted.length > 0 ? (
@@ -182,7 +181,7 @@ export default async function Home() {
 					)}
 				</section>{' '}
 				<section className='w-full my-8 mb-32'>
-					<h2 className='text-lg font-bold mb-2'>Albums</h2>
+					<h2 className='text-lg font-bold mb-2'>Your Feed</h2>
 					{followingAlbums.length > 0 ? (
 						<AlbumGrid albumIds={followingAlbums.map(album => album.id)}>
 							{followingAlbums.map(album => (

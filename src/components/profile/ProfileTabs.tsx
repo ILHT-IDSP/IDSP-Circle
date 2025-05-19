@@ -12,6 +12,7 @@ interface Item {
 	name: string;
 	image: string;
 	userProfileImage?: string;
+	photoCount: number;
 }
 
 interface UserContent {
@@ -195,6 +196,7 @@ export default function ProfileTabs() {
 							albumName={album.name}
 							userProfileImage={album.userProfileImage || '/images/default-avatar.png'}
 							albumId={album.id}
+							photoCount={album.photoCount}
 						/>
 					))}
 				</AlbumGrid>

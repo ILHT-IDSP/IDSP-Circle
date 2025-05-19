@@ -20,7 +20,6 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 	const { likeStatuses, toggleLike } = useAlbumLikes();
 	const [loadingAlbums, setLoadingAlbums] = useState<{ [key: number]: boolean }>({});
-
 	const handleLikeClick = async () => {
 		if (loadingAlbums[albumId]) return;
 		setLoadingAlbums(prev => ({ ...prev, [albumId]: true }));
@@ -28,10 +27,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 		setLoadingAlbums(prev => ({ ...prev, [albumId]: false }));
 	};
 
-	// Get the like status for this specific album
 	const isLiked = likeStatuses[albumId]?.liked || false;
 
-	
 	return (
 		<div
 			className='relative w-full rounded-lg overflow-hidden'
@@ -57,13 +54,18 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 						/>
 					</div>{' '}
 					{photoCount !== undefined && (
-						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-[var(--background)] text-sm'>
-							<FaImages className='text-[var(--background)]' />
+						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-[var(--foreground)] text-sm'>
+							<FaImages className='text-[var(--foreground)]' />
 							<span>{photoCount}</span>
 						</div>
 					)}
 					<div className='absolute bottom-0 left-0 right-0 flex items-center justify-between p-3 sm:p-4 z-10'>
-						<h3 className='black-outline text-sm font-medium'>{albumName}</h3>
+						<h3
+							className='black-outline text-sm font-medium'
+							style={{ maxWidth: 'calc(100% - 80px)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+						>
+							{albumName}
+						</h3>
 
 						<div className='flex items-center gap-3'>
 							{' '}
