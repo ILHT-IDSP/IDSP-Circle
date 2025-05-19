@@ -39,13 +39,13 @@ const nextConfig: NextConfig = {
 		],
 	},
 
-	typescript: {
-		ignoreBuildErrors: true,
-	},
+	// typescript: {
+	// 	ignoreBuildErrors: true,
+	// },
 
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
+	// eslint: {
+	// 	ignoreDuringBuilds: true,
+	// },
 
 	webpack: config => {
 		config.externals = [...config.externals, 'child_process'];

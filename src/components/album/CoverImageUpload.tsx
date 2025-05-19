@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import React, { useState, useRef } from 'react';
+import ImageUploadCropper from '../common/ImageUploadCropper';
+import { createCroppedImage } from '../user_registration/add_profilepicture/cropUtils';
 
 interface CoverImageUploadProps {
 	albumId: number;
@@ -10,48 +12,49 @@ interface CoverImageUploadProps {
 const CoverImageUpload: React.FC<CoverImageUploadProps> = ({ albumId, currentCoverImage, onImageUpdate }) => {
 	const [isUploading, setIsUploading] = useState(false);
 	const [error, setError] = useState('');
-	const fileInputRef = useRef<HTMLInputElement>(null);
+	const cropperRef = useRef<HTMLDivElement>(null);
+	const [showCropper, setShowCropper] = useState(false);
 
-	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (!file) return;
-
-		const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-		if (!allowedTypes.includes(file.type)) {
-			setError('Please select a valid image file (JPEG, PNG, or WebP)');
-			return;
-		}
-
+	const handleUploadStart = () => {
 		setIsUploading(true);
 		setError('');
+	};
 
-		const formData = new FormData();
-		formData.append('file', file);
-		formData.append('isCoverImage', 'true');
-
+	const handleUploadComplete = async (imageUrl: string) => {
 		try {
+			// Make an API call to update the album cover in the database
 			const response = await fetch(`/api/albums/${albumId}/cover`, {
-				method: 'POST',
-				body: formData,
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ coverImageUrl: imageUrl }),
 			});
 
 			if (!response.ok) {
 				const errorData = await response.json();
-				throw new Error(errorData.error || 'Failed to upload cover image');
+				throw new Error(errorData.error || 'Failed to update album cover');
 			}
 
-			const data = await response.json();
-			onImageUpdate(data.coverImageUrl);
+			onImageUpdate(imageUrl);
 		} catch (err) {
-			console.error('Error uploading cover image:', err);
-			setError(err instanceof Error ? err.message : 'An error occurred during upload');
+			console.error('Error setting album cover:', err);
+			setError(err instanceof Error ? err.message : 'Failed to update album cover');
 		} finally {
 			setIsUploading(false);
 		}
 	};
 
+	const handleUploadError = (errorMessage: string) => {
+		setError(errorMessage);
+		setIsUploading(false);
+	};
 	const triggerFileInput = () => {
-		fileInputRef.current?.click();
+		// Access the input inside the ImageUploadCropper
+		const input = cropperRef.current?.querySelector('input');
+		if (input) {
+			input.click();
+		}
 	};
 
 	return (
@@ -63,13 +66,17 @@ const CoverImageUpload: React.FC<CoverImageUploadProps> = ({ albumId, currentCov
 
 			{error && <div className='bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-2 text-sm'>{error}</div>}
 
-			<div className='relative'>
+			<div
+				className='relative'
+				ref={cropperRef}
+			>
 				{currentCoverImage && (
 					<div className='mb-2'>
 						<Image
-							fill
 							src={currentCoverImage}
 							alt='Album cover'
+							width={400}
+							height={200}
 							className='w-full h-32 object-cover rounded'
 						/>
 					</div>
@@ -84,12 +91,12 @@ const CoverImageUpload: React.FC<CoverImageUploadProps> = ({ albumId, currentCov
 					{currentCoverImage ? 'Change Cover Image' : 'Upload Cover Image'}
 				</button>
 
-				<input
-					type='file'
-					ref={fileInputRef}
-					onChange={handleFileChange}
-					className='hidden'
-					accept='image/jpeg,image/png,image/webp'
+				<ImageUploadCropper
+					onUploadStart={handleUploadStart}
+					onUploadComplete={handleUploadComplete}
+					onUploadError={handleUploadError}
+					uploadEndpoint='/api/upload'
+					aspectRatio={16 / 9} // Album covers often use 16:9 aspect ratio
 				/>
 			</div>
 		</div>

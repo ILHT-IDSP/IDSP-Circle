@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 import RegisterEmailDescription from '@/components/user_registration/enter_email/email_description';
 import RegisterEmailHeader from '@/components/user_registration/enter_email/email_header';
@@ -121,7 +122,18 @@ export default function Register() {
 			});
 			if (response.ok) {
 				setSuccess(true);
-				setTimeout(() => router.push('/auth/login'), 2000);
+				// Sign in the user automatically after successful registration
+				const result = await signIn('credentials', {
+					email: formData.email,
+					password: formData.password,
+					redirect: false,
+				});
+
+				if (result?.ok) {
+					router.push('/profile');
+				} else {
+					router.push('/auth/login');
+				}
 			} else {
 				setSuccess(false);
 			}

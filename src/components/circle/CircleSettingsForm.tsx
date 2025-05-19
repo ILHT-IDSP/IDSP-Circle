@@ -5,6 +5,7 @@ import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';
 import { FaArrowLeft, FaCamera } from 'react-icons/fa';
 import Image from 'next/image';
+import ImageUploadCropper from '../common/ImageUploadCropper';
 
 interface CircleDetails {
 	id: number;
@@ -16,7 +17,6 @@ interface CircleDetails {
 
 export default function CircleSettingsForm({ circleId }: { circleId: number; session: Session | null }) {
 	const router = useRouter();
-	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [loading, setLoading] = useState(true);
 	const [saving, setSaving] = useState(false);
 	const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
@@ -77,46 +77,30 @@ export default function CircleSettingsForm({ circleId }: { circleId: number; ses
 			isPrivate: e.target.checked,
 		}));
 	};
+	const cropperRef = useRef<HTMLDivElement>(null);
 
 	const handleAvatarClick = () => {
-		fileInputRef.current?.click();
+		// Access the input inside the ImageUploadCropper
+		const input = cropperRef.current?.querySelector('input');
+		if (input) {
+			input.click();
+		}
 	};
 
-	const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (!file) return;
-
+	const handleUploadStart = () => {
 		setIsUploadingAvatar(true);
 		setError(null);
+	};
 
+	const handleUploadComplete = async (imageUrl: string) => {
 		try {
-			// Create a FormData instance
-			const formData = new FormData();
-			formData.append('file', file);
-
-			// Upload to Cloudinary via your API
-			const uploadResponse = await fetch('/api/upload', {
-				method: 'POST',
-				body: formData,
-			});
-
-			const uploadData = await uploadResponse.json();
-
-			if (!uploadResponse.ok) {
-				throw new Error(uploadData.error || 'Failed to upload image');
-			}
-
-			if (!uploadData.url) {
-				throw new Error('No URL returned from upload');
-			}
-
 			// Update circle avatar with the new URL
 			const updateResponse = await fetch(`/api/circles/${circleId}/update-avatar`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ avatarUrl: uploadData.url }),
+				body: JSON.stringify({ avatarUrl: imageUrl }),
 			});
 
 			if (!updateResponse.ok) {
@@ -125,13 +109,18 @@ export default function CircleSettingsForm({ circleId }: { circleId: number; ses
 			}
 
 			// Update the local state
-			setCircle(prev => (prev ? { ...prev, avatar: uploadData.url } : null));
+			setCircle(prev => (prev ? { ...prev, avatar: imageUrl } : null));
 		} catch (err) {
 			console.error('Error updating circle avatar:', err);
 			setError('Failed to update avatar. Please try again.');
 		} finally {
 			setIsUploadingAvatar(false);
 		}
+	};
+
+	const handleUploadError = (errorMessage: string) => {
+		setError(errorMessage);
+		setIsUploadingAvatar(false);
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -243,21 +232,13 @@ export default function CircleSettingsForm({ circleId }: { circleId: number; ses
 						{saving ? 'Saving...' : 'Save'}
 					</button>
 				</div>
-			</div>
-
+			</div>{' '}
 			<div className='flex flex-col items-center mb-8'>
 				<div
 					className='w-24 h-24 rounded-full overflow-hidden mb-2 border-4 border-circles-dark-blue relative cursor-pointer group'
 					onClick={handleAvatarClick}
+					ref={cropperRef}
 				>
-					<input
-						type='file'
-						accept='image/*'
-						ref={fileInputRef}
-						onChange={handleAvatarChange}
-						className='hidden'
-					/>
-
 					<Image
 						src={circle.avatar || '/images/circles/default.svg'}
 						alt={circle.name}
@@ -278,10 +259,17 @@ export default function CircleSettingsForm({ circleId }: { circleId: number; ses
 							<div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white'></div>
 						</div>
 					)}
+
+					<ImageUploadCropper
+						onUploadStart={handleUploadStart}
+						onUploadComplete={handleUploadComplete}
+						onUploadError={handleUploadError}
+						uploadEndpoint='/api/upload'
+						aspectRatio={1}
+					/>
 				</div>
 				<p className='text-sm text-gray-400 mb-4'>Click to change avatar</p>
 			</div>
-
 			{/* Settings Form */}
 			<form onSubmit={handleSubmit}>
 				{error && <div className='mb-4 p-3 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg text-red-500 text-sm'>{error}</div>}
