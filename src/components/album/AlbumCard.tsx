@@ -54,8 +54,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 						/>
 					</div>{' '}
 					{photoCount !== undefined && (
-						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-[var(--foreground)] text-sm'>
-							<FaImages className='text-[var(--foreground)]' />
+						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-white text-sm'>
+							<FaImages className='text-white' />
 							<span>{photoCount}</span>
 						</div>
 					)}

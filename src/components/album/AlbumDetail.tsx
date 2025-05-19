@@ -105,7 +105,7 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 				console.error('Error fetching updated photos:', error);
 			});
 	};
-	const canAddPhotos = session?.user && ((album.creatorId && session.user.id && parseInt(session.user.id) === album.creatorId) || album.circleId); /* && is member of circle */
+	const canAddPhotos = session?.user && album.creatorId && session.user.id && parseInt(session.user.id) === album.creatorId;
 
 	const canEditAlbum = session?.user && album.creatorId && session.user.id && parseInt(session.user.id) === album.creatorId;
 
@@ -118,142 +118,158 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 			isPrivate: updatedAlbum.isPrivate,
 		});
 	};
-
 	return (
-		<div className='container mx-auto px-4 py-6 mb-32'>
+		<div className='container mx-auto px-6 py-10 mb-32 max-w-screen-xl'>
 			{' '}
-			<div className='flex flex-col gap-4 mb-6'>
+			<div className='flex flex-col gap-8 mb-24'>
 				<div>
-					<h1 className='text-2xl font-bold'>{albumData.title}</h1>
-					<p className='text-sm text-[var(--foreground)] opacity-60 mt-1'>{photos.length} photos</p>
-				</div>
-
-				<div className='flex flex-wrap items-center gap-2'>
-					{canEditAlbum && (
+					<h1 className='text-3xl font-bold'>{albumData.title}</h1>
+					<div className='flex items-center gap-6'>
 						<button
-							onClick={() => setIsEditModalOpen(true)}
-							className='bg-[var(--foreground)] hover:bg-[var(--foreground-hover)] bg-opacity-10 hover:bg-opacity-20 rounded-lg p-2 flex items-center gap-2 text-[var(--primary)]'
-							title='Edit album'
-						>
-							<FaPencilAlt /> <span className='hidden sm:inline'>Edit</span>
-						</button>
-					)}
-					{canAddPhotos && (
-						<>
-							<button
-								onClick={() => setIsBatchUploadOpen(true)}
-								className='bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-lg p-2 flex items-center gap-2 text-[var(--background)] whitespace-nowrap'
-								title='Add multiple photos at once'
-							>
-								<FaPlus /> Add Photos
-							</button>
-						</>
-					)}
-				</div>
-
-				<div className='flex items-center justify-between'>
-					<div className='flex items-center gap-2'>
-						{album.creator && (
-							<Link
-								href={`/${album.creator.username}`}
-								className='flex items-center gap-2'
-							>
-								<Image
-									src={album.creator.profileImage || '/images/default-avatar.png'}
-									alt={album.creator.username}
-									width={40}
-									height={40}
-									className='rounded-full aspect-square object-cover'
-								/>
-								<span className='font-medium'>{album.creator.name || album.creator.username}</span>
-							</Link>
-						)}
-
-						{album.Circle && (
-							<Link
-								href={`/circle/${album.Circle.id}`}
-								className='flex items-center gap-2 ml-2'
-							>
-								<Image
-									src={album.Circle.avatar || '/images/circles/default.svg'}
-									alt={album.Circle.name}
-									width={40}
-									height={40}
-									className='rounded-full object-cover'
-								/>
-								<span className='font-medium'>{album.Circle.name}</span>
-							</Link>
-						)}
-					</div>
-
-					<div className='flex items-center gap-4'>
-						<button
-							className='flex items-center gap-1 hover:cursor-pointer'
+							className='flex items-center gap-2 hover:cursor-pointer hover:opacity-70 transition-opacity'
 							aria-label={isLiked ? 'Unlike album' : 'Like album'}
 							onClick={handleLikeClick}
 							disabled={isLoading}
 						>
 							{isLiked ? (
 								<>
-									<FaHeart className='text-xl text-red-500' />
-									<span>{likeCount}</span>
+									<FaHeart className='text-2xl text-red-500' />
+									<span className='text-lg'>{likeCount}</span>
 								</>
 							) : (
 								<>
-									<FaRegHeart className='text-xl' />
-									<span>{likeCount}</span>
+									<FaRegHeart className='text-2xl' />
+									<span className='text-lg'>{likeCount}</span>
 								</>
 							)}
 						</button>
 
 						<button
-							className='flex items-center gap-1 hover:cursor-pointer'
+							className='flex items-center gap-2 hover:cursor-pointer hover:opacity-80 transition-opacity'
 							aria-label='Comment on album'
 							onClick={() => setIsCommentModalOpen(true)}
 						>
-							<FaComment className='text-xl' />
-							<span>{album._count.AlbumComment}</span>
+							<FaComment className='text-2xl' />
+							<span className='text-lg'>{album._count.AlbumComment}</span>
 						</button>
 					</div>
+					{/* <p className='text-md text-[var(--foreground)] opacity-60 mt-3'>{photos.length} photos</p> */}
 				</div>
-				{album.description && <p className='text-sm text-[var(--foreground)] opacity-60'>{album.description}</p>}
-			</div>			{photos.length > 0 ? (
-				<div className='mx-auto max-w-screen-xl columns-2 gap-4 space-y-4'>
+				<div className='flex flex-wrap items-center  gap-4'>
+					{canEditAlbum && (
+						<button
+							onClick={() => setIsEditModalOpen(true)}
+							className='bg-[var(--foreground)] hover:opacity-70 bg-opacity-10 hover:bg-opacity-20 rounded-lg py-2 px-4 flex items-center gap-3 text-[var(--background)]'
+							title='Edit album'
+						>
+							<FaPencilAlt size={18} /> <span className='hidden sm:inline'>Edit</span>
+						</button>
+					)}
+					{canAddPhotos && (
+						<>
+							{' '}
+							<button
+								onClick={() => setIsBatchUploadOpen(true)}
+								className='bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-lg py-2 px-4 flex items-center gap-3 text-[var(--background)] whitespace-nowrap'
+								title='Add multiple photos at once'
+							>
+								<FaPlus size={18} /> Add Photos
+							</button>
+						</>
+					)}
+				</div>{' '}
+				<div className='flex flex-col justify-between gap-6'>
+					<div className='flex flex-col gap-4'>
+						{album.creator && (
+							<div className='flex items-center'>
+								<Link
+									href={`/${album.creator.username}`}
+									className='flex items-center gap-3 hover:opacity-80 transition-opacity'
+								>
+									{' '}
+									<Image
+										src={album.creator.profileImage || '/images/default-avatar.png'}
+										alt={album.creator.username}
+										width={48}
+										height={48}
+										className='rounded-full aspect-square object-cover'
+									/>
+									<div>
+										<span className='text-xs opacity-60'>Created by</span>
+										<span className='font-medium block'>{album.creator.name || album.creator.username}</span>
+									</div>
+								</Link>
+							</div>
+						)}
+
+						{album.Circle && (
+							<div className='flex items-center'>
+								<Link
+									href={`/circle/${album.Circle.id}`}
+									className='flex items-center gap-3 hover:opacity-80 transition-opacity'
+								>
+									{' '}
+									<Image
+										src={album.Circle.avatar || '/images/circles/default.svg'}
+										alt={album.Circle.name}
+										width={48}
+										height={48}
+										className='rounded-full object-cover border border-[var(--primary)] border-opacity-30'
+									/>
+									<div>
+										<span className='text-xs opacity-60'>Circle</span>
+										<span className='font-medium block'>{album.Circle.name}</span>
+									</div>
+								</Link>
+							</div>
+						)}
+					</div>{' '}
+					
+				</div>
+				{album.description && <p className='text-base text-[var(--foreground)] opacity-70 max-w-2xl'>{album.description}</p>}
+			</div>
+			<h2>
+				{photos.length} photo{photos.length > 1 ? "'s" : ''}
+			</h2>
+			{photos.length > 0 ? (
+				<div className='mx-auto columns-2 gap-6 space-y-6'>
 					{photos.map(photo => (
 						<div
 							key={photo.id}
-							className='break-inside-avoid rounded-lg overflow-hidden mb-4'
+							className='break-inside-avoid rounded-xl overflow-hidden mb-6 shadow-sm hover:shadow-md transition-shadow duration-300'
 						>
+							{' '}
 							<div className='flex justify-center'>
 								<Image
 									src={photo.url}
 									alt={photo.description || `Photo ${photo.id}`}
-									width={500}
-									height={500}
+									width={800}
+									height={800}
 									className='w-full h-auto'
 									style={{ display: 'block' }}
-									sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+									sizes='(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw'
 								/>
 							</div>
 						</div>
 					))}
 				</div>
 			) : (
-				<div className='flex flex-col items-center justify-center py-10'>
-					<p className='text-lg text-[var(--foreground)] opacity-60'>No photos in this album yet</p>
+				<div className='flex flex-col items-center justify-center py-16'>
+					<p className='text-xl text-[var(--foreground)] opacity-60 mb-3'>No photos in this album yet</p>
 					{canAddPhotos && (
-						<div className='flex gap-2 mt-4'>
+						<div className='flex flex-wrap gap-4 mt-6'>
+							{' '}
 							<button
 								onClick={() => setIsAddPhotoModalOpen(true)}
-								className='bg-[var(--foreground)] bg-opacity-10 hover:bg-opacity-20 rounded-lg px-4 py-2 flex items-center gap-2 text-[var(--primary)]'
+								className='bg-[var(--foreground)] bg-opacity-10 hover:bg-opacity-20 rounded-lg px-6 py-3 flex items-center gap-3 text-[var(--primary)] transition-all'
 							>
-								<FaPlus /> Add Photo
-							</button>
+								<FaPlus size={18} /> Add Photo
+							</button>{' '}
 							<button
 								onClick={() => setIsBatchUploadOpen(true)}
-								className='bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-lg px-4 py-2 flex items-center gap-2 text-[var(--background)]'
+								className='bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-lg px-6 py-3 flex items-center gap-3 text-[var(--background)] transition-all'
 							>
-								<FaPlus /> Add Multiple Photos
+								<FaPlus size={18} /> Add Multiple Photos
 							</button>
 						</div>
 					)}

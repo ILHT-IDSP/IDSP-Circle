@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { FaTimes } from 'react-icons/fa';
 
 interface Photo {
 	id: number;
@@ -30,6 +31,20 @@ const EditAlbumModal: React.FC<EditAlbumModalProps> = ({ album, isOpen, onClose,
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [albumPhotos, setAlbumPhotos] = useState<Photo[]>([]);
+
+	// Prevent body scrolling when modal is open
+	useEffect(() => {
+		if (isOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = '';
+		}
+
+		return () => {
+			document.body.style.overflow = '';
+		};
+	}, [isOpen]);
+
 	useEffect(() => {
 		if (isOpen && photos.length === 0) {
 			fetch(`/api/albums/${album.id}/photos`)
@@ -84,12 +99,31 @@ const EditAlbumModal: React.FC<EditAlbumModalProps> = ({ album, isOpen, onClose,
 	};
 
 	return (
-		<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100 p-4'>
-			<div className='bg-white dark:bg-gray-800 rounded-lg w-full max-w-xl overflow-hidden'>
-				<div className='p-6'>
-					<h3 className='text-xl font-semibold mb-4 dark:text-white'>Edit Album</h3>
+		<div
+			className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100 p-4 overflow-y-auto'
+			onClick={e => {
+				// Close when clicking outside the modal
+				if (e.target === e.currentTarget) onClose();
+			}}
+			style={{ minHeight: '100vh' }}
+		>
+			<div
+				className='bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl my-8'
+				onClick={e => e.stopPropagation()}
+			>
+				<div className='p-5 flex justify-between items-center border-b border-gray-200 dark:border-gray-700'>
+					<h3 className='text-xl font-semibold dark:text-white'>Edit Album</h3>
+					<button
+						onClick={onClose}
+						className='text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none'
+						aria-label='Close'
+					>
+						<FaTimes />
+					</button>
+				</div>
 
-					{error && <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>{error}</div>}
+				<div className='p-6 max-h-[80vh] overflow-y-auto'>
+					{error && <div className='bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-4'>{error}</div>}
 
 					<form onSubmit={handleSubmit}>
 						<div className='mb-4'>
@@ -102,7 +136,6 @@ const EditAlbumModal: React.FC<EditAlbumModalProps> = ({ album, isOpen, onClose,
 								required
 							/>
 						</div>
-
 						<div className='mb-4'>
 							<label className='block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2'>Description</label>
 							<textarea
@@ -118,52 +151,70 @@ const EditAlbumModal: React.FC<EditAlbumModalProps> = ({ album, isOpen, onClose,
 									type='checkbox'
 									checked={isPrivate}
 									onChange={e => setIsPrivate(e.target.checked)}
-									className='mr-2'
+									className='mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
 								/>
 								<span className='text-gray-700 dark:text-gray-300'>Private Album</span>
 							</label>
-						</div>
-
+						</div>{' '}
 						{/* Album Cover Selection */}
-						<div className='mb-4'>
+						<div className='mb-6'>
 							<label className='block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2'>Cover Image</label>
 							{albumPhotos.length > 0 ? (
-								<div className='columns-2 gap-2 overflow-y-auto p-2 border rounded'>
+								<div className='grid grid-cols-2 gap-4'>
 									{albumPhotos.map(photo => (
 										<div
 											key={photo.id}
-											className={`relative cursor-pointer mb-2 overflow-hidden ${selectedCoverImage === photo.url ? 'ring-2 ring-blue-500' : ''}`}
+											className={`relative cursor-pointer overflow-hidden rounded-lg transition-all mb-4 ${selectedCoverImage === photo.url ? 'ring-2 ring-blue-500 scale-[0.98]' : 'hover:opacity-90 hover:scale-[0.99]'}`}
 											onClick={() => setSelectedCoverImage(photo.url)}
 										>
 											<Image
 												src={photo.url}
 												alt={photo.description || `Photo ${photo.id}`}
-												width={200}
-												height={200}
-												className='w-full h-auto border-[white]'
+												width={400}
+												height={400}
+												className='w-full h-auto rounded-lg'
 												style={{ display: 'block' }}
 												sizes='(max-width: 640px) 50vw, 33vw'
 											/>
+											{selectedCoverImage === photo.url && (
+												<div className='absolute top-2 right-2'>
+													<div className='bg-blue-500 rounded-full p-1'>
+														<svg
+															xmlns='http://www.w3.org/2000/svg'
+															className='h-5 w-5 text-white'
+															fill='none'
+															viewBox='0 0 24 24'
+															stroke='currentColor'
+														>
+															<path
+																strokeLinecap='round'
+																strokeLinejoin='round'
+																strokeWidth={2}
+																d='M5 13l4 4L19 7'
+															/>
+														</svg>
+													</div>
+												</div>
+											)}
 										</div>
 									))}
 								</div>
 							) : (
-								<p className='text-gray-500'>No photos available to use as cover. Add photos to the album first.</p>
+								<p className='text-gray-500 dark:text-gray-400 text-center py-8 border rounded dark:border-gray-600'>No photos available to use as cover. Add photos to the album first.</p>
 							)}
 						</div>
-
-						<div className='flex justify-end'>
+						<div className='flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700'>
 							<button
 								type='button'
 								onClick={onClose}
-								className='bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-400'
+								className='bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg mr-2 hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors'
 								disabled={isLoading}
 							>
 								Cancel
 							</button>
 							<button
 								type='submit'
-								className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
+								className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors'
 								disabled={isLoading}
 							>
 								{isLoading ? 'Saving...' : 'Save Changes'}
