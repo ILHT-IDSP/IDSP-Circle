@@ -243,6 +243,16 @@ exports.Prisma.PhotoScalarFieldEnum = {
   albumId: 'albumId'
 };
 
+exports.Prisma.ActivityScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  circleId: 'circleId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -275,7 +285,8 @@ exports.Prisma.ModelName = {
   UserSettings: 'UserSettings',
   AlbumComment: 'AlbumComment',
   AlbumLike: 'AlbumLike',
-  Photo: 'Photo'
+  Photo: 'Photo',
+  Activity: 'Activity'
 };
 
 /**

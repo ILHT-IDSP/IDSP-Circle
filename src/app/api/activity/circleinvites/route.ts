@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
                         username: true,
                     },
                 },
-                Circle: {
+                circle: {  // Changed from "C"ircle to "c"ircle
                     select: {
                         id: true,
                         name: true,
@@ -51,15 +51,42 @@ export async function PATCH(req: NextRequest) {
             return NextResponse.json({ error: "Invalid request" }, { status: 400 });
         }
 
+        // Verify activity belongs to user
+        const activity = await prisma.activity.findFirst({
+            where: {
+                id: id,
+                userId: parseInt(session.user.id),
+                type: "circle_invite"
+            },
+            include: {
+                circle: true 
+            }});
+
+        if (!activity) {
+            return NextResponse.json({ error: "Circle invite not found" }, { status: 404 });
+        }
+
         if (action === "accept") {
-            await prisma.activity.update({
-                where: { id },
-                data: { type: "circle_member" },
-            });
+            // Create membership
+            await prisma.$transaction([
+                prisma.activity.update({
+                    where: { id },
+                    data: { type: "circle_member" }
+                }),
+                prisma.membership.create({
+                    data: {
+                        userId: parseInt(session.user.id),
+                        circleId: activity.circleId!,
+                        role: "MEMBER"
+                    }
+                })
+            ]);
         } else if (action === "decline") {
             await prisma.activity.delete({
-                where: { id },
+                where: { id }
             });
+        } else {
+            return NextResponse.json({ error: "Invalid action" }, { status: 400 });
         }
 
         return NextResponse.json({ success: true });

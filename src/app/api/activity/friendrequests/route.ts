@@ -45,15 +45,39 @@ export async function PATCH(req: NextRequest) {
             return NextResponse.json({ error: "Invalid request" }, { status: 400 });
         }
 
+        // Verify the activity exists and belongs to the user
+        const activity = await prisma.activity.findFirst({
+            where: {
+                id: id,
+                userId: parseInt(session.user.id),
+                type: "friend_request"
+            }
+        });
+
+        if (!activity) {
+            return NextResponse.json({ error: "Friend request not found" }, { status: 404 });
+        }
+
         if (action === "accept") {
-            await prisma.activity.update({
-                where: { id },
-                data: { type: "friend" },
-            });
+            // Create friendship record
+            await prisma.$transaction([
+                prisma.activity.update({
+                    where: { id },
+                    data: { type: "friend" }
+                }),
+                prisma.follow.create({
+                    data: {
+                        followerId: parseInt(session.user.id),
+                        followingId: activity.userId
+                    }
+                })
+            ]);
         } else if (action === "decline") {
             await prisma.activity.delete({
-                where: { id },
+                where: { id }
             });
+        } else {
+            return NextResponse.json({ error: "Invalid action" }, { status: 400 });
         }
 
         return NextResponse.json({ success: true });
