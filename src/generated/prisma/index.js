@@ -261,7 +261,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\adnan\\Desktop\\IDSP-Circle\\src\\generated\\prisma",
+      "value": "C:\\Users\\Ozem\\OneDrive\\BCIT_FSWD\\Term 2B\\idsp-ilht\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -275,7 +275,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\adnan\\Desktop\\IDSP-Circle\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\Ozem\\OneDrive\\BCIT_FSWD\\Term 2B\\idsp-ilht\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
