@@ -25,7 +25,8 @@ export default function CreateCircle({session}: {session: Session | null}) {
     const [step, setStep] = useState(1);
 
     const handleBack = () => {
-        router.push("/profile");
+        if (step === 1) return router.push("/profle");
+        setStep((prev) => prev - 1);
     };
 
     const handleSubmit = async () => {
