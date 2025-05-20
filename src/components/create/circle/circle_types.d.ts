@@ -7,8 +7,8 @@ export interface ICircleFormData {
     avatar: string;
     name: string;
     isPrivate: boolean;
-    members: string[]; // or string[] if it's an array of members
-    creatorId: string;
+    members: number[];
+    creatorId: number;
 }
 
 export interface Circle {
