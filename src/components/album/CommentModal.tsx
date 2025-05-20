@@ -103,14 +103,14 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 	};
 	return (
 		<div
-			className='fixed inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center z-50 p-4'
+			className='comment-modal-overlay'
 			onClick={e => {
 				// Close when clicking outside the modal
 				if (e.target === e.currentTarget) onClose();
 			}}
 		>
 			<div
-				className='bg-[var(--background)] rounded-xl max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden shadow-xl'
+				className='comment-modal-container'
 				onClick={e => e.stopPropagation()}
 			>
 				{/* Header */}
@@ -146,7 +146,7 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 											alt={comment.User.username}
 											width={36}
 											height={36}
-											className='rounded-full object-cover'
+											className='rounded-full object-cover aspect-square'
 										/>
 									</div>
 									<div className='comment-content'>
@@ -184,7 +184,7 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose })
 						/>
 						<button
 							type='submit'
-							className='comment-modal-submit'
+							className='comment-modal-submit rounded-lg'
 							disabled={isSubmitting || newComment.trim() === ''}
 						>
 							{isSubmitting ? 'Posting...' : 'Post'}

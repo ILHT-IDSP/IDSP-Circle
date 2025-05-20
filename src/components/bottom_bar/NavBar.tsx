@@ -34,8 +34,8 @@ export default function NavBar() {
 
 	return (
 		<>
-			<nav className='fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] flex justify-center'>
-				<div className='w-full max-w-xl p-3 flex justify-between px-1'>
+			<nav className='fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] flex justify-center '>
+				<div className='w-full max-w-xl p-2 flex justify-between border-t border-border/40'>
 					{navItems.map(item => {
 						const isProfileItem = item.name === 'Profile';
 						const isActive = isProfileItem ? pathname === item.path || (pathname.startsWith('/profile/') && item.path === '/profile') : pathname === item.path;
@@ -44,7 +44,9 @@ export default function NavBar() {
 							return (
 								<div
 									key={item.name}
-									className='flex flex-col items-center flex-1 py-2 text-foreground/60 transition-colors cursor-pointer'
+									className={`flex flex-col items-center flex-1 py-2 transition-colors cursor-pointer rounded-md 
+                                    ${isActive ? 'text-[var(--primary)] font-medium' : 'text-[var(--foreground)] opacity-70'} 
+                                    hover:bg-[var(--foreground)]/5 hover:text-[var(--primary)]`}
 									onClick={toggleCreateContainer}
 								>
 									<item.icon className={`h-6 w-6 mb-1 ${isActive ? 'scale-110' : ''}`} />
@@ -57,9 +59,11 @@ export default function NavBar() {
 							<Link
 								key={item.name}
 								href={item.path}
-								className={`flex flex-col items-center flex-1 py-2 ${isActive ? 'text-primary' : 'text-foreground/60'} transition-colors`}
+								className={`flex flex-col items-center flex-1 py-2 rounded-md transition-all duration-200 
+                                ${isActive ? 'text-[var(--primary)] font-medium' : 'text-[var(--foreground)] opacity-70'} 
+                                hover:bg-[var(--foreground)]/5 hover:text-[var(--primary)]`}
 							>
-								<item.icon className={`h-6 w-6 mb-1 ${isActive ? 'scale-110' : ''}`} />
+								<item.icon className={`h-6 w-6 mb-1 ${isActive ? 'scale-110' : ''} transition-transform duration-200`} />
 								<span className='text-xs'>{item.name}</span>
 							</Link>
 						);

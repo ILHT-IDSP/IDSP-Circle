@@ -4,8 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart, FaRegHeart, FaComment, FaImages } from 'react-icons/fa';
 import CircleHolder from '../circle_holders';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import CommentModal from './CommentModal';
+import { useAlbumLikes } from './AlbumLikesContext';
 
 interface AlbumCardProps {
 	albumId: number;
@@ -16,51 +17,18 @@ interface AlbumCardProps {
 }
 
 const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, userProfileImage, photoCount }) => {
-	const [isLiked, setIsLiked] = useState(false);
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
-
-	useEffect(() => {
-		// Fetch like status from the API
-		const fetchLikeStatus = async () => {
-			try {
-				const response = await fetch(`/api/albums/${albumId}/like`);
-				if (response.ok) {
-					const data = await response.json();
-					setIsLiked(data.liked);
-				}
-			} catch (error) {
-				console.error('Error fetching like status:', error);
-			}
-		};
-
-		if (albumId) {
-			fetchLikeStatus();
-		}
-	}, [albumId]);
-
+	const { likeStatuses, toggleLike } = useAlbumLikes();
+	const [loadingAlbums, setLoadingAlbums] = useState<{ [key: number]: boolean }>({});
 	const handleLikeClick = async () => {
-		if (isLoading) return;
-
-		setIsLoading(true);
-		try {
-			const response = await fetch(`/api/albums/${albumId}/like`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-
-			if (response.ok) {
-				const data = await response.json();
-				setIsLiked(data.liked);
-			}
-		} catch (error) {
-			console.error('Error toggling like:', error);
-		} finally {
-			setIsLoading(false);
-		}
+		if (loadingAlbums[albumId]) return;
+		setLoadingAlbums(prev => ({ ...prev, [albumId]: true }));
+		await toggleLike(albumId);
+		setLoadingAlbums(prev => ({ ...prev, [albumId]: false }));
 	};
+
+	const isLiked = likeStatuses[albumId]?.liked || false;
+
 	return (
 		<div
 			className='relative w-full rounded-lg overflow-hidden'
@@ -76,23 +44,28 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 						alt={`${albumName} album cover`}
 						fill
 						className='object-cover'
-					/>					<div className='absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.5)] via-transparent to-[rgba(0,0,0,0.3)]' />
-
+					/>{' '}
+					<div className='absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.5)] via-transparent to-[rgba(0,0,0,0.3)]' />
 					<div className='absolute top-3 right-3 z-10'>
 						<CircleHolder
 							imageSrc={userProfileImage}
 							circleSize={40}
 							showName={false}
 						/>
-					</div>					{photoCount !== undefined && (
-						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-[var(--background)] text-sm'>
-							<FaImages className='text-[var(--background)]' />
+					</div>{' '}
+					{photoCount !== undefined && (
+						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-white text-sm'>
+							<FaImages className='text-white' />
 							<span>{photoCount}</span>
 						</div>
 					)}
-
 					<div className='absolute bottom-0 left-0 right-0 flex items-center justify-between p-3 sm:p-4 z-10'>
-						<h3 className='black-outline text-sm font-medium'>{albumName}</h3>
+						<h3
+							className='black-outline text-sm font-medium'
+							style={{ maxWidth: 'calc(100% - 80px)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+						>
+							{albumName}
+						</h3>
 
 						<div className='flex items-center gap-3'>
 							{' '}
@@ -104,8 +77,10 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 									e.stopPropagation();
 									handleLikeClick();
 								}}
-								disabled={isLoading}
-							>								{isLiked ? (
+								disabled={loadingAlbums[albumId]}
+							>
+								{' '}
+								{isLiked ? (
 									<>
 										<FaHeart className='text-xl text-[#e8083e]' />
 									</>

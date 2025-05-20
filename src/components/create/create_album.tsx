@@ -60,12 +60,16 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 		if (currentStep < 3) {
 			setCurrentStep(currentStep + 1);
 		}
-	};	const handleSubmit = async () => {
+	};
+	const handleSubmit = async () => {
 		try {
 			setIsSubmitting(true);
 			console.log('Sending album data to server...', formData);
 
-			// First, create the album
+			// Find the index of the selected cover image (which currently has a blob URL)
+			const selectedCoverIndex = formData.photos.findIndex(photo => photo.previewUrl === formData.coverImage);
+
+			// First, create the album without a cover image
 			const response = await fetch('/api/create/album', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -73,7 +77,7 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 					formData: {
 						title: formData.title,
 						description: formData.description,
-						coverImage: formData.coverImage,
+						coverImage: null, // Don't set the cover image yet - it's currently a blob URL
 						isPrivate: formData.isPrivate,
 						creatorId: formData.creatorId,
 						circleId: formData.circleId,
@@ -92,9 +96,10 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 			if (!response.ok) {
 				throw new Error(data.error || 'Failed to create album');
 			}
-
 			console.log('Album created successfully:', data);
-			const albumId = data.album.id; // If we have photos, upload them
+			const albumId = data.album.id;
+			const coverImageUrl = null;
+
 			if (formData.photos && formData.photos.length > 0) {
 				console.log(`Uploading ${formData.photos.length} photos to album ${albumId}`);
 
@@ -105,30 +110,36 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 						...photo,
 						uploading: true,
 						uploaded: false,
-					}))
+					})),
 				}));
 
 				for (let i = 0; i < formData.photos.length; i++) {
 					const photo = formData.photos[i];
+					const isSelectedCoverImage = selectedCoverIndex === i;
+
 					try {
 						const photoFormData = new FormData();
 						photoFormData.append('file', photo.file);
 						photoFormData.append('description', photo.description || '');
 
+						// If this is the selected cover image, mark it as such
+						if (isSelectedCoverImage) {
+							photoFormData.append('isCoverImage', 'true');
+						}
+
 						console.log(`Uploading photo to /api/albums/${albumId}/photos`, photo.file.name);
 						// Check if file is too large (Cloudinary free tier has a 5MB limit)
 						if (photo.file.size > 5 * 1024 * 1024) {
 							console.error(`File ${photo.file.name} is too large (${(photo.file.size / 1024 / 1024).toFixed(2)}MB). Max size is 5MB.`);
-							
+
 							// Mark file as error
 							setFormData(prev => ({
 								...prev,
-								photos: prev.photos.map((p, index) => 
-									index === i ? { ...p, uploading: false, error: 'File too large (max 5MB)' } : p
-								)
+								photos: prev.photos.map((p, index) => (index === i ? { ...p, uploading: false, error: 'File too large (max 5MB)' } : p)),
 							}));
 							continue;
-						}						const uploadResponse = await fetch(`/api/albums/${albumId}/photos`, {
+						}
+						const uploadResponse = await fetch(`/api/albums/${albumId}/photos`, {
 							method: 'POST',
 							body: photoFormData,
 						});
@@ -137,54 +148,45 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 						try {
 							responseData = await uploadResponse.json();
 							console.log('Photo upload response:', responseData);
-							
+
 							// Mark photo as uploaded
 							setFormData(prev => ({
 								...prev,
-								photos: prev.photos.map((p, index) => 
-									index === i ? { ...p, uploading: false, uploaded: true } : p
-								)
+								photos: prev.photos.map((p, index) => (index === i ? { ...p, uploading: false, uploaded: true } : p)),
 							}));
-							
 						} catch (parseError) {
 							console.error('Error parsing response:', parseError);
-							
+
 							// Mark photo as failed
 							setFormData(prev => ({
 								...prev,
-								photos: prev.photos.map((p, index) => 
-									index === i ? { ...p, uploading: false, error: 'Upload failed' } : p
-								)
+								photos: prev.photos.map((p, index) => (index === i ? { ...p, uploading: false, error: 'Upload failed' } : p)),
 							}));
 						}
-						
+
 						if (!uploadResponse.ok) {
 							console.error('Photo upload failed with status:', uploadResponse.status);
 							console.error('Response data:', responseData);
-							
+
 							// Mark photo as failed
 							setFormData(prev => ({
 								...prev,
-								photos: prev.photos.map((p, index) => 
-									index === i ? { ...p, uploading: false, error: `Upload failed (${uploadResponse.status})` } : p
-								)
+								photos: prev.photos.map((p, index) => (index === i ? { ...p, uploading: false, error: `Upload failed (${uploadResponse.status})` } : p)),
 							}));
 						}
 					} catch (error) {
 						console.error('Error uploading photo:', error);
-						
+
 						// Mark photo as failed
 						setFormData(prev => ({
 							...prev,
-							photos: prev.photos.map((p, index) => 
-								index === i ? { ...p, uploading: false, error: 'Upload failed' } : p
-							)
+							photos: prev.photos.map((p, index) => (index === i ? { ...p, uploading: false, error: 'Upload failed' } : p)),
 						}));
-						
+
 						// Continue with other photos even if one fails
 					}
 				}
-				
+
 				// Check if all photos are uploaded or have errors
 				const allPhotosProcessed = formData.photos.every(p => p.uploaded || p.error);
 				if (allPhotosProcessed) {
@@ -204,7 +206,8 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 		} finally {
 			setIsSubmitting(false);
 		}
-	};	const renderStepContent = () => {
+	};
+	const renderStepContent = () => {
 		switch (currentStep) {
 			case 1:
 				return (
@@ -245,14 +248,16 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 	return (
 		<>
 			<div className='flex flex-col h-full w-full'>
-				{' '}				<CreateAlbumTopBar
+				{' '}
+				<CreateAlbumTopBar
 					onClick={currentStep === 3 ? handleSubmit : handleNext}
 					onClickTwo={handleBack}
 					isSubmitting={isSubmitting}
 					currentStep={currentStep}
 				/>{' '}
 				<div className='flex flex-col items-center px-4 mt-6'>
-					{' '}					<div className='flex justify-center items-center gap-3 mb-6'>
+					{' '}
+					<div className='flex justify-center items-center gap-3 mb-6'>
 						{[1, 2, 3].map(step => (
 							<React.Fragment key={step}>
 								<div className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentStep >= step ? 'bg-[var(--primary)] opacity-100 transform scale-110' : 'bg-[var(--foreground)] opacity-30'}`} />

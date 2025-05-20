@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { ICircleFormData } from './circle_types';
+import ImageUploadCropper from '../../common/ImageUploadCropper';
 
 interface CircleAvatarProps {
 	avatar: string;
@@ -8,48 +9,34 @@ interface CircleAvatarProps {
 }
 
 export default function CircleAvatar({ avatar, setFormData }: CircleAvatarProps) {
-	const fileInputRef = useRef<HTMLInputElement>(null);
-	const [preview, setPreview] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const cropperRef = useRef<HTMLDivElement>(null);
 
 	const handleAvatarClick = () => {
-		fileInputRef.current?.click();
+		// Find the hidden input inside the ImageUploadCropper and click it
+		const input = cropperRef.current?.querySelector('input');
+		if (input) {
+			input.click();
+		}
 	};
 
-	const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (!file) return;
-
-		// Show preview 
-		setPreview(URL.createObjectURL(file));
+	const handleUploadStart = () => {
 		setIsLoading(true);
+		setError(null);
+	};
 
-		// Upload to Cloudinary
-		try {
-			const formData = new FormData();
-			formData.append('file', file);
+	const handleUploadComplete = (imageUrl: string) => {
+		setFormData(prev => ({
+			...prev,
+			avatar: imageUrl,
+		}));
+		setIsLoading(false);
+	};
 
-			const response = await fetch('/api/upload', {
-				method: 'POST',
-				body: formData,
-			});
-
-			const data = await response.json();
-
-			if (data.url) {
-				setFormData(prev => ({
-					...prev,
-					avatar: data.url,
-				}));
-				console.log('Image uploaded to Cloudinary: ', data.url);
-			} else {
-				console.error('Failed to upload image');
-			}
-		} catch (error) {
-			console.error('Error uploading image:', error);
-		} finally {
-			setIsLoading(false);
-		}
+	const handleUploadError = (errorMessage: string) => {
+		setError(errorMessage);
+		setIsLoading(false);
 	};
 
 	return (
@@ -58,16 +45,12 @@ export default function CircleAvatar({ avatar, setFormData }: CircleAvatarProps)
 				className='relative cursor-pointer'
 				onClick={handleAvatarClick}
 			>
-				<input
-					type='file'
-					accept='image/*'
-					ref={fileInputRef}
-					onChange={handleAvatarChange}
-					className='hidden'
-				/>
-				<div className='relative'>
+				<div
+					className='relative'
+					ref={cropperRef}
+				>
 					<Image
-						src={preview || avatar || '/images/default-avatar.png'}
+						src={avatar || '/images/default-avatar.png'}
 						alt='Circle Avatar'
 						width={200}
 						height={200}
@@ -79,6 +62,14 @@ export default function CircleAvatar({ avatar, setFormData }: CircleAvatarProps)
 							<div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white'></div>
 						</div>
 					)}
+					{error && <p className='text-red-500 text-sm mt-1'>{error}</p>}
+					<ImageUploadCropper
+						onUploadStart={handleUploadStart}
+						onUploadComplete={handleUploadComplete}
+						onUploadError={handleUploadError}
+						uploadEndpoint='/api/upload'
+						aspectRatio={1}
+					/>
 				</div>
 			</div>
 		</div>

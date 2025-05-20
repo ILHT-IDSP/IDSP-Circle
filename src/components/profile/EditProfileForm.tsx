@@ -1,9 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Session } from 'next-auth';
 import { Pencil } from 'lucide-react';
+import { createCroppedImage } from '../user_registration/add_profilepicture/cropUtils';
+import ImageCropper from '../user_registration/add_profilepicture/ImageCropper';
 
 interface ExtendedUser {
 	id?: string;
@@ -19,10 +21,29 @@ export default function EditProfileForm({ session }: { session: Session | null }
 	const [email, setEmail] = useState(session?.user?.email || '');
 	const [bio, setBio] = useState('');
 	const [avatar, setAvatar] = useState(session?.user?.image || '');
+	const [preview, setPreview] = useState<string | null>(null);
+	const [showCropper, setShowCropper] = useState(false);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
 	const router = useRouter();
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	// Functions to handle the cropper
+	const handleCropComplete = (croppedArea: any) => {
+		setCroppedAreaPixels(croppedArea);
+	};
+
+	const handleCropCancel = () => {
+		setShowCropper(false);
+		if (preview) {
+			URL.revokeObjectURL(preview);
+			setPreview(null);
+		}
+		setSelectedFile(null);
+	};
 	useEffect(() => {
 		const fetchUserProfile = async () => {
 			if (!session?.user?.username) {
@@ -35,9 +56,10 @@ export default function EditProfileForm({ session }: { session: Session | null }
 				const response = await fetch(`/api/users/${username}`);
 				if (response.ok) {
 					const data = await response.json();
-
 					if (data.bio) setBio(data.bio);
 					if (data.username) setUsername(data.username);
+					// Update avatar with the latest image from the database
+					if (data.profileImage) setAvatar(data.profileImage);
 				}
 			} catch (error: unknown) {
 				console.error('Error fetching user profile:', error);
@@ -48,28 +70,44 @@ export default function EditProfileForm({ session }: { session: Session | null }
 
 		fetchUserProfile();
 	}, [session]);
-	const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
-		// Show preview immediately
-		setAvatar(URL.createObjectURL(file));
-		setIsSubmitting(true); // Show loading state
+		if (file.type.startsWith('image/')) {
+			// Create a preview and open the cropper
+			const previewUrl = URL.createObjectURL(file);
+			setPreview(previewUrl);
+			setSelectedFile(file);
+			setShowCropper(true);
+		} else {
+			setError('Please select an image file');
+		}
+	};
+
+	const uploadCroppedImage = async () => {
+		if (!preview || !croppedAreaPixels) return;
 
 		try {
-			// Use the same API endpoint as the circle component
+			setIsSubmitting(true); // Show loading state
+
+			// Create a cropped image blob
+			const croppedImageBlob = await createCroppedImage(preview, croppedAreaPixels);
+
+			// Create a file from the blob
+			const croppedFile = new File([croppedImageBlob], selectedFile?.name || 'cropped-profile.jpg', { type: 'image/jpeg' });
+
+			// Upload the cropped file
 			const formData = new FormData();
-			formData.append('file', file); // Changed from 'avatar' to 'file' to match the API expectation
+			formData.append('file', croppedFile);
 
 			const response = await fetch('/api/upload', {
-				// Changed from '/api/user/avatar' to '/api/upload'
 				method: 'POST',
 				body: formData,
 			});
 
 			const data = await response.json();
 			if (data.url) {
-				// Changed from data.imageUrl to data.url
 				setAvatar(data.url);
 
 				// Update the user's avatar in the database
@@ -96,6 +134,14 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			setError('Failed to upload image');
 		} finally {
 			setIsSubmitting(false); // Hide loading state
+			setShowCropper(false);
+
+			// Clean up the blob URL to prevent memory leaks
+			if (preview) {
+				URL.revokeObjectURL(preview);
+				setPreview(null);
+			}
+			setSelectedFile(null);
 		}
 	};
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -156,35 +202,48 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			onSubmit={handleSubmit}
 			className='flex flex-col items-center p-4 bg-circles-light rounded-2xl shadow-lg'
 		>
-			{error && <div className='text-red-600 mb-2'>{error}</div>}{' '}
-			<label className='relative cursor-pointer mb-4'>
-				<input
-					type='file'
-					accept='image/*'
-					className='hidden'
-					onChange={handleAvatarChange}
+			{error && <div className='text-red-600 mb-2'>{error}</div>}
+			{/* Image Cropper Modal */}
+			{showCropper && preview && (
+				<ImageCropper
+					imageUrl={preview}
+					onCropComplete={handleCropComplete}
+					onCancel={handleCropCancel}
+					onConfirm={uploadCroppedImage}
+					isSubmitting={isSubmitting}
 				/>
-				<div className='relative'>
+			)}
+			<div className='mb-4 text-center'>
+				<div className='relative inline-block cursor-pointer'>
 					<Image
 						src={avatar || '/images/default-avatar.png'}
 						alt='Profile'
 						width={96}
 						height={96}
-						className='w-24 h-24 rounded-full object-cover border-4 border-circles-dark-blue'
+						className='w-24 h-24 rounded-full object-cover border-4 border-circles-dark-blue dark:border-blue-600'
+						onClick={() => inputRef.current?.click()}
 					/>
 					{isSubmitting && (
 						<div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-full'>
 							<div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white'></div>
 						</div>
 					)}
-					<div className='absolute bottom-0 right-0 bg-black rounded-full p-1 shadow-md'>
+					<div className='absolute bottom-0 right-0 bg-black dark:bg-gray-800 rounded-full p-1.5 shadow-md hover:bg-gray-800 dark:hover:bg-black transition-colors'>
 						<Pencil
 							size={16}
 							className='text-white'
 						/>
 					</div>
+					<input
+						ref={inputRef}
+						type='file'
+						accept='image/*'
+						className='hidden'
+						onChange={handleAvatarChange}
+					/>
 				</div>
-			</label>
+				<p className='text-sm text-gray-500 dark:text-gray-400 mt-2'>Click to change profile picture</p>
+			</div>
 			{/* Name */}
 			<div className='w-full mb-4'>
 				{' '}

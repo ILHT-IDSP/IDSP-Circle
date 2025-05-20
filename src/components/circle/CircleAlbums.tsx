@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AlbumCard from '../album/AlbumCard';
+import AlbumGrid from '../album/AlbumGrid';
 import { useRouter } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
 
@@ -108,8 +109,7 @@ export default function CircleAlbums({ circleId }: { circleId: number }) {
 					)}
 				</div>
 			) : (
-				<div className='grid grid-cols-2 gap-4'>
-					{' '}
+				<AlbumGrid albumIds={albums.map(album => album.id)}>
 					{albums.map(album => (
 						<AlbumCard
 							albumId={album.id}
@@ -120,7 +120,7 @@ export default function CircleAlbums({ circleId }: { circleId: number }) {
 							key={album.id}
 						/>
 					))}
-				</div>
+				</AlbumGrid>
 			)}
 		</div>
 	);
