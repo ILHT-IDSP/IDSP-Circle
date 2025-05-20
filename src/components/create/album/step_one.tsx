@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { FaUpload, FaTimes, FaCheck } from 'react-icons/fa';
 import Image from 'next/image';
+import { AlbumPhoto } from '../create_album';
 
 interface IAlbumFormData {
 	title: string;
@@ -10,14 +11,7 @@ interface IAlbumFormData {
 	isPrivate: boolean;
 	creatorId: string | undefined;
 	circleId: string | null;
-	photos: Array<{
-		file: File;
-		previewUrl: string;
-		description: string;
-		uploading: boolean;
-		uploaded: boolean;
-		error?: string;
-	}>;
+	photos: AlbumPhoto[];
 }
 
 interface CreateAlbumStepOneProps {
@@ -100,7 +94,7 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 		e.preventDefault();
 		e.stopPropagation();
 		setDragActive(false);
-		
+
 		if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
 			addFiles(e.dataTransfer.files);
 		}
@@ -108,15 +102,19 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		
+
 		if (formData.photos.length === 0) {
 			alert('Please add at least one photo to continue');
 			return;
 		}
-		
+
 		onNext();
-	};	return (
-		<form onSubmit={handleSubmit} className='w-full'>
+	};
+	return (
+		<form
+			onSubmit={handleSubmit}
+			className='w-full'
+		>
 			<div className='mb-6'>
 				<h2 className='text-xl font-medium mb-4 text-center'>Add Photos to Your Album</h2>
 
@@ -126,12 +124,10 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 					onDragEnter={handleDragEnter}
 					onDragLeave={handleDragLeave}
 					onDrop={handleDrop}
-					className={`border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer transition-all min-h-[200px] ${
-						dragActive 
-							? 'border-[var(--primary)] bg-[var(--primary)] bg-opacity-5' 
-							: 'border-[var(--foreground)] border-opacity-20 hover:border-opacity-40'
-					}`}
-				>					<FaUpload className='text-4xl mb-4 text-[var(--foreground)] opacity-60' />
+					className={`border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer transition-all min-h-[200px] ${dragActive ? 'border-[var(--primary)] bg-[var(--primary)] bg-opacity-5' : 'border-[var(--foreground)] border-opacity-20 hover:border-opacity-40'}`}
+				>
+					{' '}
+					<FaUpload className='text-4xl mb-4 text-[var(--foreground)] opacity-60' />
 					<p className='mb-2 font-medium'>Drag & drop photos here</p>
 					<p className='text-sm opacity-70 mb-4'>or click to browse your files</p>
 					<p className='text-xs opacity-50'>JPG, PNG, or GIF (max 5MB each)</p>
@@ -142,7 +138,7 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 						multiple
 						onChange={handleFileSelect}
 						className='hidden'
-						aria-label="Upload photos"
+						aria-label='Upload photos'
 					/>
 				</div>
 			</div>
