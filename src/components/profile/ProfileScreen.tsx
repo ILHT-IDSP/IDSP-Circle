@@ -1,106 +1,47 @@
-'use client';
+"use client";
 
-import { Session } from 'next-auth';
-import ProfileHeader from './ProfileHeader';
-import ProfileTabs from './ProfileTabs';
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { Session } from "next-auth";
+import ProfileHeader from "./ProfileHeader";
+import ProfileTabs from "./ProfileTabs";
 
-interface ProfileUser {
-	id: number;
-	username: string;
-	name?: string | null;
-	bio?: string | null;
-	profileImage?: string | null;
-	coverImage?: string | null;
-	isProfilePrivate?: boolean;
-	circlesCount: number;
-	albumsCount: number;
-	followersCount: number;
-	followingCount: number;
-	isFollowing: boolean;
-	isOwnProfile: boolean;
+interface User {
+    id: number;
+    name: string;
+    username: string;
+    profileImage: string;
+    bio: string;
+    circleCount: number;
+    friendCount: number;
 }
 
 export default function ProfileScreen({ session }: { session: Session | null }) {
-	const params = useParams();
-	const router = useRouter();
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-	const [profileData, setProfileData] = useState<ProfileUser | null>(null);
-	// Get username from URL params
-	const username = typeof params?.username === 'string' ? params.username : Array.isArray(params?.username) ? params.username[0] : null;
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const res = await fetch(`/api/users/${session?.user.id}`);
+                const data = await res.json();
+                setUser(data);
+            } catch (error) {
+                console.error("Failed to fetch user data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-	// Add function to handle follower count updates
-	const handleFollowUpdate = (isFollowing: boolean) => {
-		if (profileData) {
-			setProfileData({
-				...profileData,
-				followersCount: isFollowing ? profileData.followersCount + 1 : Math.max(0, profileData.followersCount - 1),
-				isFollowing: isFollowing,
-			});
-		}
-	};
+        if (session?.user.id) fetchUserData();
+    }, [session?.user.id]);
 
-	useEffect(() => {
-		const fetchProfileData = async () => {
-			try {
-				if (!username) {
-					throw new Error('Username not provided');
-				}
+    if (loading) return <p className="text-center text-circles-light">Loading...</p>;
+    if (!user) return <p className="text-center text-circles-light">User not found</p>;
 
-				const response = await fetch(`/api/users/${username}`);
-
-				if (!response.ok) {
-					if (response.status === 404) {
-						throw new Error('User not found');
-					}
-					throw new Error('Failed to fetch user data');
-				}
-
-				const data = await response.json();
-				setProfileData(data);
-				setLoading(false);
-			} catch (err) {
-				console.error('Error fetching profile data:', err);
-				setError(err instanceof Error ? err.message : 'An error occurred');
-				setLoading(false);
-			}
-		};
-
-		fetchProfileData();
-	}, [username]);
-
-	if (loading) {
-		return (
-			<div className='min-h-screen bg-circles-dark px-4 pt-6 pb-20 flex items-center justify-center'>
-				<div className='text-circles-light text-lg'>Loading profile...</div>
-			</div>
-		);
-	}
-
-	if (error || !profileData) {
-		return (
-			<div className='min-h-screen bg-circles-dark px-4 pt-6 pb-20 flex flex-col items-center justify-center'>
-				<div className='text-circles-light text-lg mb-4'>{error || 'Profile not found'}</div>
-				<button
-					onClick={() => router.push('/')}
-					className='bg-circles-dark-blue text-circles-light px-4 py-2 rounded-lg'
-				>
-					Go Home
-				</button>
-			</div>
-		);
-	}
-	return (
-		<div className='min-h-screen bg-circles-dark px-4 pt-6 pb-32'>
-			<ProfileHeader
-				profileData={profileData}
-				session={session}
-				onFollowUpdate={handleFollowUpdate}
-			/>
-			<ProfileTabs />
-		</div>
-	);
+    return (
+        <div className="min-h-screen bg-circles-dark px-4 pt-6 pb-20">
+            <ProfileHeader session={session} />
+            <ProfileTabs user={user} />
+        </div>
+    );
 }

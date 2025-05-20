@@ -10,7 +10,12 @@ export async function GET(req: NextRequest) {
         }
 
         const activities = await prisma.activity.findMany({
-            where: { userId: parseInt(session.user.id) },
+            where: { 
+                userId: parseInt(session.user.id),
+                type: {
+                    notIn: ["friend_request", "circle_invite"] // Exclude pending requests
+                }
+            },
             orderBy: { createdAt: "desc" },
             include: {
                 user: {
@@ -18,6 +23,12 @@ export async function GET(req: NextRequest) {
                         id: true,
                         name: true,
                         username: true,
+                    },
+                },
+                circle: {
+                    select: {
+                        id: true,
+                        name: true,
                     },
                 },
             },
