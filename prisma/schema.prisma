@@ -31,7 +31,6 @@ model User {
   memberships      Membership[]
   posts            Post[]
   settings         UserSettings?
-  activities       Activity[]
 }
 
 model Circle {
@@ -202,18 +201,6 @@ model Photo {
   Album       Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
 
   @@index([albumId])
-}
-
-model Activity {
-  id        Int      @id @default(autoincrement())
-  type      String // e.g., "like", "comment", "follow", "circle_invite", "friend_request"
-  content   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 enum Role {

@@ -1,7 +1,7 @@
 "use client";
 import SettingsCategory from "@/components/settings_form/SettingsCategory";
 import SettingsItem from "@/components/settings_form/SettingsItem";
-import {FaBell, FaUserFriends, FaAdjust, FaImages, FaSignOutAlt} from "react-icons/fa";
+import {FaBell, FaUserFriends, FaAdjust, FaImages, FaSignOutAlt, FaTrash} from "react-icons/fa";
 import {signOut} from "next-auth/react";
 import NavBar from "@/components/bottom_bar/NavBar";
 // import DemoNavBar from '@/components/top_nav/DemoNavBar';
@@ -9,7 +9,7 @@ import NavBar from "@/components/bottom_bar/NavBar";
 export default function SettingsPage() {
     return (
         <>
-            <div className="w-full max-w-2xl mx-auto min-h-screen p-6">
+            <div className="w-full max-w-2xl mx-auto min-h-screen p-6 mb-10">
                 {/* <DemoNavBar /> */}
                 <header className="mb-6">
                     <h1 className="text-3xl font-bold">Settings</h1>
@@ -51,6 +51,12 @@ export default function SettingsPage() {
                         label="Friends List"
                         icon={<FaUserFriends />}
                         href="/settings/friends"
+                    />
+                    <SettingsItem
+                        customColour="red"
+                        label="Delete Account"
+                        icon={<FaTrash />}
+                        href="/settings/terminate"
                     />
                     <SettingsItem
                         label="Logout"

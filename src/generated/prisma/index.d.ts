@@ -73,11 +73,6 @@ export type AlbumLike = $Result.DefaultSelection<Prisma.$AlbumLikePayload>
  * 
  */
 export type Photo = $Result.DefaultSelection<Prisma.$PhotoPayload>
-/**
- * Model Activity
- * 
- */
-export type Activity = $Result.DefaultSelection<Prisma.$ActivityPayload>
 
 /**
  * Enums
@@ -341,16 +336,6 @@ export class PrismaClient<
     * ```
     */
   get photo(): Prisma.PhotoDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.activity`: Exposes CRUD operations for the **Activity** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Activities
-    * const activities = await prisma.activity.findMany()
-    * ```
-    */
-  get activity(): Prisma.ActivityDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -802,8 +787,7 @@ export namespace Prisma {
     UserSettings: 'UserSettings',
     AlbumComment: 'AlbumComment',
     AlbumLike: 'AlbumLike',
-    Photo: 'Photo',
-    Activity: 'Activity'
+    Photo: 'Photo'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -822,7 +806,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "circle" | "membership" | "post" | "comment" | "like" | "follow" | "album" | "userSettings" | "albumComment" | "albumLike" | "photo" | "activity"
+      modelProps: "user" | "circle" | "membership" | "post" | "comment" | "like" | "follow" | "album" | "userSettings" | "albumComment" | "albumLike" | "photo"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1714,80 +1698,6 @@ export namespace Prisma {
           }
         }
       }
-      Activity: {
-        payload: Prisma.$ActivityPayload<ExtArgs>
-        fields: Prisma.ActivityFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ActivityFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ActivityFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>
-          }
-          findFirst: {
-            args: Prisma.ActivityFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ActivityFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>
-          }
-          findMany: {
-            args: Prisma.ActivityFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>[]
-          }
-          create: {
-            args: Prisma.ActivityCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>
-          }
-          createMany: {
-            args: Prisma.ActivityCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ActivityCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>[]
-          }
-          delete: {
-            args: Prisma.ActivityDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>
-          }
-          update: {
-            args: Prisma.ActivityUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>
-          }
-          deleteMany: {
-            args: Prisma.ActivityDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ActivityUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ActivityUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>[]
-          }
-          upsert: {
-            args: Prisma.ActivityUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityPayload>
-          }
-          aggregate: {
-            args: Prisma.ActivityAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateActivity>
-          }
-          groupBy: {
-            args: Prisma.ActivityGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ActivityGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ActivityCountArgs<ExtArgs>
-            result: $Utils.Optional<ActivityCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1884,7 +1794,6 @@ export namespace Prisma {
     albumComment?: AlbumCommentOmit
     albumLike?: AlbumLikeOmit
     photo?: PhotoOmit
-    activity?: ActivityOmit
   }
 
   /* Types for Logging */
@@ -1989,7 +1898,6 @@ export namespace Prisma {
     likes: number
     memberships: number
     posts: number
-    activities: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2003,7 +1911,6 @@ export namespace Prisma {
     likes?: boolean | UserCountOutputTypeCountLikesArgs
     memberships?: boolean | UserCountOutputTypeCountMembershipsArgs
     posts?: boolean | UserCountOutputTypeCountPostsArgs
-    activities?: boolean | UserCountOutputTypeCountActivitiesArgs
   }
 
   // Custom InputTypes
@@ -2085,13 +1992,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityWhereInput
   }
 
 
@@ -2494,7 +2394,6 @@ export namespace Prisma {
     memberships?: boolean | User$membershipsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
-    activities?: boolean | User$activitiesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2553,7 +2452,6 @@ export namespace Prisma {
     memberships?: boolean | User$membershipsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
-    activities?: boolean | User$activitiesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2573,7 +2471,6 @@ export namespace Prisma {
       memberships: Prisma.$MembershipPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
       settings: Prisma.$UserSettingsPayload<ExtArgs> | null
-      activities: Prisma.$ActivityPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2992,7 +2889,6 @@ export namespace Prisma {
     memberships<T extends User$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__UserSettingsClient<$Result.GetResult<Prisma.$UserSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    activities<T extends User$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3677,30 +3573,6 @@ export namespace Prisma {
      */
     include?: UserSettingsInclude<ExtArgs> | null
     where?: UserSettingsWhereInput
-  }
-
-  /**
-   * User.activities
-   */
-  export type User$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    where?: ActivityWhereInput
-    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
-    cursor?: ActivityWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
   }
 
   /**
@@ -16416,1115 +16288,6 @@ export namespace Prisma {
 
 
   /**
-   * Model Activity
-   */
-
-  export type AggregateActivity = {
-    _count: ActivityCountAggregateOutputType | null
-    _avg: ActivityAvgAggregateOutputType | null
-    _sum: ActivitySumAggregateOutputType | null
-    _min: ActivityMinAggregateOutputType | null
-    _max: ActivityMaxAggregateOutputType | null
-  }
-
-  export type ActivityAvgAggregateOutputType = {
-    id: number | null
-    userId: number | null
-  }
-
-  export type ActivitySumAggregateOutputType = {
-    id: number | null
-    userId: number | null
-  }
-
-  export type ActivityMinAggregateOutputType = {
-    id: number | null
-    type: string | null
-    content: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    userId: number | null
-  }
-
-  export type ActivityMaxAggregateOutputType = {
-    id: number | null
-    type: string | null
-    content: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    userId: number | null
-  }
-
-  export type ActivityCountAggregateOutputType = {
-    id: number
-    type: number
-    content: number
-    createdAt: number
-    updatedAt: number
-    userId: number
-    _all: number
-  }
-
-
-  export type ActivityAvgAggregateInputType = {
-    id?: true
-    userId?: true
-  }
-
-  export type ActivitySumAggregateInputType = {
-    id?: true
-    userId?: true
-  }
-
-  export type ActivityMinAggregateInputType = {
-    id?: true
-    type?: true
-    content?: true
-    createdAt?: true
-    updatedAt?: true
-    userId?: true
-  }
-
-  export type ActivityMaxAggregateInputType = {
-    id?: true
-    type?: true
-    content?: true
-    createdAt?: true
-    updatedAt?: true
-    userId?: true
-  }
-
-  export type ActivityCountAggregateInputType = {
-    id?: true
-    type?: true
-    content?: true
-    createdAt?: true
-    updatedAt?: true
-    userId?: true
-    _all?: true
-  }
-
-  export type ActivityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Activity to aggregate.
-     */
-    where?: ActivityWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Activities to fetch.
-     */
-    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ActivityWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Activities from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Activities.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Activities
-    **/
-    _count?: true | ActivityCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ActivityAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ActivitySumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ActivityMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ActivityMaxAggregateInputType
-  }
-
-  export type GetActivityAggregateType<T extends ActivityAggregateArgs> = {
-        [P in keyof T & keyof AggregateActivity]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateActivity[P]>
-      : GetScalarType<T[P], AggregateActivity[P]>
-  }
-
-
-
-
-  export type ActivityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityWhereInput
-    orderBy?: ActivityOrderByWithAggregationInput | ActivityOrderByWithAggregationInput[]
-    by: ActivityScalarFieldEnum[] | ActivityScalarFieldEnum
-    having?: ActivityScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ActivityCountAggregateInputType | true
-    _avg?: ActivityAvgAggregateInputType
-    _sum?: ActivitySumAggregateInputType
-    _min?: ActivityMinAggregateInputType
-    _max?: ActivityMaxAggregateInputType
-  }
-
-  export type ActivityGroupByOutputType = {
-    id: number
-    type: string
-    content: string | null
-    createdAt: Date
-    updatedAt: Date
-    userId: number
-    _count: ActivityCountAggregateOutputType | null
-    _avg: ActivityAvgAggregateOutputType | null
-    _sum: ActivitySumAggregateOutputType | null
-    _min: ActivityMinAggregateOutputType | null
-    _max: ActivityMaxAggregateOutputType | null
-  }
-
-  type GetActivityGroupByPayload<T extends ActivityGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ActivityGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ActivityGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ActivityGroupByOutputType[P]>
-            : GetScalarType<T[P], ActivityGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ActivitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    type?: boolean
-    content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["activity"]>
-
-  export type ActivitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    type?: boolean
-    content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["activity"]>
-
-  export type ActivitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    type?: boolean
-    content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["activity"]>
-
-  export type ActivitySelectScalar = {
-    id?: boolean
-    type?: boolean
-    content?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    userId?: boolean
-  }
-
-  export type ActivityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "content" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["activity"]>
-  export type ActivityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type ActivityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type ActivityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $ActivityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Activity"
-    objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      type: string
-      content: string | null
-      createdAt: Date
-      updatedAt: Date
-      userId: number
-    }, ExtArgs["result"]["activity"]>
-    composites: {}
-  }
-
-  type ActivityGetPayload<S extends boolean | null | undefined | ActivityDefaultArgs> = $Result.GetResult<Prisma.$ActivityPayload, S>
-
-  type ActivityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ActivityFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ActivityCountAggregateInputType | true
-    }
-
-  export interface ActivityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Activity'], meta: { name: 'Activity' } }
-    /**
-     * Find zero or one Activity that matches the filter.
-     * @param {ActivityFindUniqueArgs} args - Arguments to find a Activity
-     * @example
-     * // Get one Activity
-     * const activity = await prisma.activity.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ActivityFindUniqueArgs>(args: SelectSubset<T, ActivityFindUniqueArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Activity that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ActivityFindUniqueOrThrowArgs} args - Arguments to find a Activity
-     * @example
-     * // Get one Activity
-     * const activity = await prisma.activity.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ActivityFindUniqueOrThrowArgs>(args: SelectSubset<T, ActivityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Activity that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityFindFirstArgs} args - Arguments to find a Activity
-     * @example
-     * // Get one Activity
-     * const activity = await prisma.activity.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ActivityFindFirstArgs>(args?: SelectSubset<T, ActivityFindFirstArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Activity that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityFindFirstOrThrowArgs} args - Arguments to find a Activity
-     * @example
-     * // Get one Activity
-     * const activity = await prisma.activity.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ActivityFindFirstOrThrowArgs>(args?: SelectSubset<T, ActivityFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Activities that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Activities
-     * const activities = await prisma.activity.findMany()
-     * 
-     * // Get first 10 Activities
-     * const activities = await prisma.activity.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const activityWithIdOnly = await prisma.activity.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ActivityFindManyArgs>(args?: SelectSubset<T, ActivityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Activity.
-     * @param {ActivityCreateArgs} args - Arguments to create a Activity.
-     * @example
-     * // Create one Activity
-     * const Activity = await prisma.activity.create({
-     *   data: {
-     *     // ... data to create a Activity
-     *   }
-     * })
-     * 
-     */
-    create<T extends ActivityCreateArgs>(args: SelectSubset<T, ActivityCreateArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Activities.
-     * @param {ActivityCreateManyArgs} args - Arguments to create many Activities.
-     * @example
-     * // Create many Activities
-     * const activity = await prisma.activity.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ActivityCreateManyArgs>(args?: SelectSubset<T, ActivityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Activities and returns the data saved in the database.
-     * @param {ActivityCreateManyAndReturnArgs} args - Arguments to create many Activities.
-     * @example
-     * // Create many Activities
-     * const activity = await prisma.activity.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Activities and only return the `id`
-     * const activityWithIdOnly = await prisma.activity.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ActivityCreateManyAndReturnArgs>(args?: SelectSubset<T, ActivityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Activity.
-     * @param {ActivityDeleteArgs} args - Arguments to delete one Activity.
-     * @example
-     * // Delete one Activity
-     * const Activity = await prisma.activity.delete({
-     *   where: {
-     *     // ... filter to delete one Activity
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ActivityDeleteArgs>(args: SelectSubset<T, ActivityDeleteArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Activity.
-     * @param {ActivityUpdateArgs} args - Arguments to update one Activity.
-     * @example
-     * // Update one Activity
-     * const activity = await prisma.activity.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ActivityUpdateArgs>(args: SelectSubset<T, ActivityUpdateArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Activities.
-     * @param {ActivityDeleteManyArgs} args - Arguments to filter Activities to delete.
-     * @example
-     * // Delete a few Activities
-     * const { count } = await prisma.activity.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ActivityDeleteManyArgs>(args?: SelectSubset<T, ActivityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Activities.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Activities
-     * const activity = await prisma.activity.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ActivityUpdateManyArgs>(args: SelectSubset<T, ActivityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Activities and returns the data updated in the database.
-     * @param {ActivityUpdateManyAndReturnArgs} args - Arguments to update many Activities.
-     * @example
-     * // Update many Activities
-     * const activity = await prisma.activity.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Activities and only return the `id`
-     * const activityWithIdOnly = await prisma.activity.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ActivityUpdateManyAndReturnArgs>(args: SelectSubset<T, ActivityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Activity.
-     * @param {ActivityUpsertArgs} args - Arguments to update or create a Activity.
-     * @example
-     * // Update or create a Activity
-     * const activity = await prisma.activity.upsert({
-     *   create: {
-     *     // ... data to create a Activity
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Activity we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ActivityUpsertArgs>(args: SelectSubset<T, ActivityUpsertArgs<ExtArgs>>): Prisma__ActivityClient<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Activities.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityCountArgs} args - Arguments to filter Activities to count.
-     * @example
-     * // Count the number of Activities
-     * const count = await prisma.activity.count({
-     *   where: {
-     *     // ... the filter for the Activities we want to count
-     *   }
-     * })
-    **/
-    count<T extends ActivityCountArgs>(
-      args?: Subset<T, ActivityCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ActivityCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Activity.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ActivityAggregateArgs>(args: Subset<T, ActivityAggregateArgs>): Prisma.PrismaPromise<GetActivityAggregateType<T>>
-
-    /**
-     * Group by Activity.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ActivityGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ActivityGroupByArgs['orderBy'] }
-        : { orderBy?: ActivityGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ActivityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActivityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Activity model
-   */
-  readonly fields: ActivityFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Activity.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Activity model
-   */
-  interface ActivityFieldRefs {
-    readonly id: FieldRef<"Activity", 'Int'>
-    readonly type: FieldRef<"Activity", 'String'>
-    readonly content: FieldRef<"Activity", 'String'>
-    readonly createdAt: FieldRef<"Activity", 'DateTime'>
-    readonly updatedAt: FieldRef<"Activity", 'DateTime'>
-    readonly userId: FieldRef<"Activity", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Activity findUnique
-   */
-  export type ActivityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * Filter, which Activity to fetch.
-     */
-    where: ActivityWhereUniqueInput
-  }
-
-  /**
-   * Activity findUniqueOrThrow
-   */
-  export type ActivityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * Filter, which Activity to fetch.
-     */
-    where: ActivityWhereUniqueInput
-  }
-
-  /**
-   * Activity findFirst
-   */
-  export type ActivityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * Filter, which Activity to fetch.
-     */
-    where?: ActivityWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Activities to fetch.
-     */
-    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Activities.
-     */
-    cursor?: ActivityWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Activities from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Activities.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Activities.
-     */
-    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
-  }
-
-  /**
-   * Activity findFirstOrThrow
-   */
-  export type ActivityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * Filter, which Activity to fetch.
-     */
-    where?: ActivityWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Activities to fetch.
-     */
-    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Activities.
-     */
-    cursor?: ActivityWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Activities from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Activities.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Activities.
-     */
-    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
-  }
-
-  /**
-   * Activity findMany
-   */
-  export type ActivityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * Filter, which Activities to fetch.
-     */
-    where?: ActivityWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Activities to fetch.
-     */
-    orderBy?: ActivityOrderByWithRelationInput | ActivityOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Activities.
-     */
-    cursor?: ActivityWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Activities from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Activities.
-     */
-    skip?: number
-    distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
-  }
-
-  /**
-   * Activity create
-   */
-  export type ActivityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Activity.
-     */
-    data: XOR<ActivityCreateInput, ActivityUncheckedCreateInput>
-  }
-
-  /**
-   * Activity createMany
-   */
-  export type ActivityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Activities.
-     */
-    data: ActivityCreateManyInput | ActivityCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Activity createManyAndReturn
-   */
-  export type ActivityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * The data used to create many Activities.
-     */
-    data: ActivityCreateManyInput | ActivityCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Activity update
-   */
-  export type ActivityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Activity.
-     */
-    data: XOR<ActivityUpdateInput, ActivityUncheckedUpdateInput>
-    /**
-     * Choose, which Activity to update.
-     */
-    where: ActivityWhereUniqueInput
-  }
-
-  /**
-   * Activity updateMany
-   */
-  export type ActivityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Activities.
-     */
-    data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyInput>
-    /**
-     * Filter which Activities to update
-     */
-    where?: ActivityWhereInput
-    /**
-     * Limit how many Activities to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Activity updateManyAndReturn
-   */
-  export type ActivityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * The data used to update Activities.
-     */
-    data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyInput>
-    /**
-     * Filter which Activities to update
-     */
-    where?: ActivityWhereInput
-    /**
-     * Limit how many Activities to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Activity upsert
-   */
-  export type ActivityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Activity to update in case it exists.
-     */
-    where: ActivityWhereUniqueInput
-    /**
-     * In case the Activity found by the `where` argument doesn't exist, create a new Activity with this data.
-     */
-    create: XOR<ActivityCreateInput, ActivityUncheckedCreateInput>
-    /**
-     * In case the Activity was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ActivityUpdateInput, ActivityUncheckedUpdateInput>
-  }
-
-  /**
-   * Activity delete
-   */
-  export type ActivityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-    /**
-     * Filter which Activity to delete.
-     */
-    where: ActivityWhereUniqueInput
-  }
-
-  /**
-   * Activity deleteMany
-   */
-  export type ActivityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Activities to delete
-     */
-    where?: ActivityWhereInput
-    /**
-     * Limit how many Activities to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Activity without action
-   */
-  export type ActivityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Activity
-     */
-    select?: ActivitySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Activity
-     */
-    omit?: ActivityOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Enums
    */
 
@@ -17697,18 +16460,6 @@ export namespace Prisma {
   export type PhotoScalarFieldEnum = (typeof PhotoScalarFieldEnum)[keyof typeof PhotoScalarFieldEnum]
 
 
-  export const ActivityScalarFieldEnum: {
-    id: 'id',
-    type: 'type',
-    content: 'content',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    userId: 'userId'
-  };
-
-  export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
-
-
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -17844,7 +16595,6 @@ export namespace Prisma {
     memberships?: MembershipListRelationFilter
     posts?: PostListRelationFilter
     settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
-    activities?: ActivityListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -17870,7 +16620,6 @@ export namespace Prisma {
     memberships?: MembershipOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
     settings?: UserSettingsOrderByWithRelationInput
-    activities?: ActivityOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -17899,7 +16648,6 @@ export namespace Prisma {
     memberships?: MembershipListRelationFilter
     posts?: PostListRelationFilter
     settings?: XOR<UserSettingsNullableScalarRelationFilter, UserSettingsWhereInput> | null
-    activities?: ActivityListRelationFilter
   }, "id" | "email" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -18722,68 +17470,6 @@ export namespace Prisma {
     albumId?: IntWithAggregatesFilter<"Photo"> | number
   }
 
-  export type ActivityWhereInput = {
-    AND?: ActivityWhereInput | ActivityWhereInput[]
-    OR?: ActivityWhereInput[]
-    NOT?: ActivityWhereInput | ActivityWhereInput[]
-    id?: IntFilter<"Activity"> | number
-    type?: StringFilter<"Activity"> | string
-    content?: StringNullableFilter<"Activity"> | string | null
-    createdAt?: DateTimeFilter<"Activity"> | Date | string
-    updatedAt?: DateTimeFilter<"Activity"> | Date | string
-    userId?: IntFilter<"Activity"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }
-
-  export type ActivityOrderByWithRelationInput = {
-    id?: SortOrder
-    type?: SortOrder
-    content?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-    user?: UserOrderByWithRelationInput
-  }
-
-  export type ActivityWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: ActivityWhereInput | ActivityWhereInput[]
-    OR?: ActivityWhereInput[]
-    NOT?: ActivityWhereInput | ActivityWhereInput[]
-    type?: StringFilter<"Activity"> | string
-    content?: StringNullableFilter<"Activity"> | string | null
-    createdAt?: DateTimeFilter<"Activity"> | Date | string
-    updatedAt?: DateTimeFilter<"Activity"> | Date | string
-    userId?: IntFilter<"Activity"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
-
-  export type ActivityOrderByWithAggregationInput = {
-    id?: SortOrder
-    type?: SortOrder
-    content?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-    _count?: ActivityCountOrderByAggregateInput
-    _avg?: ActivityAvgOrderByAggregateInput
-    _max?: ActivityMaxOrderByAggregateInput
-    _min?: ActivityMinOrderByAggregateInput
-    _sum?: ActivitySumOrderByAggregateInput
-  }
-
-  export type ActivityScalarWhereWithAggregatesInput = {
-    AND?: ActivityScalarWhereWithAggregatesInput | ActivityScalarWhereWithAggregatesInput[]
-    OR?: ActivityScalarWhereWithAggregatesInput[]
-    NOT?: ActivityScalarWhereWithAggregatesInput | ActivityScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Activity"> | number
-    type?: StringWithAggregatesFilter<"Activity"> | string
-    content?: StringNullableWithAggregatesFilter<"Activity"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Activity"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Activity"> | Date | string
-    userId?: IntWithAggregatesFilter<"Activity"> | number
-  }
-
   export type UserCreateInput = {
     email: string
     name?: string | null
@@ -18806,7 +17492,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -18832,7 +17517,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -18857,7 +17541,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -18883,7 +17566,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -19670,65 +18352,6 @@ export namespace Prisma {
     albumId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ActivityCreateInput = {
-    type: string
-    content?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutActivitiesInput
-  }
-
-  export type ActivityUncheckedCreateInput = {
-    id?: number
-    type: string
-    content?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId: number
-  }
-
-  export type ActivityUpdateInput = {
-    type?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutActivitiesNestedInput
-  }
-
-  export type ActivityUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type ActivityCreateManyInput = {
-    id?: number
-    type: string
-    content?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId: number
-  }
-
-  export type ActivityUpdateManyMutationInput = {
-    type?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: IntFieldUpdateOperationsInput | number
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -19845,12 +18468,6 @@ export namespace Prisma {
     isNot?: UserSettingsWhereInput | null
   }
 
-  export type ActivityListRelationFilter = {
-    every?: ActivityWhereInput
-    some?: ActivityWhereInput
-    none?: ActivityWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -19889,10 +18506,6 @@ export namespace Prisma {
   }
 
   export type PostOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ActivityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20590,43 +19203,6 @@ export namespace Prisma {
     albumId?: SortOrder
   }
 
-  export type ActivityCountOrderByAggregateInput = {
-    id?: SortOrder
-    type?: SortOrder
-    content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ActivityAvgOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ActivityMaxOrderByAggregateInput = {
-    id?: SortOrder
-    type?: SortOrder
-    content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ActivityMinOrderByAggregateInput = {
-    id?: SortOrder
-    type?: SortOrder
-    content?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ActivitySumOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-  }
-
   export type AlbumCreateNestedManyWithoutCreatorInput = {
     create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
@@ -20703,13 +19279,6 @@ export namespace Prisma {
     connect?: UserSettingsWhereUniqueInput
   }
 
-  export type ActivityCreateNestedManyWithoutUserInput = {
-    create?: XOR<ActivityCreateWithoutUserInput, ActivityUncheckedCreateWithoutUserInput> | ActivityCreateWithoutUserInput[] | ActivityUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutUserInput | ActivityCreateOrConnectWithoutUserInput[]
-    createMany?: ActivityCreateManyUserInputEnvelope
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-  }
-
   export type AlbumUncheckedCreateNestedManyWithoutCreatorInput = {
     create?: XOR<AlbumCreateWithoutCreatorInput, AlbumUncheckedCreateWithoutCreatorInput> | AlbumCreateWithoutCreatorInput[] | AlbumUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: AlbumCreateOrConnectWithoutCreatorInput | AlbumCreateOrConnectWithoutCreatorInput[]
@@ -20784,13 +19353,6 @@ export namespace Prisma {
     create?: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserSettingsCreateOrConnectWithoutUserInput
     connect?: UserSettingsWhereUniqueInput
-  }
-
-  export type ActivityUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<ActivityCreateWithoutUserInput, ActivityUncheckedCreateWithoutUserInput> | ActivityCreateWithoutUserInput[] | ActivityUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutUserInput | ActivityCreateOrConnectWithoutUserInput[]
-    createMany?: ActivityCreateManyUserInputEnvelope
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -20959,20 +19521,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserSettingsUpdateToOneWithWhereWithoutUserInput, UserSettingsUpdateWithoutUserInput>, UserSettingsUncheckedUpdateWithoutUserInput>
   }
 
-  export type ActivityUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ActivityCreateWithoutUserInput, ActivityUncheckedCreateWithoutUserInput> | ActivityCreateWithoutUserInput[] | ActivityUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutUserInput | ActivityCreateOrConnectWithoutUserInput[]
-    upsert?: ActivityUpsertWithWhereUniqueWithoutUserInput | ActivityUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ActivityCreateManyUserInputEnvelope
-    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    update?: ActivityUpdateWithWhereUniqueWithoutUserInput | ActivityUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ActivityUpdateManyWithWhereWithoutUserInput | ActivityUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-  }
-
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -21129,20 +19677,6 @@ export namespace Prisma {
     delete?: UserSettingsWhereInput | boolean
     connect?: UserSettingsWhereUniqueInput
     update?: XOR<XOR<UserSettingsUpdateToOneWithWhereWithoutUserInput, UserSettingsUpdateWithoutUserInput>, UserSettingsUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ActivityUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ActivityCreateWithoutUserInput, ActivityUncheckedCreateWithoutUserInput> | ActivityCreateWithoutUserInput[] | ActivityUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ActivityCreateOrConnectWithoutUserInput | ActivityCreateOrConnectWithoutUserInput[]
-    upsert?: ActivityUpsertWithWhereUniqueWithoutUserInput | ActivityUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ActivityCreateManyUserInputEnvelope
-    set?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    disconnect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    delete?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
-    update?: ActivityUpdateWithWhereUniqueWithoutUserInput | ActivityUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ActivityUpdateManyWithWhereWithoutUserInput | ActivityUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
   }
 
   export type AlbumCreateNestedManyWithoutCircleInput = {
@@ -21767,20 +20301,6 @@ export namespace Prisma {
     update?: XOR<XOR<AlbumUpdateToOneWithWhereWithoutPhotoInput, AlbumUpdateWithoutPhotoInput>, AlbumUncheckedUpdateWithoutPhotoInput>
   }
 
-  export type UserCreateNestedOneWithoutActivitiesInput = {
-    create?: XOR<UserCreateWithoutActivitiesInput, UserUncheckedCreateWithoutActivitiesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutActivitiesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type UserUpdateOneRequiredWithoutActivitiesNestedInput = {
-    create?: XOR<UserCreateWithoutActivitiesInput, UserUncheckedCreateWithoutActivitiesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutActivitiesInput
-    upsert?: UserUpsertWithoutActivitiesInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutActivitiesInput, UserUpdateWithoutActivitiesInput>, UserUncheckedUpdateWithoutActivitiesInput>
-  }
-
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -22289,31 +20809,6 @@ export namespace Prisma {
     create: XOR<UserSettingsCreateWithoutUserInput, UserSettingsUncheckedCreateWithoutUserInput>
   }
 
-  export type ActivityCreateWithoutUserInput = {
-    type: string
-    content?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ActivityUncheckedCreateWithoutUserInput = {
-    id?: number
-    type: string
-    content?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ActivityCreateOrConnectWithoutUserInput = {
-    where: ActivityWhereUniqueInput
-    create: XOR<ActivityCreateWithoutUserInput, ActivityUncheckedCreateWithoutUserInput>
-  }
-
-  export type ActivityCreateManyUserInputEnvelope = {
-    data: ActivityCreateManyUserInput | ActivityCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type AlbumUpsertWithWhereUniqueWithoutCreatorInput = {
     where: AlbumWhereUniqueInput
     update: XOR<AlbumUpdateWithoutCreatorInput, AlbumUncheckedUpdateWithoutCreatorInput>
@@ -22626,34 +21121,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ActivityUpsertWithWhereUniqueWithoutUserInput = {
-    where: ActivityWhereUniqueInput
-    update: XOR<ActivityUpdateWithoutUserInput, ActivityUncheckedUpdateWithoutUserInput>
-    create: XOR<ActivityCreateWithoutUserInput, ActivityUncheckedCreateWithoutUserInput>
-  }
-
-  export type ActivityUpdateWithWhereUniqueWithoutUserInput = {
-    where: ActivityWhereUniqueInput
-    data: XOR<ActivityUpdateWithoutUserInput, ActivityUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ActivityUpdateManyWithWhereWithoutUserInput = {
-    where: ActivityScalarWhereInput
-    data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type ActivityScalarWhereInput = {
-    AND?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-    OR?: ActivityScalarWhereInput[]
-    NOT?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
-    id?: IntFilter<"Activity"> | number
-    type?: StringFilter<"Activity"> | string
-    content?: StringNullableFilter<"Activity"> | string | null
-    createdAt?: DateTimeFilter<"Activity"> | Date | string
-    updatedAt?: DateTimeFilter<"Activity"> | Date | string
-    userId?: IntFilter<"Activity"> | number
-  }
-
   export type AlbumCreateWithoutCircleInput = {
     title: string
     description?: string | null
@@ -22712,7 +21179,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedCirclesInput = {
@@ -22737,7 +21203,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedCirclesInput = {
@@ -22851,7 +21316,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedCirclesInput = {
@@ -22876,7 +21340,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MembershipUpsertWithWhereUniqueWithoutCircleInput = {
@@ -22964,7 +21427,6 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -22989,7 +21451,6 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -23067,7 +21528,6 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -23092,7 +21552,6 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CommentCreateWithoutPostInput = {
@@ -23194,7 +21653,6 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -23219,7 +21677,6 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -23329,7 +21786,6 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -23354,7 +21810,6 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostCreateWithoutCommentsInput = {
@@ -23406,7 +21861,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
@@ -23431,7 +21885,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommentsInput = {
@@ -23505,7 +21958,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -23530,7 +21982,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostCreateWithoutLikesInput = {
@@ -23582,7 +22033,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLikesInput = {
@@ -23607,7 +22057,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLikesInput = {
@@ -23681,7 +22130,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLikesInput = {
@@ -23706,7 +22154,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFollowingInput = {
@@ -23730,7 +22177,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowingInput = {
@@ -23755,7 +22201,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowingInput = {
@@ -23784,7 +22229,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowersInput = {
@@ -23809,7 +22253,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowersInput = {
@@ -23849,7 +22292,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -23874,7 +22316,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFollowersInput = {
@@ -23909,7 +22350,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -23934,7 +22374,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CircleCreateWithoutAlbumInput = {
@@ -23990,7 +22429,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAlbumInput = {
@@ -24015,7 +22453,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAlbumInput = {
@@ -24164,7 +22601,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAlbumInput = {
@@ -24189,7 +22625,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AlbumCommentUpsertWithWhereUniqueWithoutAlbumInput = {
@@ -24273,7 +22708,6 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutUserInput
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSettingsInput = {
@@ -24298,7 +22732,6 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSettingsInput = {
@@ -24338,7 +22771,6 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutUserNestedInput
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettingsInput = {
@@ -24363,7 +22795,6 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AlbumCreateWithoutAlbumCommentInput = {
@@ -24419,7 +22850,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAlbumCommentInput = {
@@ -24444,7 +22874,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAlbumCommentInput = {
@@ -24522,7 +22951,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAlbumCommentInput = {
@@ -24547,7 +22975,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AlbumCreateWithoutAlbumLikeInput = {
@@ -24603,7 +23030,6 @@ export namespace Prisma {
     memberships?: MembershipCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     settings?: UserSettingsCreateNestedOneWithoutUserInput
-    activities?: ActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAlbumLikeInput = {
@@ -24628,7 +23054,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAlbumLikeInput = {
@@ -24706,7 +23131,6 @@ export namespace Prisma {
     memberships?: MembershipUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUpdateOneWithoutUserNestedInput
-    activities?: ActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAlbumLikeInput = {
@@ -24731,7 +23155,6 @@ export namespace Prisma {
     memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
-    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AlbumCreateWithoutPhotoInput = {
@@ -24802,120 +23225,6 @@ export namespace Prisma {
     circleId?: NullableIntFieldUpdateOperationsInput | number | null
     AlbumComment?: AlbumCommentUncheckedUpdateManyWithoutAlbumNestedInput
     AlbumLike?: AlbumLikeUncheckedUpdateManyWithoutAlbumNestedInput
-  }
-
-  export type UserCreateWithoutActivitiesInput = {
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean | null
-    Album?: AlbumCreateNestedManyWithoutCreatorInput
-    AlbumComment?: AlbumCommentCreateNestedManyWithoutUserInput
-    AlbumLike?: AlbumLikeCreateNestedManyWithoutUserInput
-    createdCircles?: CircleCreateNestedManyWithoutCreatorInput
-    comments?: CommentCreateNestedManyWithoutUserInput
-    following?: FollowCreateNestedManyWithoutFollowerInput
-    followers?: FollowCreateNestedManyWithoutFollowingInput
-    likes?: LikeCreateNestedManyWithoutUserInput
-    memberships?: MembershipCreateNestedManyWithoutUserInput
-    posts?: PostCreateNestedManyWithoutUserInput
-    settings?: UserSettingsCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutActivitiesInput = {
-    id?: number
-    email: string
-    name?: string | null
-    username: string
-    password: string
-    bio?: string | null
-    profileImage?: string | null
-    coverImage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isProfilePrivate?: boolean | null
-    Album?: AlbumUncheckedCreateNestedManyWithoutCreatorInput
-    AlbumComment?: AlbumCommentUncheckedCreateNestedManyWithoutUserInput
-    AlbumLike?: AlbumLikeUncheckedCreateNestedManyWithoutUserInput
-    createdCircles?: CircleUncheckedCreateNestedManyWithoutCreatorInput
-    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
-    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
-    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
-    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
-    memberships?: MembershipUncheckedCreateNestedManyWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    settings?: UserSettingsUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutActivitiesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutActivitiesInput, UserUncheckedCreateWithoutActivitiesInput>
-  }
-
-  export type UserUpsertWithoutActivitiesInput = {
-    update: XOR<UserUpdateWithoutActivitiesInput, UserUncheckedUpdateWithoutActivitiesInput>
-    create: XOR<UserCreateWithoutActivitiesInput, UserUncheckedCreateWithoutActivitiesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutActivitiesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutActivitiesInput, UserUncheckedUpdateWithoutActivitiesInput>
-  }
-
-  export type UserUpdateWithoutActivitiesInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    Album?: AlbumUpdateManyWithoutCreatorNestedInput
-    AlbumComment?: AlbumCommentUpdateManyWithoutUserNestedInput
-    AlbumLike?: AlbumLikeUpdateManyWithoutUserNestedInput
-    createdCircles?: CircleUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUpdateManyWithoutUserNestedInput
-    following?: FollowUpdateManyWithoutFollowerNestedInput
-    followers?: FollowUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUpdateManyWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutActivitiesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isProfilePrivate?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    Album?: AlbumUncheckedUpdateManyWithoutCreatorNestedInput
-    AlbumComment?: AlbumCommentUncheckedUpdateManyWithoutUserNestedInput
-    AlbumLike?: AlbumLikeUncheckedUpdateManyWithoutUserNestedInput
-    createdCircles?: CircleUncheckedUpdateManyWithoutCreatorNestedInput
-    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
-    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
-    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
-    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
-    memberships?: MembershipUncheckedUpdateManyWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    settings?: UserSettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type AlbumCreateManyCreatorInput = {
@@ -24996,14 +23305,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     circleId: number
-  }
-
-  export type ActivityCreateManyUserInput = {
-    id?: number
-    type: string
-    content?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type AlbumUpdateWithoutCreatorInput = {
@@ -25250,29 +23551,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     circleId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type ActivityUpdateWithoutUserInput = {
-    type?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AlbumCreateManyCircleInput = {
