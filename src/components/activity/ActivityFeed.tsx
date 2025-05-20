@@ -1,17 +1,77 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const activities = [
-    { id: 1, user: "dingdongduong", message: "Liked your Circle: sleeps", time: "now" },
-    { id: 2, user: "chelseawoo", message: "Liked your comment: HAHA remember when...", time: "10m ago" },
-    { id: 3, user: "annabunny", message: "Liked your Album: sunset", time: "9hrs ago" },
-    { id: 4, user: "irinaa", message: "Commented on your post", time: "12hrs ago" },
-    { id: 5, user: "anguss.beef", message: "Replied to your comment: dude no way s...", time: "19hrs ago" },
-    { id: 6, user: "noshowmax", message: "Liked your Album: hawaii", time: "Sunday" },
-];
+interface Activity {
+    id: number;
+    type: string;
+    user: {
+        name: string;
+    };
+    content: string;
+    createdAt: string;
+}
 
 export default function ActivityFeed() {
+    const [activities, setActivities] = useState<Activity[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchActivities = async () => {
+            try {
+                const res = await fetch("/api/activity");
+                if (!res.ok) throw new Error("Failed to load activities");
+                const data = await res.json();
+                setActivities(data);
+            } catch (err) {
+                console.error(err);
+                setError("Failed to load activities");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchActivities();
+    }, []);
+
+    const formatTime = (timestamp: string) => {
+        const now = new Date();
+        const activityDate = new Date(timestamp);
+        const diffMs = now.getTime() - activityDate.getTime();
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+        if (diffHours < 1) return "now";
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffHours < 168) return `${Math.floor(diffHours / 24)}d ago`;
+        return activityDate.toLocaleDateString();
+    };
+
+    const groupActivities = (activities: Activity[]) => {
+        const now = new Date();
+        const newActivities: Activity[] = [];
+        const todayActivities: Activity[] = [];
+        const thisWeekActivities: Activity[] = [];
+
+        activities.forEach(activity => {
+            const activityDate = new Date(activity.createdAt);
+            const diffHours = (now.getTime() - activityDate.getTime()) / (1000 * 60 * 60);
+
+            if (diffHours < 1) {
+                newActivities.push(activity);
+            } else if (diffHours < 24) {
+                todayActivities.push(activity);
+            } else if (diffHours < 168) {
+                thisWeekActivities.push(activity);
+            }
+        });
+
+        return { newActivities, todayActivities, thisWeekActivities };
+    };
+
+    const { newActivities, todayActivities, thisWeekActivities } = groupActivities(activities);
+
     return (
         <div className="mobile-container">
             {/* Circle Invites */}
@@ -26,32 +86,52 @@ export default function ActivityFeed() {
                 <span className="text-circles-light text-sm">›</span>
             </Link>
 
-            {/* New */}
-            <h2 className="text-md font-semibold text-circles-light mb-4">New</h2>
-            {activities.slice(0, 2).map((activity) => (
-                <div key={activity.id} className="mb-4">
-                    <span className="font-semibold text-circles-light">{activity.user}</span> {activity.message}
-                    <span className="block text-xs text-gray-500">{activity.time}</span>
-                </div>
-            ))}
+            {isLoading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
+            ) : (
+                <>
+                    {/* New */}
+                    {newActivities.length > 0 && (
+                        <>
+                            <h2 className="text-md font-semibold text-circles-light mb-4">New</h2>
+                            {newActivities.map(activity => (
+                                <div key={activity.id} className="mb-4">
+                                    <span className="font-semibold text-circles-light">{activity.user.name}</span> {activity.content}
+                                    <span className="block text-xs text-gray-500">{formatTime(activity.createdAt)}</span>
+                                </div>
+                            ))}
+                        </>
+                    )}
 
-            {/* Today */}
-            <h2 className="text-md font-semibold text-circles-light mb-4">Today</h2>
-            {activities.slice(2, 5).map((activity) => (
-                <div key={activity.id} className="mb-4">
-                    <span className="font-semibold text-circles-light">{activity.user}</span> {activity.message}
-                    <span className="block text-xs text-gray-500">{activity.time}</span>
-                </div>
-            ))}
+                    {/* Today */}
+                    {todayActivities.length > 0 && (
+                        <>
+                            <h2 className="text-md font-semibold text-circles-light mb-4">Today</h2>
+                            {todayActivities.map(activity => (
+                                <div key={activity.id} className="mb-4">
+                                    <span className="font-semibold text-circles-light">{activity.user.name}</span> {activity.content}
+                                    <span className="block text-xs text-gray-500">{formatTime(activity.createdAt)}</span>
+                                </div>
+                            ))}
+                        </>
+                    )}
 
-            {/* This Week */}
-            <h2 className="text-md font-semibold text-circles-light mb-4">This Week</h2>
-            {activities.slice(5).map((activity) => (
-                <div key={activity.id} className="mb-4">
-                    <span className="font-semibold text-circles-light">{activity.user}</span> {activity.message}
-                    <span className="block text-xs text-gray-500">{activity.time}</span>
-                </div>
-            ))}
+                    {/* This Week */}
+                    {thisWeekActivities.length > 0 && (
+                        <>
+                            <h2 className="text-md font-semibold text-circles-light mb-4">This Week</h2>
+                            {thisWeekActivities.map(activity => (
+                                <div key={activity.id} className="mb-4">
+                                    <span className="font-semibold text-circles-light">{activity.user.name}</span> {activity.content}
+                                    <span className="block text-xs text-gray-500">{formatTime(activity.createdAt)}</span>
+                                </div>
+                            ))}
+                        </>
+                    )}
+                </>
+            )}
         </div>
     );
 }
