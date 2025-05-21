@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { auth } from '@/auth';
 
 // Define interfaces for better type checking
 interface Circle {
@@ -20,10 +21,12 @@ interface Album {
 
 export async function GET(request: Request, { params }) {
 	try {
+		const session = await auth();
+		const currentUserId = session?.user?.id ? parseInt(session.user.id) : null;
+
 		// Get the username from params
 		const resolvedParams = await params;
 		const username = resolvedParams.username;
-
 		// Find the user
 		const user = await prisma.user.findUnique({
 			where: { username },
@@ -35,7 +38,31 @@ export async function GET(request: Request, { params }) {
 
 		if (!user) {
 			return NextResponse.json({ error: 'User not found' }, { status: 404 });
-		} // Get user's albums with photo counts
+		}
+
+		// Check if this is the user's own profile
+		const isOwnProfile = currentUserId === user.id;
+
+		// Check if the profile is private and the current user is not following them and not the owner
+		if (user.isProfilePrivate && currentUserId !== user.id) {
+			// Check if the current user is following this user
+			const isFollowing = currentUserId
+				? await prisma.follow.findFirst({
+						where: {
+							followerId: currentUserId,
+							followingId: user.id,
+						},
+				  })
+				: null;			// If not following and profile is private, return restricted data
+			if (!isFollowing) {
+				return NextResponse.json({
+					albums: [],
+					circles: [],
+					isPrivate: true,
+					isOwnProfile: currentUserId === user.id
+				});
+			}
+		}// Get user's albums with photo counts
 		const albums = await prisma.album.findMany({
 			where: {
 				creatorId: user.id,
@@ -88,7 +115,6 @@ export async function GET(request: Request, { params }) {
 
 		// Filter out circles the user created to avoid duplicates
 		const joinedCircles = memberships.map(membership => membership.circle as Circle).filter(circle => circle.creatorId !== user.id);
-
 		// Combine all circles
 		const allCircles = [...createdCircles, ...joinedCircles]; // Transform the data to match the expected format in the frontend
 		const formattedAlbums = albums.map((album: any) => ({
@@ -109,6 +135,7 @@ export async function GET(request: Request, { params }) {
 			albums: formattedAlbums,
 			circles: formattedCircles,
 			isPrivate: user.isProfilePrivate || false,
+			isOwnProfile: currentUserId === user.id
 		});
 	} catch (error) {
 		console.error('Error fetching user content:', error);

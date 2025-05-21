@@ -5,7 +5,8 @@ import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 
 export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
-	const username = await params.username;
+	const resolvedParams = await params;
+	const username = resolvedParams.username;
 
 	try {
 		const user = await prisma.user.findUnique({
@@ -30,12 +31,15 @@ export async function generateMetadata({ params }: { params: { username: string 
 
 export default async function UserProfilePage({ params }: { params: { username: string } }) {
 	const session = await auth();
-	const username = await params.username
-	
-	
+	const resolvedParams = await params;
+	const username = resolvedParams.username;
+
 	return (
 		<>
-			<ProfileScreen session={session} username={username} />
+			<ProfileScreen
+				session={session}
+				username={username}
+			/>
 			<NavBar />
 		</>
 	);

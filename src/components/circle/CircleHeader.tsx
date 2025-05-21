@@ -3,7 +3,7 @@
 import { Session } from 'next-auth';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { FaArrowLeft, FaCog, FaUserPlus } from 'react-icons/fa';
+import { FaArrowLeft, FaCog, FaUserPlus, FaUsers } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
 interface CircleDetails {
@@ -22,7 +22,9 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 	const router = useRouter();
 	const [isJoining, setIsJoining] = useState(false);
 	const [canInvite, setCanInvite] = useState(false);
-	
+	const [canManageRequests, setCanManageRequests] = useState(false);
+	const [joinRequestStatus, setJoinRequestStatus] = useState<'none' | 'pending'>('none');
+
 	// Fetch user permissions for this circle
 	useEffect(() => {
 		if (circle && circle.isMember) {
@@ -32,20 +34,40 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 					if (response.ok) {
 						const permissions = await response.json();
 						setCanInvite(permissions.canInviteMembers);
+						// Admin or moderator can manage join requests
+						setCanManageRequests(permissions.role === 'ADMIN' || permissions.role === 'MODERATOR');
 					}
 				} catch (error) {
 					console.error('Error fetching permissions:', error);
 				}
 			};
-			
+
 			checkPermissions();
 		}
 	}, [circle]);
 
+	// Check for existing join request if the circle is private and user is not a member
+	useEffect(() => {
+		if (circle && circle.isPrivate && !circle.isMember && session?.user?.id) {
+			const checkJoinRequestStatus = async () => {
+				try {
+					const response = await fetch(`/api/circles/${circle.id}/joinrequests?checkRequestStatus=true`);
+					if (response.ok) {
+						const data = await response.json();
+						setJoinRequestStatus(data.requestSent ? 'pending' : 'none');
+					}
+				} catch (error) {
+					console.error('Error checking join request status:', error);
+				}
+			};
+
+			checkJoinRequestStatus();
+		}
+	}, [circle, session]);
+
 	const handleBack = () => {
 		router.back();
 	};
-
 	const handleJoinLeaveCircle = async () => {
 		if (!session) {
 			router.push('/auth/login');
@@ -68,6 +90,13 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 				throw new Error(`Failed to ${action} circle`);
 			}
 
+			const data = await response.json();
+
+			// If this was a join request for a private circle, update the UI state
+			if (data.action === 'request_sent' || data.action === 'request_already_sent') {
+				setJoinRequestStatus('pending');
+			}
+
 			router.refresh();
 		} catch (error) {
 			console.error(`Error ${circle.isMember ? 'leaving' : 'joining'} circle:`, error);
@@ -88,6 +117,7 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 				</button>
 			</div>
 
+			{/* Settings button for creator */}
 			{circle.isCreator && (
 				<div className='absolute top-4 right-4 z-10'>
 					<button
@@ -112,31 +142,62 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 
 				<h1 className='text-2xl font-bold mb-1'>{circle.name}</h1>
 
-				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}				<div className='flex items-center mb-4'>
+				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}
+
+				<div className='flex items-center mb-4'>
 					<div className='text-sm text-gray-400'>
 						{circle.isPrivate ? 'Private Circle' : 'Public Circle'} • {circle.membersCount} members
 					</div>
 				</div>
-				
-				<div className="flex space-x-3">
-					{/* Show leave/join button for non-creators */}
+
+				<div className='flex space-x-3'>
+					{/* Show appropriate button based on status */}
 					{!circle.isCreator && (
-						<button
-							onClick={handleJoinLeaveCircle}
-							disabled={isJoining}
-							className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${circle.isMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} transition-colors`}
-						>
-							{isJoining ? 'Processing...' : circle.isMember ? 'Leave Circle' : 'Join Circle'}
-						</button>
+						<>
+							{circle.isPrivate && joinRequestStatus === 'pending' ? (
+								<button
+									disabled={true}
+									className='px-6 py-2 rounded-lg text-sm font-medium bg-gray-500 text-white cursor-not-allowed'
+								>
+									Request Pending
+								</button>
+							) : (
+								<button
+									onClick={handleJoinLeaveCircle}
+									disabled={isJoining}
+									className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${circle.isMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} transition-colors`}
+								>
+									{isJoining ? 'Processing...' : circle.isMember ? 'Leave Circle' : circle.isPrivate ? 'Request to Join' : 'Join Circle'}
+								</button>
+							)}
+						</>
 					)}
-					
+
+					{/* Invite button for members with permission */}
 					{circle.isMember && canInvite && (
 						<button
 							onClick={() => router.push(`/circle/${circle.id}/invite`)}
-							className="flex items-center px-6 py-2 rounded-lg bg-[var(--circles-dark-blue)] text-white hover:bg-blue-700 transition-all hover:cursor-pointer"
+							className='flex items-center px-6 py-2 rounded-lg bg-[var(--circles-dark-blue)] text-white hover:bg-blue-700 transition-all hover:cursor-pointer'
 						>
-							<FaUserPlus className="mr-2" size={14} />
-							<span className="text-sm font-medium">Invite</span>
+							<FaUserPlus
+								className='mr-2'
+								size={14}
+							/>
+							<span className='text-sm font-medium'>Invite</span>
+						</button>
+					)}
+
+					{/* Join requests button for admins/moderators */}
+					{circle.isMember && canManageRequests && circle.isPrivate && (
+						<button
+							onClick={() => router.push(`/circle/${circle.id}/joinrequests`)}
+							className='flex items-center px-6 py-2 rounded-lg bg-[var(--background-secondary)] text-[var(--foreground)] border border-[var(--border)] hover:bg-[var(--background)] transition-all hover:cursor-pointer'
+						>
+							<FaUsers
+								className='mr-2'
+								size={14}
+							/>
+							<span className='text-sm font-medium'>Join Requests</span>
 						</button>
 					)}
 				</div>

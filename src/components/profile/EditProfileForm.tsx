@@ -6,6 +6,7 @@ import { Session } from 'next-auth';
 import { Pencil } from 'lucide-react';
 import { createCroppedImage } from '../user_registration/add_profilepicture/cropUtils';
 import ImageCropper from '../user_registration/add_profilepicture/ImageCropper';
+import { useUpdateSession } from '@/hooks/useUpdateSession';
 
 interface ExtendedUser {
 	id?: string;
@@ -21,15 +22,17 @@ export default function EditProfileForm({ session }: { session: Session | null }
 	const [email, setEmail] = useState(session?.user?.email || '');
 	const [bio, setBio] = useState('');
 	const [avatar, setAvatar] = useState(session?.user?.image || '');
+	const [isProfilePrivate, setIsProfilePrivate] = useState(false);
 	const [preview, setPreview] = useState<string | null>(null);
 	const [showCropper, setShowCropper] = useState(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
-	const router = useRouter();
-	const [error, setError] = useState<string | null>(null);
+	const router = useRouter();	const [error, setError] = useState<string | null>(null);
+	const [success, setSuccess] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const { updateSessionData } = useUpdateSession();
 
 	// Functions to handle the cropper
 	const handleCropComplete = (croppedArea: any) => {
@@ -60,6 +63,8 @@ export default function EditProfileForm({ session }: { session: Session | null }
 					if (data.username) setUsername(data.username);
 					// Update avatar with the latest image from the database
 					if (data.profileImage) setAvatar(data.profileImage);
+					// Set privacy setting
+					setIsProfilePrivate(data.isProfilePrivate || false);
 				}
 			} catch (error: unknown) {
 				console.error('Error fetching user profile:', error);
@@ -108,9 +113,7 @@ export default function EditProfileForm({ session }: { session: Session | null }
 
 			const data = await response.json();
 			if (data.url) {
-				setAvatar(data.url);
-
-				// Update the user's avatar in the database
+				setAvatar(data.url);				// Update the user's avatar in the database
 				const updateResponse = await fetch('/api/user/profile', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -120,12 +123,16 @@ export default function EditProfileForm({ session }: { session: Session | null }
 						name,
 						bio,
 						username,
+						isProfilePrivate,
 					}),
 				});
 
 				if (!updateResponse.ok) {
 					throw new Error('Failed to update profile with new avatar');
 				}
+				
+				// Update the session data to reflect the new avatar
+				await updateSessionData();
 			} else {
 				setError('Failed to upload image');
 			}
@@ -143,8 +150,7 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			}
 			setSelectedFile(null);
 		}
-	};
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	};	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (!name.trim()) {
@@ -168,24 +174,28 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			const res = await fetch('/api/user/profile', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name, bio, username }),
+				body: JSON.stringify({ name, bio, username, isProfilePrivate }),
 			});
 
 			const data = await res.json();
 			if (!res.ok) {
 				setError(data.error || 'Failed to update profile');
 				return;
-			}
-
-			if (session?.user) {
-				const username = (session.user as ExtendedUser).username;
-				if (username) {
+			}			// Check if username has changed
+			const usernameChanged = username !== (session?.user as ExtendedUser)?.username;
+			
+			// Update the session data
+			const sessionUpdated = await updateSessionData();
+			
+			if (sessionUpdated) {
+				setSuccess('Profile updated successfully!');
+				// Wait a moment to show the success message before redirecting
+				setTimeout(() => {
 					router.push(`/${username}`);
-				} else {
-					router.push('/profile');
-				}
+				}, 1000);
 			} else {
-				router.push('/profile');
+				// Redirect anyway even if session update failed
+				router.push(`/${username}`);
 			}
 		} catch (error: unknown) {
 			setError('An error occurred while updating your profile.');
@@ -197,12 +207,12 @@ export default function EditProfileForm({ session }: { session: Session | null }
 	if (loading) {
 		return <div className='flex justify-center p-4'>Loading profile data...</div>;
 	}
-	return (
-		<form
+	return (		<form
 			onSubmit={handleSubmit}
 			className='flex flex-col items-center p-4 bg-circles-light rounded-2xl shadow-lg'
 		>
-			{error && <div className='text-red-600 mb-2'>{error}</div>}
+			{error && <div className='text-red-600 mb-2 w-full p-2 bg-red-50 rounded-lg'>{error}</div>}
+			{success && <div className='text-green-600 mb-2 w-full p-2 bg-green-50 rounded-lg'>{success}</div>}
 			{/* Image Cropper Modal */}
 			{showCropper && preview && (
 				<ImageCropper
@@ -320,6 +330,27 @@ export default function EditProfileForm({ session }: { session: Session | null }
 					rows={4}
 				/>
 			</div>{' '}
+			{/* Privacy Toggle */}
+			<div className='w-full mb-4 flex items-center justify-between'>
+				<div>
+					<label
+						htmlFor='privacy-toggle'
+						className='font-medium'
+					>
+						Private Profile
+					</label>
+					<p className='text-xs text-gray-600 dark:text-gray-400'>When enabled, only your followers can see your content</p>
+				</div>
+				<div className='flex items-center'>
+					<input
+						type='checkbox'
+						id='privacy-toggle'
+						checked={isProfilePrivate}
+						onChange={e => setIsProfilePrivate(e.target.checked)}
+						className='toggle toggle-sm toggle-primary'
+					/>
+				</div>
+			</div>
 			{/* Save*/}
 			<button
 				type='submit'

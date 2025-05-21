@@ -8,16 +8,40 @@ export async function GET(req: NextRequest) {
 		if (!session || !session.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
-
 		const userId = parseInt(session.user.id);
 
-		// Get regular activities (excluding pending requests/invites)
+		// Get activities where the logged-in user is the target/recipient, not the actor
 		const activities = await prisma.activity.findMany({
 			where: {
 				userId: userId,
 				type: {
 					notIn: ['friend_request', 'circle_invite'], // Exclude pending requests
 				},
+				// Exclude self-initiated activities by checking if the content
+				// doesn't mention the user themselves joining or creating something
+				AND: [
+					{
+						NOT: {
+							content: {
+								contains: `${session.user.name || session.user.username} joined`,
+							},
+						},
+					},
+					{
+						NOT: {
+							content: {
+								contains: `${session.user.name || session.user.username} created`,
+							},
+						},
+					},
+					{
+						NOT: {
+							content: {
+								contains: `${session.user.name || session.user.username} added`,
+							},
+						},
+					},
+				],
 			},
 			orderBy: { createdAt: 'desc' },
 			include: {

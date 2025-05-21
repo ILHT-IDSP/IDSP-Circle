@@ -6,6 +6,7 @@ import Link from 'next/link';
 import AlbumCard from '@/components/album/AlbumCard';
 import AlbumGrid from '@/components/album/AlbumGrid';
 import CircleHolder from '@/components/circle_holders';
+import ThemeToggle from '../theme/NewThemeToggle';
 
 interface Item {
 	id: number;
@@ -19,6 +20,7 @@ interface UserContent {
 	albums: Item[];
 	circles: Item[];
 	isPrivate: boolean;
+	isOwnProfile?: boolean;
 }
 
 export default function ProfileTabs() {
@@ -83,13 +85,16 @@ export default function ProfileTabs() {
 				</button>
 			</div>
 		);
-	}
-
+	} 
 	// Private profile state
-	if (content.isPrivate) {
+	// Only show the private profile message if:
+	// 1. Content is marked as private
+	// 2. It's not the user's own profile
+	// 3. The albums and circles arrays are empty (meaning they're not a follower)
+	if (content.isPrivate && content.isOwnProfile === false && content.albums.length === 0 && content.circles.length === 0) {
 		return (
 			<div className='py-8 flex flex-col items-center'>
-				<div className='w-16 h-16 flex items-center justify-center bg-gray-200 rounded-full'>
+				<div className='w-16 h-16 flex items-center justify-center bg-gray-200 text-[var(--circles-dark)] rounded-full'>
 					{' '}
 					<svg
 						xmlns='http://www.w3.org/2000/svg'

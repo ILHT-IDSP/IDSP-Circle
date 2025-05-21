@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 import AlbumDetail from '@/components/album/AlbumDetail';
 import NavBar from '@/components/bottom_bar/NavBar';
+import { redirect } from 'next/navigation';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
 	try {
@@ -49,6 +50,55 @@ export default async function AlbumPage({ params }: { params: Promise<{ id: stri
 	if (isNaN(albumId)) {
 		return <div>Invalid album ID</div>;
 	}
+
+	// First fetch basic album info with circle details
+	const albumBasicInfo = await prisma.album.findUnique({
+		where: { id: albumId },
+		select: {
+			id: true,
+			Circle: {
+				select: {
+					id: true,
+					isPrivate: true,
+					creatorId: true,
+				},
+			},
+		},
+	});
+
+	if (!albumBasicInfo) {
+		return <div>Album not found</div>;
+	}
+
+	// Check if album belongs to a private circle and enforce access control
+	if (albumBasicInfo.Circle?.isPrivate) {
+		const userId = session?.user?.id ? parseInt(session.user.id) : null;
+
+		// Allow access if user is the circle creator
+		const isCreator = userId === albumBasicInfo.Circle.creatorId;
+
+		// Otherwise, check if user is a member
+		if (!isCreator && userId) {
+			const membership = await prisma.membership.findUnique({
+				where: {
+					userId_circleId: {
+						userId,
+						circleId: albumBasicInfo.Circle.id,
+					},
+				},
+			});
+
+			// If not a member, redirect to circle page to show the join request UI
+			if (!membership) {
+				redirect(`/circle/${albumBasicInfo.Circle.id}`);
+			}
+		} else if (!isCreator && !userId) {
+			// Not logged in, redirect to login page
+			redirect('/auth/login');
+		}
+	}
+
+	// Now fetch full album details since user has access
 	const album = await prisma.album.findUnique({
 		where: { id: albumId },
 		include: {
@@ -68,6 +118,7 @@ export default async function AlbumPage({ params }: { params: Promise<{ id: stri
 					id: true,
 					name: true,
 					avatar: true,
+					isPrivate: true,
 				},
 			},
 			_count: {
@@ -83,6 +134,7 @@ export default async function AlbumPage({ params }: { params: Promise<{ id: stri
 	if (!album) {
 		return <div>Album not found</div>;
 	}
+
 	let isLiked = false;
 
 	if (session?.user) {
@@ -97,6 +149,7 @@ export default async function AlbumPage({ params }: { params: Promise<{ id: stri
 
 		isLiked = !!like;
 	}
+
 	// Format dates to strings for the component
 	const formattedAlbum = {
 		...album,
@@ -104,8 +157,8 @@ export default async function AlbumPage({ params }: { params: Promise<{ id: stri
 		Photo: album.Photo.map(photo => ({
 			...photo,
 			createdAt: photo.createdAt.toISOString(),
-			updatedAt: photo.updatedAt.toISOString()
-		}))
+			updatedAt: photo.updatedAt.toISOString(),
+		})),
 	};
 
 	return (

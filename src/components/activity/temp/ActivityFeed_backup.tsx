@@ -32,37 +32,8 @@ export default function ActivityFeed() {
 
 	// Helper function to extract follower username from content
 	const extractFollowerUsername = (content: string) => {
-		// Extract the username from parentheses (username)
-		const match = content.match(/\(([^)]+)\)/);
-		if (match && match[1]) {
-			return match[1]; // Return the username from inside the parentheses
-		}
-		// Fallback to the old method if the parentheses format is not found
+		// Extract the name/username that appears before " started following" or " accepted"
 		return content.split(' started following')[0].split(' accepted')[0];
-	};
-
-	// Extract circle ID from content for join requests
-	const extractCircleId = (activity: Activity): number | null => {
-		if (activity.circleId) {
-			return activity.circleId;
-		}
-
-		// Try to parse the hidden ID from the join request format
-		if (activity.type === 'circle_join_request') {
-			const match = activity.content?.match(/\(requester:(\d+)\)/);
-			if (match) {
-				// We have the requester ID, but we need the circle ID
-				// Since this is attached to the activity, return the circle ID if available
-				return activity.circleId || null;
-			}
-		}
-
-		return null;
-	};
-
-	// Clean content by removing the hidden requester ID for display
-	const cleanJoinRequestContent = (content: string): string => {
-		return content.replace(/\s?\(requester:\d+\)/, '');
 	};
 
 	useEffect(() => {
@@ -168,13 +139,8 @@ export default function ActivityFeed() {
 									key={activity.id}
 									className='mb-4 p-3 bg-[var(--background-secondary)] rounded-lg'
 								>
-									{/* Clean join request display */}
 									{activity.type === 'followed' ? (
 										<>{activity.content}</>
-									) : activity.type === 'circle_join_request' ? (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {cleanJoinRequestContent(activity.content)}
-										</>
 									) : (
 										<>
 											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {activity.content}
@@ -190,7 +156,7 @@ export default function ActivityFeed() {
 
 									{activity.type === 'followed' && (
 										<Link
-											href={`/${extractFollowerUsername(activity.content)}`}
+											href={`/${activity.user.username}`}
 											className='block text-xs text-circles-dark-blue mt-1'
 										>
 											View profile
@@ -226,13 +192,8 @@ export default function ActivityFeed() {
 									key={activity.id}
 									className='mb-4 p-3 bg-[var(--background-secondary)] rounded-lg'
 								>
-									{/* Clean join request display */}
 									{activity.type === 'followed' ? (
 										<>{activity.content}</>
-									) : activity.type === 'circle_join_request' ? (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {cleanJoinRequestContent(activity.content)}
-										</>
 									) : (
 										<>
 											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {activity.content}
@@ -248,7 +209,7 @@ export default function ActivityFeed() {
 
 									{activity.type === 'followed' && (
 										<Link
-											href={`/${extractFollowerUsername(activity.content)}`}
+											href={`/${activity.user.username}`}
 											className='block text-xs text-circles-dark-blue mt-1'
 										>
 											View profile
@@ -269,14 +230,6 @@ export default function ActivityFeed() {
 											className='block text-xs text-circles-dark-blue mt-1'
 										>
 											View album
-										</Link>
-									)}
-									{activity.type === 'circle_join_request' && activity.circleId && (
-										<Link
-											href={`/circle/${activity.circleId}/joinrequests`}
-											className='block text-xs text-circles-dark-blue mt-1'
-										>
-											Manage join requests
 										</Link>
 									)}
 								</div>
@@ -292,13 +245,8 @@ export default function ActivityFeed() {
 									key={activity.id}
 									className='mb-4 p-3 bg-[var(--background-secondary)] rounded-lg'
 								>
-									{/* Clean join request display */}
 									{activity.type === 'followed' ? (
 										<>{activity.content}</>
-									) : activity.type === 'circle_join_request' ? (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {cleanJoinRequestContent(activity.content)}
-										</>
 									) : (
 										<>
 											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {activity.content}
@@ -314,7 +262,7 @@ export default function ActivityFeed() {
 
 									{activity.type === 'followed' && (
 										<Link
-											href={`/${extractFollowerUsername(activity.content)}`}
+											href={`/${activity.user.username}`}
 											className='block text-xs text-circles-dark-blue mt-1'
 										>
 											View profile
@@ -335,14 +283,6 @@ export default function ActivityFeed() {
 											className='block text-xs text-circles-dark-blue mt-1'
 										>
 											View album
-										</Link>
-									)}
-									{activity.type === 'circle_join_request' && activity.circleId && (
-										<Link
-											href={`/circle/${activity.circleId}/joinrequests`}
-											className='block text-xs text-circles-dark-blue mt-1'
-										>
-											Manage join requests
 										</Link>
 									)}
 								</div>

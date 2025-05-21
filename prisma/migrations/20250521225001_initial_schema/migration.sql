@@ -14,7 +14,6 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "isProfilePrivate" BOOLEAN DEFAULT false,
-    "birthday" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -56,33 +55,8 @@ CREATE TABLE "Post" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" INTEGER NOT NULL,
     "circleId" INTEGER NOT NULL,
-    "musicId" INTEGER NOT NULL,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Music" (
-    "id" SERIAL NOT NULL,
-    "title" TEXT NOT NULL,
-    "artist" TEXT NOT NULL,
-    "albumCover" TEXT,
-    "audioUrl" TEXT NOT NULL,
-    "duration" INTEGER,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Music_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "SavedMusic" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "musicId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "SavedMusic_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -125,7 +99,9 @@ CREATE TABLE "Album" (
     "coverImage" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "creatorId" INTEGER NOT NULL,
+    "isPrivate" BOOLEAN NOT NULL DEFAULT false,
+    "creatorId" INTEGER,
+    "circleId" INTEGER,
 
     CONSTRAINT "Album_pkey" PRIMARY KEY ("id")
 );
@@ -148,6 +124,54 @@ CREATE TABLE "UserSettings" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "UserSettings_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AlbumComment" (
+    "id" SERIAL NOT NULL,
+    "content" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "albumId" INTEGER NOT NULL,
+
+    CONSTRAINT "AlbumComment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AlbumLike" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" INTEGER NOT NULL,
+    "albumId" INTEGER NOT NULL,
+
+    CONSTRAINT "AlbumLike_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Photo" (
+    "id" SERIAL NOT NULL,
+    "url" TEXT NOT NULL,
+    "description" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "albumId" INTEGER NOT NULL,
+
+    CONSTRAINT "Photo_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Activity" (
+    "id" SERIAL NOT NULL,
+    "type" TEXT NOT NULL,
+    "content" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "circleId" INTEGER,
+    "requesterId" INTEGER,
+
+    CONSTRAINT "Activity_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -173,18 +197,6 @@ CREATE INDEX "Post_userId_idx" ON "Post"("userId");
 
 -- CreateIndex
 CREATE INDEX "Post_circleId_idx" ON "Post"("circleId");
-
--- CreateIndex
-CREATE INDEX "Post_musicId_idx" ON "Post"("musicId");
-
--- CreateIndex
-CREATE INDEX "SavedMusic_userId_idx" ON "SavedMusic"("userId");
-
--- CreateIndex
-CREATE INDEX "SavedMusic_musicId_idx" ON "SavedMusic"("musicId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "SavedMusic_userId_musicId_key" ON "SavedMusic"("userId", "musicId");
 
 -- CreateIndex
 CREATE INDEX "Comment_userId_idx" ON "Comment"("userId");
@@ -214,10 +226,40 @@ CREATE UNIQUE INDEX "Follow_followerId_followingId_key" ON "Follow"("followerId"
 CREATE INDEX "Album_creatorId_idx" ON "Album"("creatorId");
 
 -- CreateIndex
+CREATE INDEX "Album_circleId_idx" ON "Album"("circleId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "UserSettings_userId_key" ON "UserSettings"("userId");
 
 -- CreateIndex
 CREATE INDEX "UserSettings_userId_idx" ON "UserSettings"("userId");
+
+-- CreateIndex
+CREATE INDEX "AlbumComment_albumId_idx" ON "AlbumComment"("albumId");
+
+-- CreateIndex
+CREATE INDEX "AlbumComment_userId_idx" ON "AlbumComment"("userId");
+
+-- CreateIndex
+CREATE INDEX "AlbumLike_albumId_idx" ON "AlbumLike"("albumId");
+
+-- CreateIndex
+CREATE INDEX "AlbumLike_userId_idx" ON "AlbumLike"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "AlbumLike_userId_albumId_key" ON "AlbumLike"("userId", "albumId");
+
+-- CreateIndex
+CREATE INDEX "Photo_albumId_idx" ON "Photo"("albumId");
+
+-- CreateIndex
+CREATE INDEX "Activity_userId_idx" ON "Activity"("userId");
+
+-- CreateIndex
+CREATE INDEX "Activity_circleId_idx" ON "Activity"("circleId");
+
+-- CreateIndex
+CREATE INDEX "Activity_requesterId_idx" ON "Activity"("requesterId");
 
 -- AddForeignKey
 ALTER TABLE "Circle" ADD CONSTRAINT "Circle_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -232,16 +274,7 @@ ALTER TABLE "Membership" ADD CONSTRAINT "Membership_userId_fkey" FOREIGN KEY ("u
 ALTER TABLE "Post" ADD CONSTRAINT "Post_circleId_fkey" FOREIGN KEY ("circleId") REFERENCES "Circle"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_musicId_fkey" FOREIGN KEY ("musicId") REFERENCES "Music"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "SavedMusic" ADD CONSTRAINT "SavedMusic_musicId_fkey" FOREIGN KEY ("musicId") REFERENCES "Music"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "SavedMusic" ADD CONSTRAINT "SavedMusic_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -262,7 +295,34 @@ ALTER TABLE "Follow" ADD CONSTRAINT "Follow_followerId_fkey" FOREIGN KEY ("follo
 ALTER TABLE "Follow" ADD CONSTRAINT "Follow_followingId_fkey" FOREIGN KEY ("followingId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Album" ADD CONSTRAINT "Album_circleId_fkey" FOREIGN KEY ("circleId") REFERENCES "Circle"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Album" ADD CONSTRAINT "Album_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserSettings" ADD CONSTRAINT "UserSettings_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AlbumComment" ADD CONSTRAINT "AlbumComment_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AlbumComment" ADD CONSTRAINT "AlbumComment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AlbumLike" ADD CONSTRAINT "AlbumLike_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AlbumLike" ADD CONSTRAINT "AlbumLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Photo" ADD CONSTRAINT "Photo_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Activity" ADD CONSTRAINT "Activity_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Activity" ADD CONSTRAINT "Activity_circleId_fkey" FOREIGN KEY ("circleId") REFERENCES "Circle"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Activity" ADD CONSTRAINT "Activity_requesterId_fkey" FOREIGN KEY ("requesterId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

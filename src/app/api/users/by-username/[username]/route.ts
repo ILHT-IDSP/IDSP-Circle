@@ -34,16 +34,33 @@ export async function GET(
           },
         },
       },
-    });
-
-    if (!user) {
+    });    if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    // Check if current user is following this profile
+    }    // Check if this is the user's own profile
+    const isOwnProfile = currentUserId === user.id;
+    
+    // Check if current user is following this user
     const isFollowing = currentUserId 
       ? user.followers.some(follower => follower.followerId === currentUserId)
       : false;
+    
+    // For private profiles, limit data if not following and not own profile
+    if (user.isProfilePrivate && !isFollowing && !isOwnProfile) {
+      // Return limited profile data
+      return NextResponse.json({
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        profileImage: user.profileImage,
+        isProfilePrivate: true,
+        circlesCount: 0,
+        albumsCount: 0,
+        followersCount: user._count.followers,
+        followingCount: user._count.following,
+        isFollowing: false,
+        isOwnProfile: false
+      });
+    }
       
     // Prepare the response data
     const publicUserData = {

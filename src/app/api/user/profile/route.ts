@@ -9,9 +9,8 @@ export async function POST(request: NextRequest) {
 		// Check if user is authenticated
 		if (!session?.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-		}
-		// Get profile data from request body
-		const { name, bio, username, profileImage } = await request.json();
+		} // Get profile data from request body
+		const { name, bio, username, profileImage, isProfilePrivate } = await request.json();
 
 		// Validate the data
 		if (username && username !== session.user.username) {
@@ -24,7 +23,6 @@ export async function POST(request: NextRequest) {
 				return NextResponse.json({ error: 'Username is already taken' }, { status: 400 });
 			}
 		}
-
 		// Update the user profile
 		const updatedUser = await prisma.user.update({
 			where: {
@@ -35,15 +33,18 @@ export async function POST(request: NextRequest) {
 				bio: bio || undefined,
 				username: username || undefined,
 				profileImage: profileImage || undefined, // Add profileImage field
+				isProfilePrivate: typeof isProfilePrivate === 'boolean' ? isProfilePrivate : undefined,
 			},
-		});
-
-		return NextResponse.json({
+		});		return NextResponse.json({
 			success: true,
 			user: {
+				id: updatedUser.id,
 				name: updatedUser.name,
 				username: updatedUser.username,
 				bio: updatedUser.bio,
+				profileImage: updatedUser.profileImage,
+				isProfilePrivate: updatedUser.isProfilePrivate,
+				usernameChanged: username && username !== session.user.username,
 			},
 		});
 	} catch (error) {

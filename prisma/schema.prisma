@@ -31,6 +31,8 @@ model User {
   memberships      Membership[]
   posts            Post[]
   settings         UserSettings?
+  Activity         Activity[]
+  Requests         Activity[]     @relation("RequestUser")
 }
 
 model Circle {
@@ -205,18 +207,21 @@ model Photo {
 }
 
 model Activity {
-  id        Int      @id @default(autoincrement())
-  type      String // e.g., "like", "comment", "follow", "circle_invite", "friend_request"
-  content   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  circleId  Int?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  circle    Circle?  @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  id          Int      @id @default(autoincrement())
+  type        String // e.g., "like", "comment", "follow", "circle_invite", "friend_request"
+  content     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      Int
+  circleId    Int?
+  requesterId Int?     // For activities like circle_join_request
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  circle      Circle?  @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  requester   User?    @relation("RequestUser", fields: [requesterId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([circleId])
+  @@index([requesterId])
 }
 
 enum Role {

@@ -32,6 +32,7 @@ export async function POST(request: Request, { params }) {
 				id: true,
 				creatorId: true,
 				isPrivate: true,
+				name: true,
 			},
 		});
 
@@ -67,18 +68,55 @@ export async function POST(request: Request, { params }) {
 				});
 			}
 
-			// Get circle details for the activity content
-			const circleDetails = await prisma.circle.findUnique({
-				where: { id: circleId },
-				select: {
-					name: true,
-					creatorId: true
-				}
+			// Check if there's already a pending join request
+			const existingRequest = await prisma.activity.findFirst({
+				where: {
+					type: 'circle_join_request',
+					userId: circle.creatorId, // Activity belongs to the circle creator or admins
+					content: { contains: `user:${userId} wants to join` },
+					circleId: circleId,
+				},
 			});
 
-			// Create membership and activity records in a transaction
+			// For private circles, create a join request instead of adding directly
+			if (circle.isPrivate) {
+				if (existingRequest) {
+					return NextResponse.json({
+						success: true,
+						action: 'request_already_sent',
+						message: 'Join request already sent',
+					});
+				}
+
+				// Get the user information to include in the activity
+				const requestingUser = await prisma.user.findUnique({
+					where: { id: userId },
+					select: { name: true, username: true }
+				});
+				
+				const userName = requestingUser?.name || requestingUser?.username || "Unknown user";
+				
+				// Create a join request activity with better content
+				await prisma.activity.create({
+					data: {
+						type: 'circle_join_request',
+						content: `${userName} wants to join your circle "${circle.name}"`,
+						userId: circle.creatorId, // Activity belongs to the circle creator
+						circleId: circleId,
+						requesterId: userId, // Store the requester ID directly in the database field
+					},
+				});
+
+				return NextResponse.json({
+					success: true,
+					action: 'request_sent',
+					message: 'Join request sent',
+				});
+			}
+
+			// For public circles, create membership directly
 			let membership;
-			await prisma.$transaction(async (prisma) => {
+			await prisma.$transaction(async prisma => {
 				// Create the membership
 				membership = await prisma.membership.create({
 					data: {
@@ -87,16 +125,16 @@ export async function POST(request: Request, { params }) {
 						role: 'MEMBER',
 					},
 				});
-				
+
 				// Create activity for circle creator if they're not the one joining
-				if (circleDetails && circleDetails.creatorId !== userId) {
+				if (circle.creatorId !== userId) {
 					await prisma.activity.create({
 						data: {
 							type: 'circle_join',
-							content: `joined your circle "${circleDetails.name}"`,
-							userId: circleDetails.creatorId, // Activity belongs to circle creator
-							circleId: circleId
-						}
+							content: `joined your circle "${circle.name}"`,
+							userId: circle.creatorId, // Activity belongs to circle creator
+							circleId: circleId,
+						},
 					});
 				}
 			});
