@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	images: {
-		domains: ['www.google.com', 'images.unsplash.com', 'a.espncdn.com', 'encrypted-tbn0.gstatic.com', 'bigboyburgers.bcitwebdeveloper.ca', 'randomuser.me', 'res.cloudinary.com' ], // Add the hostname here
+		domains: ['www.google.com', 'images.unsplash.com', 'a.espncdn.com', 'encrypted-tbn0.gstatic.com', 'bigboyburgers.bcitwebdeveloper.ca', 'randomuser.me', 'res.cloudinary.com'], // Add the hostname here
 	},
 
 	webpack: config => {

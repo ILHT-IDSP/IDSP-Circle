@@ -2,8 +2,8 @@
 
 import { Session } from 'next-auth';
 import Image from 'next/image';
-import { useState } from 'react';
-import { FaArrowLeft, FaCog } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaArrowLeft, FaCog, FaUserPlus } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
 interface CircleDetails {
@@ -21,6 +21,26 @@ interface CircleDetails {
 export default function CircleHeader({ circle, session }: { circle: CircleDetails; session: Session | null }) {
 	const router = useRouter();
 	const [isJoining, setIsJoining] = useState(false);
+	const [canInvite, setCanInvite] = useState(false);
+	
+	// Fetch user permissions for this circle
+	useEffect(() => {
+		if (circle && circle.isMember) {
+			const checkPermissions = async () => {
+				try {
+					const response = await fetch(`/api/circles/${circle.id}/permissions`);
+					if (response.ok) {
+						const permissions = await response.json();
+						setCanInvite(permissions.canInviteMembers);
+					}
+				} catch (error) {
+					console.error('Error fetching permissions:', error);
+				}
+			};
+			
+			checkPermissions();
+		}
+	}, [circle]);
 
 	const handleBack = () => {
 		router.back();
@@ -92,23 +112,34 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 
 				<h1 className='text-2xl font-bold mb-1'>{circle.name}</h1>
 
-				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}
-
-				<div className='flex items-center mb-4'>
+				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}				<div className='flex items-center mb-4'>
 					<div className='text-sm text-gray-400'>
 						{circle.isPrivate ? 'Private Circle' : 'Public Circle'} • {circle.membersCount} members
 					</div>
 				</div>
-
-				{!circle.isCreator && (
-					<button
-						onClick={handleJoinLeaveCircle}
-						disabled={isJoining}
-						className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${circle.isMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} transition-colors`}
-					>
-						{isJoining ? 'Processing...' : circle.isMember ? 'Leave Circle' : 'Join Circle'}
-					</button>
-				)}
+				
+				<div className="flex space-x-3">
+					{/* Show leave/join button for non-creators */}
+					{!circle.isCreator && (
+						<button
+							onClick={handleJoinLeaveCircle}
+							disabled={isJoining}
+							className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${circle.isMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} transition-colors`}
+						>
+							{isJoining ? 'Processing...' : circle.isMember ? 'Leave Circle' : 'Join Circle'}
+						</button>
+					)}
+					
+					{circle.isMember && canInvite && (
+						<button
+							onClick={() => router.push(`/circle/${circle.id}/invite`)}
+							className="flex items-center px-6 py-2 rounded-lg bg-[var(--circles-dark-blue)] text-white hover:bg-blue-700 transition-all hover:cursor-pointer"
+						>
+							<FaUserPlus className="mr-2" size={14} />
+							<span className="text-sm font-medium">Invite</span>
+						</button>
+					)}
+				</div>
 			</div>
 		</div>
 	);

@@ -75,25 +75,52 @@ export async function POST(request: NextRequest, { params }) {
 		if (!album) {
 			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
 		}
-
-		// Create the comment
-		const comment = await prisma.albumComment.create({
-			data: {
-				content: content.trim(),
-				userId: userId,
-				albumId: albumId,
-				updatedAt: new Date(),
-			},
+		// Get album details with creator info
+		const albumWithCreator = await prisma.album.findUnique({
+			where: { id: albumId },
 			include: {
-				User: {
-					select: {
+				creator: {
+					select: { 
 						id: true,
-						username: true,
-						name: true,
-						profileImage: true,
+						name: true
+					}
+				}
+			}
+		});
+
+		let comment;
+		await prisma.$transaction(async (prisma) => {
+			// Create the comment
+			comment = await prisma.albumComment.create({
+				data: {
+					content: content.trim(),
+					userId: userId,
+					albumId: albumId,
+					updatedAt: new Date(),
+				},
+				include: {
+					User: {
+						select: {
+							id: true,
+							username: true,
+							name: true,
+							profileImage: true,
+						},
 					},
 				},
-			},
+			});
+			
+			// Create activity for album owner if it's not the user's own album
+			if (albumWithCreator && albumWithCreator.creator && albumWithCreator.creator.id !== userId) {
+				await prisma.activity.create({
+					data: {
+						type: 'album_comment',
+						content: `commented on your album "${albumWithCreator.title}"`,
+						userId: albumWithCreator.creator.id, // Activity belongs to album creator
+						circleId: albumWithCreator.circleId || null
+					}
+				});
+			}
 		});
 
 		return NextResponse.json(comment);

@@ -12,7 +12,7 @@ export default function CreateCircleIcon() {
                 >
                     <div
                         id="circle-icon-container"
-                        className="bg-circles-dark-blue p-3 flex items-center h-20 w-20 rounded-2xl"
+                        className="bg-[var(--circles-dark-blue)] p-3 flex items-center h-20 w-20 rounded-2xl"
                     >
                         <div className="filter invert flex m-auto">
                             <CirclesLogo
@@ -23,7 +23,7 @@ export default function CreateCircleIcon() {
                         </div>
                     </div>
                     <div>
-                        <p className="text-white text-sm">create new circle</p>
+                        <p className="text-[var(--foreground)] text-sm">create new circle</p>
                     </div>
                 </Link>
             </div>

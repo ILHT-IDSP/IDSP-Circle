@@ -30,22 +30,59 @@ export async function POST(request: NextRequest) {
 
 		if (!targetUser) {
 			return NextResponse.json({ error: 'Target user not found' }, { status: 404 });
-		}
-		if (action === 'follow') {
-			// Create follow record if it doesn't exist
-			await prisma.follow.upsert({
-				where: {
-					followerId_followingId: {
+		}		if (action === 'follow') {
+			// Check if target user has a private profile
+			const isTargetPrivate = targetUser.isProfilePrivate;
+			
+			if (isTargetPrivate) {
+				// Check if there's already a pending friend request
+				const existingRequest = await prisma.activity.findFirst({
+					where: {
+						type: "friend_request",
+						userId: targetUserId,
+						content: { contains: `wants to follow you` }
+					}
+				});
+				
+				if (!existingRequest) {
+					// For private profiles, create a friend request activity
+					await prisma.activity.create({
+						data: {
+							type: "friend_request",
+							content: `wants to follow you`,
+							userId: targetUserId, // Activity belongs to the target user
+							circleId: null
+						}
+					});
+					
+					return NextResponse.json({
+						success: true,
+						action: 'request_sent',
+						message: 'Follow request sent'
+					});
+				} else {
+					return NextResponse.json({
+						success: true,
+						action: 'request_already_sent',
+						message: 'Follow request already sent'
+					});
+				}
+			} else {
+				// For public profiles, create follow record immediately
+				await prisma.follow.upsert({
+					where: {
+						followerId_followingId: {
+							followerId: currentUserId,
+							followingId: targetUserId,
+						},
+					},
+					update: {},
+					create: {
 						followerId: currentUserId,
 						followingId: targetUserId,
 					},
-				},
-				update: {},
-				create: {
-					followerId: currentUserId,
-					followingId: targetUserId,
-				},
-			});
+				});
+			}
 
 			// Get updated follower and following counts
 			const [followerCount, followingCount] = await Promise.all([

@@ -4,12 +4,10 @@ import NavBar from '@/components/bottom_bar/NavBar';
 import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 
-export async function generateMetadata({ params }: { params: Promise<{ username: string }> }): Promise<Metadata> {
-	const resolvedParams = await params;
-	const username = resolvedParams.username;
+export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
+	const username = await params.username;
 
 	try {
-		// Fetch user data to get their name
 		const user = await prisma.user.findUnique({
 			where: { username },
 			select: { name: true },
@@ -30,12 +28,14 @@ export async function generateMetadata({ params }: { params: Promise<{ username:
 	}
 }
 
-export default async function UserProfilePage({ params }: { params: Promise<{ username: string }> }) {
+export default async function UserProfilePage({ params }: { params: { username: string } }) {
 	const session = await auth();
-	const resolvedParams = await params;
+	const username = await params.username
+	
+	
 	return (
 		<>
-			<ProfileScreen session={session} />
+			<ProfileScreen session={session} username={username} />
 			<NavBar />
 		</>
 	);

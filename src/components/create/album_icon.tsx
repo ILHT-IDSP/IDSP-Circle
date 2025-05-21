@@ -11,17 +11,17 @@ export default function CreateAlbumIcon() {
 				>
 					<div
 						id='album-icon-container'
-						className='bg-circles-dark-blue p-3 flex items-center h-20 w-20 rounded-2xl'
+						className='bg-[var(--circles-dark-blue)] p-3 flex items-center h-20 w-20 rounded-2xl'
 					>
 						<div className='filter invert flex m-auto'>
-							<AlbumSVG
+							<AlbumSVG 
 								width={45}
 								height={45}
 							/>
 						</div>
 					</div>
 					<div>
-						<p className='text-white text-sm'>create album</p>
+						<p className='text-[var(--foreground)] text-sm'>create album</p>
 					</div>
 				</Link>
 			</div>

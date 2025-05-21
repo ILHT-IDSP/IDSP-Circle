@@ -41,7 +41,6 @@ export async function GET(request: Request, { params }) {
 				return NextResponse.json({ error: 'Access denied to private circle' }, { status: 403 });
 			}
 		}
-
 		// Get all members with their basic info
 		const members = await prisma.membership.findMany({
 			where: { circleId },
@@ -61,6 +60,27 @@ export async function GET(request: Request, { params }) {
 			],
 		});
 
+		// Get all pending invitations for this circle
+		const invites = await prisma.activity.findMany({
+			where: {
+				type: 'circle_invite',
+				circleId,
+			},
+			select: {
+				id: true,
+				userId: true,
+				createdAt: true,
+				user: {
+					select: {
+						id: true,
+						username: true,
+						name: true,
+						profileImage: true,
+					},
+				},
+			},
+		});
+
 		// Format the response
 		const formattedMembers = members.map(member => ({
 			id: member.user.id,
@@ -70,7 +90,19 @@ export async function GET(request: Request, { params }) {
 			role: member.role,
 		}));
 
-		return NextResponse.json(formattedMembers);
+		const formattedInvites = invites.map(invite => ({
+			id: invite.id,
+			userId: invite.userId,
+			username: invite.user.username,
+			name: invite.user.name,
+			profileImage: invite.user.profileImage,
+			createdAt: invite.createdAt,
+		}));
+
+		return NextResponse.json({
+			members: formattedMembers,
+			invites: formattedInvites,
+		});
 	} catch (error) {
 		console.error('Error fetching circle members:', error);
 		return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

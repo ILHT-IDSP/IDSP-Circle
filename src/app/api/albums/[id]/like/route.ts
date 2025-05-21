@@ -20,6 +20,14 @@ export async function POST(request: NextRequest, { params }) {
 		// Check if album exists
 		const album = await prisma.album.findUnique({
 			where: { id: albumId },
+			include: {
+				creator: {
+					select: {
+						id: true,
+						name: true,
+					}
+				}
+			}
 		});
 
 		if (!album) {
@@ -50,11 +58,26 @@ export async function POST(request: NextRequest, { params }) {
 			return NextResponse.json({ liked: false });
 		} else {
 			// User hasn't liked this album, so like it
-			await prisma.albumLike.create({
-				data: {
-					userId: userId,
-					albumId: albumId,
-				},
+			await prisma.$transaction(async (prisma) => {
+				// Create the like record
+				await prisma.albumLike.create({
+					data: {
+						userId: userId,
+						albumId: albumId,
+					},
+				});
+						// Only create activity if the album has a creator and it's not the current user
+				if (album.creator && album.creator.id !== userId) {
+					// Create activity for the album creator
+					await prisma.activity.create({
+						data: {
+							type: 'album_like',
+							content: `liked your album "${album.title}"`,
+							userId: album.creator.id, // Activity belongs to the album creator
+							circleId: album.circleId || null
+						}
+					});
+				}
 			});
 
 			return NextResponse.json({ liked: true });

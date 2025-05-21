@@ -57,8 +57,8 @@ export async function GET(request: Request, { params }) {
 			role = membership?.role || null;
 		}
 
-		const canCreateAlbum = role === 'ADMIN' || role === 'MODERATOR';
-		const canInviteMembers = !!role; // Any member can invite
+		const canCreateAlbum = role === 'ADMIN' || role === 'MODERATOR' || role === 'MEMBER';
+		const canInviteMembers = !!role;
 		const canRemoveMembers = role === 'ADMIN';
 		const canEditCircle = isCreator;
 

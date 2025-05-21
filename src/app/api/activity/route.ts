@@ -9,9 +9,12 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
+        const userId = parseInt(session.user.id);
+        
+        // Get regular activities (excluding pending requests/invites)
         const activities = await prisma.activity.findMany({
             where: { 
-                userId: parseInt(session.user.id),
+                userId: userId,
                 type: {
                     notIn: ["friend_request", "circle_invite"] // Exclude pending requests
                 }
@@ -33,8 +36,28 @@ export async function GET(req: NextRequest) {
                 },
             },
         });
+        
+        // Check if user has pending friend requests
+        const friendRequestsCount = await prisma.activity.count({
+            where: {
+                userId: userId,
+                type: "friend_request"
+            }
+        });
+        
+        // Check if user has pending circle invites
+        const circleInvitesCount = await prisma.activity.count({
+            where: {
+                userId: userId,
+                type: "circle_invite"
+            }
+        });
 
-        return NextResponse.json(activities);
+        return NextResponse.json({
+            activities,
+            hasFollowRequests: friendRequestsCount > 0,
+            hasCircleInvites: circleInvitesCount > 0
+        });
     } catch (error) {
         console.error("Error fetching activities:", error);
         return NextResponse.json({ error: "Failed to fetch activities" }, { status: 500 });
