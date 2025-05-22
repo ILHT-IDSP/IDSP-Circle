@@ -7,6 +7,10 @@ import ThemeToggle from '@/components/theme/NewThemeToggle';
 export const metadata: Metadata = {
 	title: 'Circles',
 	description: 'A social media app for connecting with friends',
+ 	icons: {
+		icon: '/Logo.svg',
+		apple: '/Logo.svg',
+	},
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
