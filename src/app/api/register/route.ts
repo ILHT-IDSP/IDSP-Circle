@@ -9,7 +9,10 @@ export async function GET() {}
 export async function POST(req: Request) {
 	try {
 		const { formData } = await req.json();
-		const existingUser = await prisma.user.findUnique({ where: { email: formData.email } });
+		// Convert email to lowercase for case-insensitive handling
+		const lowercaseEmail = formData.email.toLowerCase();
+
+		const existingUser = await prisma.user.findUnique({ where: { email: lowercaseEmail } });
 
 		if (existingUser) {
 			return NextResponse.json({ error: 'Email already in use' }, { status: 400 });
@@ -19,7 +22,7 @@ export async function POST(req: Request) {
 		console.log('Creating user...');
 		const user = await prisma.user.create({
 			data: {
-				email: formData.email,
+				email: lowercaseEmail, // Store email as lowercase
 				name: formData.fullName,
 				username: formData.username,
 				password: formData.password,

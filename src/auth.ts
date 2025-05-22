@@ -16,9 +16,12 @@ export const { handlers, signIn, signOut, auth } = (NextAuth as any)({
 						throw new Error('No credentials provided.');
 					}
 
+					// Convert email to lowercase for case-insensitive comparison
+					const lowercaseEmail = credentials.email.toLowerCase();
+
 					const user = await prisma.user.findUnique({
 						where: {
-							email: credentials.email as string,
+							email: lowercaseEmail,
 						},
 						include: {
 							_count: {
@@ -52,13 +55,15 @@ export const { handlers, signIn, signOut, auth } = (NextAuth as any)({
 				}
 			},
 		} as any),
-	],  pages: {
-    signIn: '/auth/login',
-    error: '/auth/session-error',
-  },
+	],
+	pages: {
+		signIn: '/auth/login',
+		error: '/auth/session-error',
+	},
 	session: {
 		strategy: 'jwt',
-	},	callbacks: {
+	},
+	callbacks: {
 		async session({ session, token }: any) {
 			try {
 				if (token && session && session.user) {
@@ -72,14 +77,15 @@ export const { handlers, signIn, signOut, auth } = (NextAuth as any)({
 				}
 				return session;
 			} catch (error) {
-				console.error("Error in session callback:", error);
+				console.error('Error in session callback:', error);
 				// Return a minimal valid session to prevent client-side errors
 				return {
 					expires: session?.expires || new Date(Date.now() + 2 * 86400).toISOString(),
-					user: session?.user || { name: "Unknown", email: "unknown@example.com" }
+					user: session?.user || { name: 'Unknown', email: 'unknown@example.com' },
 				};
 			}
-		},		async jwt({ token, user }: any) {
+		},
+		async jwt({ token, user }: any) {
 			try {
 				if (user) {
 					token.id = user.id;
@@ -92,7 +98,7 @@ export const { handlers, signIn, signOut, auth } = (NextAuth as any)({
 				}
 				return token;
 			} catch (error) {
-				console.error("Error in JWT callback:", error);
+				console.error('Error in JWT callback:', error);
 				// Return the token as is to prevent disruption
 				return token;
 			}
