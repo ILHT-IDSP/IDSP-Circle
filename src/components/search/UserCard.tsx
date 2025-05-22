@@ -21,7 +21,6 @@ export default function UserCard({ user }: { user: User }) {
 	useEffect(() => {
 		setIsFollowing(user.isFollowing || false);
 	}, [user.isFollowing]);
-
 	const handleFollowToggle = async (e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -57,6 +56,16 @@ export default function UserCard({ user }: { user: User }) {
 			} else {
 				toast.success(`Unfollowed @${user.username}`, { id: toastId });
 			}
+			
+			// Try to refresh global user state after successful follow/unfollow
+			try {
+				// Find if we have a global context for refreshing
+				const refreshEvent = new CustomEvent('refreshUsers');
+				window.dispatchEvent(refreshEvent);
+			} catch (refreshError) {
+				// Silently fail if there's no global context
+				console.debug('Could not refresh global user state', refreshError);
+			}
 		} catch (error) {
 			console.error(`Error ${action}ing user:`, error);
 
@@ -90,13 +99,16 @@ export default function UserCard({ user }: { user: User }) {
 					<p className='text-[var(--foreground)] font-semibold'>{user.name || user.username}</p>
 					<p className='text-[var(--foreground-secondary)] text-sm'>@{user.username}</p>
 				</div>
-			</Link>
-
-			<button
+			</Link>			<button
 				onClick={handleFollowToggle}
 				disabled={isProcessing}
-				className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${isFollowing ? 'bg-[var(--background)] border border-[var(--primary)] text-[var(--primary)]' : 'bg-[var(--primary)] text-[var(--background)]'} ${isProcessing ? 'opacity-70' : 'hover:opacity-80'}`}
-			>				{isProcessing ? (
+				className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+					isFollowing 
+						? 'bg-[var(--background)] border border-[var(--primary)] text-[var(--primary)]' 
+						: 'bg-[var(--primary)] text-[var(--background)]'
+				} ${isProcessing ? 'opacity-70' : 'hover:opacity-80'}`}
+			>
+				{isProcessing ? (
 					<span className='flex items-center'>
 						<span className='h-3 w-3 rounded-full border-2 border-t-transparent border-[var(--primary)] animate-spin mr-1'></span>
 						<span>{isFollowing ? 'Unfollowing...' : 'Following...'}</span>

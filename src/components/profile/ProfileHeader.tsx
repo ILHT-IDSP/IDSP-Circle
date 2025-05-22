@@ -130,8 +130,11 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 				const data = await response.json();
 				if (data.followerCount !== undefined) setFollowersCount(data.followerCount);
 				if (data.followingCount !== undefined) setFollowingCount(data.followingCount);
-
 				toast.success('Unfollowed successfully', { id: toastId });
+
+				// Trigger global refresh
+				const refreshEvent = new CustomEvent('refreshUsers');
+				window.dispatchEvent(refreshEvent);
 			} catch (error) {
 				console.error('Error unfollowing user:', error);
 				// Revert optimistic update if there's an error
@@ -169,7 +172,6 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					}
 
 					const data = await response.json();
-
 					if (data.action === 'request_sent') {
 						toast.success('Follow request sent', { id: toastId });
 					} else if (data.action === 'followed') {
@@ -179,6 +181,10 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 						updateFollowState(true);
 						toast.success('Following user', { id: toastId });
 					}
+
+					// Trigger global refresh
+					const refreshEvent = new CustomEvent('refreshUsers');
+					window.dispatchEvent(refreshEvent);
 				} catch (error) {
 					console.error('Error sending follow request:', error);
 					// Revert optimistic update
@@ -212,6 +218,10 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					if (data.followingCount !== undefined) setFollowingCount(data.followingCount);
 
 					toast.success('Following user', { id: toastId });
+
+					// Trigger global refresh
+					const refreshEvent = new CustomEvent('refreshUsers');
+					window.dispatchEvent(refreshEvent);
 				} catch (error) {
 					console.error('Error following user:', error);
 					// Revert optimistic update if there's an error

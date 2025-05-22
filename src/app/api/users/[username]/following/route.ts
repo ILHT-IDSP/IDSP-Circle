@@ -38,7 +38,7 @@ export async function GET(request: NextRequest, { params }) {
 				{
 					error: 'This user has a private profile. Follow them to see who they follow.',
 					isPrivate: true,
-					isOwnProfile
+					isOwnProfile,
 				},
 				{ status: 403 }
 			);
@@ -59,11 +59,22 @@ export async function GET(request: NextRequest, { params }) {
 			},
 		});
 
+		// If logged in, get current user's followings to determine isFollowing status
+		let currentUserFollowings: number[] = [];
+		if (currentUserId) {
+			const followings = await prisma.follow.findMany({
+				where: { followerId: currentUserId },
+				select: { followingId: true },
+			});
+			currentUserFollowings = followings.map(f => f.followingId);
+		}
+
 		const formattedFollowing = following.map(f => ({
 			id: f.following.id,
 			username: f.following.username,
 			name: f.following.name,
 			profileImage: f.following.profileImage,
+			isFollowing: currentUserFollowings.includes(f.following.id),
 		}));
 
 		return NextResponse.json(formattedFollowing);

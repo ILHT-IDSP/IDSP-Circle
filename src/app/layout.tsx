@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body className='antialiased pb-4 lg:pb-0'>
 				<SessionProvider>
 					<NextThemeProvider>
-						<ThemeToggle />
+						{/* <ThemeToggle /> */}
 						<div className='mobile-container'>{children}</div>
 					</NextThemeProvider>
 				</SessionProvider>

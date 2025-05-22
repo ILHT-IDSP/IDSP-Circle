@@ -19,9 +19,11 @@ export default function FollowersPage() {
 	const [isOwnProfile, setIsOwnProfile] = useState(false);
 	const params = useParams();
 	const username = params.username ? String(params.username) : '';
+
 	useEffect(() => {
 		const fetchFollowers = async () => {
 			try {
+				setLoading(true);
 				const res = await fetch(`/api/users/${username}/followers`);
 
 				if (!res.ok) {
@@ -46,7 +48,19 @@ export default function FollowersPage() {
 		};
 
 		fetchFollowers();
+
+		// Listen for global follow/unfollow events to refresh the list
+		const handleRefresh = () => {
+			fetchFollowers();
+		};
+
+		window.addEventListener('refreshUsers', handleRefresh);
+
+		return () => {
+			window.removeEventListener('refreshUsers', handleRefresh);
+		};
 	}, [username]);
+
 	if (loading) return <p className='text-center text-circles-light'>Loading...</p>;
 	return (
 		<>

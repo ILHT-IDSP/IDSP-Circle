@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import UserCard from '@/components/search/UserCard';
 import { toast } from 'react-hot-toast';
+import Link from 'next/link';
 
 interface User {
 	id: number;
@@ -12,23 +13,33 @@ interface User {
 	isFollowing?: boolean;
 }
 
-export default function SearchResults() {
-	const [query, setQuery] = useState('');
+export default function SearchResults() {	const [query, setQuery] = useState('');
 	const [users, setUsers] = useState<User[]>([]);
 	const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
-
-	// Fetch users based on query
+	const [showAllUsers, setShowAllUsers] = useState(true); // Default to showing all users
+	// Load initial users or fetch users based on query
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
 				setIsLoading(true);
-				const res = await fetch(`/api/users/search?term=${encodeURIComponent(query)}`);
+				// If showing all users or there's a search query
+				const endpoint = showAllUsers || query.trim() !== '' 
+					? `/api/users/search?term=${encodeURIComponent(query)}`
+					: '/api/users?limit=20'; // Fetch initial users with limit
+					
+				const res = await fetch(endpoint);
 				if (!res.ok) {
 					throw new Error('Failed to fetch users');
 				}
+				
 				const data = await res.json();
-				setUsers(data.users || []);
+				// Handle different response formats
+				if (Array.isArray(data)) {
+					setUsers(data);
+				} else {
+					setUsers(data.users || []);
+				}
 			} catch (error) {
 				console.error('Error fetching users:', error);
 				toast.error('Failed to load users');
@@ -42,10 +53,17 @@ export default function SearchResults() {
 			fetchUsers();
 		}, 300);
 
-		return () => clearTimeout(debounceTimeout);
-	}, [query]);
+		const handleRefresh = () => {
+			fetchUsers();
+		};
+		window.addEventListener('refreshUsers', handleRefresh);
 
-	// Filter users based on query
+		return () => {
+			clearTimeout(debounceTimeout);
+			window.removeEventListener('refreshUsers', handleRefresh);
+		};
+	}, [query, showAllUsers]);
+
 	useEffect(() => {
 		if (query.trim() === '') {
 			setFilteredUsers(users);
@@ -55,7 +73,6 @@ export default function SearchResults() {
 			setFilteredUsers(filtered);
 		}
 	}, [query, users]);
-
 	return (
 		<div>
 			<div className='relative mb-6'>
@@ -72,6 +89,21 @@ export default function SearchResults() {
 					</div>
 				)}
 			</div>
+			
+			{/* Toggle button for showing all users */}
+			<div className='mb-4 flex items-center justify-between'>
+				<button
+					onClick={() => setShowAllUsers(!showAllUsers)}
+					className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+						showAllUsers 
+							? 'bg-circles-dark-blue text-white' 
+							: 'bg-circles-light bg-opacity-20 text-circles-light'
+					}`}
+				>
+					{showAllUsers ? 'Showing All Users' : 'Show All Users'}
+				</button>
+				
+			</div>
 
 			{filteredUsers.length > 0 ? (
 				<div className='space-y-4'>
@@ -83,7 +115,19 @@ export default function SearchResults() {
 					))}
 				</div>
 			) : (
-				<div className='bg-circles-light bg-opacity-10 rounded-lg p-6 text-center'>{isLoading ? <p className='text-circles-light'>Loading users...</p> : query.trim() !== '' ? <p className='text-circles-light'>No users found matching &quot;{query}&quot;</p> : <p className='text-circles-light'>Start typing to search for users</p>}</div>
+				<div className='bg-circles-light bg-opacity-10 rounded-lg p-6 text-center'>
+					{isLoading ? (
+						<p className='text-circles-light'>Loading users...</p>
+					) : query.trim() !== '' ? (
+						<p className='text-circles-light'>No users found matching &quot;{query}&quot;</p>
+					) : (
+						<p className='text-circles-light'>
+							{showAllUsers 
+								? 'No users found. Be the first to join!' 
+								: 'Click "Show All Users" to see everyone or start typing to search'}
+						</p>
+					)}
+				</div>
 			)}
 		</div>
 	);
