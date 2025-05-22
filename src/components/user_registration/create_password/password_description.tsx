@@ -5,7 +5,7 @@ export default function RegisterPasswordDescription() {
                 id="register-password-container"
                 className="register-descriptions"
             >
-                <div>
+                <div className="text-xl py-2">
                     <p>Your new password must contain:</p>
                 </div>
                 <div>
