@@ -27,7 +27,8 @@ export default function EditProfileForm({ session }: { session: Session | null }
 	const [showCropper, setShowCropper] = useState(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
-	const router = useRouter();	const [error, setError] = useState<string | null>(null);
+	const router = useRouter();
+	const [error, setError] = useState<string | null>(null);
 	const [success, setSuccess] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -113,7 +114,7 @@ export default function EditProfileForm({ session }: { session: Session | null }
 
 			const data = await response.json();
 			if (data.url) {
-				setAvatar(data.url);				// Update the user's avatar in the database
+				setAvatar(data.url); // Update the user's avatar in the database
 				const updateResponse = await fetch('/api/user/profile', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -130,7 +131,7 @@ export default function EditProfileForm({ session }: { session: Session | null }
 				if (!updateResponse.ok) {
 					throw new Error('Failed to update profile with new avatar');
 				}
-				
+
 				// Update the session data to reflect the new avatar
 				await updateSessionData();
 			} else {
@@ -150,7 +151,8 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			}
 			setSelectedFile(null);
 		}
-	};	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	};
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (!name.trim()) {
@@ -168,25 +170,31 @@ export default function EditProfileForm({ session }: { session: Session | null }
 			return;
 		}
 
+		// Convert email to lowercase for case-insensitive handling
+		const lowercaseEmail = email.toLowerCase();
+		if (lowercaseEmail !== email) {
+			setEmail(lowercaseEmail);
+		}
+
 		setError(null);
 		setIsSubmitting(true);
 		try {
 			const res = await fetch('/api/user/profile', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name, bio, username, isProfilePrivate }),
+				body: JSON.stringify({ name, bio, username, email: lowercaseEmail, isProfilePrivate }),
 			});
 
 			const data = await res.json();
 			if (!res.ok) {
 				setError(data.error || 'Failed to update profile');
 				return;
-			}			// Check if username has changed
+			} // Check if username has changed
 			const usernameChanged = username !== (session?.user as ExtendedUser)?.username;
-			
+
 			// Update the session data
 			const sessionUpdated = await updateSessionData();
-			
+
 			if (sessionUpdated) {
 				setSuccess('Profile updated successfully!');
 				// Wait a moment to show the success message before redirecting
@@ -207,7 +215,8 @@ export default function EditProfileForm({ session }: { session: Session | null }
 	if (loading) {
 		return <div className='flex justify-center p-4'>Loading profile data...</div>;
 	}
-	return (		<form
+	return (
+		<form
 			onSubmit={handleSubmit}
 			className='flex flex-col items-center p-4 bg-circles-light rounded-2xl shadow-lg'
 		>

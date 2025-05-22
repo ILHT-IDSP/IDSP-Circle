@@ -218,8 +218,12 @@ export default function ActivityFeed() {
 		return { newActivities, todayActivities, thisWeekActivities };
 	};
 
-	const renderActivityContent = (activity: Activity) => {
-		if (activity.type === 'followed') {
+	const renderActivityContent = (activity: Activity) => {		if (activity.type === 'followed') {
+			return <>{activity.content}</>;
+		}
+
+		if (activity.type === 'album_like' || activity.type === 'album_comment') {
+			// The content already includes the user's name from the API
 			return <>{activity.content}</>;
 		}
 

@@ -10,7 +10,10 @@ export async function POST(request: NextRequest) {
 		if (!session?.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		} // Get profile data from request body
-		const { name, bio, username, profileImage, isProfilePrivate } = await request.json();
+		const { name, bio, username, email, profileImage, isProfilePrivate } = await request.json();
+
+		// Convert email to lowercase if provided
+		const lowerCaseEmail = email ? email.toLowerCase() : undefined;
 
 		// Validate the data
 		if (username && username !== session.user.username) {
@@ -23,6 +26,17 @@ export async function POST(request: NextRequest) {
 				return NextResponse.json({ error: 'Username is already taken' }, { status: 400 });
 			}
 		}
+
+		// If email is being changed, check if it's already in use
+		if (lowerCaseEmail && lowerCaseEmail !== session.user.email) {
+			const existingEmailUser = await prisma.user.findUnique({
+				where: { email: lowerCaseEmail },
+			});
+
+			if (existingEmailUser) {
+				return NextResponse.json({ error: 'Email is already in use' }, { status: 400 });
+			}
+		}
 		// Update the user profile
 		const updatedUser = await prisma.user.update({
 			where: {
@@ -32,16 +46,19 @@ export async function POST(request: NextRequest) {
 				name: name || undefined,
 				bio: bio || undefined,
 				username: username || undefined,
+				email: lowerCaseEmail, // Add email field with lowercase value
 				profileImage: profileImage || undefined, // Add profileImage field
 				isProfilePrivate: typeof isProfilePrivate === 'boolean' ? isProfilePrivate : undefined,
 			},
-		});		return NextResponse.json({
+		});
+		return NextResponse.json({
 			success: true,
 			user: {
 				id: updatedUser.id,
 				name: updatedUser.name,
 				username: updatedUser.username,
 				bio: updatedUser.bio,
+				email: updatedUser.email, // Include email in response
 				profileImage: updatedUser.profileImage,
 				isProfilePrivate: updatedUser.isProfilePrivate,
 				usernameChanged: username && username !== session.user.username,

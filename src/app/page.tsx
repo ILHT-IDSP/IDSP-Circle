@@ -86,15 +86,44 @@ export default async function Home() {
 
 	// Extract the IDs of users being followed
 	const followingIds = following.map(f => f.following.id);
-	// Get albums from users that the current user follows
-	const followingAlbums = await prisma.album.findMany({
+
+	// Extract circle IDs the user is a member of
+	const userCircleIds = userCirclesFormatted.map(circle => circle.id);
+
+	// Get albums for the feed, which includes:
+	// 1. Albums from users the current user follows
+	// 2. Albums from circles the user is a member of
+	// 3. User's own albums
+	const feedAlbums = await prisma.album.findMany({
 		where: {
-			creatorId: {
-				in: followingIds,
-			},
+			OR: [
+				// Albums from users the user follows
+				{
+					creatorId: {
+						in: followingIds,
+					},
+				},
+				// Albums from circles the user is a member of
+				{
+					circleId: {
+						in: userCircleIds,
+					},
+				},
+				// User's own albums
+				{
+					creatorId: userId,
+				},
+			],
 		},
 		include: {
 			creator: true,
+			Circle: {
+				select: {
+					id: true,
+					name: true,
+					avatar: true,
+				},
+			},
 			_count: {
 				select: {
 					Photo: true,
@@ -104,7 +133,7 @@ export default async function Home() {
 		orderBy: {
 			createdAt: 'desc',
 		},
-		take: 10, // Limit to 10 most recent albums
+		take: 20, // Increased limit since we're showing more albums now
 	});
 
 	return (
@@ -182,9 +211,9 @@ export default async function Home() {
 				</section>{' '}
 				<section className='w-full my-8 mb-32'>
 					<h2 className='text-lg font-bold mb-2'>Your Feed</h2>
-					{followingAlbums.length > 0 ? (
-						<AlbumGrid albumIds={followingAlbums.map(album => album.id)}>
-							{followingAlbums.map(album => (
+					{feedAlbums.length > 0 ? (
+						<AlbumGrid albumIds={feedAlbums.map(album => album.id)}>
+							{feedAlbums.map(album => (
 								<AlbumCard
 									key={album.id}
 									albumId={album.id}
@@ -192,6 +221,14 @@ export default async function Home() {
 									albumName={album.title}
 									userProfileImage={album.creator?.profileImage || '/images/default-avatar.png'}
 									photoCount={album._count.Photo}
+									// Pass creator information
+									creatorName={album.creator?.name || album.creator?.username || 'Unknown'}
+									// Pass circle information if available
+									circleName={album.Circle?.name}
+									circleImage={album.Circle?.avatar || '/images/circles/default.svg'}
+									// Keep old props for backward compatibility
+									sourceName={album.Circle ? album.Circle.name : album.creator?.name || 'Unknown'}
+									sourceType={album.Circle ? 'circle' : 'user'}
 								/>
 							))}
 						</AlbumGrid>

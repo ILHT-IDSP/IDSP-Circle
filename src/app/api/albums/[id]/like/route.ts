@@ -65,14 +65,21 @@ export async function POST(request: NextRequest, { params }) {
 						userId: userId,
 						albumId: albumId,
 					},
-				});
-						// Only create activity if the album has a creator and it's not the current user
+				});				// Only create activity if the album has a creator and it's not the current user
 				if (album.creator && album.creator.id !== userId) {
+					// Get the current user's name or username
+					const currentUser = await prisma.user.findUnique({
+						where: { id: userId },
+						select: { name: true, username: true }
+					});
+					
+					const actorName = currentUser?.name || currentUser?.username || 'Someone';
+					
 					// Create activity for the album creator
 					await prisma.activity.create({
 						data: {
 							type: 'album_like',
-							content: `liked your album "${album.title}"`,
+							content: `${actorName} liked your album "${album.title}"`,
 							userId: album.creator.id, // Activity belongs to the album creator
 							circleId: album.circleId || null
 						}

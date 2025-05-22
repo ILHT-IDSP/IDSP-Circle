@@ -14,9 +14,25 @@ interface AlbumCardProps {
 	albumName: string;
 	userProfileImage: string;
 	photoCount?: number;
+	sourceName?: string;
+	sourceType?: 'user' | 'circle';
+	creatorName?: string;
+	circleName?: string;
+	circleImage?: string;
 }
 
-const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, userProfileImage, photoCount }) => {
+const AlbumCard: React.FC<AlbumCardProps> = ({ 
+	albumId, 
+	albumImage, 
+	albumName, 
+	userProfileImage, 
+	photoCount,
+	sourceName,
+	sourceType,
+	creatorName,
+	circleName,
+	circleImage
+}) => {
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 	const { likeStatuses, toggleLike } = useAlbumLikes();
 	const [loadingAlbums, setLoadingAlbums] = useState<{ [key: number]: boolean }>({});
@@ -46,13 +62,27 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 						className='object-cover'
 					/>{' '}
 					<div className='absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.5)] via-transparent to-[rgba(0,0,0,0.3)]' />
+					
+					{/* User profile image in top right */}
 					<div className='absolute top-3 right-3 z-10'>
 						<CircleHolder
 							imageSrc={userProfileImage}
 							circleSize={40}
 							showName={false}
 						/>
-					</div>{' '}
+					</div>
+					
+					{/* Circle image if available */}
+					{circleName && circleImage && (
+						<div className='absolute top-3 right-16 z-10'>
+							<CircleHolder
+								imageSrc={circleImage}
+								circleSize={40}
+								showName={false}
+							/>
+						</div>
+					)}
+					
 					{photoCount !== undefined && (
 						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-white text-sm'>
 							<FaImages className='text-white' />
@@ -60,12 +90,35 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 						</div>
 					)}
 					<div className='absolute bottom-0 left-0 right-0 flex items-center justify-between p-3 sm:p-4 z-10'>
-						<h3
-							className='black-outline text-sm font-medium'
-							style={{ maxWidth: 'calc(100% - 80px)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-						>
-							{albumName}
-						</h3>
+						<div className='flex flex-col' style={{ maxWidth: 'calc(100% - 80px)' }}>
+							<h3
+								className='black-outline text-sm font-medium'
+								style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+							>
+								{albumName}
+							</h3>
+							
+							{/* Show creator name */}
+							{creatorName && (
+								<span className='text-xs opacity-90 black-outline flex items-center gap-1'>
+									• By {creatorName}
+								</span>
+							)}
+							
+							{/* Show circle if available */}
+							{circleName && (
+								<span className='text-xs opacity-90 black-outline flex items-center gap-1'>
+									◉ {circleName}
+								</span>
+							)}
+							
+							{/* Fallback to old source display if needed */}
+							{!creatorName && !circleName && sourceName && (
+								<span className='text-xs opacity-90 black-outline flex items-center gap-1'>
+									{sourceType === 'circle' ? '◉' : '•'} {sourceName}
+								</span>
+							)}
+						</div>
 
 						<div className='flex items-center gap-3'>
 							{' '}
