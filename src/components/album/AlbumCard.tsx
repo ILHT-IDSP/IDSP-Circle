@@ -4,9 +4,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart, FaRegHeart, FaComment, FaImages } from 'react-icons/fa';
 import CircleHolder from '../circle_holders';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import CommentModal from './CommentModal';
 import { useAlbumLikes } from './AlbumLikesContext';
+
+/**
+ * Gets the display URL for an album cover image
+ */
+function getDisplayUrl(coverImage: string | null): string | null {
+	if (!coverImage) return null;
+	return coverImage;
+}
 
 interface AlbumCardProps {
 	albumId: number;
@@ -23,7 +31,12 @@ interface AlbumCardProps {
 
 const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, userProfileImage, photoCount, sourceName, sourceType, creatorName, circleName, circleImage }) => {
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes();
+	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes(); // Process the albumImage to handle any necessary transformations
+	const displayImageUrl = useMemo(() => {
+		const url = albumImage || '/images/albums/default.svg';
+		return url;
+	}, [albumImage]); // Generate object-position style (centered by default since we're using uploaded cropped images)
+	const objectPosition = useMemo(() => 'center', []);
 
 	const handleLikeClick = async (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -47,12 +60,16 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 				href={`/album/${albumId}`}
 				className='relative w-full h-full block'
 			>
+				{' '}
 				<div className='relative w-full h-full'>
+					{' '}
 					<Image
-						src={albumImage}
+						src={displayImageUrl}
 						alt={`${albumName} album cover`}
 						fill
+						sizes='(max-width: 768px) 100vw, 33vw'
 						className='object-cover'
+						priority
 					/>{' '}
 					<div className='absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.5)] via-transparent to-[rgba(0,0,0,0.3)]' />
 					{/* User profile image in top right */}

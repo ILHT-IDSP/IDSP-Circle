@@ -18,7 +18,7 @@ export function ToggleShowPassword({inputId}: {inputId: string}) {
         <>
             <button
                 type="button"
-                onClick={togglePasswordVisibility}                className="mr-2 sm:mr-4 text-foreground"
+                onClick={togglePasswordVisibility}                className="mr-2 sm:mr-4 text-[var(--circles-dark)]"
                 aria-label={showPassword ? "Hide password" : "Show password"}
             >
                 <AwesomeIcon 

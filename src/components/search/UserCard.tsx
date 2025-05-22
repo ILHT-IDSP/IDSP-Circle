@@ -67,9 +67,8 @@ export default function UserCard({ user }: { user: User }) {
 			setIsProcessing(false);
 		}
 	};
-
 	return (
-		<div className='flex items-center justify-between bg-circles-light px-4 py-3 rounded-lg hover:bg-circles-light-blue transition-colors'>
+		<div className='flex items-center justify-between bg-[var(--background-secondary)] px-4 py-3 rounded-lg hover:bg-[var(--background-secondary)]/80 transition-colors'>
 			<Link
 				href={`/${user.username}`}
 				className='flex items-center flex-grow'
@@ -88,19 +87,18 @@ export default function UserCard({ user }: { user: User }) {
 					)}
 				</div>
 				<div>
-					<p className='text-circles-dark font-semibold'>{user.name || user.username}</p>
-					<p className='text-circles-dark text-sm'>@{user.username}</p>
+					<p className='text-[var(--foreground)] font-semibold'>{user.name || user.username}</p>
+					<p className='text-[var(--foreground-secondary)] text-sm'>@{user.username}</p>
 				</div>
 			</Link>
 
 			<button
 				onClick={handleFollowToggle}
 				disabled={isProcessing}
-				className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${isFollowing ? 'bg-circles-light border border-circles-dark-blue text-circles-dark-blue' : 'bg-circles-dark-blue text-white'} ${isProcessing ? 'opacity-70' : 'hover:opacity-80'}`}
-			>
-				{isProcessing ? (
+				className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${isFollowing ? 'bg-[var(--background)] border border-[var(--primary)] text-[var(--primary)]' : 'bg-[var(--primary)] text-[var(--background)]'} ${isProcessing ? 'opacity-70' : 'hover:opacity-80'}`}
+			>				{isProcessing ? (
 					<span className='flex items-center'>
-						<span className='h-3 w-3 rounded-full border-2 border-t-transparent border-circles-dark animate-spin mr-1'></span>
+						<span className='h-3 w-3 rounded-full border-2 border-t-transparent border-[var(--primary)] animate-spin mr-1'></span>
 						<span>{isFollowing ? 'Unfollowing...' : 'Following...'}</span>
 					</span>
 				) : isFollowing ? (

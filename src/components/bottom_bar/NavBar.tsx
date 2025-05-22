@@ -44,7 +44,7 @@ export default function NavBar() {
 							return (
 								<div
 									key={item.name}
-									className={`flex flex-col items-center flex-1 py-2 transition-colors cursor-pointer rounded-md 
+									className={`flex flex-col items-center flex-1 py-2  cursor-pointer rounded-md 
                                     ${isActive ? 'text-[var(--primary)] font-medium' : 'text-[var(--foreground)] opacity-70'} 
                                     hover:bg-[var(--foreground)]/5 hover:text-[var(--primary)]`}
 									onClick={toggleCreateContainer}

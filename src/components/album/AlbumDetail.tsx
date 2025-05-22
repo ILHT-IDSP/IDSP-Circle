@@ -1,16 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart, FaRegHeart, FaComment, FaPlus, FaPencilAlt } from 'react-icons/fa';
 import { Session } from '@auth/core/types';
 import CommentModal from './CommentModal';
-import AddPhotoModal from './AddPhotoModal';
+import CroppablePhotoUpload from './CroppablePhotoUpload';
 import PhotoBatchUpload from './PhotoBatchUpload';
 import EditAlbumModal from './EditAlbumModal';
 import { useAlbumLikes, AlbumLikesProvider } from './AlbumLikesContext';
 import { toast } from 'react-hot-toast';
+
+/**
+ * Gets the display URL for an album cover image
+ */
+function getDisplayUrl(coverImage: string | null): string | null {
+	if (!coverImage) return null;
+	return coverImage;
+}
 
 interface Photo {
 	id: number;
@@ -59,6 +67,9 @@ const AlbumDetailContent: React.FC<AlbumDetailProps> = ({ album, isLiked: initia
 	const [photos, setPhotos] = useState<Photo[]>(album.Photo);
 	const [albumData, setAlbumData] = useState(album);
 	const [isCircleMember, setIsCircleMember] = useState(false);
+
+	// Process the album cover image to get the original URL if it's in JSON format
+	const coverImageUrl = useMemo(() => getDisplayUrl(albumData.coverImage), [albumData.coverImage]);
 
 	// Use the album likes context instead of local state
 	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes();
@@ -295,14 +306,12 @@ const AlbumDetailContent: React.FC<AlbumDetailProps> = ({ album, isLiked: initia
 				/>
 			)}
 			{isAddPhotoModalOpen && (
-				<div className='fixed inset-0 bg-[var(--background)] flex items-center justify-center z-100 p-4'>
-					<AddPhotoModal
-						albumId={album.id}
-						isOpen={isAddPhotoModalOpen}
-						onClose={() => setIsAddPhotoModalOpen(false)}
-						onPhotoAdded={handleAddPhoto}
-					/>
-				</div>
+				<CroppablePhotoUpload
+					albumId={album.id}
+					isOpen={isAddPhotoModalOpen}
+					onClose={() => setIsAddPhotoModalOpen(false)}
+					onPhotoAdded={handleAddPhoto}
+				/>
 			)}
 			{isBatchUploadOpen && (
 				<div className='fixed inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center z-100 p-4'>

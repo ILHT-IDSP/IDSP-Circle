@@ -3,6 +3,8 @@ import React, { useState, useRef } from 'react';
 import { FaUpload, FaTimes, FaCheck } from 'react-icons/fa';
 import Image from 'next/image';
 import { AlbumPhoto } from '../create_album';
+import { createCroppedImage } from '../../user_registration/add_profilepicture/cropUtils';
+import ImageCropper from '../../user_registration/add_profilepicture/ImageCropper';
 
 interface IAlbumFormData {
 	title: string;
@@ -23,34 +25,89 @@ interface CreateAlbumStepOneProps {
 export default function CreateAlbumStepOne({ formData, setFormData, onNext }: CreateAlbumStepOneProps) {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [dragActive, setDragActive] = useState<boolean>(false);
-
+	const [showCropper, setShowCropper] = useState(false);
+	const [currentFile, setCurrentFile] = useState<File | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+	const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+	const [currentDescription, setCurrentDescription] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
 		if (!files || files.length === 0) return;
-		addFiles(files);
+
+		// Use the first file for cropping
+		const file = files[0];
+
+		if (file.type.startsWith('image/')) {
+			// Create a preview and open the cropper
+			const filePreviewUrl = URL.createObjectURL(file);
+			setCurrentFile(file);
+			setPreviewUrl(filePreviewUrl);
+			setShowCropper(true);
+		} else {
+			alert('Please select an image file');
+		}
 	};
 
-	const addFiles = (files: FileList) => {
-		// Convert FileList to array and filter out non-image files
-		const fileArray = Array.from(files).filter(file => file.type.startsWith('image/'));
+	const handleCropComplete = (croppedArea: any) => {
+		setCroppedAreaPixels(croppedArea);
+	};
 
-		// Create preview URLs and add to photos state
-		const newPhotos = fileArray.map(file => ({
-			file,
-			previewUrl: URL.createObjectURL(file),
-			description: '',
-			uploading: false,
-			uploaded: false,
-		}));
+	const handleCropCancel = () => {
+		setShowCropper(false);
+		if (previewUrl) {
+			URL.revokeObjectURL(previewUrl);
+			setPreviewUrl(null);
+		}
+		setCurrentFile(null);
+		setCurrentDescription('');
+	};
 
-		setFormData(prev => ({
-			...prev,
-			photos: [...(prev.photos || []), ...newPhotos],
-		}));
+	const finalizeCroppedImage = async () => {
+		if (!previewUrl || !croppedAreaPixels || !currentFile) return;
 
-		// Clear the input to allow selecting the same file again
-		if (fileInputRef.current) {
-			fileInputRef.current.value = '';
+		try {
+			setIsSubmitting(true);
+
+			// Create a cropped image blob
+			const croppedImageBlob = await createCroppedImage(previewUrl, croppedAreaPixels);
+
+			// Create a file from the blob
+			const croppedFile = new File([croppedImageBlob], currentFile.name, { type: 'image/jpeg' });
+
+			// Create a new preview URL for the cropped image
+			const croppedPreviewUrl = URL.createObjectURL(croppedImageBlob);
+
+			// Add the cropped photo to the album
+			setFormData(prev => ({
+				...prev,
+				photos: [
+					...(prev.photos || []),
+					{
+						file: croppedFile,
+						previewUrl: croppedPreviewUrl,
+						description: currentDescription,
+						uploading: false,
+						uploaded: false,
+					},
+				],
+			}));
+
+			// Reset form for next photo
+			setCurrentDescription('');
+		} catch (error) {
+			console.error('Image cropping error:', error);
+			alert('Failed to crop image');
+		} finally {
+			setIsSubmitting(false);
+			setShowCropper(false);
+
+			// Clean up the blob URL to prevent memory leaks
+			if (previewUrl) {
+				URL.revokeObjectURL(previewUrl);
+				setPreviewUrl(null);
+			}
+			setCurrentFile(null);
 		}
 	};
 
@@ -89,14 +146,24 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 		e.stopPropagation();
 		setDragActive(false);
 	};
-
 	const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
 		setDragActive(false);
 
 		if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-			addFiles(e.dataTransfer.files);
+			// Use the first file for cropping
+			const file = e.dataTransfer.files[0];
+
+			if (file.type.startsWith('image/')) {
+				// Create a preview and open the cropper
+				const filePreviewUrl = URL.createObjectURL(file);
+				setCurrentFile(file);
+				setPreviewUrl(filePreviewUrl);
+				setShowCropper(true);
+			} else {
+				alert('Please select an image file');
+			}
 		}
 	};
 
@@ -128,17 +195,17 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 				>
 					{' '}
 					<FaUpload className='text-4xl mb-4 text-[var(--foreground)] opacity-60' />
-					<p className='mb-2 font-medium'>Drag & drop photos here</p>
+					<p className='mb-2 font-medium'>Drag & drop a photo here</p>
 					<p className='text-sm opacity-70 mb-4'>or click to browse your files</p>
 					<p className='text-xs opacity-50'>JPG, PNG, or GIF (max 5MB each)</p>
+					<p className='text-xs opacity-50 mt-1'>Photos will be cropped to fit the album layout</p>
 					<input
 						ref={fileInputRef}
 						type='file'
 						accept='image/*'
-						multiple
 						onChange={handleFileSelect}
 						className='hidden'
-						aria-label='Upload photos'
+						aria-label='Upload photo'
 					/>
 				</div>
 			</div>
@@ -199,6 +266,49 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 					Continue to Next Step
 				</button>
 			</div>
+
+			{/* Image Cropper Modal */}
+			{showCropper && previewUrl && (
+				<div className='fixed inset-0 bg-[rgba(0,0,0,0.8)] flex items-center justify-center z-50'>
+					<div className='bg-[var(--background)] rounded-xl max-w-2xl w-full p-4 flex flex-col'>
+						<div className='flex justify-between items-center mb-4'>
+							<h2 className='text-xl font-semibold'>Crop Your Image</h2>
+							<button
+								type='button'
+								onClick={handleCropCancel}
+								className='text-[var(--foreground)] opacity-60 hover:opacity-100'
+							>
+								<FaTimes />
+							</button>
+						</div>
+
+						<ImageCropper
+							imageUrl={previewUrl}
+							onCropComplete={handleCropComplete}
+							onCancel={handleCropCancel}
+							onConfirm={finalizeCroppedImage}
+							isSubmitting={isSubmitting}
+						/>
+
+						<div className='mt-4'>
+							<label
+								htmlFor='photo-description'
+								className='block text-sm font-medium text-[var(--foreground)] mb-1'
+							>
+								Description (optional)
+							</label>
+							<input
+								id='photo-description'
+								type='text'
+								value={currentDescription}
+								onChange={e => setCurrentDescription(e.target.value)}
+								className='w-full px-3 py-2 border border-[var(--foreground)] border-opacity-20 rounded-md bg-[var(--background)]'
+								placeholder='Add a description to your photo'
+							/>
+						</div>
+					</div>
+				</div>
+			)}
 		</form>
 	);
 }

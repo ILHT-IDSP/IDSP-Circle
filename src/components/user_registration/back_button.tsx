@@ -8,7 +8,7 @@ export function BackButton({handleBack}: IBackButtonProps) {
             <button className="">
                 <AwesomeIcon
                     icon={faArrowLeft}
-                    className="w-10 h-10 mt-5 p-2 text-black"
+                    className="w-10 h-10 mt-5 p-2 text-[var(--foreground)]"
                     onClick={handleBack}
                 />
             </button>

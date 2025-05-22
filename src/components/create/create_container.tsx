@@ -21,7 +21,7 @@ export default function CreateContainer({ isVisible, onClose }: { isVisible: boo
 				<div className='max-w-full w-full flex justify-end'>
 					<AwesomeIcon
 						icon={faX}
-						className='text-white p-3 m-2 text-2xl hover:cursor-pointer hover:opacity-70 transition-all'
+						className='text-[var(--foreground)] p-3 m-2 text-2xl hover:cursor-pointer hover:opacity-70 transition-all'
 						onClick={onClose}
 					/>
 				</div>

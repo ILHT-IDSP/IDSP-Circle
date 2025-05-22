@@ -83,26 +83,26 @@ export default function CircleAlbums({ circleId }: { circleId: number }) {
 
 	return (
 		<div className='px-6 py-4 pb-24'>
+			{' '}
 			<div className='flex justify-between items-center mb-4'>
 				<h2 className='text-lg font-semibold'>Albums • {albums.length}</h2>
 				{canCreate && (
 					<button
 						onClick={handleCreateAlbum}
-						className='flex items-center gap-2 bg-circles-dark-blue text-white px-4 py-2 rounded-full text-sm font-medium'
+						className='flex items-center gap-2 bg-[var(--primary)] text-[var(--background)] px-4 py-2 rounded-lg text-sm font-medium'
 					>
 						<FaPlus size={12} />
 						<span>New Album</span>
 					</button>
 				)}
 			</div>
-
 			{albums.length === 0 ? (
 				<div className='text-center py-10'>
-					<p className='text-gray-400 mb-4'>No albums yet</p>
+					<p className='text-[var(--foreground-secondary)] mb-4'>No albums yet</p>
 					{canCreate && (
 						<button
 							onClick={handleCreateAlbum}
-							className='bg-circles-dark-blue text-white px-6 py-2 rounded-full text-sm font-medium'
+							className='bg-[var(--primary)] text-[var(--background)] px-6 py-2 rounded-lg text-sm font-medium'
 						>
 							Create First Album
 						</button>

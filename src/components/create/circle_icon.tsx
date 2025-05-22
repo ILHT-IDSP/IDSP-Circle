@@ -14,11 +14,12 @@ export default function CreateCircleIcon() {
                         id="circle-icon-container"
                         className="bg-[var(--circles-dark-blue)] p-3 flex items-center h-20 w-20 rounded-2xl"
                     >
-                        <div className="filter flex m-auto">
+                        <div className="text-white flex m-auto">
                             <CirclesLogo
                                 width={45}
                                 height={45}
                                 showText={false}
+								white={true}
                             />
                         </div>
                     </div>
