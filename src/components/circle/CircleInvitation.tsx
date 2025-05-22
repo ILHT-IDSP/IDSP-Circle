@@ -6,6 +6,7 @@ import { FaSearch, FaUserPlus } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import CircleUserSearch from './CircleUserSearch';
 import DemoNavBar from '../top_nav/DemoNavBar';
+import { toast } from 'react-hot-toast';
 
 interface User {
 	id: number;
@@ -31,6 +32,9 @@ export default function CircleInvitation({ circleId }: CircleInvitationProps) {
 	const [invitingUsers, setInvitingUsers] = useState<Record<number, boolean>>({});
 	const [inviteResults, setInviteResults] = useState<Record<number, { success: boolean; message: string }>>({});
 
+	// Store optimistic invite states
+	const [optimisticInvites, setOptimisticInvites] = useState<Set<number>>(new Set());
+
 	useEffect(() => {
 		// Filter friends based on search term
 		if (friends.length > 0) {
@@ -38,6 +42,7 @@ export default function CircleInvitation({ circleId }: CircleInvitationProps) {
 			setFilteredFriends(filtered);
 		}
 	}, [searchTerm, friends]);
+
 	useEffect(() => {
 		const fetchFriends = async () => {
 			try {
@@ -67,9 +72,28 @@ export default function CircleInvitation({ circleId }: CircleInvitationProps) {
 	}, [circleId]);
 
 	const handleInviteUser = async (userId: number) => {
+		// Don't allow inviting if already in progress
+		if (invitingUsers[userId]) return;
+
+		// Find the user for displaying name in toast
+		const user = friends.find(u => u.id === userId);
+		if (!user) return;
+
+		const userName = user.name || user.username;
+
 		try {
-			// Mark this user as currently being invited
+			// Mark this user as currently being invited (for UI purposes)
 			setInvitingUsers(prev => ({ ...prev, [userId]: true }));
+
+			// Optimistically mark as invited
+			setOptimisticInvites(prev => {
+				const updated = new Set(prev);
+				updated.add(userId);
+				return updated;
+			});
+
+			// Show toast notification
+			const toastId = toast.loading(`Inviting ${userName}...`);
 
 			const response = await fetch(`/api/circles/${circleId}/invite`, {
 				method: 'POST',
@@ -81,6 +105,24 @@ export default function CircleInvitation({ circleId }: CircleInvitationProps) {
 
 			const data = await response.json();
 
+			if (response.ok) {
+				// Success
+				toast.success(`Invitation sent to ${userName}!`, { id: toastId });
+
+				// Update user's isInvited status in the friends list
+				setFriends(prevFriends => prevFriends.map(friend => (friend.id === userId ? { ...friend, isInvited: true } : friend)));
+			} else {
+				// Failed
+				toast.error(data.error || 'Failed to send invitation', { id: toastId });
+
+				// Remove from optimistic invites
+				setOptimisticInvites(prev => {
+					const updated = new Set(prev);
+					updated.delete(userId);
+					return updated;
+				});
+			}
+
 			setInviteResults(prev => ({
 				...prev,
 				[userId]: {
@@ -90,6 +132,15 @@ export default function CircleInvitation({ circleId }: CircleInvitationProps) {
 			}));
 		} catch (error) {
 			console.error('Error inviting user:', error);
+			toast.error(`Error inviting ${userName}`);
+
+			// Remove from optimistic invites
+			setOptimisticInvites(prev => {
+				const updated = new Set(prev);
+				updated.delete(userId);
+				return updated;
+			});
+
 			setInviteResults(prev => ({
 				...prev,
 				[userId]: {
@@ -100,9 +151,6 @@ export default function CircleInvitation({ circleId }: CircleInvitationProps) {
 		} finally {
 			// No longer inviting this user
 			setInvitingUsers(prev => ({ ...prev, [userId]: false }));
-
-			// Refresh data after a short delay
-			setTimeout(() => router.refresh(), 1000);
 		}
 	};
 

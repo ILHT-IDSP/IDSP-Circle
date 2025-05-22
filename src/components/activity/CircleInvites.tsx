@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 interface CircleInvite {
 	id: number;
@@ -34,6 +35,7 @@ export default function CircleInvites() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [processingIds, setProcessingIds] = useState<number[]>([]);
+	const [optimisticActions, setOptimisticActions] = useState<Map<number, 'accept' | 'decline'>>(new Map());
 
 	useEffect(() => {
 		const fetchCircleInvites = async () => {
@@ -54,7 +56,20 @@ export default function CircleInvites() {
 	}, []);
 
 	const handleAccept = async (inviteId: number) => {
+		// Don't allow multiple actions on the same invite
+		if (processingIds.includes(inviteId)) return;
+
+		// Find the invite to show in toast
+		const invite = circleInvites.find(inv => inv.id === inviteId);
+		if (!invite) return;
+
+		// Optimistically update UI
 		setProcessingIds(prev => [...prev, inviteId]);
+		setOptimisticActions(prev => new Map(prev).set(inviteId, 'accept'));
+
+		// Show loading toast
+		const toastId = toast.loading(`Joining ${invite.circle.name}...`);
+
 		try {
 			const res = await fetch(`/api/activity/circleinvites`, {
 				method: 'PATCH',
@@ -66,22 +81,48 @@ export default function CircleInvites() {
 
 			if (!res.ok) throw new Error('Failed to accept invite');
 
-			// Add a small delay for animation
-			setTimeout(() => {
-				setCircleInvites(circleInvites.filter(invite => invite.id !== inviteId));
-				setProcessingIds(prev => prev.filter(id => id !== inviteId));
-			}, 300);
+			// Success toast
+			toast.success(`Joined ${invite.circle.name}!`, { id: toastId });
 
-			console.log(`Accepted invite ID: ${inviteId}`);
+			// Remove from list with animation
+			setTimeout(() => {
+				setCircleInvites(prevInvites => prevInvites.filter(inv => inv.id !== inviteId));
+				setProcessingIds(prev => prev.filter(id => id !== inviteId));
+				setOptimisticActions(prev => {
+					const updated = new Map(prev);
+					updated.delete(inviteId);
+					return updated;
+				});
+			}, 300);
 		} catch (err) {
 			console.error(err);
-			setError('Failed to accept invite');
+			toast.error(`Failed to join ${invite.circle.name}`, { id: toastId });
+
+			// Revert optimistic update
 			setProcessingIds(prev => prev.filter(id => id !== inviteId));
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.delete(inviteId);
+				return updated;
+			});
 		}
 	};
 
 	const handleDecline = async (inviteId: number) => {
+		// Don't allow multiple actions on the same invite
+		if (processingIds.includes(inviteId)) return;
+
+		// Find the invite to show in toast
+		const invite = circleInvites.find(inv => inv.id === inviteId);
+		if (!invite) return;
+
+		// Optimistically update UI
 		setProcessingIds(prev => [...prev, inviteId]);
+		setOptimisticActions(prev => new Map(prev).set(inviteId, 'decline'));
+
+		// Show loading toast
+		const toastId = toast.loading(`Declining invitation to ${invite.circle.name}...`);
+
 		try {
 			const res = await fetch(`/api/activity/circleinvites`, {
 				method: 'PATCH',
@@ -93,17 +134,30 @@ export default function CircleInvites() {
 
 			if (!res.ok) throw new Error('Failed to decline invite');
 
-			// Add a small delay for animation
-			setTimeout(() => {
-				setCircleInvites(circleInvites.filter(invite => invite.id !== inviteId));
-				setProcessingIds(prev => prev.filter(id => id !== inviteId));
-			}, 300);
+			// Success toast
+			toast.success(`Declined invitation to ${invite.circle.name}`, { id: toastId });
 
-			console.log(`Declined invite ID: ${inviteId}`);
+			// Remove from list with animation
+			setTimeout(() => {
+				setCircleInvites(prevInvites => prevInvites.filter(inv => inv.id !== inviteId));
+				setProcessingIds(prev => prev.filter(id => id !== inviteId));
+				setOptimisticActions(prev => {
+					const updated = new Map(prev);
+					updated.delete(inviteId);
+					return updated;
+				});
+			}, 300);
 		} catch (err) {
 			console.error(err);
-			setError('Failed to decline invite');
+			toast.error(`Failed to decline invitation`, { id: toastId });
+
+			// Revert optimistic update
 			setProcessingIds(prev => prev.filter(id => id !== inviteId));
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.delete(inviteId);
+				return updated;
+			});
 		}
 	};
 
@@ -141,7 +195,7 @@ export default function CircleInvites() {
 				circleInvites.map(invite => (
 					<div
 						key={invite.id}
-						className={`bg-[var(--background-secondary)] rounded-lg p-4 shadow-sm border border-[var(--border)] transition-all duration-300 ${processingIds.includes(invite.id) ? 'opacity-50 scale-95' : 'opacity-100'}`}
+						className={`bg-[var(--background-secondary)] rounded-lg p-4 shadow-sm border border-[var(--border)] transition-all duration-300 ${processingIds.includes(invite.id) ? 'opacity-70 scale-98' : 'opacity-100'} ${optimisticActions.get(invite.id) === 'accept' ? 'border-green-500 border-opacity-50' : optimisticActions.get(invite.id) === 'decline' ? 'border-red-500 border-opacity-50' : ''}`}
 					>
 						<div className='flex justify-between items-start mb-4'>
 							<div className='flex items-center'>
@@ -200,19 +254,20 @@ export default function CircleInvites() {
 							</Link>
 
 							<div className='flex space-x-2'>
+								{' '}
 								<button
 									disabled={processingIds.includes(invite.id)}
 									onClick={() => handleAccept(invite.id)}
-									className='bg-[var(--primary)] text-white font-medium py-1.5 px-4 rounded-lg text-sm hover:opacity-80 transition disabled:opacity-50'
+									className={`font-medium py-1.5 px-4 rounded-lg text-sm transition-all ${optimisticActions.get(invite.id) === 'accept' ? 'bg-green-500 text-white' : 'bg-[var(--primary)] text-white hover:opacity-80'} disabled:opacity-50 ${processingIds.includes(invite.id) && optimisticActions.get(invite.id) === 'accept' ? 'animate-pulse' : ''}`}
 								>
-									{processingIds.includes(invite.id) ? 'Processing...' : 'Accept'}
+									{processingIds.includes(invite.id) && optimisticActions.get(invite.id) === 'accept' ? 'Joining...' : 'Accept'}
 								</button>
 								<button
 									disabled={processingIds.includes(invite.id)}
 									onClick={() => handleDecline(invite.id)}
-									className='bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] font-medium py-1.5 px-4 rounded-lg text-sm hover:opacity-80 transition disabled:opacity-50'
+									className={`font-medium py-1.5 px-4 rounded-lg text-sm transition-all ${optimisticActions.get(invite.id) === 'decline' ? 'bg-red-500 text-white' : 'bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)]'} hover:opacity-80 disabled:opacity-50 ${processingIds.includes(invite.id) && optimisticActions.get(invite.id) === 'decline' ? 'animate-pulse' : ''}`}
 								>
-									{processingIds.includes(invite.id) ? 'Processing...' : 'Decline'}
+									{processingIds.includes(invite.id) && optimisticActions.get(invite.id) === 'decline' ? 'Declining...' : 'Decline'}
 								</button>
 							</div>
 						</div>

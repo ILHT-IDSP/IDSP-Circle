@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { FaArrowLeft, FaCog, FaUserPlus, FaUsers } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 interface CircleDetails {
 	id: number;
@@ -23,11 +24,21 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 	const [isJoining, setIsJoining] = useState(false);
 	const [canInvite, setCanInvite] = useState(false);
 	const [canManageRequests, setCanManageRequests] = useState(false);
-	const [joinRequestStatus, setJoinRequestStatus] = useState<'none' | 'pending'>('none');
+	const [joinRequestStatus, setJoinRequestStatus] = useState<'none' | 'pending'>('pending');
+
+	// For optimistic UI updates
+	const [optimisticIsMember, setOptimisticIsMember] = useState<boolean | null>(null);
+	const [optimisticMembersCount, setOptimisticMembersCount] = useState<number | null>(null);
+	const [optimisticJoinRequestStatus, setOptimisticJoinRequestStatus] = useState<'none' | 'pending' | null>(null);
+
+	// Effective values (either optimistic or actual)
+	const effectiveIsMember = optimisticIsMember !== null ? optimisticIsMember : circle.isMember;
+	const effectiveMembersCount = optimisticMembersCount !== null ? optimisticMembersCount : circle.membersCount;
+	const effectiveJoinRequestStatus = optimisticJoinRequestStatus !== null ? optimisticJoinRequestStatus : joinRequestStatus;
 
 	// Fetch user permissions for this circle
 	useEffect(() => {
-		if (circle && circle.isMember) {
+		if (circle && effectiveIsMember) {
 			const checkPermissions = async () => {
 				try {
 					const response = await fetch(`/api/circles/${circle.id}/permissions`);
@@ -44,11 +55,11 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 
 			checkPermissions();
 		}
-	}, [circle]);
+	}, [circle, effectiveIsMember]);
 
 	// Check for existing join request if the circle is private and user is not a member
 	useEffect(() => {
-		if (circle && circle.isPrivate && !circle.isMember && session?.user?.id) {
+		if (circle && circle.isPrivate && !effectiveIsMember && session?.user?.id) {
 			const checkJoinRequestStatus = async () => {
 				try {
 					const response = await fetch(`/api/circles/${circle.id}/joinrequests?checkRequestStatus=true`);
@@ -63,46 +74,141 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 
 			checkJoinRequestStatus();
 		}
-	}, [circle, session]);
+	}, [circle, effectiveIsMember, session]);
 
 	const handleBack = () => {
 		router.back();
 	};
+
 	const handleJoinLeaveCircle = async () => {
 		if (!session) {
 			router.push('/auth/login');
 			return;
 		}
 
-		try {
-			setIsJoining(true);
-			const action = circle.isMember ? 'leave' : 'join';
+		// Prevent multiple clicks
+		if (isJoining) return;
 
-			const response = await fetch(`/api/circles/${circle.id}/membership`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ action }),
-			});
+		const isLeaving = effectiveIsMember;
+		const action = isLeaving ? 'leave' : 'join';
 
-			if (!response.ok) {
-				throw new Error(`Failed to ${action} circle`);
+		// Optimistic UI updates
+		setIsJoining(true);
+
+		// Optimistically update member status
+		if (isLeaving) {
+			// Leaving the circle
+			setOptimisticIsMember(false);
+			setOptimisticMembersCount(Math.max(0, effectiveMembersCount - 1));
+
+			// Show loading toast
+			const toastId = toast.loading(`Leaving ${circle.name}...`);
+
+			try {
+				const response = await fetch(`/api/circles/${circle.id}/membership`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ action }),
+				});
+
+				if (!response.ok) {
+					throw new Error(`Failed to leave circle`);
+				}
+
+				// Success toast
+				toast.success(`Left ${circle.name}`, { id: toastId });
+
+				// Refresh after successful action
+				router.refresh();
+			} catch (error) {
+				console.error(`Error leaving circle:`, error);
+				toast.error(`Failed to leave circle. Please try again.`, { id: toastId });
+
+				// Revert optimistic updates
+				setOptimisticIsMember(null);
+				setOptimisticMembersCount(null);
+			} finally {
+				setIsJoining(false);
 			}
+		} else {
+			// Joining the circle or requesting to join
+			if (circle.isPrivate) {
+				// For private circles, set request status to pending
+				setOptimisticJoinRequestStatus('pending');
 
-			const data = await response.json();
+				// Show loading toast
+				const toastId = toast.loading(`Requesting to join ${circle.name}...`);
 
-			// If this was a join request for a private circle, update the UI state
-			if (data.action === 'request_sent' || data.action === 'request_already_sent') {
-				setJoinRequestStatus('pending');
+				try {
+					const response = await fetch(`/api/circles/${circle.id}/membership`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ action }),
+					});
+
+					if (!response.ok) {
+						throw new Error(`Failed to request joining circle`);
+					}
+
+					const data = await response.json();
+
+					// If this was a join request for a private circle, update the UI state
+					if (data.action === 'request_sent' || data.action === 'request_already_sent') {
+						toast.success(`Request to join ${circle.name} sent`, { id: toastId });
+					}
+
+					// Refresh after successful action
+					router.refresh();
+				} catch (error) {
+					console.error(`Error requesting to join circle:`, error);
+					toast.error(`Failed to request joining circle. Please try again.`, { id: toastId });
+
+					// Revert optimistic updates
+					setOptimisticJoinRequestStatus(null);
+				} finally {
+					setIsJoining(false);
+				}
+			} else {
+				// For public circles, immediately join
+				setOptimisticIsMember(true);
+				setOptimisticMembersCount(effectiveMembersCount + 1);
+
+				// Show loading toast
+				const toastId = toast.loading(`Joining ${circle.name}...`);
+
+				try {
+					const response = await fetch(`/api/circles/${circle.id}/membership`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ action }),
+					});
+
+					if (!response.ok) {
+						throw new Error(`Failed to join circle`);
+					}
+
+					// Success toast
+					toast.success(`Joined ${circle.name}!`, { id: toastId });
+
+					// Refresh after successful action
+					router.refresh();
+				} catch (error) {
+					console.error(`Error joining circle:`, error);
+					toast.error(`Failed to join circle. Please try again.`, { id: toastId });
+
+					// Revert optimistic updates
+					setOptimisticIsMember(null);
+					setOptimisticMembersCount(null);
+				} finally {
+					setIsJoining(false);
+				}
 			}
-
-			router.refresh();
-		} catch (error) {
-			console.error(`Error ${circle.isMember ? 'leaving' : 'joining'} circle:`, error);
-			alert(`Failed to ${circle.isMember ? 'leave' : 'join'} circle. Please try again.`);
-		} finally {
-			setIsJoining(false);
 		}
 	};
 
@@ -143,16 +249,18 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}
 
 				<div className='flex items-center mb-4'>
+					{' '}
 					<div className='text-sm text-gray-400'>
-						{circle.isPrivate ? 'Private Circle' : 'Public Circle'} • {circle.membersCount} members
+						{circle.isPrivate ? 'Private Circle' : 'Public Circle'} • {effectiveMembersCount} members
 					</div>
 				</div>
 
 				<div className='flex space-x-3'>
+					{' '}
 					{/* Show appropriate button based on status */}
 					{!circle.isCreator && (
 						<>
-							{circle.isPrivate && joinRequestStatus === 'pending' ? (
+							{circle.isPrivate && effectiveJoinRequestStatus === 'pending' ? (
 								<button
 									disabled={true}
 									className='px-6 py-2 rounded-lg text-sm font-medium bg-gray-500 text-white cursor-not-allowed'
@@ -163,14 +271,13 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 								<button
 									onClick={handleJoinLeaveCircle}
 									disabled={isJoining}
-									className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${circle.isMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} transition-colors`}
+									className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${effectiveIsMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} transition-colors ${isJoining ? 'opacity-80' : ''}`}
 								>
-									{isJoining ? 'Processing...' : circle.isMember ? 'Leave Circle' : circle.isPrivate ? 'Request to Join' : 'Join Circle'}
+									{isJoining ? (effectiveIsMember ? 'Leaving...' : circle.isPrivate ? 'Requesting...' : 'Joining...') : effectiveIsMember ? 'Leave Circle' : circle.isPrivate ? 'Request to Join' : 'Join Circle'}
 								</button>
 							)}
 						</>
 					)}
-
 					{/* Invite button for members with permission */}
 					{circle.isMember && canInvite && (
 						<button
@@ -184,7 +291,6 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 							<span className='text-sm font-medium'>Invite</span>
 						</button>
 					)}
-
 					{/* Join requests button for admins/moderators */}
 					{circle.isMember && canManageRequests && circle.isPrivate && (
 						<button

@@ -21,29 +21,22 @@ interface AlbumCardProps {
 	circleImage?: string;
 }
 
-const AlbumCard: React.FC<AlbumCardProps> = ({ 
-	albumId, 
-	albumImage, 
-	albumName, 
-	userProfileImage, 
-	photoCount,
-	sourceName,
-	sourceType,
-	creatorName,
-	circleName,
-	circleImage
-}) => {
+const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, userProfileImage, photoCount, sourceName, sourceType, creatorName, circleName, circleImage }) => {
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-	const { likeStatuses, toggleLike } = useAlbumLikes();
-	const [loadingAlbums, setLoadingAlbums] = useState<{ [key: number]: boolean }>({});
-	const handleLikeClick = async () => {
-		if (loadingAlbums[albumId]) return;
-		setLoadingAlbums(prev => ({ ...prev, [albumId]: true }));
+	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes();
+
+	const handleLikeClick = async (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		// Don't allow another click if this album is already being processed
+		if (pendingAlbums.has(albumId)) return;
+
 		await toggleLike(albumId);
-		setLoadingAlbums(prev => ({ ...prev, [albumId]: false }));
 	};
 
 	const isLiked = likeStatuses[albumId]?.liked || false;
+	const isPending = pendingAlbums.has(albumId);
 
 	return (
 		<div
@@ -62,7 +55,6 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
 						className='object-cover'
 					/>{' '}
 					<div className='absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.5)] via-transparent to-[rgba(0,0,0,0.3)]' />
-					
 					{/* User profile image in top right */}
 					<div className='absolute top-3 right-3 z-10'>
 						<CircleHolder
@@ -71,7 +63,6 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
 							showName={false}
 						/>
 					</div>
-					
 					{/* Circle image if available */}
 					{circleName && circleImage && (
 						<div className='absolute top-3 right-16 z-10'>
@@ -82,7 +73,6 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
 							/>
 						</div>
 					)}
-					
 					{photoCount !== undefined && (
 						<div className='absolute top-3 left-3 z-10 flex items-center gap-1 bg-[rgba(0,0,0,0.4)] px-2 py-1 rounded text-white text-sm'>
 							<FaImages className='text-white' />
@@ -90,28 +80,23 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
 						</div>
 					)}
 					<div className='absolute bottom-0 left-0 right-0 flex items-center justify-between p-3 sm:p-4 z-10'>
-						<div className='flex flex-col' style={{ maxWidth: 'calc(100% - 80px)' }}>
+						<div
+							className='flex flex-col'
+							style={{ maxWidth: 'calc(100% - 80px)' }}
+						>
 							<h3
 								className='black-outline text-sm font-medium'
 								style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
 							>
 								{albumName}
 							</h3>
-							
+
 							{/* Show creator name */}
-							{creatorName && (
-								<span className='text-xs opacity-90 black-outline flex items-center gap-1'>
-									• By {creatorName}
-								</span>
-							)}
-							
+							{creatorName && <span className='text-xs opacity-90 black-outline flex items-center gap-1'>• By {creatorName}</span>}
+
 							{/* Show circle if available */}
-							{circleName && (
-								<span className='text-xs opacity-90 black-outline flex items-center gap-1'>
-									◉ {circleName}
-								</span>
-							)}
-							
+							{circleName && <span className='text-xs opacity-90 black-outline flex items-center gap-1'>◉ {circleName}</span>}
+
 							{/* Fallback to old source display if needed */}
 							{!creatorName && !circleName && sourceName && (
 								<span className='text-xs opacity-90 black-outline flex items-center gap-1'>
@@ -123,23 +108,19 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
 						<div className='flex items-center gap-3'>
 							{' '}
 							<button
-								className='flex items-center gap-1 hover:cursor-pointer'
+								className={`flex items-center gap-1 hover:cursor-pointer ${isPending ? 'opacity-60' : ''}`}
 								aria-label={isLiked ? 'Unlike album' : 'Like album'}
-								onClick={e => {
-									e.preventDefault();
-									e.stopPropagation();
-									handleLikeClick();
-								}}
-								disabled={loadingAlbums[albumId]}
+								onClick={handleLikeClick}
+								disabled={isPending}
 							>
 								{' '}
 								{isLiked ? (
 									<>
-										<FaHeart className='text-xl text-[#e8083e]' />
+										<FaHeart className={`text-xl text-[#e8083e] ${isPending ? 'animate-pulse' : ''}`} />
 									</>
 								) : (
 									<>
-										<FaRegHeart className='text-xl text-white text-shadow-black' />
+										<FaRegHeart className={`text-xl text-white text-shadow-black ${isPending ? 'animate-pulse' : ''}`} />
 									</>
 								)}
 							</button>

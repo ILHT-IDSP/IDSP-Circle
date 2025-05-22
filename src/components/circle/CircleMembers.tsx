@@ -24,6 +24,10 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 	const [isActionInProgress, setIsActionInProgress] = useState(false);
 	const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+	// Add overlay ref for blocking interactions when dropdown is open
+	const overlayRef = useRef<HTMLDivElement>(null);
+	// Add refs for each dropdown menu
+	const dropdownMenuRefs = useRef<{[key: number]: HTMLDivElement | null}>({});
 
 	useEffect(() => {
 		const fetchMembers = async () => {
@@ -57,12 +61,23 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 
 		fetchMembers();
 	}, [circleId, session]);
-
 	const handlePromoteMember = async (memberId: number) => {
 		if (isActionInProgress) return;
 
+		// Optimistically update the UI immediately
+		setMembers(prevMembers => prevMembers.map(member => 
+			(member.id === memberId ? { ...member, role: 'MODERATOR' } : member)
+		));
+		
+		// Close the dropdown right away
+		setActiveDropdown(null);
+		
+		// Show immediate feedback
+		const toastId = toast.loading('Promoting member...');
+		
 		try {
 			setIsActionInProgress(true);
+			
 			const response = await fetch(`/api/circles/${circleId}/member/${memberId}/promote`, {
 				method: 'PATCH',
 				headers: {
@@ -75,25 +90,40 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 				throw new Error(errorData.error || 'Failed to promote member');
 			}
 
-			const data = await response.json();
-
-			// Update the member's role in the local state
-			setMembers(prevMembers => prevMembers.map(member => (member.id === memberId ? { ...member, role: 'MODERATOR' } : member)));
-
-			toast.success('Member promoted to moderator');
+			// Server confirmed the change
+			toast.success('Member promoted to moderator', { id: toastId });
 		} catch (error) {
 			console.error('Error promoting member:', error);
-			toast.error(error instanceof Error ? error.message : 'Failed to promote member');
+			
+			// Revert the optimistic update
+			setMembers(prevMembers => prevMembers.map(member => 
+				(member.id === memberId ? { ...member, role: 'MEMBER' } : member)
+			));
+			
+			toast.error(error instanceof Error ? error.message : 'Failed to promote member', { id: toastId });
 		} finally {
 			setIsActionInProgress(false);
 		}
 	};
-
 	const handleRemoveMember = async (memberId: number) => {
 		if (isActionInProgress) return;
 
+		// Get the member before removing for potential rollback
+		const memberToRemove = members.find(m => m.id === memberId);
+		if (!memberToRemove) return;
+
+		// Optimistically remove the member from UI
+		setMembers(prevMembers => prevMembers.filter(member => member.id !== memberId));
+		
+		// Close the dropdown right away
+		setActiveDropdown(null);
+		
+		// Show immediate feedback
+		const toastId = toast.loading('Removing member...');
+		
 		try {
 			setIsActionInProgress(true);
+			
 			const response = await fetch(`/api/circles/${circleId}/member/${memberId}/remove`, {
 				method: 'DELETE',
 				headers: {
@@ -106,12 +136,15 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 				throw new Error(errorData.error || 'Failed to remove member');
 			}
 
-			// Remove the member from the local state
-			setMembers(prevMembers => prevMembers.filter(member => member.id !== memberId));
-			toast.success('Member removed from circle');
+			// Server confirmed the removal
+			toast.success('Member removed from circle', { id: toastId });
 		} catch (error) {
 			console.error('Error removing member:', error);
-			toast.error(error instanceof Error ? error.message : 'Failed to remove member');
+			
+			// Restore the member in case of error
+			setMembers(prevMembers => [...prevMembers, memberToRemove]);
+			
+			toast.error(error instanceof Error ? error.message : 'Failed to remove member', { id: toastId });
 		} finally {
 			setIsActionInProgress(false);
 		}
@@ -155,23 +188,37 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 			default:
 				return 'text-[var(--foreground-secondary)]';
 		}
-	};
-
-	// Close dropdown when clicking outside
+	};	// Close dropdown when clicking outside
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-				setActiveDropdown(null);
+			// Check if the click is outside both the dropdown button and menu
+			if (activeDropdown !== null) {
+				const isClickInsideDropdownButton = dropdownRef.current && dropdownRef.current.contains(event.target as Node);
+				const isClickInsideDropdownMenu = dropdownMenuRefs.current[activeDropdown] && 
+					dropdownMenuRefs.current[activeDropdown]?.contains(event.target as Node);
+				
+				if (!isClickInsideDropdownButton && !isClickInsideDropdownMenu) {
+					setActiveDropdown(null);
+				}
 			}
 		}
 
-		// Add the event listener with capture phase to ensure it runs before other handlers
-		document.addEventListener('mousedown', handleClickOutside, true);
+		// Add event listeners
+		if (activeDropdown !== null) {
+			// Use capture phase to ensure our handler runs first
+			document.addEventListener('mousedown', handleClickOutside, true);
+		}
 
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside, true);
 		};
-	}, []);
+	}, [activeDropdown]);
+
+	// Toggle dropdown and manage overlay
+	const toggleDropdown = (memberId: number, e: React.MouseEvent) => {
+		e.stopPropagation();
+		setActiveDropdown(activeDropdown === memberId ? null : memberId);
+	};
 
 	if (loading) {
 		return (
@@ -203,10 +250,16 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 				<p className='text-red-500 text-sm'>{error}</p>
 			</div>
 		);
-	}
-
-	return (
-		<div className='px-6 py-4 pb-24'>
+	}	return (
+		<div className='px-6 py-4 pb-24 relative'>
+			{activeDropdown !== null && (
+				<div 
+					className="fixed inset-0 bg-black opacity-5 z-40" 
+					onClick={() => setActiveDropdown(null)}
+					ref={overlayRef}
+				/>
+			)}
+			
 			<h2 className='text-lg font-semibold mb-4'>Members • {members.length}</h2>
 
 			<div className='flex flex-col space-y-4'>
@@ -215,12 +268,11 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 					const isCurrentUser = member.id === currentUserId;
 					const canManage = !isCurrentUser && canManageMember(member.role);
 
-					return (
-						<div
+					return (						<div
 							key={member.id}
 							className='flex items-center px-4 py-4 border-b border-[var(--border)] hover:bg-[var(--background-secondary)] transition-colors relative'
 						>
-							<div className='flex items-center'>
+							<Link href={`/${member.username}`} className='flex items-center flex-grow'>
 								<div className='w-9 h-9 relative rounded-full overflow-hidden mr-3 border border-[var(--border)]'>
 									<Image
 										src={member.profileImage || '/images/default-avatar.png'}
@@ -233,32 +285,28 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 									<span className='font-medium text-[var(--foreground)]'>{member.username}</span>
 									<span className={`text-sm ${getRoleColor(member.role)}`}>{member.role}</span>
 								</div>
-							</div>
-
-							{canManage && (
+							</Link>							{canManage && (
 								<div
-									className='relative ml-auto'
+									className='relative ml-auto '
 									ref={dropdownRef}
 								>
 									<button
-										onClick={e => {
-											e.stopPropagation();
-											setActiveDropdown(activeDropdown === member.id ? null : member.id);
-										}}
+										onClick={(e) => toggleDropdown(member.id, e)}
 										className={`p-2.5 rounded-full transition-colors duration-150 ${activeDropdown === member.id ? 'bg-[var(--background-secondary)]' : 'hover:bg-[var(--background-secondary)]'}`}
 										aria-label='Member options'
 									>
 										<FaEllipsisV className='text-[var(--foreground-secondary)] text-[20px]' />
-									</button>
-
-									{activeDropdown === member.id && (
-										<div className='absolute right-0 top-full mt-1 bg-[var(--background)] shadow-lg rounded-md py-2 min-w-[200px] z-50 border border-[var(--border)]'>
+									</button>									{activeDropdown === member.id && (
+										<div 
+											className='absolute right-0 top-full mt-1 bg-[var(--background)] shadow-lg rounded-md py-2 min-w-[200px] z-[100] border border-[var(--border)]'
+											ref={(el) => { dropdownMenuRefs.current[member.id] = el }}
+											onClick={(e) => e.stopPropagation()}
+										>
 											{member.role === 'MEMBER' && userRole === 'ADMIN' && (
-												<button
-													onClick={e => {
+												<button													onClick={e => {
 														e.stopPropagation();
 														handlePromoteMember(member.id);
-														setActiveDropdown(null);
+														// setActiveDropdown handled in function
 													}}
 													disabled={isActionInProgress}
 													className='flex w-full items-center px-4 py-3 text-[15px] hover:bg-[var(--background-secondary)] cursor-pointer text-left font-medium'
@@ -267,11 +315,10 @@ export default function CircleMembers({ circleId }: { circleId: number }) {
 													<span>Promote to Moderator</span>
 												</button>
 											)}
-											<button
-												onClick={e => {
+											<button												onClick={e => {
 													e.stopPropagation();
 													handleRemoveMember(member.id);
-													setActiveDropdown(null);
+													// setActiveDropdown handled in function
 												}}
 												disabled={isActionInProgress}
 												className='flex w-full items-center px-4 py-3 text-[15px] hover:bg-[var(--background-secondary)] cursor-pointer text-red-500 text-left font-medium'

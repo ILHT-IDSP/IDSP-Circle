@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 interface FriendRequest {
 	id: number;
@@ -27,6 +28,8 @@ export default function FriendRequests() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [processingIds, setProcessingIds] = useState<number[]>([]);
+	// Map to track optimistic actions and their status
+	const [optimisticActions, setOptimisticActions] = useState<Map<number, string>>(new Map());
 
 	useEffect(() => {
 		const fetchFriendRequests = async () => {
@@ -38,6 +41,7 @@ export default function FriendRequests() {
 			} catch (err) {
 				console.error(err);
 				setError('Failed to load friend requests');
+				toast.error('Failed to load friend requests');
 			} finally {
 				setIsLoading(false);
 			}
@@ -46,8 +50,23 @@ export default function FriendRequests() {
 		fetchFriendRequests();
 	}, []);
 
-	const handleAccept = async (requestId: number) => {
+	const handleAccept = async (request: FriendRequest) => {
+		const requestId = request.id;
+		const displayName = request.requester?.name || request.requester?.username || request.user?.name || request.user?.username || 'user';
+
+		// Mark as processing
 		setProcessingIds(prev => [...prev, requestId]);
+
+		// Add to optimistic actions map
+		setOptimisticActions(prev => {
+			const updated = new Map(prev);
+			updated.set(requestId, 'accepting');
+			return updated;
+		});
+
+		// Create toast
+		const toastId = toast.loading(`Accepting ${displayName}'s request...`);
+
 		try {
 			const res = await fetch(`/api/activity/friendrequests`, {
 				method: 'PATCH',
@@ -59,22 +78,60 @@ export default function FriendRequests() {
 
 			if (!res.ok) throw new Error('Failed to accept friend request');
 
+			// Update optimistic action status
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.set(requestId, 'accepted');
+				return updated;
+			});
+
+			toast.success(`You're now following ${displayName}`, { id: toastId });
+
 			// Add a small delay for animation
 			setTimeout(() => {
-				setFriendRequests(friendRequests.filter(request => request.id !== requestId));
+				setFriendRequests(friendRequests.filter(req => req.id !== requestId));
 				setProcessingIds(prev => prev.filter(id => id !== requestId));
-			}, 300);
 
-			console.log(`Accepted friend request ID: ${requestId}`);
+				// Remove from optimistic actions after animation
+				setOptimisticActions(prev => {
+					const updated = new Map(prev);
+					updated.delete(requestId);
+					return updated;
+				});
+			}, 800);
 		} catch (err) {
 			console.error(err);
 			setError('Failed to accept friend request');
+
+			// Update optimistic action status
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.delete(requestId);
+				return updated;
+			});
+
 			setProcessingIds(prev => prev.filter(id => id !== requestId));
+			toast.error(`Failed to accept ${displayName}'s request`, { id: toastId });
 		}
 	};
 
-	const handleDecline = async (requestId: number) => {
+	const handleDecline = async (request: FriendRequest) => {
+		const requestId = request.id;
+		const displayName = request.requester?.name || request.requester?.username || request.user?.name || request.user?.username || 'user';
+
+		// Mark as processing
 		setProcessingIds(prev => [...prev, requestId]);
+
+		// Add to optimistic actions map
+		setOptimisticActions(prev => {
+			const updated = new Map(prev);
+			updated.set(requestId, 'declining');
+			return updated;
+		});
+
+		// Create toast
+		const toastId = toast.loading(`Declining ${displayName}'s request...`);
+
 		try {
 			const res = await fetch(`/api/activity/friendrequests`, {
 				method: 'PATCH',
@@ -86,17 +143,40 @@ export default function FriendRequests() {
 
 			if (!res.ok) throw new Error('Failed to decline friend request');
 
+			// Update optimistic action status
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.set(requestId, 'declined');
+				return updated;
+			});
+
+			toast.success(`Declined ${displayName}'s request`, { id: toastId });
+
 			// Add a small delay for animation
 			setTimeout(() => {
-				setFriendRequests(friendRequests.filter(request => request.id !== requestId));
+				setFriendRequests(friendRequests.filter(req => req.id !== requestId));
 				setProcessingIds(prev => prev.filter(id => id !== requestId));
-			}, 300);
 
-			console.log(`Declined friend request ID: ${requestId}`);
+				// Remove from optimistic actions after animation
+				setOptimisticActions(prev => {
+					const updated = new Map(prev);
+					updated.delete(requestId);
+					return updated;
+				});
+			}, 800);
 		} catch (err) {
 			console.error(err);
 			setError('Failed to decline friend request');
+
+			// Update optimistic action status
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.delete(requestId);
+				return updated;
+			});
+
 			setProcessingIds(prev => prev.filter(id => id !== requestId));
+			toast.error(`Failed to decline ${displayName}'s request`, { id: toastId });
 		}
 	};
 
@@ -117,11 +197,25 @@ export default function FriendRequests() {
 			{friendRequests.map(request => {
 				// Determine which user to show (requester if available, fallback to user)
 				const displayUser = request.requester || request.user;
+				const isProcessing = processingIds.includes(request.id);
+				const actionStatus = optimisticActions.get(request.id);
+
+				// Determine opacity and animation based on status
+				let cardClasses = 'relative p-4 border rounded-lg bg-[var(--background-secondary)] transition-all duration-300';
+				if (isProcessing) {
+					cardClasses += ' opacity-80';
+				}
+				if (actionStatus === 'accepted') {
+					cardClasses += ' scale-95 opacity-60 border-green-500';
+				}
+				if (actionStatus === 'declined') {
+					cardClasses += ' scale-95 opacity-60 border-red-300';
+				}
 
 				return (
 					<div
 						key={request.id}
-						className={`relative p-4 border rounded-lg bg-[var(--background-secondary)] transition-opacity ${processingIds.includes(request.id) ? 'opacity-60' : 'opacity-100'}`}
+						className={cardClasses}
 					>
 						<div className='flex items-center space-x-3'>
 							<Link href={`/${displayUser.username}`}>
@@ -145,18 +239,18 @@ export default function FriendRequests() {
 							</div>
 							<div className='flex flex-col space-y-2'>
 								<button
-									onClick={() => handleAccept(request.id)}
-									disabled={processingIds.includes(request.id)}
-									className='px-4 py-1 bg-[var(--primary)] text-white rounded-md hover:opacity-90 text-sm font-medium'
+									onClick={() => handleAccept(request)}
+									disabled={isProcessing}
+									className={`px-4 py-1 rounded-md hover:opacity-90 text-sm font-medium transition-all ${actionStatus === 'accepting' ? 'bg-[var(--primary)] text-white opacity-70' : actionStatus === 'accepted' ? 'bg-green-500 text-white' : 'bg-[var(--primary)] text-white'}`}
 								>
-									Accept
+									{actionStatus === 'accepting' ? 'Accepting...' : actionStatus === 'accepted' ? 'Accepted' : 'Accept'}
 								</button>
 								<button
-									onClick={() => handleDecline(request.id)}
-									disabled={processingIds.includes(request.id)}
-									className='px-4 py-1 border border-[var(--border)] rounded-md  text-sm font-medium'
+									onClick={() => handleDecline(request)}
+									disabled={isProcessing}
+									className={`px-4 py-1 rounded-md text-sm font-medium transition-all ${actionStatus === 'declining' ? 'border border-[var(--border)] opacity-70' : actionStatus === 'declined' ? 'bg-red-100 text-red-500 border border-red-200' : 'border border-[var(--border)]'}`}
 								>
-									Decline
+									{actionStatus === 'declining' ? 'Declining...' : actionStatus === 'declined' ? 'Declined' : 'Decline'}
 								</button>
 							</div>
 						</div>

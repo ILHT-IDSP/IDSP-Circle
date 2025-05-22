@@ -9,6 +9,8 @@ import CommentModal from './CommentModal';
 import AddPhotoModal from './AddPhotoModal';
 import PhotoBatchUpload from './PhotoBatchUpload';
 import EditAlbumModal from './EditAlbumModal';
+import { useAlbumLikes, AlbumLikesProvider } from './AlbumLikesContext';
+import { toast } from 'react-hot-toast';
 
 interface Photo {
 	id: number;
@@ -49,63 +51,33 @@ interface AlbumDetailProps {
 	session: Session | null;
 }
 
-const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLiked, session }) => {
-	const [isLiked, setIsLiked] = useState(initialIsLiked);
-	const [likeCount, setLikeCount] = useState(album._count.AlbumLike);
+const AlbumDetailContent: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLiked, session }) => {
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 	const [isAddPhotoModalOpen, setIsAddPhotoModalOpen] = useState(false);
 	const [isBatchUploadOpen, setIsBatchUploadOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [photos, setPhotos] = useState<Photo[]>(album.Photo);
 	const [albumData, setAlbumData] = useState(album);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isCircleMember, setIsCircleMember] = useState(false);
+
+	// Use the album likes context instead of local state
+	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes();
+
+	// Get like status from context or use initial value as fallback
+	const isLiked = likeStatuses[album.id]?.liked ?? initialIsLiked;
+	const likeCount = likeStatuses[album.id]?.likeCount ?? album._count.AlbumLike;
+	const isPending = pendingAlbums.has(album.id);
 
 	const handleLikeClick = async () => {
-		if (isLoading) return;
+		if (isPending) return;
+
 		if (!session?.user) {
-			// Redirect to login or show login modal
-			alert('Please log in to like albums');
+			toast.error('Please log in to like albums');
 			return;
 		}
 
-		setIsLoading(true);
-		try {
-			const response = await fetch(`/api/albums/${album.id}/like`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-
-			if (response.ok) {
-				const data = await response.json();
-				setIsLiked(data.liked);
-				setLikeCount(prev => (data.liked ? prev + 1 : prev - 1));
-			}
-		} catch (error) {
-			console.error('Error toggling like:', error);
-		} finally {
-			setIsLoading(false);
-		}
+		await toggleLike(album.id);
 	};
-	const handleAddPhoto = (newPhoto: Photo) => {
-		setPhotos(prevPhotos => [newPhoto, ...prevPhotos]);
-	};
-
-	const handlePhotoBatchComplete = () => {
-		setIsBatchUploadOpen(false);
-
-		// Reload photos
-		fetch(`/api/albums/${album.id}/photos`)
-			.then(response => response.json())
-			.then(data => {
-				setPhotos(data.photos);
-			})
-			.catch(error => {
-				console.error('Error fetching updated photos:', error);
-			});
-	};
-	const [isCircleMember, setIsCircleMember] = useState(false);
 
 	// Check if user is a member of the circle
 	useEffect(() => {
@@ -139,6 +111,25 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 			isPrivate: updatedAlbum.isPrivate,
 		});
 	};
+
+	const handleAddPhoto = (newPhoto: Photo) => {
+		setPhotos(prevPhotos => [newPhoto, ...prevPhotos]);
+	};
+
+	const handlePhotoBatchComplete = () => {
+		setIsBatchUploadOpen(false);
+
+		// Reload photos
+		fetch(`/api/albums/${album.id}/photos`)
+			.then(response => response.json())
+			.then(data => {
+				setPhotos(data.photos);
+			})
+			.catch(error => {
+				console.error('Error fetching updated photos:', error);
+			});
+	};
+
 	return (
 		<div className='container mx-auto px-6 py-10 mb-32 max-w-screen-xl'>
 			{' '}
@@ -149,19 +140,19 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 
 					<div className='flex items-center mt-8 gap-6'>
 						<button
-							className='flex items-center gap-2 hover:cursor-pointer hover:opacity-70 transition-opacity'
+							className={`flex items-center gap-2 hover:cursor-pointer ${isPending ? 'opacity-60' : 'hover:opacity-70'} transition-opacity`}
 							aria-label={isLiked ? 'Unlike album' : 'Like album'}
 							onClick={handleLikeClick}
-							disabled={isLoading}
+							disabled={isPending}
 						>
 							{isLiked ? (
 								<>
-									<FaHeart className='text-2xl text-red-500' />
+									<FaHeart className={`text-2xl text-red-500 ${isPending ? 'animate-pulse' : ''}`} />
 									<span className='text-lg'>{likeCount}</span>
 								</>
 							) : (
 								<>
-									<FaRegHeart className='text-2xl' />
+									<FaRegHeart className={`text-2xl ${isPending ? 'animate-pulse' : ''}`} />
 									<span className='text-lg'>{likeCount}</span>
 								</>
 							)}
@@ -340,6 +331,15 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 				/>
 			)}
 		</div>
+	);
+};
+
+// Wrapper component to provide the AlbumLikesContext
+const AlbumDetail: React.FC<AlbumDetailProps> = props => {
+	return (
+		<AlbumLikesProvider albumIds={[props.album.id]}>
+			<AlbumDetailContent {...props} />
+		</AlbumLikesProvider>
 	);
 };
 

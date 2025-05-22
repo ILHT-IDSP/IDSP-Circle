@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { toast } from 'react-hot-toast';
 
 interface AlbumLikeStatus {
 	liked: boolean;
@@ -11,6 +12,7 @@ interface AlbumLikesContextType {
 	likeStatuses: Record<number, AlbumLikeStatus>;
 	toggleLike: (albumId: number) => Promise<void>;
 	isLoading: boolean;
+	pendingAlbums: Set<number>;
 }
 
 const AlbumLikesContext = createContext<AlbumLikesContextType | undefined>(undefined);
@@ -31,6 +33,7 @@ interface AlbumLikesProviderProps {
 export function AlbumLikesProvider({ children, albumIds }: AlbumLikesProviderProps) {
 	const [likeStatuses, setLikeStatuses] = useState<Record<number, AlbumLikeStatus>>({});
 	const [isLoading, setIsLoading] = useState(false);
+	const [pendingAlbums, setPendingAlbums] = useState<Set<number>>(new Set());
 
 	// Fetch all like statuses at once when the component mounts
 	useEffect(() => {
@@ -63,9 +66,37 @@ export function AlbumLikesProvider({ children, albumIds }: AlbumLikesProviderPro
 		fetchLikeStatuses();
 	}, [albumIds]);
 
-	// Toggle like status for a single album
+	// Toggle like status for a single album with optimistic update
 	const toggleLike = async (albumId: number) => {
-		setIsLoading(true);
+		// Skip if this album is already being processed
+		if (pendingAlbums.has(albumId)) {
+			return;
+		}
+
+		// Get current like status
+		const currentStatus = likeStatuses[albumId] || { liked: false, likeCount: 0 };
+		const newLikedStatus = !currentStatus.liked;
+		const newLikeCount = newLikedStatus ? currentStatus.likeCount + 1 : Math.max(0, currentStatus.likeCount - 1);
+
+		// Update pending state to prevent duplicate requests
+		setPendingAlbums(prev => {
+			const updated = new Set(prev);
+			updated.add(albumId);
+			return updated;
+		});
+
+		// Optimistically update UI
+		setLikeStatuses(prev => ({
+			...prev,
+			[albumId]: {
+				liked: newLikedStatus,
+				likeCount: newLikeCount,
+			},
+		}));
+
+		// Show subtle toast notification
+		const toastId = toast.loading(newLikedStatus ? 'Liking album...' : 'Unliking album...', { duration: 2000 });
+
 		try {
 			const response = await fetch(`/api/albums/${albumId}/like`, {
 				method: 'POST',
@@ -74,22 +105,32 @@ export function AlbumLikesProvider({ children, albumIds }: AlbumLikesProviderPro
 				},
 			});
 
-			if (response.ok) {
-				const data = await response.json();
-
-				// Update the state with the new like status
-				setLikeStatuses(prev => ({
-					...prev,
-					[albumId]: {
-						liked: data.liked,
-						likeCount: data.liked ? (prev[albumId]?.likeCount || 0) + 1 : Math.max(0, (prev[albumId]?.likeCount || 0) - 1),
-					},
-				}));
+			if (!response.ok) {
+				throw new Error('Failed to update like status');
 			}
+
+			const data = await response.json();
+
+			// Toast success message
+			toast.success(data.liked ? 'Album liked' : 'Album unliked', { id: toastId });
 		} catch (error) {
 			console.error('Error toggling like:', error);
+
+			// Revert the optimistic update
+			setLikeStatuses(prev => ({
+				...prev,
+				[albumId]: currentStatus,
+			}));
+
+			// Show error toast
+			toast.error('Failed to update like status', { id: toastId });
 		} finally {
-			setIsLoading(false);
+			// Remove album from pending set
+			setPendingAlbums(prev => {
+				const updated = new Set(prev);
+				updated.delete(albumId);
+				return updated;
+			});
 		}
 	};
 
@@ -97,6 +138,7 @@ export function AlbumLikesProvider({ children, albumIds }: AlbumLikesProviderPro
 		likeStatuses,
 		toggleLike,
 		isLoading,
+		pendingAlbums,
 	};
 
 	return <AlbumLikesContext.Provider value={value}>{children}</AlbumLikesContext.Provider>;

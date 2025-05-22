@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Session } from 'next-auth';
 import { useState, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 interface ProfileUser {
 	id: number;
@@ -41,25 +42,27 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 		followingCount: 0,
 		isFollowing: false,
 		isOwnProfile: true,
-	};	const profile = profileData || defaultProfileData;
+	};
+	const profile = profileData || defaultProfileData;
 	const [isFollowing, setIsFollowing] = useState(profile.isFollowing);
 	const [showUnfollowConfirm, setShowUnfollowConfirm] = useState(false);
 	const [followersCount, setFollowersCount] = useState(profile.followersCount);
 	const [followingCount, setFollowingCount] = useState(profile.followingCount);
 	const [requestSent, setRequestSent] = useState(false);
-	
+	const [isProcessing, setIsProcessing] = useState(false);
+
 	useEffect(() => {
 		if (profileData) {
 			setIsFollowing(profileData.isFollowing || false);
 			setFollowersCount(profileData.followersCount || 0);
 			setFollowingCount(profileData.followingCount || 0);
-			
+
 			// Check if a follow request has already been sent
 			if (profileData.isProfilePrivate && !profileData.isFollowing && !profileData.isOwnProfile) {
 				// Define checkRequestStatus inside useEffect to avoid dependency issues
 				const checkRequestStatus = async () => {
 					if (!session?.user) return;
-					
+
 					try {
 						const response = await fetch(`/api/users/follow?targetUserId=${profileData.id}&checkRequestStatus=true`);
 						const data = await response.json();
@@ -68,7 +71,7 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 						console.error('Error checking follow request status:', error);
 					}
 				};
-				
+
 				checkRequestStatus();
 			}
 		}
@@ -97,15 +100,21 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 			return;
 		}
 
+		if (isProcessing) return; // Prevent multiple rapid clicks
+		setIsProcessing(true);
+
 		// Make sure onFollowUpdate is defined
 		const updateFollowState = onFollowUpdate || (() => {});
 
 		if (showUnfollowConfirm) {
-			// confirmed unfollow
+			// Optimistically update UI
 			setShowUnfollowConfirm(false);
 			setIsFollowing(false);
 			setFollowersCount(count => Math.max(0, count - 1));
 			updateFollowState(false);
+
+			// Show loading toast
+			const toastId = toast.loading('Unfollowing user...');
 
 			try {
 				const response = await fetch('/api/users/follow', {
@@ -113,47 +122,40 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ targetUserId: profile.id, action: 'unfollow' }),
 				});
+
+				if (!response.ok) {
+					throw new Error('Failed to unfollow user');
+				}
+
 				const data = await response.json();
 				if (data.followerCount !== undefined) setFollowersCount(data.followerCount);
 				if (data.followingCount !== undefined) setFollowingCount(data.followingCount);
+
+				toast.success('Unfollowed successfully', { id: toastId });
 			} catch (error) {
 				console.error('Error unfollowing user:', error);
+				// Revert optimistic update if there's an error
 				setIsFollowing(true);
 				setFollowersCount(count => count + 1);
 				updateFollowState(true);
+				toast.error('Failed to unfollow user', { id: toastId });
+			} finally {
+				setIsProcessing(false);
 			}
 			return;
 		}
 
 		if (isFollowing) {
-			setShowUnfollowConfirm(true);		} else {
+			setShowUnfollowConfirm(true);
+			setIsProcessing(false);
+		} else {
 			// For private profiles, we send a follow request instead of immediately following
 			if (profile.isProfilePrivate) {
-				try {
-					const response = await fetch('/api/users/follow', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ targetUserId: profile.id, action: 'follow' }),
-					});
-					
-					const data = await response.json();
-					
-					if (data.action === 'request_sent') {
-						setRequestSent(true);
-					} else if (data.action === 'followed') {
-						// In case the user is not private (unlikely unless changed during this session)
-						setIsFollowing(true);
-						setFollowersCount(data.followerCount || followersCount + 1);
-						updateFollowState(true);
-					}
-				} catch (error) {
-					console.error('Error sending follow request:', error);
-				}
-			} else {
-				// For public profiles, immediately follow
-				setIsFollowing(true);
-				setFollowersCount(count => count + 1);
-				updateFollowState(true);
+				// Optimistically update UI for request sent state
+				setRequestSent(true);
+
+				// Show loading toast
+				const toastId = toast.loading('Sending follow request...');
 
 				try {
 					const response = await fetch('/api/users/follow', {
@@ -161,14 +163,64 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({ targetUserId: profile.id, action: 'follow' }),
 					});
+
+					if (!response.ok) {
+						throw new Error('Failed to send follow request');
+					}
+
+					const data = await response.json();
+
+					if (data.action === 'request_sent') {
+						toast.success('Follow request sent', { id: toastId });
+					} else if (data.action === 'followed') {
+						// In case the user is not private (unlikely unless changed during this session)
+						setIsFollowing(true);
+						setFollowersCount(data.followerCount || followersCount + 1);
+						updateFollowState(true);
+						toast.success('Following user', { id: toastId });
+					}
+				} catch (error) {
+					console.error('Error sending follow request:', error);
+					// Revert optimistic update
+					setRequestSent(false);
+					toast.error('Failed to send follow request', { id: toastId });
+				} finally {
+					setIsProcessing(false);
+				}
+			} else {
+				// For public profiles, immediately follow with optimistic update
+				setIsFollowing(true);
+				setFollowersCount(count => count + 1);
+				updateFollowState(true);
+
+				// Show loading toast
+				const toastId = toast.loading('Following user...');
+
+				try {
+					const response = await fetch('/api/users/follow', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ targetUserId: profile.id, action: 'follow' }),
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to follow user');
+					}
+
 					const data = await response.json();
 					if (data.followerCount !== undefined) setFollowersCount(data.followerCount);
 					if (data.followingCount !== undefined) setFollowingCount(data.followingCount);
+
+					toast.success('Following user', { id: toastId });
 				} catch (error) {
 					console.error('Error following user:', error);
+					// Revert optimistic update if there's an error
 					setIsFollowing(false);
 					setFollowersCount(count => Math.max(0, count - 1));
 					updateFollowState(false);
+					toast.error('Failed to follow user', { id: toastId });
+				} finally {
+					setIsProcessing(false);
 				}
 			}
 		}
@@ -184,30 +236,37 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					accept='image/*'
 					onChange={handleChange}
 				/>
-			)}			<Image
+			)}{' '}
+			<Image
 				src={profile.profileImage || '/images/default-avatar.png'}
 				alt='Profile'
 				width={96}
 				height={96}
-				className={`w-24 h-24 rounded-full object-cover `}
+				className={`w-24 h-24 rounded-full object-cover ${profile.isOwnProfile ? 'cursor-pointer' : ''}`}
 				onClick={handleUploadClick}
 			/>
-
 			{profile.isProfilePrivate && (
-				<div className="absolute top-4 left-4 bg-gray-800 text-white text-xs px-2 py-1 rounded-full flex items-center">
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+				<div className='absolute top-4 left-4 bg-gray-800 text-white text-xs px-2 py-1 rounded-full flex items-center'>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						className='h-3 w-3 mr-1'
+						fill='none'
+						viewBox='0 0 24 24'
+						stroke='currentColor'
+					>
+						<path
+							strokeLinecap='round'
+							strokeLinejoin='round'
+							strokeWidth={2}
+							d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'
+						/>
 					</svg>
 					Private
 				</div>
 			)}
-
 			{profile.name && <p className='text-lg font-semibold mt-2'>{profile.name}</p>}
-
 			<p className='text-xl font-bold mt-1'>@{profile.username}</p>
-
 			{profile.bio && <p className='mt-2 text-center'>{profile.bio}</p>}
-
 			<div className='flex space-x-6 mt-3'>
 				<div className='text-center'>
 					<p className=' font-semibold'>{profile.circlesCount}</p>
@@ -232,7 +291,6 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					<p className='text-sm'>following</p>
 				</Link>
 			</div>
-
 			{profile.isOwnProfile && (
 				<Link
 					href='/settings'
@@ -241,24 +299,16 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 					<Settings className='w-6 h-6 ' />
 				</Link>
 			)}
-
 			<div className='mt-4'>
 				{profile.isOwnProfile ? (
 					<Link href='/profile/edit-profile'>
 						<button className='px-6 py-2 bg-[var(--primary)] text-white hover:opacity-90 font-medium rounded-md transition'>Edit Profile</button>
-					</Link>				) : (
+					</Link>
+				) : (
 					<button
-						className={`px-6 py-2 rounded-lg hover:opacity-70 hover:cursor-pointer transition ${
-							showUnfollowConfirm 
-								? 'bg-red-500 text-white' 
-								: isFollowing 
-									? 'bg-[var(--background-secondary)] border border-[var(--border)]' 
-									: requestSent 
-										? 'bg-gray-400 text-white' 
-										: 'bg-[var(--primary)] text-white'
-						}`}
+						className={`px-6 py-2 rounded-lg hover:opacity-70 hover:cursor-pointer transition ${showUnfollowConfirm ? 'bg-red-500 text-white' : isFollowing ? 'bg-[var(--background-secondary)] border border-[var(--border)]' : requestSent ? 'bg-gray-400 text-white' : 'bg-[var(--primary)] text-white'}`}
 						onClick={handleFollowAction}
-						disabled={requestSent}
+						disabled={requestSent || isProcessing}
 					>
 						{showUnfollowConfirm ? (
 							<div className='flex items-center gap-2'>
@@ -266,9 +316,21 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 								<Check className='w-4 h-4' />
 							</div>
 						) : isFollowing ? (
-							'Following'
+							isProcessing ? (
+								'Processing...'
+							) : (
+								'Following'
+							)
 						) : profile.isProfilePrivate && !isFollowing ? (
-							requestSent ? 'Request Sent' : 'Request to Follow'
+							requestSent ? (
+								'Request Sent'
+							) : isProcessing ? (
+								'Processing...'
+							) : (
+								'Request to Follow'
+							)
+						) : isProcessing ? (
+							'Processing...'
 						) : (
 							'Follow'
 						)}

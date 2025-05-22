@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { formatDistanceToNow } from 'date-fns';
+import { toast } from 'react-hot-toast';
 
 interface JoinRequest {
 	id: number;
@@ -25,6 +26,7 @@ export default function CircleJoinRequests({ circleId }: { circleId: number }) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [processingIds, setProcessingIds] = useState<number[]>([]);
+	const [optimisticActions, setOptimisticActions] = useState<Map<number, 'accept' | 'decline'>>(new Map());
 
 	useEffect(() => {
 		const fetchJoinRequests = async () => {
@@ -54,8 +56,21 @@ export default function CircleJoinRequests({ circleId }: { circleId: number }) {
 	}, [circleId, router]);
 
 	const handleAccept = async (requestId: number) => {
+		// Prevent multiple actions on the same request
+		if (processingIds.includes(requestId)) return;
+
+		// Find the request for the toast message
+		const request = joinRequests.find(req => req.id === requestId);
+		if (!request || !request.requester) return;
+
+		// Optimistic UI update
+		setProcessingIds(prev => [...prev, requestId]);
+		setOptimisticActions(prev => new Map(prev).set(requestId, 'accept'));
+
+		// Show toast
+		const toastId = toast.loading(`Accepting ${request.requester.name || request.requester.username}'s request...`);
+
 		try {
-			setProcessingIds(prev => [...prev, requestId]);
 			const response = await fetch(`/api/circles/${circleId}/joinrequests`, {
 				method: 'PATCH',
 				headers: {
@@ -71,20 +86,50 @@ export default function CircleJoinRequests({ circleId }: { circleId: number }) {
 				throw new Error('Failed to accept join request');
 			}
 
-			// Remove the request from the list
-			setJoinRequests(prev => prev.filter(req => req.id !== requestId));
-			router.refresh();
+			// Success toast
+			toast.success(`Added ${request.requester.name || request.requester.username} to the circle!`, { id: toastId });
+
+			// Remove with animation
+			setTimeout(() => {
+				setJoinRequests(prev => prev.filter(req => req.id !== requestId));
+				setProcessingIds(prev => prev.filter(id => id !== requestId));
+				setOptimisticActions(prev => {
+					const updated = new Map(prev);
+					updated.delete(requestId);
+					return updated;
+				});
+				router.refresh();
+			}, 300);
 		} catch (err) {
 			console.error('Error accepting join request:', err);
-			alert('Failed to accept request. Please try again.');
-		} finally {
+			toast.error('Failed to accept request. Please try again.', { id: toastId });
+
+			// Revert optimistic update
 			setProcessingIds(prev => prev.filter(id => id !== requestId));
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.delete(requestId);
+				return updated;
+			});
 		}
 	};
 
 	const handleDecline = async (requestId: number) => {
+		// Prevent multiple actions on the same request
+		if (processingIds.includes(requestId)) return;
+
+		// Find the request for the toast message
+		const request = joinRequests.find(req => req.id === requestId);
+		if (!request || !request.requester) return;
+
+		// Optimistic UI update
+		setProcessingIds(prev => [...prev, requestId]);
+		setOptimisticActions(prev => new Map(prev).set(requestId, 'decline'));
+
+		// Show toast
+		const toastId = toast.loading(`Declining ${request.requester.name || request.requester.username}'s request...`);
+
 		try {
-			setProcessingIds(prev => [...prev, requestId]);
 			const response = await fetch(`/api/circles/${circleId}/joinrequests`, {
 				method: 'PATCH',
 				headers: {
@@ -100,14 +145,31 @@ export default function CircleJoinRequests({ circleId }: { circleId: number }) {
 				throw new Error('Failed to decline join request');
 			}
 
-			// Remove the request from the list
-			setJoinRequests(prev => prev.filter(req => req.id !== requestId));
-			router.refresh();
+			// Success toast
+			toast.success(`Declined join request from ${request.requester.name || request.requester.username}`, { id: toastId });
+
+			// Remove with animation
+			setTimeout(() => {
+				setJoinRequests(prev => prev.filter(req => req.id !== requestId));
+				setProcessingIds(prev => prev.filter(id => id !== requestId));
+				setOptimisticActions(prev => {
+					const updated = new Map(prev);
+					updated.delete(requestId);
+					return updated;
+				});
+				router.refresh();
+			}, 300);
 		} catch (err) {
 			console.error('Error declining join request:', err);
-			alert('Failed to decline request. Please try again.');
-		} finally {
+			toast.error('Failed to decline request. Please try again.', { id: toastId });
+
+			// Revert optimistic update
 			setProcessingIds(prev => prev.filter(id => id !== requestId));
+			setOptimisticActions(prev => {
+				const updated = new Map(prev);
+				updated.delete(requestId);
+				return updated;
+			});
 		}
 	};
 
@@ -147,7 +209,7 @@ export default function CircleJoinRequests({ circleId }: { circleId: number }) {
 				joinRequests.map(request => (
 					<div
 						key={request.id}
-						className='p-4 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] hover:shadow-sm transition-all'
+						className={`p-4 rounded-lg border transition-all duration-300 ${processingIds.includes(request.id) ? 'opacity-70 scale-98' : 'opacity-100'} ${optimisticActions.get(request.id) === 'accept' ? 'bg-[var(--background-secondary)] border-green-500 border-opacity-50' : optimisticActions.get(request.id) === 'decline' ? 'bg-[var(--background-secondary)] border-red-500 border-opacity-50' : 'bg-[var(--background-secondary)] border-[var(--border)] hover:shadow-sm'}`}
 					>
 						<div className='flex items-start mb-3'>
 							{request.requester && (
@@ -181,19 +243,20 @@ export default function CircleJoinRequests({ circleId }: { circleId: number }) {
 						</div>
 
 						<div className='flex space-x-2 justify-end'>
+							{' '}
 							<button
 								disabled={processingIds.includes(request.id)}
 								onClick={() => handleDecline(request.id)}
-								className='bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] font-medium py-1.5 px-4 rounded-lg text-sm hover:opacity-80 transition disabled:opacity-50'
+								className={`font-medium py-1.5 px-4 rounded-lg text-sm transition-all ${optimisticActions.get(request.id) === 'decline' ? 'bg-red-500 text-white' : 'bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)]'} hover:opacity-80 disabled:opacity-50 ${processingIds.includes(request.id) && optimisticActions.get(request.id) === 'decline' ? 'animate-pulse' : ''}`}
 							>
-								{processingIds.includes(request.id) ? 'Processing...' : 'Decline'}
+								{processingIds.includes(request.id) && optimisticActions.get(request.id) === 'decline' ? 'Declining...' : 'Decline'}
 							</button>
 							<button
 								disabled={processingIds.includes(request.id)}
 								onClick={() => handleAccept(request.id)}
-								className='bg-[var(--primary)] text-white font-medium py-1.5 px-4 rounded-lg text-sm hover:opacity-80 transition disabled:opacity-50'
+								className={`font-medium py-1.5 px-4 rounded-lg text-sm transition-all ${optimisticActions.get(request.id) === 'accept' ? 'bg-green-500 text-white' : 'bg-[var(--primary)] text-white'} hover:opacity-80 disabled:opacity-50 ${processingIds.includes(request.id) && optimisticActions.get(request.id) === 'accept' ? 'animate-pulse' : ''}`}
 							>
-								{processingIds.includes(request.id) ? 'Processing...' : 'Accept'}
+								{processingIds.includes(request.id) && optimisticActions.get(request.id) === 'accept' ? 'Accepting...' : 'Accept'}
 							</button>
 						</div>
 					</div>
