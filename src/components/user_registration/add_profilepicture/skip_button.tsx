@@ -5,7 +5,7 @@ interface SkipButtonProps {
 export default function SkipButton({ onClick }: SkipButtonProps) {
 	return (
 		<>
-			<footer className='absolute w-full bottom-16'>
+			<div className='w-full mt-4'>
 				{' '}
 				<button
 					type='button'
@@ -14,7 +14,7 @@ export default function SkipButton({ onClick }: SkipButtonProps) {
 				>
 					Skip
 				</button>
-			</footer>
+			</div>
 		</>
 	);
 }

@@ -104,10 +104,11 @@ export default function AddProfilePicture({ formData, setFormData, onNext }: IFo
 	};
 	return (
 		<>
+			{' '}
 			<div>
 				{' '}
 				<div
-					className={`flex flex-col items-center ${isDragging ? 'bg-blue-100 dark:bg-blue-900/30' : ''} transition-colors duration-200 p-4 rounded-lg border-2 ${isDragging ? 'border-blue-500 dark:border-blue-400 border-dashed' : 'border-transparent'}`}
+					className={`flex flex-col items-center ${isDragging ? 'bg-blue-100 dark:bg-blue-900/30' : ''} transition-colors duration-200 p-4 pb-8 rounded-lg border-2 ${isDragging ? 'border-blue-500 dark:border-blue-400 border-dashed' : 'border-transparent'}`}
 					id='profile-picture-container'
 					onDragOver={handleDragOver}
 					onDragLeave={handleDragLeave}
@@ -180,7 +181,8 @@ export default function AddProfilePicture({ formData, setFormData, onNext }: IFo
 							</button>
 						</div>
 					)}
-					<SkipButton onClick={handleSkip} />
+					{/* Only show Skip button if Next button is not visible */}
+					{(!formData.profileImage || !formData.profileImage.startsWith('http')) && <SkipButton onClick={handleSkip} />}
 				</div>
 			</div>
 			{/* Image Cropper Modal */}
