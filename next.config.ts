@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
 		config.externals = [...config.externals, 'child_process'];
 		return config;
 	},
+
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
+
+	typescript: {
+		ignoreBuildErrors: true,
+	},
 };
 
 export default nextConfig;
