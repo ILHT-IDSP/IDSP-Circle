@@ -30,7 +30,7 @@ export default async function Home() {
 				},
 			},
 		},
-	}); 
+	});
 	const userCirclesFormatted = userCircles.map(membership => membership.circle);
 
 	interface SuggestedCircle {
@@ -80,22 +80,57 @@ export default async function Home() {
 	const followingIds = following.map(f => f.following.id);
 
 	const userCircleIds = userCirclesFormatted.map(circle => circle.id);
-
 	const feedAlbums = await prisma.album.findMany({
 		where: {
 			OR: [
 				{
-					creatorId: {
-						in: followingIds,
-					},
+					// User's own albums
+					creatorId: userId,
 				},
 				{
+					// Albums from followed users, but exclude private circle albums unless user is a member
+					AND: [
+						{
+							creatorId: {
+								in: followingIds,
+							},
+						},
+						{
+							OR: [
+								{
+									// Public circle albums or non-circle albums
+									Circle: {
+										isPrivate: false,
+									},
+								},
+								{
+									// Non-circle albums (personal albums)
+									circleId: null,
+								},
+								{
+									// Private circle albums where user is a member
+									AND: [
+										{
+											Circle: {
+												isPrivate: true,
+											},
+										},
+										{
+											circleId: {
+												in: userCircleIds,
+											},
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					// Albums from circles user is a member of
 					circleId: {
 						in: userCircleIds,
 					},
-				},
-				{
-					creatorId: userId,
 				},
 			],
 		},
@@ -106,6 +141,7 @@ export default async function Home() {
 					id: true,
 					name: true,
 					avatar: true,
+					isPrivate: true,
 				},
 			},
 			_count: {
@@ -117,7 +153,7 @@ export default async function Home() {
 		orderBy: {
 			createdAt: 'desc',
 		},
-		take: 20, 
+		take: 20,
 	});
 
 	return (

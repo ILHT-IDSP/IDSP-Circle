@@ -62,10 +62,61 @@ export async function GET(request: Request, { params }) {
 					isOwnProfile: currentUserId === user.id
 				});
 			}
-		}// Get user's albums with photo counts
+		}
+		
+		// Get current user's circle memberships to check private circle access
+		const userCircleMemberships = currentUserId ? await prisma.membership.findMany({
+			where: {
+				userId: currentUserId,
+			},
+			select: {
+				circleId: true,
+			},
+		}) : [];
+		
+		const userCircleIds = userCircleMemberships.map(m => m.circleId);
+
+		// Get user's albums with photo counts, filtering private circle albums
 		const albums = await prisma.album.findMany({
 			where: {
-				creatorId: user.id,
+				AND: [
+					{
+						creatorId: user.id,
+					},
+					{
+						OR: [
+							{
+								// Personal albums (not in any circle)
+								circleId: null,
+							},
+							{
+								// Public circle albums
+								Circle: {
+									isPrivate: false,
+								},
+							},
+							{
+								// User viewing their own profile can see all their albums
+								creatorId: currentUserId,
+							},
+							{
+								// Private circle albums where the viewing user is a member
+								AND: [
+									{
+										Circle: {
+											isPrivate: true,
+										},
+									},
+									{
+										circleId: {
+											in: userCircleIds,
+										},
+									},
+								],
+							},
+						],
+					},
+				],
 			},
 			select: {
 				id: true,

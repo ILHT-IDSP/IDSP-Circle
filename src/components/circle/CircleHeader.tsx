@@ -35,9 +35,15 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 	const effectiveIsMember = optimisticIsMember !== null ? optimisticIsMember : circle.isMember;
 	const effectiveMembersCount = optimisticMembersCount !== null ? optimisticMembersCount : circle.membersCount;
 	const effectiveJoinRequestStatus = optimisticJoinRequestStatus !== null ? optimisticJoinRequestStatus : joinRequestStatus;
-
 	// Fetch user permissions for this circle
 	useEffect(() => {
+		// Reset UI state when component mounts or circle changes
+		const resetOptimisticStates = () => {
+			setOptimisticIsMember(null);
+			setOptimisticMembersCount(null);
+			setOptimisticJoinRequestStatus(null);
+		};
+
 		if (circle && effectiveIsMember) {
 			const checkPermissions = async () => {
 				try {
@@ -55,8 +61,12 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 
 			checkPermissions();
 		}
-	}, [circle, effectiveIsMember]);
 
+		// Cleanup function to reset optimistic states when component unmounts or circle changes
+		return () => {
+			resetOptimisticStates();
+		};
+	}, [circle, effectiveIsMember]);
 	// Check for existing join request if the circle is private and user is not a member
 	useEffect(() => {
 		if (circle && circle.isPrivate && !effectiveIsMember && session?.user?.id) {
@@ -66,6 +76,12 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 					if (response.ok) {
 						const data = await response.json();
 						setJoinRequestStatus(data.requestSent ? 'pending' : 'none');
+
+						// Reset the optimistic join request status if a request isn't found on the server
+						// This is important after a request has been accepted
+						if (!data.requestSent && optimisticJoinRequestStatus === 'pending') {
+							setOptimisticJoinRequestStatus(null);
+						}
 					}
 				} catch (error) {
 					console.error('Error checking join request status:', error);
@@ -73,13 +89,16 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 			};
 
 			checkJoinRequestStatus();
+		} else if (effectiveIsMember) {
+			// If the user is a member, ensure we reset any pending request state
+			setJoinRequestStatus('none');
+			setOptimisticJoinRequestStatus(null);
 		}
-	}, [circle, effectiveIsMember, session]);
+	}, [circle, effectiveIsMember, session, optimisticJoinRequestStatus]);
 
 	const handleBack = () => {
 		router.back();
 	};
-
 	const handleJoinLeaveCircle = async () => {
 		if (!session) {
 			router.push('/auth/login');
@@ -92,12 +111,11 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 		const isLeaving = effectiveIsMember;
 		const action = isLeaving ? 'leave' : 'join';
 
-		// Optimistic UI updates
+		// Set joining state immediately to show loading state in button
 		setIsJoining(true);
 
-		// Optimistically update member status
 		if (isLeaving) {
-			// Leaving the circle
+			// Immediately show optimistic UI updates for leaving
 			setOptimisticIsMember(false);
 			setOptimisticMembersCount(Math.max(0, effectiveMembersCount - 1));
 
@@ -120,7 +138,7 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 				// Success toast
 				toast.success(`Left ${circle.name}`, { id: toastId });
 
-				// Refresh after successful action
+				// Refresh after successful action, but keep our optimistic UI state
 				router.refresh();
 			} catch (error) {
 				console.error(`Error leaving circle:`, error);
@@ -135,7 +153,7 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 		} else {
 			// Joining the circle or requesting to join
 			if (circle.isPrivate) {
-				// For private circles, set request status to pending
+				// Immediately show optimistic UI updates for requesting to join
 				setOptimisticJoinRequestStatus('pending');
 
 				// Show loading toast
@@ -161,8 +179,8 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 						toast.success(`Request to join ${circle.name} sent`, { id: toastId });
 					}
 
-					// Refresh after successful action
-					router.refresh();
+					// Keep optimistic UI state - don't refresh the page to avoid flicker
+					// router.refresh() - removed to maintain optimistic state
 				} catch (error) {
 					console.error(`Error requesting to join circle:`, error);
 					toast.error(`Failed to request joining circle. Please try again.`, { id: toastId });
@@ -173,7 +191,7 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 					setIsJoining(false);
 				}
 			} else {
-				// For public circles, immediately join
+				// For public circles, immediately update the UI
 				setOptimisticIsMember(true);
 				setOptimisticMembersCount(effectiveMembersCount + 1);
 
@@ -196,8 +214,8 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 					// Success toast
 					toast.success(`Joined ${circle.name}!`, { id: toastId });
 
-					// Refresh after successful action
-					router.refresh();
+					// Keep optimistic UI state - don't refresh the page to avoid flicker
+					// router.refresh() - removed to maintain optimistic state
 				} catch (error) {
 					console.error(`Error joining circle:`, error);
 					toast.error(`Failed to join circle. Please try again.`, { id: toastId });
@@ -246,24 +264,20 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 
 				<h1 className='text-2xl font-bold mb-1'>{circle.name}</h1>
 
-				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}
-
-				<div className='flex items-center mb-4'>
-					{' '}
+				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}				<div className='flex items-center mb-4'>
 					<div className='text-sm text-gray-400'>
-						{circle.isPrivate ? 'Private Circle' : 'Public Circle'} • {effectiveMembersCount} members
+						{circle.isPrivate ? 'Private Circle' : 'Public Circle'} • {effectiveMembersCount} {effectiveMembersCount === 1 ? 'member' : 'members'}
 					</div>
 				</div>
 
 				<div className='flex space-x-3'>
-					{' '}
 					{/* Show appropriate button based on status */}
 					{!circle.isCreator && (
 						<>
-							{circle.isPrivate && effectiveJoinRequestStatus === 'pending' ? (
+							{circle.isPrivate && effectiveJoinRequestStatus === 'pending' && !effectiveIsMember ? (
 								<button
 									disabled={true}
-									className='px-6 py-2 rounded-lg text-sm font-medium bg-gray-500 text-white cursor-not-allowed'
+									className='px-6 py-2 rounded-lg text-sm font-medium bg-gray-500 text-white cursor-not-allowed transition-all'
 								>
 									Request Pending
 								</button>
@@ -271,9 +285,16 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 								<button
 									onClick={handleJoinLeaveCircle}
 									disabled={isJoining}
-									className={`px-6 py-2 rounded-lg hover:cursor-pointer text-sm font-medium ${effectiveIsMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} transition-colors ${isJoining ? 'opacity-80' : ''}`}
+									className={`px-6 py-2 rounded-lg text-sm font-medium 
+                    ${isJoining ? 'opacity-80 cursor-wait' : 'hover:cursor-pointer'}
+                    ${effectiveIsMember 
+                      ? 'bg-gray-700 text-white hover:bg-red-700' 
+                      : 'bg-circles-dark-blue text-white hover:bg-blue-700'} 
+                    transition-all duration-300`}
 								>
-									{isJoining ? (effectiveIsMember ? 'Leaving...' : circle.isPrivate ? 'Requesting...' : 'Joining...') : effectiveIsMember ? 'Leave Circle' : circle.isPrivate ? 'Request to Join' : 'Join Circle'}
+									{isJoining 
+                    ? (effectiveIsMember ? 'Leaving...' : circle.isPrivate ? 'Requesting...' : 'Joining...') 
+                    : (effectiveIsMember ? 'Leave Circle' : circle.isPrivate ? 'Request to Join' : 'Join Circle')}
 								</button>
 							)}
 						</>
