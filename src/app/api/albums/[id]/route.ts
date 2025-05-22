@@ -76,12 +76,11 @@ export async function PATCH(request: NextRequest, { params }) {
 		if (!album) {
 			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
 		}
-
 		// Check if user has permission to update the album
 		const userId = parseInt(session.user.id);
 
 		if (album.creatorId !== userId) {
-			// For circle albums, check if user has admin rights
+			// For circle albums, check if user is a member of the circle
 			if (album.circleId) {
 				const membership = await prisma.membership.findUnique({
 					where: {
@@ -92,9 +91,10 @@ export async function PATCH(request: NextRequest, { params }) {
 					},
 				});
 
-				if (!membership || membership.role !== 'ADMIN') {
+				if (!membership) {
 					return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
 				}
+				// Allow the creator of the album to edit it regardless of role
 			} else {
 				return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
 			}
@@ -141,12 +141,11 @@ export async function DELETE(request: NextRequest, { params }) {
 		if (!album) {
 			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
 		}
-
 		// Check if user has permission to delete the album
 		const userId = parseInt(session.user.id);
 
 		if (album.creatorId !== userId) {
-			// For circle albums, check if user has admin rights
+			// For circle albums, check if user is a member of the circle
 			if (album.circleId) {
 				const membership = await prisma.membership.findUnique({
 					where: {
@@ -156,10 +155,11 @@ export async function DELETE(request: NextRequest, { params }) {
 						},
 					},
 				});
-
-				if (!membership || membership.role !== 'ADMIN') {
+				if (!membership) {
 					return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
 				}
+				// Only allow the creator to delete the album for now
+				return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
 			} else {
 				return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
 			}

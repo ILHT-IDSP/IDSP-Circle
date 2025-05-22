@@ -29,13 +29,10 @@ export async function GET(request: Request) {
 				},
 			},
 		});
-
 		const memberCircles = await prisma.membership.findMany({
 			where: {
 				userId,
-				role: {
-					in: ['ADMIN', 'MODERATOR'],
-				},
+				// Include all roles, not just admin and moderator
 			},
 			select: {
 				circle: {
@@ -64,7 +61,7 @@ export async function GET(request: Request) {
 			...memberCircles.map(membership => ({
 				...membership.circle,
 				role: membership.role,
-				canCreateAlbum: true, // Both ADMIN and MODERATOR can create albums
+				canCreateAlbum: true, // All members can create albums
 			})),
 		];
 

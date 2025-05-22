@@ -52,12 +52,8 @@ export async function POST(req: Request) {
 			// If not a member or creator, deny access
 			if (!membership && circle?.creatorId !== creatorId) {
 				return NextResponse.json({ error: 'You can only add albums to circles you are a member of' }, { status: 403 });
-			}
-
-			// Check if the user has permission to create albums in this circle
-			if (membership && membership.role !== 'ADMIN' && membership.role !== 'MODERATOR' && circle?.creatorId !== creatorId) {
-				return NextResponse.json({ error: 'You do not have permission to create albums in this circle' }, { status: 403 });
-			}
+			}			// All circle members can create albums - no role restriction
+			// We already verified the user is a member above
 		}
 		// Create the album
 		const newAlbum = await prisma.album.create({

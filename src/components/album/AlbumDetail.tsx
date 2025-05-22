@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart, FaRegHeart, FaComment, FaPlus, FaPencilAlt } from 'react-icons/fa';
@@ -105,7 +105,28 @@ const AlbumDetail: React.FC<AlbumDetailProps> = ({ album, isLiked: initialIsLike
 				console.error('Error fetching updated photos:', error);
 			});
 	};
-	const canAddPhotos = session?.user && album.creatorId && session.user.id && parseInt(session.user.id) === album.creatorId;
+	const [isCircleMember, setIsCircleMember] = useState(false);
+
+	// Check if user is a member of the circle
+	useEffect(() => {
+		if (session?.user?.id && album.Circle?.id) {
+			fetch(`/api/circles/${album.Circle.id}/permissions`)
+				.then(res => res.json())
+				.then(data => {
+					setIsCircleMember(!!data.role); // If user has a role, they are a member
+				})
+				.catch(err => console.error('Error checking circle membership:', err));
+		}
+	}, [session?.user?.id, album.Circle?.id]);
+
+	const canAddPhotos =
+		session?.user &&
+		album.creatorId &&
+		session.user.id &&
+		// Creator can always add photos
+		(parseInt(session.user.id) === album.creatorId ||
+			// If it's a circle album, members of the circle can add photos too
+			(album.Circle && isCircleMember));
 
 	const canEditAlbum = session?.user && album.creatorId && session.user.id && parseInt(session.user.id) === album.creatorId;
 
