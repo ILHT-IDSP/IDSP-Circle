@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			lang='en'
 			suppressHydrationWarning
 		>
-			<body className='antialiased'>
+			<body className='antialiased pb-4 lg:pb-0'>
 				<SessionProvider>
 					<NextThemeProvider>
 						<div className='mobile-container'>{children}</div>
