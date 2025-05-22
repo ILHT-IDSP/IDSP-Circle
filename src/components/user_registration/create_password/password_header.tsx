@@ -1,7 +1,7 @@
 export function RegisterPasswordHeader() {
     return (
         <>
-            <h1 className="register-headers">Create a password</h1>
+            <h1 className="text-4xl font-semibold register-headers">Create a password</h1>
         </>
     );
 }
