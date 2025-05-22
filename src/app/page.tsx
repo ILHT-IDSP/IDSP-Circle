@@ -9,18 +9,14 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
 export default async function Home() {
-	// Get the current user's session
 	const session = await auth();
 
-	// If not logged in, redirect to login page
 	if (!session || !session.user) {
 		redirect('/auth/login');
 	}
 
-	// Get user ID from session
 	const userId = parseInt(session.user.id);
 
-	// Get circles the user is a member of
 	const userCircles = await prisma.membership.findMany({
 		where: {
 			userId: userId,
@@ -34,10 +30,9 @@ export default async function Home() {
 				},
 			},
 		},
-	}); // Format the circles data for display
+	}); 
 	const userCirclesFormatted = userCircles.map(membership => membership.circle);
 
-	// Define the type for suggested circles
 	interface SuggestedCircle {
 		id: number;
 		name: string;
@@ -47,7 +42,6 @@ export default async function Home() {
 		};
 	}
 
-	// Fetch all circles if user is not in any circles (for suggestions)
 	let suggestedCircles: SuggestedCircle[] = [];
 	if (userCirclesFormatted.length === 0) {
 		suggestedCircles = await prisma.circle.findMany({
@@ -66,11 +60,10 @@ export default async function Home() {
 					_count: 'desc',
 				},
 			},
-			take: 10, // Limit to 10 most popular circles
+			take: 10,
 		});
 	}
 
-	// Get users that the current user follows
 	const following = await prisma.follow.findMany({
 		where: {
 			followerId: userId,
@@ -84,32 +77,23 @@ export default async function Home() {
 		},
 	});
 
-	// Extract the IDs of users being followed
 	const followingIds = following.map(f => f.following.id);
 
-	// Extract circle IDs the user is a member of
 	const userCircleIds = userCirclesFormatted.map(circle => circle.id);
 
-	// Get albums for the feed, which includes:
-	// 1. Albums from users the current user follows
-	// 2. Albums from circles the user is a member of
-	// 3. User's own albums
 	const feedAlbums = await prisma.album.findMany({
 		where: {
 			OR: [
-				// Albums from users the user follows
 				{
 					creatorId: {
 						in: followingIds,
 					},
 				},
-				// Albums from circles the user is a member of
 				{
 					circleId: {
 						in: userCircleIds,
 					},
 				},
-				// User's own albums
 				{
 					creatorId: userId,
 				},
@@ -133,7 +117,7 @@ export default async function Home() {
 		orderBy: {
 			createdAt: 'desc',
 		},
-		take: 20, // Increased limit since we're showing more albums now
+		take: 20, 
 	});
 
 	return (

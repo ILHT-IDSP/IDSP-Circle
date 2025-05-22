@@ -11,7 +11,7 @@ interface AlbumGridProps {
 export default function AlbumGrid({ children, albumIds }: AlbumGridProps) {
 	return (
 		<AlbumLikesProvider albumIds={albumIds}>
-			<div className='grid grid-cols-2 gap-4'>{children}</div>
+			<div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>{children}</div>
 		</AlbumLikesProvider>
 	);
 }
