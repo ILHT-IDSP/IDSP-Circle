@@ -1,55 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Circles - Social Media for Close Communities
 
-## Getting Started
+![Circles Logo](/public/Logo.svg)
 
-First, run the development server:
+Circles is a modern social media application designed to help people connect in meaningful ways through shared communities. Unlike traditional social platforms that focus on broadcasting to wide audiences, Circles creates intimate spaces for friends, families, and interest groups to share moments that matter.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌟 Features
+
+### Circle Communities
+- Create private or public circles for different groups in your life
+- Invite friends and family to join your circles
+- Share content exclusively within specific circles
+- Browse and discover public circles based on interests
+
+### Photo Albums
+- Create and share photo albums within your circles
+- Upload multiple photos at once with batch uploading
+- Comment on and like photos
+- Edit album details and manage permissions
+
+### User Experience
+- Personalized activity feed showing updates from your circles
+- Real-time notifications for new posts, comments, and likes
+- User profiles with customizable privacy settings
+- Friend requests and circle invitations
+
+### Security & Privacy
+- Private circles visible only to members
+- Granular privacy controls for user profiles
+- Secure authentication system
+
+## 🛠️ Technology Stack
+
+- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API routes, Node.js
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js
+- **Image Storage**: Cloudinary
+- **Styling**: Chakra UI, Tailwind CSS
+- **Icons**: Font Awesome, Lucide React
+- **Deployment**: Vercel
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- PostgreSQL database
+- Cloudinary account (for image storage)
+
+### Environment Setup
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/circles"
+
+# Authentication
+AUTH_SECRET="your-auth-secret"
+
+# Cloudinary
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/IDSP-Circle.git
+   cd IDSP-Circle
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## Database Setup
+3. Set up the database:
+   ```bash
+   npx prisma migrate dev
+   ```
 
-This project uses Prisma as ORM with a PostgreSQL database. To set up a local database with sample data, follow these steps:
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-1. Ensure you have a PostgreSQL database running and your `.env` file contains the correct `DATABASE_URL`.
-2. Run migrations to create the database schema:
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-```bash
-npx prisma migrate dev
-```
+## 🧑‍💻 Development
 
-3. Seed the database with sample data:
+### Scripts
 
-```bash
-npm run db:seed
-```
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint to check code quality
 
-This will populate the database with users, circles, music, posts, comments, likes, and other related data for testing and development purposes. The seed script is located at `prisma/seed.ts`.
+### Project Structure
 
-## Learn More
+- `/src/app` - Next.js app router pages and layouts
+- `/src/components` - Reusable React components
+- `/src/lib` - Utility functions and services
+- `/src/hooks` - Custom React hooks
+- `/prisma` - Database schema and migrations
+- `/public` - Static assets
 
-To learn more about Next.js, take a look at the following resources:
+---
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Developed with ❤️ by the ILHT Team
