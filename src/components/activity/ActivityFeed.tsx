@@ -218,7 +218,8 @@ export default function ActivityFeed() {
 		return { newActivities, todayActivities, thisWeekActivities };
 	};
 
-	const renderActivityContent = (activity: Activity) => {		if (activity.type === 'followed') {
+	const renderActivityContent = (activity: Activity) => {
+		if (activity.type === 'followed') {
 			return <>{activity.content}</>;
 		}
 

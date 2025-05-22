@@ -80,16 +80,16 @@ export async function POST(request: NextRequest, { params }) {
 			where: { id: albumId },
 			include: {
 				creator: {
-					select: { 
+					select: {
 						id: true,
-						name: true
-					}
-				}
-			}
+						name: true,
+					},
+				},
+			},
 		});
 
 		let comment;
-		await prisma.$transaction(async (prisma) => {
+		await prisma.$transaction(async prisma => {
 			// Create the comment
 			comment = await prisma.albumComment.create({
 				data: {
@@ -109,23 +109,23 @@ export async function POST(request: NextRequest, { params }) {
 					},
 				},
 			});
-					// Create activity for album owner if it's not the user's own album
+			// Create activity for album owner if it's not the user's own album
 			if (albumWithCreator && albumWithCreator.creator && albumWithCreator.creator.id !== userId) {
 				// Get the current user's name or username
 				const currentUser = await prisma.user.findUnique({
 					where: { id: userId },
-					select: { name: true, username: true }
+					select: { name: true, username: true },
 				});
-				
+
 				const actorName = currentUser?.name || currentUser?.username || 'Someone';
-				
+
 				await prisma.activity.create({
 					data: {
 						type: 'album_comment',
 						content: `${actorName} commented on your album "${albumWithCreator.title}"`,
 						userId: albumWithCreator.creator.id, // Activity belongs to album creator
-						circleId: albumWithCreator.circleId || null
-					}
+						circleId: albumWithCreator.circleId || null,
+					},
 				});
 			}
 		});
