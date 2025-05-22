@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
@@ -19,6 +19,12 @@ import RegisterUsernameHeader from '@/components/user_registration/create_userna
 import CreateUsername from '@/components/user_registration/create_username/create_username';
 import AddProfilePicture from '@/components/user_registration/add_profilepicture/add_profilepicture';
 import Confirmation from '@/components/user_registration/confirmation';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the OnboardingTutorial to avoid hydration issues with localStorage
+const OnboardingTutorial = dynamic(() => import('@/components/onboarding/OnboardingTutorial'), {
+	ssr: false,
+});
 
 export default function Register() {
 	const router = useRouter();
@@ -37,6 +43,7 @@ export default function Register() {
 	const [step, setStep] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [success, setSuccess] = useState(false);
+	const [showOnboarding, setShowOnboarding] = useState(false);
 
 	const handleBack = () => {
 		if (step === 1) {
@@ -100,17 +107,40 @@ export default function Register() {
 
 		if (step === 3) return setStep(prev => prev + 1);
 	};
-
 	const handleCreateUsername = () => {
 		console.log('STEP 5 ', formData.username);
-		if (formData.username.length <= 0 || !formData.username) throw new Error('Enter a username');
-		if (step === 4 && formData.username) return setStep(prev => prev + 1);
+
+		// Validate username
+		if (!formData.username || formData.username.trim() === '') {
+			throw new Error('Username is required');
+		}
+
+		// Check length
+		if (formData.username.length < 3) {
+			throw new Error('Username must be at least 3 characters long');
+		}
+
+		if (formData.username.length > 20) {
+			throw new Error('Username must be at most 20 characters long');
+		}
+
+		// Check for valid characters
+		if (!/^[a-zA-Z0-9_-]+$/.test(formData.username)) {
+			throw new Error('Username can only contain letters, numbers, underscores (_) and hyphens (-)');
+		}
+
+		// Check if username starts with a letter
+		if (!/^[a-zA-Z]/.test(formData.username)) {
+			throw new Error('Username must start with a letter');
+		}
+
+		// If all checks pass, proceed to the next step
+		if (step === 4) return setStep(prev => prev + 1);
 	};
 
 	const handleUploadProfileImage = () => {
 		setStep(prev => prev + 1);
 	};
-
 	const handleCreateProfile = async () => {
 		setLoading(true);
 		setSuccess(false);
@@ -130,7 +160,8 @@ export default function Register() {
 				});
 
 				if (result?.ok) {
-					router.push('/profile');
+					// Show onboarding tutorial before redirecting
+					setShowOnboarding(true);
 				} else {
 					router.push('/auth/login');
 				}
@@ -141,7 +172,6 @@ export default function Register() {
 			setLoading(false);
 		}
 	};
-
 	return (
 		<div
 			id='register-page-wrapper'
@@ -229,13 +259,21 @@ export default function Register() {
 						onNext={handleUploadProfileImage}
 					/>
 				</div>
-			)}
+			)}{' '}
 			{step === 6 && (
 				<Confirmation
 					formData={formData}
 					onSubmit={handleCreateProfile}
 					loading={loading}
 					success={success}
+				/>
+			)}
+			{showOnboarding && (
+				<OnboardingTutorial
+					onComplete={() => {
+						setShowOnboarding(false);
+						router.push('/profile');
+					}}
 				/>
 			)}
 		</div>

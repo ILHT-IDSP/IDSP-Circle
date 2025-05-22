@@ -1,27 +1,67 @@
-import NextButton from "../next_button";
-import {IFormData, IFormDataProps} from "../register_types";
-import UsernameInput from "./username_input";
+import NextButton from '../next_button';
+import { IFormData, IFormDataProps } from '../register_types';
+import UsernameInput from './username_input';
+import { useState } from 'react';
 
-export default function CreateUsername({formData, setFormData, onNext}: IFormDataProps) {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setFormData((prev: IFormData) => ({...prev, [name]: value}));
-    };
+export default function CreateUsername({ formData, setFormData, onNext }: IFormDataProps) {
+	const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        onNext();
-    };
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		// Only allow valid characters
+		const sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '');
+		setFormData((prev: IFormData) => ({ ...prev, [name]: sanitizedValue }));
+	};
 
-    return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <UsernameInput
-                    value={formData.username}
-                    onChange={handleChange}
-                />
-                <NextButton />
-            </form>
-        </>
-    );
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		// Check if there's an error before proceeding
+		if (error) {
+			return;
+		}
+
+		// Validate the username one last time
+		if (!formData.username) {
+			setError('Username is required');
+			return;
+		}
+
+		if (formData.username.length < 3) {
+			setError('Username must be at least 3 characters long');
+			return;
+		}
+
+		if (formData.username.length > 20) {
+			setError('Username must be at most 20 characters long');
+			return;
+		}
+
+		if (!/^[a-zA-Z0-9_-]+$/.test(formData.username)) {
+			setError('Username can only contain letters, numbers, underscores (_) and hyphens (-)');
+			return;
+		}
+
+		if (!/^[a-zA-Z]/.test(formData.username)) {
+			setError('Username must start with a letter');
+			return;
+		}
+
+		// If all checks pass, proceed to next step
+		onNext();
+	};
+
+	return (
+		<>
+			<form onSubmit={handleSubmit}>
+				<UsernameInput
+					value={formData.username}
+					onChange={handleChange}
+					error={error}
+					setError={setError}
+				/>
+				<NextButton />
+			</form>
+		</>
+	);
 }
