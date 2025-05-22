@@ -6,8 +6,6 @@ import { PasswordInput } from './password_input';
 import { RememberMe } from './remember_user_checkbox';
 import { ForgotPassword } from './forgot_password';
 import CirclesLogo from '../Circles_Logo';
-import { OrDivider } from './or_divider';
-import { AlternativeLogins } from './alternative_login';
 import { DontHaveAnAccountSignUp } from './dont_have_an_account';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
@@ -60,8 +58,6 @@ export function LoginForm() {
 					disabled={isLoading}
 				/>
 
-				<OrDivider />
-				<AlternativeLogins />
 			</form>
 			<div className='pt-25'>
 				<DontHaveAnAccountSignUp />
