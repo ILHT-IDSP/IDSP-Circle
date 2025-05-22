@@ -115,10 +115,9 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 				>
 					<FaArrowLeft size={18} />
 				</button>
-			</div>
-
-			{/* Settings button for creator */}
-			{circle.isCreator && (
+			</div>{' '}
+			{/* Settings button for creator and admin */}
+			{(circle.isCreator || canManageRequests) && (
 				<div className='absolute top-4 right-4 z-10'>
 					<button
 						onClick={() => router.push(`/circle/${circle.id}/settings`)}
@@ -128,7 +127,6 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 					</button>
 				</div>
 			)}
-
 			<div className='flex flex-col items-center pt-8 pb-4 px-4'>
 				<div className='w-28 h-28 rounded-full overflow-hidden mb-4 border-4 border-circles-dark-blue'>
 					<Image

@@ -49,7 +49,6 @@ export default async function CircleSettingsPage({ params }: PageParams) {
 	if (isNaN(id)) {
 		return notFound();
 	}
-
 	const circle = await prisma.circle.findUnique({
 		where: { id },
 		select: {
@@ -58,12 +57,34 @@ export default async function CircleSettingsPage({ params }: PageParams) {
 		},
 	});
 
+	// Get the user's membership in this circle to check their role
+	const membership = await prisma.membership.findUnique({
+		where: {
+			userId_circleId: {
+				userId: parseInt(session.user.id),
+				circleId: id,
+			},
+		},
+		select: {
+			role: true,
+		},
+	});
+
 	if (!circle) {
 		return notFound();
 	}
 
+	// Check if the user is the creator, has an ADMIN role, or has a MODERATOR role
 	const userId = parseInt(session.user.id);
-	if (circle.creatorId !== userId) {
+	const isAdmin = circle.creatorId === userId || membership?.role === 'ADMIN';
+	const isModerator = membership?.role === 'MODERATOR';
+
+	// Only admins and moderators can access settings
+	if (!isAdmin && !isModerator) {
+		// Redirect to circle page if not admin or moderator
+		redirect(`/circle/${id}`);
+	}
+	if (circle.creatorId !== userId && !isAdmin) {
 		redirect(`/circle/${id}`);
 	}
 

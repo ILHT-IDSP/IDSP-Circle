@@ -15,7 +15,7 @@ interface CircleDetails {
 	isPrivate: boolean;
 }
 
-export default function CircleSettingsForm({ circleId }: { circleId: number; session: Session | null }) {
+export default function CircleSettingsForm({ circleId, session }: { circleId: number; session: Session | null }) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 	const [saving, setSaving] = useState(false);
@@ -27,6 +27,7 @@ export default function CircleSettingsForm({ circleId }: { circleId: number; ses
 		description: '',
 		isPrivate: false,
 	});
+	const [isAdmin, setIsAdmin] = useState(false);
 
 	useEffect(() => {
 		const fetchCircleDetails = async () => {
@@ -56,6 +57,23 @@ export default function CircleSettingsForm({ circleId }: { circleId: number; ses
 		if (circleId) {
 			fetchCircleDetails();
 		}
+	}, [circleId]);
+
+	// Check if the user is an admin
+	useEffect(() => {
+		const checkAdminStatus = async () => {
+			try {
+				const response = await fetch(`/api/circles/${circleId}/permissions`);
+				if (response.ok) {
+					const permissions = await response.json();
+					setIsAdmin(permissions.role === 'ADMIN' || permissions.isCreator);
+				}
+			} catch (err) {
+				console.error('Error checking admin status:', err);
+			}
+		};
+
+		checkAdminStatus();
 	}, [circleId]);
 
 	const handleBack = () => {
@@ -324,17 +342,19 @@ export default function CircleSettingsForm({ circleId }: { circleId: number; ses
 				</div>
 
 				{/* Danger Zone */}
-				<div className='mt-12 border border-red-500 rounded-lg p-4'>
-					<h3 className='text-red-500 font-medium mb-2'>Danger Zone</h3>
-					<p className='text-sm text-gray-400 mb-4'>Once you delete a circle, there is no going back. Please be certain.</p>
-					<button
-						type='button'
-						onClick={handleDeleteCircle}
-						className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700'
-					>
-						Delete Circle
-					</button>
-				</div>
+				{isAdmin && (
+					<div className='mt-12 border border-red-500 rounded-lg p-4'>
+						<h3 className='text-red-500 font-medium mb-2'>Danger Zone</h3>
+						<p className='text-sm text-gray-400 mb-4'>Once you delete a circle, there is no going back. Please be certain.</p>
+						<button
+							type='button'
+							onClick={handleDeleteCircle}
+							className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700'
+						>
+							Delete Circle
+						</button>
+					</div>
+				)}
 			</form>
 		</div>
 	);
