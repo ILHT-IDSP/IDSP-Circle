@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Activity {
 	id: number;
@@ -19,9 +22,17 @@ interface Activity {
 		id: number;
 		name: string;
 	};
+	requesterId?: number;
+	requester?: {
+		id: number;
+		username: string;
+		name: string | null;
+		profileImage: string | null;
+	} | null;
 }
 
 export default function ActivityFeed() {
+	const router = useRouter();
 	const [activities, setActivities] = useState<Activity[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -29,6 +40,7 @@ export default function ActivityFeed() {
 	const [hasCircleInvites, setHasCircleInvites] = useState(false);
 	const [followRequestsCount, setFollowRequestsCount] = useState(0);
 	const [circleInvitesCount, setCircleInvitesCount] = useState(0);
+	const [processingIds, setProcessingIds] = useState<number[]>([]);
 
 	// Helper function to extract follower username from content
 	const extractFollowerUsername = (content: string) => {
@@ -59,10 +71,32 @@ export default function ActivityFeed() {
 
 		return null;
 	};
-
 	// Clean content by removing the hidden requester ID for display
 	const cleanJoinRequestContent = (content: string): string => {
 		return content.replace(/\s?\(requester:\d+\)/, '');
+	};
+
+	// Extract circle name from content for better display
+	const extractCircleName = (content: string): string | null => {
+		// For circle join requests - "wants to join your circle "circleName""
+		const match = content.match(/your circle "([^"]+)"/);
+		if (match && match[1]) {
+			return match[1];
+		}
+
+		// For 'joined the circle' notifications - "joined the circle "circleName""
+		const joinMatch = content.match(/joined the circle "([^"]+)"/);
+		if (joinMatch && joinMatch[1]) {
+			return joinMatch[1];
+		}
+
+		// For simple "joined the circle" without quotes
+		const simpleJoinMatch = content.match(/joined the circle (.+)$/);
+		if (simpleJoinMatch && simpleJoinMatch[1]) {
+			return simpleJoinMatch[1];
+		}
+
+		return null;
 	};
 
 	useEffect(() => {
@@ -87,6 +121,68 @@ export default function ActivityFeed() {
 
 		fetchActivities();
 	}, []);
+
+	const handleAccept = async (activity: Activity) => {
+		if (!activity.circleId) return;
+
+		try {
+			setProcessingIds(prev => [...prev, activity.id]);
+			const response = await fetch(`/api/circles/${activity.circleId}/joinrequests`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					requestId: activity.id,
+					action: 'accept',
+				}),
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to accept join request');
+			}
+
+			// Remove the request from the list
+			setActivities(prev => prev.filter(act => act.id !== activity.id));
+			router.refresh();
+		} catch (err) {
+			console.error('Error accepting join request:', err);
+			alert('Failed to accept request. Please try again.');
+		} finally {
+			setProcessingIds(prev => prev.filter(id => id !== activity.id));
+		}
+	};
+
+	const handleDecline = async (activity: Activity) => {
+		if (!activity.circleId) return;
+
+		try {
+			setProcessingIds(prev => [...prev, activity.id]);
+			const response = await fetch(`/api/circles/${activity.circleId}/joinrequests`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					requestId: activity.id,
+					action: 'decline',
+				}),
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to decline join request');
+			}
+
+			// Remove the request from the list
+			setActivities(prev => prev.filter(act => act.id !== activity.id));
+			router.refresh();
+		} catch (err) {
+			console.error('Error declining join request:', err);
+			alert('Failed to decline request. Please try again.');
+		} finally {
+			setProcessingIds(prev => prev.filter(id => id !== activity.id));
+		}
+	};
 
 	const formatTime = (timestamp: string) => {
 		const now = new Date();
@@ -120,6 +216,143 @@ export default function ActivityFeed() {
 		});
 
 		return { newActivities, todayActivities, thisWeekActivities };
+	};
+
+	const renderActivityContent = (activity: Activity) => {
+		if (activity.type === 'followed') {
+			return <>{activity.content}</>;
+		}
+
+		if (activity.type === 'circle_join_request') {
+			const circleName = activity.circle?.name || extractCircleName(activity.content) || 'your circle';
+
+			// Enhanced join request display with user info and request details
+			return (
+				<div className='w-full'>
+					<div className='flex items-start mb-3'>
+						{activity.requester && (
+							<Link href={`/${activity.requester.username}`}>
+								<div className='relative mr-3 flex-shrink-0'>
+									<Image
+										src={activity.requester.profileImage || '/images/default-avatar.png'}
+										alt={activity.requester.name || activity.requester.username}
+										width={48}
+										height={48}
+										className='rounded-full object-cover border border-[var(--border)]'
+									/>
+								</div>
+							</Link>
+						)}
+						<div className='flex-1'>
+							{activity.requester && (
+								<Link
+									href={`/${activity.requester.username}`}
+									className='hover:underline'
+								>
+									<p className='font-semibold'>
+										{activity.requester.name || activity.requester.username}
+										<span className='font-normal text-[var(--foreground-secondary)] ml-1'>@{activity.requester.username}</span>
+									</p>
+								</Link>
+							)}
+							<p className='text-sm text-[var(--foreground-secondary)] mt-1'>{formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}</p>
+							<p className='mt-2'>wants to join your circle &quot;{circleName}&quot;</p>
+						</div>
+					</div>
+
+					<div className='flex space-x-2 justify-end'>
+						<button
+							disabled={processingIds.includes(activity.id)}
+							onClick={() => handleDecline(activity)}
+							className='bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] font-medium py-1.5 px-4 rounded-lg text-sm hover:opacity-80 transition disabled:opacity-50'
+						>
+							{processingIds.includes(activity.id) ? 'Processing...' : 'Decline'}
+						</button>
+						<button
+							disabled={processingIds.includes(activity.id)}
+							onClick={() => handleAccept(activity)}
+							className='bg-[var(--primary)] text-white font-medium py-1.5 px-4 rounded-lg text-sm hover:opacity-80 transition disabled:opacity-50'
+						>
+							{processingIds.includes(activity.id) ? 'Processing...' : 'Accept'}
+						</button>
+					</div>
+				</div>
+			);
+		}
+
+		if (activity.type === 'circle_join' && activity.circle) {
+			return (
+				<div className='w-full'>
+					<div className='flex items-start'>
+						<Link href={`/${activity.user.username}`}>
+							<div className='relative mr-3 flex-shrink-0'>
+								<Image
+									src={activity.user.profileImage || '/images/default-avatar.png'}
+									alt={activity.user.name || activity.user.username}
+									width={40}
+									height={40}
+									className='rounded-full object-cover border border-[var(--border)]'
+								/>
+							</div>
+						</Link>
+						<div className='flex-1'>
+							<Link
+								href={`/${activity.user.username}`}
+								className='hover:underline'
+							>
+								<span className='font-semibold'>{activity.user.name || activity.user.username}</span>
+							</Link>{' '}
+							joined your circle{' '}
+							<Link
+								href={`/circle/${activity.circle.id}`}
+								className='hover:underline'
+							>
+								<span className='font-semibold'>{activity.circle.name}</span>
+							</Link>
+						</div>
+					</div>
+				</div>
+			);
+		}
+
+		// For the circle_new_member type (similar to circle_join but with possible different content format)
+		if (activity.type === 'circle_new_member' && activity.circle) {
+			// Extract user name correctly from the content
+			const contentMatch = activity.content.match(/(.+?) joined the circle/);
+			const userName = contentMatch ? contentMatch[1] : 'Someone';
+			const circleName = activity.circle.name || extractCircleName(activity.content);
+
+			return (
+				<div className='w-full'>
+					<div className='flex items-start'>
+						<div className='relative mr-3 flex-shrink-0'>
+							<Image
+								src={'/images/default-avatar.png'}
+								alt={userName}
+								width={40}
+								height={40}
+								className='rounded-full object-cover border border-[var(--border)]'
+							/>
+						</div>
+						<div className='flex-1'>
+							<span className='font-semibold'>{userName}</span> joined your circle{' '}
+							<Link
+								href={`/circle/${activity.circle.id}`}
+								className='hover:underline'
+							>
+								<span className='font-semibold'>{circleName}</span>
+							</Link>
+						</div>
+					</div>
+				</div>
+			);
+		}
+
+		return (
+			<>
+				<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {activity.content}
+			</>
+		);
 	};
 
 	const { newActivities, todayActivities, thisWeekActivities } = groupActivities(activities);
@@ -168,25 +401,9 @@ export default function ActivityFeed() {
 									key={activity.id}
 									className='mb-4 p-3 bg-[var(--background-secondary)] rounded-lg'
 								>
-									{/* Clean join request display */}
-									{activity.type === 'followed' ? (
-										<>{activity.content}</>
-									) : activity.type === 'circle_join_request' ? (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {cleanJoinRequestContent(activity.content)}
-										</>
-									) : (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {activity.content}
-										</>
-									)}
-									<span className='block text-xs text-[var(--foreground)] opacity-60 mt-1'>{formatTime(activity.createdAt)}</span>
+									{renderActivityContent(activity)}
 
-									{/* Extract follower username from content (handling both "started following" and "accepted your follow request" cases)
-									const extractFollowerUsername = (content: string) => {
-										// Extract the name/username that appears before " started following" or " accepted"
-										return content.split(' started following')[0].split(' accepted')[0];
-									}; */}
+									{activity.type !== 'circle_join_request' && <span className='block text-xs text-[var(--foreground)] opacity-60 mt-1'>{formatTime(activity.createdAt)}</span>}
 
 									{activity.type === 'followed' && (
 										<Link
@@ -197,7 +414,7 @@ export default function ActivityFeed() {
 										</Link>
 									)}
 
-									{activity.type === 'circle_join' && activity.circle && (
+									{(activity.type === 'circle_join' || activity.type === 'circle_new_member') && activity.circle && (
 										<Link
 											href={`/circle/${activity.circle.id}`}
 											className='block text-xs text-circles-dark-blue mt-1'
@@ -226,25 +443,9 @@ export default function ActivityFeed() {
 									key={activity.id}
 									className='mb-4 p-3 bg-[var(--background-secondary)] rounded-lg'
 								>
-									{/* Clean join request display */}
-									{activity.type === 'followed' ? (
-										<>{activity.content}</>
-									) : activity.type === 'circle_join_request' ? (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {cleanJoinRequestContent(activity.content)}
-										</>
-									) : (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {activity.content}
-										</>
-									)}
-									<span className='block text-xs text-[var(--foreground)] opacity-60 mt-1'>{formatTime(activity.createdAt)}</span>
+									{renderActivityContent(activity)}
 
-									{/* Extract follower username from content (handling both "started following" and "accepted your follow request" cases)
-									const extractFollowerUsername = (content: string) => {
-										// Extract the name/username that appears before " started following" or " accepted"
-										return content.split(' started following')[0].split(' accepted')[0];
-									}; */}
+									{activity.type !== 'circle_join_request' && <span className='block text-xs text-[var(--foreground)] opacity-60 mt-1'>{formatTime(activity.createdAt)}</span>}
 
 									{activity.type === 'followed' && (
 										<Link
@@ -255,7 +456,7 @@ export default function ActivityFeed() {
 										</Link>
 									)}
 
-									{activity.type === 'circle_join' && activity.circle && (
+									{(activity.type === 'circle_join' || activity.type === 'circle_new_member') && activity.circle && (
 										<Link
 											href={`/circle/${activity.circle.id}`}
 											className='block text-xs text-circles-dark-blue mt-1'
@@ -269,14 +470,6 @@ export default function ActivityFeed() {
 											className='block text-xs text-circles-dark-blue mt-1'
 										>
 											View album
-										</Link>
-									)}
-									{activity.type === 'circle_join_request' && activity.circleId && (
-										<Link
-											href={`/circle/${activity.circleId}/joinrequests`}
-											className='block text-xs text-circles-dark-blue mt-1'
-										>
-											Manage join requests
 										</Link>
 									)}
 								</div>
@@ -292,25 +485,9 @@ export default function ActivityFeed() {
 									key={activity.id}
 									className='mb-4 p-3 bg-[var(--background-secondary)] rounded-lg'
 								>
-									{/* Clean join request display */}
-									{activity.type === 'followed' ? (
-										<>{activity.content}</>
-									) : activity.type === 'circle_join_request' ? (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {cleanJoinRequestContent(activity.content)}
-										</>
-									) : (
-										<>
-											<span className='font-semibold text-[var(--foreground)]'>{activity.user.name}</span> {activity.content}
-										</>
-									)}
-									<span className='block text-xs text-[var(--foreground)] opacity-60 mt-1'>{formatTime(activity.createdAt)}</span>
+									{renderActivityContent(activity)}
 
-									{/* Extract follower username from content (handling both "started following" and "accepted your follow request" cases)
-									const extractFollowerUsername = (content: string) => {
-										// Extract the name/username that appears before " started following" or " accepted"
-										return content.split(' started following')[0].split(' accepted')[0];
-									}; */}
+									{activity.type !== 'circle_join_request' && <span className='block text-xs text-[var(--foreground)] opacity-60 mt-1'>{formatTime(activity.createdAt)}</span>}
 
 									{activity.type === 'followed' && (
 										<Link
@@ -321,7 +498,7 @@ export default function ActivityFeed() {
 										</Link>
 									)}
 
-									{activity.type === 'circle_join' && activity.circle && (
+									{(activity.type === 'circle_join' || activity.type === 'circle_new_member') && activity.circle && (
 										<Link
 											href={`/circle/${activity.circle.id}`}
 											className='block text-xs text-circles-dark-blue mt-1'
@@ -335,14 +512,6 @@ export default function ActivityFeed() {
 											className='block text-xs text-circles-dark-blue mt-1'
 										>
 											View album
-										</Link>
-									)}
-									{activity.type === 'circle_join_request' && activity.circleId && (
-										<Link
-											href={`/circle/${activity.circleId}/joinrequests`}
-											className='block text-xs text-circles-dark-blue mt-1'
-										>
-											Manage join requests
 										</Link>
 									)}
 								</div>

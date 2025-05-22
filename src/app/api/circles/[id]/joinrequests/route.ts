@@ -2,15 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 
-// GET endpoint for getting join requests for a circle
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
 	try {
 		const session = await auth();
 		if (!session?.user?.id) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
-
-		const circleId = parseInt(params.id, 10);
+		const resolvedParams = await params;
+		const circleId = parseInt(resolvedParams.id, 10);
 		if (isNaN(circleId)) {
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });
 		}
@@ -20,7 +19,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 		// Check if this is just a status check for current user
 		const url = new URL(request.url);
 		const checkRequestStatus = url.searchParams.get('checkRequestStatus');
-		if (checkRequestStatus === 'true') {			// Check if current user has already sent a join request
+		if (checkRequestStatus === 'true') {
+			// Check if current user has already sent a join request
 			const existingRequest = await prisma.activity.findFirst({
 				where: {
 					type: 'circle_join_request',
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 		if (!membership || (membership.role !== 'ADMIN' && membership.role !== 'MODERATOR')) {
 			return NextResponse.json({ error: 'Access denied' }, { status: 403 });
-		}		// Get all join requests for the circle
+		} // Get all join requests for the circle
 		const joinRequests = await prisma.activity.findMany({
 			where: {
 				type: 'circle_join_request',
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 				content: request.content,
 				createdAt: request.createdAt,
 				requesterId: request.requesterId,
-				requester: request.requester
+				requester: request.requester,
 			};
 		});
 
@@ -182,7 +182,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 		if (!joinRequest) {
 			return NextResponse.json({ error: 'Join request not found' }, { status: 404 });
 		}
-		
+
 		// Get the requester ID directly from the join request
 		const requesterId = joinRequest.requesterId;
 
@@ -211,13 +211,13 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 					success: true,
 					message: 'User is already a member of this circle',
 				});
-			}			// Get the user information
+			} // Get the user information
 			const user = await prisma.user.findUnique({
 				where: { id: requesterId },
-				select: { name: true, username: true }
+				select: { name: true, username: true },
 			});
-			
-			const userName = user?.name || user?.username || "A user";
+
+			const userName = user?.name || user?.username || 'A user';
 
 			// Add the user to the circle and remove the request
 			await prisma.$transaction([
@@ -241,11 +241,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 						userId: requesterId,
 						circleId,
 					},
-				}),				// Create activity for the circle
+				}), // Create activity for the circle
 				prisma.activity.create({
 					data: {
 						type: 'circle_new_member',
-						content: `${userName} joined the circle`,
+						content: `${userName} joined the circle "${circle.name}"`,
 						userId: circle.creatorId,
 						circleId,
 					},

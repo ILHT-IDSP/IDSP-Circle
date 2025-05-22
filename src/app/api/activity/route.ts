@@ -58,6 +58,14 @@ export async function GET(req: NextRequest) {
 						name: true,
 					},
 				},
+				requester: {
+					select: {
+						id: true,
+						username: true,
+						name: true,
+						profileImage: true,
+					},
+				},
 			},
 		});
 
