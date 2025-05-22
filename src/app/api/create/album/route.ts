@@ -59,7 +59,6 @@ export async function POST(req: Request) {
 				return NextResponse.json({ error: 'You do not have permission to create albums in this circle' }, { status: 403 });
 			}
 		}
-
 		// Create the album
 		const newAlbum = await prisma.album.create({
 			data: {
@@ -67,7 +66,7 @@ export async function POST(req: Request) {
 				title: formData.title,
 				description: formData.description || '',
 				coverImage: formData.coverImage || null,
-				isPrivate: formData.isPrivate || true,
+				isPrivate: false, // Always public since we're not implementing private albums
 				circleId: formData.circleId ? parseInt(formData.circleId, 10) : null,
 			},
 		});

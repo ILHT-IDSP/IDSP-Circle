@@ -30,7 +30,7 @@ const defaultAlbumData: IAlbumFormData = {
 	title: '',
 	coverImage: '',
 	description: '',
-	isPrivate: true,
+	isPrivate: false, // Default to public since we're not implementing private albums
 	creatorId: undefined,
 	circleId: null,
 	photos: [],

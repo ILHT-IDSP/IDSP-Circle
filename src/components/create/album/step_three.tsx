@@ -49,30 +49,14 @@ export default function CreateAlbumStepThree({ formData, setFormData, onSubmit, 
 			...prev,
 			description: e.target.value,
 		}));
-	};
-
-	const handlePrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData(prev => ({
-			...prev,
-			isPrivate: e.target.value === 'private',
-		}));
-	};
-
-	const handleSubmitForm = (e: React.FormEvent) => {
+	};	const handleSubmitForm = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		// Validations
-		if (!formData.title.trim()) {
-			alert('Please enter an album title');
-			return;
+		// Since we now show the validation messages on the UI,
+		// we can just call onSubmit if both required fields are present
+		if (formData.title.trim() && formData.coverImage) {
+			onSubmit();
 		}
-
-		if (!formData.coverImage) {
-			alert('Please select a cover image for the album');
-			return;
-		}
-
-		onSubmit();
 	};
 
 	return (
@@ -81,12 +65,10 @@ export default function CreateAlbumStepThree({ formData, setFormData, onSubmit, 
 			className='w-full'
 		>
 			<div className='mb-8'>
-				<h2 className='text-xl font-medium mb-4 text-center'>Finalize Your Album</h2>
-
-				{/* Cover Image Selection */}
+				<h2 className='text-xl font-medium mb-4 text-center'>Finalize Your Album</h2>				{/* Cover Image Selection */}
 				<div className='mb-8'>
 					<h3 className='font-medium mb-3'>Select Cover Image *</h3>
-					<p className='text-sm opacity-70 mb-4'>Choose one photo to be your album cover</p>
+					<p className='text-sm opacity-70 mb-4'>Click on one of your photos to use as the album cover</p>
 					<div className='grid grid-cols-4 gap-3'>
 						{formData.photos.map((photo, index) => (
 							<div
@@ -187,9 +169,7 @@ export default function CreateAlbumStepThree({ formData, setFormData, onSubmit, 
 								placeholder='Give your album a title'
 								required
 							/>
-						</div>
-
-						<div>
+						</div>						<div>
 							<label
 								htmlFor='album-description'
 								className='block text-sm font-medium mb-1'
@@ -204,34 +184,6 @@ export default function CreateAlbumStepThree({ formData, setFormData, onSubmit, 
 								placeholder='Describe your album...'
 								rows={3}
 							/>
-						</div>
-
-						<div>
-							<label className='block text-sm font-medium mb-2'>Privacy</label>
-							<div className='space-y-2'>
-								<label className='flex items-center'>
-									<input
-										type='radio'
-										name='privacy'
-										value='private'
-										checked={formData.isPrivate}
-										onChange={handlePrivacyChange}
-										className='mr-2'
-									/>
-									<span>Private (Only you and selected circle can view)</span>
-								</label>
-								<label className='flex items-center'>
-									<input
-										type='radio'
-										name='privacy'
-										value='public'
-										checked={!formData.isPrivate}
-										onChange={handlePrivacyChange}
-										className='mr-2'
-									/>
-									<span>Public (Anyone can view)</span>
-								</label>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -258,15 +210,31 @@ export default function CreateAlbumStepThree({ formData, setFormData, onSubmit, 
 							{formData.photos.filter(p => p.uploaded).length} of {formData.photos.length} photos uploaded
 							{formData.photos.filter(p => p.error).length > 0 && ` (${formData.photos.filter(p => p.error).length} failed)`}
 						</div>
+					</div>				) : (
+					<div className="flex flex-col items-center">
+						<button
+							type='submit'
+							className='px-6 py-2.5 bg-[var(--primary)] text-white font-medium rounded-lg hover:bg-[var(--primary-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+							disabled={!formData.title || !formData.coverImage}
+						>
+							Create Album
+						</button>
+						
+						{/* Feedback on why button is disabled */}
+						{(!formData.title || !formData.coverImage) && (
+							<div className="mt-3 text-sm text-amber-500">
+								{!formData.title && !formData.coverImage && (
+									<p>⚠️ Please add a title and select a cover image</p>
+								)}
+								{!formData.title && formData.coverImage && (
+									<p>⚠️ Please add a title for your album</p>
+								)}
+								{formData.title && !formData.coverImage && (
+									<p>⚠️ Please select a cover image for your album</p>
+								)}
+							</div>
+						)}
 					</div>
-				) : (
-					<button
-						type='submit'
-						className='px-6 py-2.5 bg-[var(--primary)] text-white font-medium rounded-lg hover:bg-[var(--primary-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-						disabled={!formData.title || !formData.coverImage}
-					>
-						Create Album
-					</button>
 				)}
 			</div>
 		</form>

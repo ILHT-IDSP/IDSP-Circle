@@ -322,7 +322,7 @@ export default function CreateAlbum({ session }: { session: Session | null }) {
 
 	return (
 		<>
-			<div className='flex flex-col h-full w-full'>
+			<div className='flex flex-col pb-24 pt-8 w-full'>
 				{' '}
 				<CreateAlbumTopBar
 					onClick={currentStep === 3 ? handleSubmit : handleNext}
