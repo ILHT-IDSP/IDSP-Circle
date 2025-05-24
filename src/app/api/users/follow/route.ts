@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function POST(request: NextRequest) {
 	try {
@@ -22,28 +23,45 @@ export async function POST(request: NextRequest) {
 		if (currentUserId === targetUserId) {
 			return NextResponse.json({ error: 'Cannot follow/unfollow yourself' }, { status: 400 });
 		}
+		// OPTIMIZATION: Use transaction to batch user lookup and permission validation
+		const result = await PrismaUtils.transaction(async (tx) => {
+			// Check if target user exists and get profile privacy
+			const targetUser = await tx.user.findUnique({
+				where: { id: targetUserId },
+				select: {
+					id: true,
+					isProfilePrivate: true,
+				},
+			});
 
-		// Check if target user exists
-		const targetUser = await prisma.user.findUnique({
-			where: { id: targetUserId },
-		});
+			if (!targetUser) {
+				return { error: 'Target user not found', status: 404 };
+			}
 
-		if (!targetUser) {
-			return NextResponse.json({ error: 'Target user not found' }, { status: 404 });
-		}
-		if (action === 'follow') {
-			// Check if target user has a private profile
-			const isTargetPrivate = targetUser.isProfilePrivate;
-
-			if (isTargetPrivate) {
-				// Check if there's already a pending friend request
-				const existingRequest = await prisma.activity.findFirst({
+			// Check if there's already a pending friend request for private profiles
+			let existingRequest = null;
+			if (targetUser.isProfilePrivate && action === 'follow') {
+				existingRequest = await tx.activity.findFirst({
 					where: {
 						type: 'friend_request',
 						userId: targetUserId,
 						content: { contains: `wants to follow you` },
 					},
 				});
+			}
+
+			return { targetUser, existingRequest };
+		});
+
+		if ('error' in result) {
+			return NextResponse.json({ error: result.error }, { status: result.status });
+		}
+
+		const { targetUser, existingRequest } = result;		if (action === 'follow') {
+			// Check if target user has a private profile
+			const isTargetPrivate = targetUser.isProfilePrivate;
+
+			if (isTargetPrivate) {
 				if (!existingRequest) {
 					// For private profiles, create a friend request activity
 					await prisma.activity.create({
@@ -66,10 +84,12 @@ export async function POST(request: NextRequest) {
 						action: 'request_already_sent',
 						message: 'Follow request already sent',
 					});
-				}			} else {				// For public profiles, create follow record immediately
-				await prisma.$transaction([
+				}
+			} else {
+				// OPTIMIZATION: Use single transaction for follow creation and activity
+				const counts = await PrismaUtils.transaction(async (tx) => {
 					// Create the follow relationship
-					prisma.follow.upsert({
+					await tx.follow.upsert({
 						where: {
 							followerId_followingId: {
 								followerId: currentUserId,
@@ -81,65 +101,74 @@ export async function POST(request: NextRequest) {
 							followerId: currentUserId,
 							followingId: targetUserId,
 						},
-					}),							// Create activity notification for the target user
-					prisma.activity.create({
+					});
+
+					// Create activity notification for the target user
+					await tx.activity.create({
 						data: {
 							type: 'followed',
 							userId: targetUserId, // This activity is for the user being followed
 							content: `${session.user.name || session.user.username} (${session.user.username}) started following you`,
 						},
-					})
-				]);
+					});
+
+					// Get updated follower and following counts in the same transaction
+					const [followerCount, followingCount] = await Promise.all([
+						tx.follow.count({
+							where: {
+								followingId: targetUserId,
+							},
+						}),
+						tx.follow.count({
+							where: {
+								followerId: targetUserId,
+							},
+						}),
+					]);
+
+					return { followerCount, followingCount };
+				});
+
+				return NextResponse.json({
+					success: true,
+					action: 'followed',
+					followerCount: counts.followerCount,
+					followingCount: counts.followingCount,
+				});
 			}
-
-			// Get updated follower and following counts
-			const [followerCount, followingCount] = await Promise.all([
-				prisma.follow.count({
-					where: {
-						followingId: targetUserId,
-					},
-				}),
-				prisma.follow.count({
-					where: {
-						followerId: targetUserId,
-					},
-				}),
-			]);
-
-			return NextResponse.json({
-				success: true,
-				action: 'followed',
-				followerCount,
-				followingCount,
-			});
 		} else if (action === 'unfollow') {
-			// Delete follow record if it exists
-			await prisma.follow.deleteMany({
-				where: {
-					followerId: currentUserId,
-					followingId: targetUserId,
-				},
-			});
-
-			// Get updated follower and following counts
-			const [followerCount, followingCount] = await Promise.all([
-				prisma.follow.count({
+			// OPTIMIZATION: Use single transaction for unfollow and count update
+			const counts = await PrismaUtils.transaction(async (tx) => {
+				// Delete follow record if it exists
+				await tx.follow.deleteMany({
 					where: {
+						followerId: currentUserId,
 						followingId: targetUserId,
 					},
-				}),
-				prisma.follow.count({
-					where: {
-						followerId: targetUserId,
-					},
-				}),
-			]);
+				});
+
+				// Get updated follower and following counts in the same transaction
+				const [followerCount, followingCount] = await Promise.all([
+					tx.follow.count({
+						where: {
+							followingId: targetUserId,
+						},
+					}),
+					tx.follow.count({
+						where: {
+							followerId: targetUserId,
+						},
+					}),
+				]);
+
+				return { followerCount, followingCount };
+			});
 
 			return NextResponse.json({
 				success: true,
 				action: 'unfollowed',
-				followerCount,
-				followingCount,
+				followerCount: counts.followerCount,
+				followingCount: counts.followingCount,
 			});
 		}
 

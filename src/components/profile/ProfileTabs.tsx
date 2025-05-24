@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AlbumCard from '@/components/album/AlbumCard';
@@ -26,41 +26,51 @@ interface UserContent {
 export default function ProfileTabs() {
 	const params = useParams();
 	const router = useRouter();
-	const username = typeof params?.username === 'string' ? params.username : Array.isArray(params?.username) ? params.username[0] : null;
+	const username = useMemo(() => {
+		return typeof params?.username === 'string' 
+			? params.username 
+			: Array.isArray(params?.username) 
+				? params.username[0] 
+				: null;
+	}, [params?.username]);
+
 	const [activeTab, setActiveTab] = useState<'albums' | 'circles'>('albums');
 	const [content, setContent] = useState<UserContent>({ albums: [], circles: [], isPrivate: false });
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
-		const fetchUserContent = async () => {
-			try {
-				if (!username) {
-					throw new Error('Username not provided');
+	const fetchUserContent = useCallback(async () => {
+		if (!username) {
+			setError('Username not provided');
+			setLoading(false);
+			return;
+		}
+
+		try {
+			setLoading(true);
+			setError(null);
+			const response = await fetch(`/api/users/${username}/content`);
+
+			if (!response.ok) {
+				if (response.status === 404) {
+					throw new Error('User not found');
 				}
-
-				setLoading(true);
-				const response = await fetch(`/api/users/${username}/content`);
-
-				if (!response.ok) {
-					if (response.status === 404) {
-						throw new Error('User not found');
-					}
-					throw new Error('Failed to fetch user content');
-				}
-
-				const data = await response.json();
-				setContent(data);
-			} catch (err) {
-				console.error('Error fetching user content:', err);
-				setError(err instanceof Error ? err.message : 'An error occurred');
-			} finally {
-				setLoading(false);
+				throw new Error('Failed to fetch user content');
 			}
-		};
 
-		fetchUserContent();
+			const data = await response.json();
+			setContent(data);
+		} catch (err) {
+			console.error('Error fetching user content:', err);
+			setError(err instanceof Error ? err.message : 'An error occurred');
+		} finally {
+			setLoading(false);
+		}
 	}, [username]);
+
+	useEffect(() => {
+		fetchUserContent();
+	}, [fetchUserContent]);
 
 	// Loading state
 	if (loading) {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { AlbumPhoto } from '../create_album';
+import OptimizedImage from '../../common/OptimizedImage';
 
 interface IAlbumFormData {
 	title: string;
@@ -98,11 +98,13 @@ export default function CreateAlbumStepThree({ formData, setFormData, onSubmit, 
 								onClick={() => handleSelectCoverImage(index)}
 								className={`relative cursor-pointer rounded-lg overflow-hidden aspect-square border-2 ${selectedCoverImageIndex === index ? 'border-[var(--primary)]' : 'border-transparent hover:border-[var(--foreground)] hover:border-opacity-30'}`}
 							>
-								<Image
+								{' '}
+								<OptimizedImage
 									src={photo.previewUrl}
 									alt={`Photo ${index + 1}`}
-									fill
-									className='object-cover'
+									width={300}
+									height={300}
+									className='object-cover w-full h-full'
 								/>
 								{/* Upload Status Indicators */}
 								{isSubmitting && (
@@ -145,7 +147,6 @@ export default function CreateAlbumStepThree({ formData, setFormData, onSubmit, 
 										) : null}
 									</div>
 								)}
-
 								{/* Selected Cover Image Indicator */}
 								{selectedCoverImageIndex === index && !isSubmitting && (
 									<div className='absolute inset-0 bg-[var(--primary)] bg-opacity-20 flex items-center justify-center'>

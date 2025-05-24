@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function POST(request: NextRequest) {
 	try {
@@ -13,13 +14,11 @@ export async function POST(request: NextRequest) {
 		const { name, bio, username, email, profileImage, isProfilePrivate } = await request.json();
 
 		// Convert email to lowercase if provided
-		const lowerCaseEmail = email ? email.toLowerCase() : undefined;
-
-		// Validate the data
+		const lowerCaseEmail = email ? email.toLowerCase() : undefined;		// OPTIMIZATION: Batch validation queries if needed
 		if (username && username !== session.user.username) {
-			// Check if username is already taken
 			const existingUser = await prisma.user.findUnique({
 				where: { username },
+				select: { id: true },
 			});
 
 			if (existingUser) {
@@ -27,10 +26,10 @@ export async function POST(request: NextRequest) {
 			}
 		}
 
-		// If email is being changed, check if it's already in use
 		if (lowerCaseEmail && lowerCaseEmail !== session.user.email) {
 			const existingEmailUser = await prisma.user.findUnique({
 				where: { email: lowerCaseEmail },
+				select: { id: true },
 			});
 
 			if (existingEmailUser) {

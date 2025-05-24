@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import Image from 'next/image';
+import OptimizedImage from '../common/OptimizedImage';
 import ImageUploadCropper from '../common/ImageUploadCropper';
 
 interface Photo {
@@ -144,11 +144,13 @@ const CroppablePhotoUpload: React.FC<CroppablePhotoUploadProps> = ({ albumId, is
 						>
 							{uploadedImageUrl ? (
 								<div className='relative aspect-square w-full max-w-md mx-auto mb-2'>
-									<Image
+									<OptimizedImage
 										src={uploadedImageUrl}
 										alt='Uploaded photo'
-										fill
-										className='object-cover rounded-lg'
+										width={400}
+										height={400}
+										className='object-cover rounded-lg w-full h-full'
+										fallbackSrc='/images/albums/default.svg'
 									/>
 								</div>
 							) : (

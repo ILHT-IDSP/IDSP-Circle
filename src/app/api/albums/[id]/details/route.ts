@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 import { cacheFn } from '@/lib/cache';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: NextRequest, { params }) {
 	try {
@@ -17,37 +18,41 @@ export async function GET(request: NextRequest, { params }) {
 		}
 
 		const userId = parseInt(session.user.id);
-
 		return cacheFn(
 			`user:${userId}:album:${albumId}:details`,
 			300, // 5 minutes cache
 			async () => {
-				// Fetch album details with photo count, creator info, and like status in a single query
-				const album = await prisma.album.findUnique({
-					where: { id: albumId },
-					include: {
-						creator: {
-							select: {
-								id: true,
-								username: true,
-								name: true,
-								profileImage: true,
+				// Fetch album details and potential membership check in a single transaction
+				const [album, membership] = await PrismaUtils.transaction(async (tx) => {
+					const albumQuery = tx.album.findUnique({
+						where: { id: albumId },
+						include: {
+							creator: {
+								select: {
+									id: true,
+									username: true,
+									name: true,
+									profileImage: true,
+								},
+							},
+							_count: {
+								select: {
+									Photo: true,
+									AlbumLike: true,
+									AlbumComment: true,
+								},
+							},
+							AlbumLike: {
+								where: {
+									userId,
+								},
+								take: 1,
 							},
 						},
-						_count: {
-							select: {
-								Photo: true,
-								AlbumLike: true,
-								AlbumComment: true,
-							},
-						},
-						AlbumLike: {
-							where: {
-								userId,
-							},
-							take: 1,
-						},
-					},
+					});
+
+					// Only check membership if we need to (will be determined after getting album)
+					return Promise.all([albumQuery, Promise.resolve(null)]);
 				});
 
 				if (!album) {
@@ -59,7 +64,7 @@ export async function GET(request: NextRequest, { params }) {
 					// Check if the user is in the same circle as the album (if album belongs to a circle)
 					let hasAccess = false;
 					if (album.circleId) {
-						const membership = await prisma.membership.findUnique({
+						const membershipCheck = await prisma.membership.findUnique({
 							where: {
 								userId_circleId: {
 									userId,
@@ -67,7 +72,7 @@ export async function GET(request: NextRequest, { params }) {
 								},
 							},
 						});
-						hasAccess = !!membership;
+						hasAccess = !!membershipCheck;
 					}
 
 					if (!hasAccess) {

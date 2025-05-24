@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useRef } from 'react';
 import { FaUpload, FaTimes } from 'react-icons/fa';
-import Image from 'next/image';
 import { AlbumPhoto } from '../create_album';
+import OptimizedImage from '../../common/OptimizedImage';
 
 interface IAlbumFormData {
 	title: string;
@@ -182,12 +182,14 @@ export default function CreateAlbumStepOne({ formData, setFormData, onNext }: Cr
 								key={index}
 								className='relative'
 							>
+								{' '}
 								<div className='relative aspect-square rounded-lg overflow-hidden border border-[var(--foreground)] border-opacity-30'>
-									<Image
+									<OptimizedImage
 										src={photo.previewUrl}
 										alt={`Preview ${index + 1}`}
-										fill
-										className='object-cover'
+										width={300}
+										height={300}
+										className='object-cover w-full h-full'
 									/>
 								</div>
 								<button

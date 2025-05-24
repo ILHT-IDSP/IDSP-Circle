@@ -1,11 +1,11 @@
 'use client';
 
 import { Session } from 'next-auth';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { FaArrowLeft, FaCog, FaUserPlus, FaUsers } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import OptimizedImage from '../common/OptimizedImage';
 
 interface CircleDetails {
 	id: number;
@@ -252,24 +252,24 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 				</div>
 			)}
 			<div className='flex flex-col items-center pt-8 pb-4 px-4'>
+				{' '}
 				<div className='w-28 h-28 rounded-full overflow-hidden mb-4 border-4 border-circles-dark-blue'>
-					<Image
+					<OptimizedImage
 						src={circle.avatar || '/images/circles/default.svg'}
 						alt={circle.name}
 						width={112}
 						height={112}
 						className='object-cover w-full h-full'
+						fallbackSrc='/images/circles/default.svg'
 					/>
 				</div>
-
 				<h1 className='text-2xl font-bold mb-1'>{circle.name}</h1>
-
-				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}				<div className='flex items-center mb-4'>
+				{circle.description && <p className='text-sm text-gray-400 text-center mb-3 max-w-md'>{circle.description}</p>}{' '}
+				<div className='flex items-center mb-4'>
 					<div className='text-sm text-gray-400'>
 						{circle.isPrivate ? 'Private Circle' : 'Public Circle'} • {effectiveMembersCount} {effectiveMembersCount === 1 ? 'member' : 'members'}
 					</div>
 				</div>
-
 				<div className='flex space-x-3'>
 					{/* Show appropriate button based on status */}
 					{!circle.isCreator && (
@@ -287,14 +287,10 @@ export default function CircleHeader({ circle, session }: { circle: CircleDetail
 									disabled={isJoining}
 									className={`px-6 py-2 rounded-lg text-sm font-medium 
                     ${isJoining ? 'opacity-80 cursor-wait' : 'hover:cursor-pointer'}
-                    ${effectiveIsMember 
-                      ? 'bg-gray-700 text-white hover:bg-red-700' 
-                      : 'bg-circles-dark-blue text-white hover:bg-blue-700'} 
+                    ${effectiveIsMember ? 'bg-gray-700 text-white hover:bg-red-700' : 'bg-circles-dark-blue text-white hover:bg-blue-700'} 
                     transition-all duration-300`}
 								>
-									{isJoining 
-                    ? (effectiveIsMember ? 'Leaving...' : circle.isPrivate ? 'Requesting...' : 'Joining...') 
-                    : (effectiveIsMember ? 'Leave Circle' : circle.isPrivate ? 'Request to Join' : 'Join Circle')}
+									{isJoining ? (effectiveIsMember ? 'Leaving...' : circle.isPrivate ? 'Requesting...' : 'Joining...') : effectiveIsMember ? 'Leave Circle' : circle.isPrivate ? 'Request to Join' : 'Join Circle'}
 								</button>
 							)}
 						</>

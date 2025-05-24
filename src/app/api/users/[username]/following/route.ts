@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: NextRequest, { params }) {
 	try {
@@ -42,39 +43,39 @@ export async function GET(request: NextRequest, { params }) {
 				},
 				{ status: 403 }
 			);
-		}
-
-		// Get users that the profile user is following
-		const following = await prisma.follow.findMany({
-			where: { followerId: user.id },
-			include: {
-				following: {
-					select: {
-						id: true,
-						username: true,
-						name: true,
-						profileImage: true,
+		}		// Get users that the profile user is following and current user's follow status
+		const [following, currentUserFollowings] = await PrismaUtils.transaction(async (tx) => {
+			const followingQuery = tx.follow.findMany({
+				where: { followerId: user.id },
+				include: {
+					following: {
+						select: {
+							id: true,
+							username: true,
+							name: true,
+							profileImage: true,
+						},
 					},
 				},
-			},
-		});
+			});
 
-		// If logged in, get current user's followings to determine isFollowing status
-		let currentUserFollowings: number[] = [];
-		if (currentUserId) {
-			const followings = await prisma.follow.findMany({
+			const currentUserFollowingsQuery = currentUserId ? tx.follow.findMany({
 				where: { followerId: currentUserId },
 				select: { followingId: true },
-			});
-			currentUserFollowings = followings.map(f => f.followingId);
-		}
+			}) : Promise.resolve([]);
+
+			return Promise.all([followingQuery, currentUserFollowingsQuery]);
+		});
+
+		// Create a Set for O(1) lookup performance
+		const currentUserFollowingIds = new Set(currentUserFollowings.map(f => f.followingId));
 
 		const formattedFollowing = following.map(f => ({
 			id: f.following.id,
 			username: f.following.username,
 			name: f.following.name,
 			profileImage: f.following.profileImage,
-			isFollowing: currentUserFollowings.includes(f.following.id),
+			isFollowing: currentUserFollowingIds.has(f.following.id),
 		}));
 
 		return NextResponse.json(formattedFollowing);

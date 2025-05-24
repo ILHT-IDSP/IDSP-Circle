@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 import { uploadToCloudinary } from '@/lib/cloudinary';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export const maxDuration = 30; // Set max duration to 30 seconds for this API route
 
@@ -28,40 +29,53 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ error: 'Invalid album ID' }, { status: 400 });
 		}
 
-		// Check if the album exists
-		const album = await prisma.album.findUnique({
-			where: { id: albumId },
-			include: {
-				Circle: true,
-			},
-		});
-
-		if (!album) {
-			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
-		}
-
-		// Check if the user has permission to add photos to this album
 		const userId = parseInt(session.user.id);
 
-		// For personal albums
-		const canAddToPersonalAlbum = album.creatorId === userId;
-
-		// For circle albums
-		let canAddToCircleAlbum = false;
-		if (album.circleId) {
-			// Check if user is a member of the circle
-			const membership = await prisma.membership.findUnique({
-				where: {
-					userId_circleId: {
-						userId: userId,
-						circleId: album.circleId,
+		// OPTIMIZATION: Use transaction to batch album validation and permission checks
+		const permissionResult = await PrismaUtils.transaction(async (tx) => {
+			// Check if the album exists
+			const album = await tx.album.findUnique({
+				where: { id: albumId },
+				include: {
+					Circle: {
+						select: {
+							id: true,
+						},
 					},
 				},
 			});
-			canAddToCircleAlbum = !!membership;
+
+			if (!album) {
+				return { album: null, hasPermission: false };
+			}
+
+			// For personal albums
+			const canAddToPersonalAlbum = album.creatorId === userId;
+
+			// For circle albums - check membership if applicable
+			let canAddToCircleAlbum = false;
+			if (album.circleId) {
+				const membership = await tx.membership.findUnique({
+					where: {
+						userId_circleId: {
+							userId: userId,
+							circleId: album.circleId,
+						},
+					},
+				});
+				canAddToCircleAlbum = !!membership;
+			}
+
+			const hasPermission = canAddToPersonalAlbum || canAddToCircleAlbum;
+
+			return { album, hasPermission };
+		});
+
+		if (!permissionResult.album) {
+			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
 		}
 
-		if (!canAddToPersonalAlbum && !canAddToCircleAlbum) {
+		if (!permissionResult.hasPermission) {
 			return NextResponse.json({ error: 'You do not have permission to add photos to this album' }, { status: 403 });
 		}
 

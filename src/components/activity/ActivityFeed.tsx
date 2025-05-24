@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { formatDistanceToNow } from 'date-fns';
@@ -42,85 +42,76 @@ export default function ActivityFeed() {
 	const [circleInvitesCount, setCircleInvitesCount] = useState(0);
 	const [processingIds, setProcessingIds] = useState<number[]>([]);
 
-	// Helper function to extract follower username from content
-	const extractFollowerUsername = (content: string) => {
-		// Extract the username from parentheses (username)
+	// Memoized helper functions to prevent recreation on every render
+	const extractFollowerUsername = useCallback((content: string) => {
 		const match = content.match(/\(([^)]+)\)/);
 		if (match && match[1]) {
-			return match[1]; // Return the username from inside the parentheses
+			return match[1];
 		}
-		// Fallback to the old method if the parentheses format is not found
 		return content.split(' started following')[0].split(' accepted')[0];
-	};
+	}, []);
 
-	// Extract circle ID from content for join requests
-	const extractCircleId = (activity: Activity): number | null => {
+	const extractCircleId = useCallback((activity: Activity): number | null => {
 		if (activity.circleId) {
 			return activity.circleId;
 		}
 
-		// Try to parse the hidden ID from the join request format
 		if (activity.type === 'circle_join_request') {
 			const match = activity.content?.match(/\(requester:(\d+)\)/);
 			if (match) {
-				// We have the requester ID, but we need the circle ID
-				// Since this is attached to the activity, return the circle ID if available
 				return activity.circleId || null;
 			}
 		}
 
 		return null;
-	};
-	// Clean content by removing the hidden requester ID for display
-	const cleanJoinRequestContent = (content: string): string => {
-		return content.replace(/\s?\(requester:\d+\)/, '');
-	};
+	}, []);
 
-	// Extract circle name from content for better display
-	const extractCircleName = (content: string): string | null => {
-		// For circle join requests - "wants to join your circle "circleName""
+	const cleanJoinRequestContent = useCallback((content: string): string => {
+		return content.replace(/\s?\(requester:\d+\)/, '');
+	}, []);
+
+	const extractCircleName = useCallback((content: string): string | null => {
 		const match = content.match(/your circle "([^"]+)"/);
 		if (match && match[1]) {
 			return match[1];
 		}
 
-		// For 'joined the circle' notifications - "joined the circle "circleName""
 		const joinMatch = content.match(/joined the circle "([^"]+)"/);
 		if (joinMatch && joinMatch[1]) {
 			return joinMatch[1];
 		}
 
-		// For simple "joined the circle" without quotes
 		const simpleJoinMatch = content.match(/joined the circle (.+)$/);
 		if (simpleJoinMatch && simpleJoinMatch[1]) {
 			return simpleJoinMatch[1];
 		}
 
 		return null;
-	};
+	}, []);
+
+	const fetchActivities = useCallback(async () => {
+		try {
+			setError(null);
+			const res = await fetch('/api/activity');
+			if (!res.ok) throw new Error('Failed to load activities');
+			const data = await res.json();
+			setActivities(data.activities || []);
+
+			setHasFollowRequests(data.hasFollowRequests || false);
+			setHasCircleInvites(data.hasCircleInvites || false);
+			setFollowRequestsCount(data.followRequestsCount || 0);
+			setCircleInvitesCount(data.circleInvitesCount || 0);
+		} catch (err) {
+			console.error(err);
+			setError('Failed to load activities');
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
 
 	useEffect(() => {
-		const fetchActivities = async () => {
-			try {
-				const res = await fetch('/api/activity');
-				if (!res.ok) throw new Error('Failed to load activities');
-				const data = await res.json();
-				setActivities(data.activities || []);
-
-				setHasFollowRequests(data.hasFollowRequests || false);
-				setHasCircleInvites(data.hasCircleInvites || false);
-				setFollowRequestsCount(data.followRequestsCount || 0);
-				setCircleInvitesCount(data.circleInvitesCount || 0);
-			} catch (err) {
-				console.error(err);
-				setError('Failed to load activities');
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
 		fetchActivities();
-	}, []);
+	}, [fetchActivities]);
 
 	const handleAccept = async (activity: Activity) => {
 		if (!activity.circleId) return;

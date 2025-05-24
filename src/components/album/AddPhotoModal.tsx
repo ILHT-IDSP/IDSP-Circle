@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { FaTimes, FaUpload } from 'react-icons/fa';
-import Image from 'next/image';
+import OptimizedImage from '../common/OptimizedImage';
 
 interface Photo {
 	id: number;
@@ -124,7 +124,9 @@ const AddPhotoModal: React.FC<AddPhotoModalProps> = ({ albumId, isOpen, onClose,
 				className='bg-[var(--background)] rounded-xl max-w-lg w-full overflow-hidden shadow-xl'
 				onClick={e => e.stopPropagation()}
 			>
-				<div className='flex justify-between items-center p-4 border-b border-[var(--foreground)] border-opacity-20'>					<h2 className='text-xl font-semibold'>Add Photo to Album</h2>
+				<div className='flex justify-between items-center p-4 border-b border-[var(--foreground)] border-opacity-20'>
+					{' '}
+					<h2 className='text-xl font-semibold'>Add Photo to Album</h2>
 					<button
 						onClick={onClose}
 						disabled={isUploading}
@@ -138,7 +140,9 @@ const AddPhotoModal: React.FC<AddPhotoModalProps> = ({ albumId, isOpen, onClose,
 				<form
 					onSubmit={handleSubmit}
 					className='p-4'
-				>					{/* Preview area */}
+				>
+					{' '}
+					{/* Preview area */}
 					<div
 						onClick={() => fileInputRef.current?.click()}
 						className='border-2 border-dashed border-[var(--foreground)] border-opacity-20 rounded-lg p-4 mb-4 flex flex-col items-center justify-center cursor-pointer hover:border-opacity-40 transition-all'
@@ -149,15 +153,16 @@ const AddPhotoModal: React.FC<AddPhotoModalProps> = ({ albumId, isOpen, onClose,
 								className='relative w-full'
 								style={{ maxHeight: '300px' }}
 							>
-								<Image
+								<OptimizedImage
 									src={previewUrl}
 									alt='Preview'
 									width={400}
 									height={300}
 									className='rounded-lg mx-auto object-contain'
-									style={{ maxHeight: '300px' }}
+									fallbackSrc='/images/albums/default.svg'
 								/>
-							</div>						) : (
+							</div>
+						) : (
 							<>
 								<FaUpload className='text-[var(--foreground)] opacity-40 text-3xl mb-2' />
 								<p className='text-[var(--foreground)] opacity-70 mb-1'>Click to select an image</p>
@@ -165,7 +170,6 @@ const AddPhotoModal: React.FC<AddPhotoModalProps> = ({ albumId, isOpen, onClose,
 							</>
 						)}
 					</div>
-
 					<input
 						ref={fileInputRef}
 						type='file'
@@ -173,7 +177,6 @@ const AddPhotoModal: React.FC<AddPhotoModalProps> = ({ albumId, isOpen, onClose,
 						onChange={handleImageChange}
 						className='hidden'
 					/>
-
 					{/* Description input */}
 					<div className='mb-4'>
 						<label
@@ -191,9 +194,8 @@ const AddPhotoModal: React.FC<AddPhotoModalProps> = ({ albumId, isOpen, onClose,
 							rows={3}
 						/>
 					</div>
-
 					{/* Error message */}
-					{error && <div className='mb-4 text-red-500 text-sm'>{error}</div>}					{/* Buttons */}
+					{error && <div className='mb-4 text-red-500 text-sm'>{error}</div>} {/* Buttons */}
 					<div className='flex justify-end gap-2'>
 						<button
 							type='button'
@@ -202,7 +204,8 @@ const AddPhotoModal: React.FC<AddPhotoModalProps> = ({ albumId, isOpen, onClose,
 							className='px-4 py-2 text-[var(--foreground)] hover:bg-[var(--foreground)] hover:bg-opacity-5 rounded-md'
 						>
 							Cancel
-						</button>						<button
+						</button>{' '}
+						<button
 							type='submit'
 							disabled={!selectedImage || isUploading}
 							className={`px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-[var(--background)] rounded-md flex items-center gap-2 ${!selectedImage || isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}

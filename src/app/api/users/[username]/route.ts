@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: NextRequest, { params }) {
 	try {
 		const username = (await params).username;
-		const session = await auth();
-
-		// Get the user data
+		const session = await auth();		// Get user data first, then check follow status
 		const user = await prisma.user.findUnique({
 			where: {
 				username,
@@ -35,17 +34,13 @@ export async function GET(request: NextRequest, { params }) {
 			return NextResponse.json({ error: 'User not found' }, { status: 404 });
 		}
 
-		// Check if the current user is following the profile user
-		let isFollowing = false;
-		if (session?.user) {
-			const followRecord = await prisma.follow.findFirst({
-				where: {
-					followerId: parseInt(session.user.id),
-					followingId: user.id,
-				},
-			});
-			isFollowing = !!followRecord;
-		}
+		// Check follow status if user is logged in
+		const isFollowing = session?.user ? !!(await prisma.follow.findFirst({
+			where: {
+				followerId: parseInt(session.user.id),
+				followingId: user.id,
+			},
+		})) : false;
 
 		// Format response
 		const responseData = {

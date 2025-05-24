@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function POST(req: Request) {
 	try {
@@ -24,8 +25,7 @@ export async function POST(req: Request) {
 		if (isNaN(creatorId)) {
 			return NextResponse.json({ error: 'Invalid creator ID' }, { status: 400 });
 		}
-
-		// Check if the album is being added to a circle
+		// OPTIMIZATION: Check circle membership in a single transaction if applicable
 		if (formData.circleId) {
 			const circleId = parseInt(formData.circleId, 10);
 
@@ -33,27 +33,31 @@ export async function POST(req: Request) {
 				return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });
 			}
 
-			// Check if the user is a member of the circle
-			const membership = await prisma.membership.findUnique({
-				where: {
-					userId_circleId: {
-						userId: creatorId,
-						circleId,
+			// Use transaction to batch membership and circle validation
+			const hasAccess = await PrismaUtils.transaction(async (tx) => {
+				// Check if the user is a member of the circle
+				const membership = await tx.membership.findUnique({
+					where: {
+						userId_circleId: {
+							userId: creatorId,
+							circleId,
+						},
 					},
-				},
+				});
+
+				// Check if the user is the creator of the circle
+				const circle = await tx.circle.findUnique({
+					where: { id: circleId },
+					select: { creatorId: true },
+				});
+
+				// Return true if user is member or creator
+				return membership || circle?.creatorId === creatorId;
 			});
 
-			// Check if the user is the creator of the circle
-			const circle = await prisma.circle.findUnique({
-				where: { id: circleId },
-				select: { creatorId: true },
-			});
-
-			// If not a member or creator, deny access
-			if (!membership && circle?.creatorId !== creatorId) {
+			if (!hasAccess) {
 				return NextResponse.json({ error: 'You can only add albums to circles you are a member of' }, { status: 403 });
-			}			// All circle members can create albums - no role restriction
-			// We already verified the user is a member above
+			}
 		}
 		// Create the album
 		const newAlbum = await prisma.album.create({

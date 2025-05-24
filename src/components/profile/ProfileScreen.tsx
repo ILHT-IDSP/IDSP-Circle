@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Session } from "next-auth";
-// Import the fixed version of ProfileHeader to avoid runtime errors
 import ProfileHeader from "./ProfileHeader";
 import ProfileTabs from "./ProfileTabs";
 
@@ -16,7 +15,6 @@ interface User {
     friendCount: number;
 }
 
-// Extended user interface to match the profileData requirements
 interface ProfileUser {
     id: number;
     username: string;
@@ -42,62 +40,63 @@ export default function ProfileScreen({ session, username }: ProfileScreenProps)
     const [user, setUser] = useState<User | null>(null);
     const [profileData, setProfileData] = useState<ProfileUser | undefined>(undefined);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                // If username is provided, fetch that user's profile
-                // Otherwise, fetch the logged-in user's profile
-                const endpoint = username 
-                    ? `/api/users/by-username/${encodeURIComponent(username)}`
-                    : `/api/users/${session?.user?.id}`;
-                
-                if (!session?.user?.id && !username) {
-                    setLoading(false);
-                    return;
-                }
-                
-                const res = await fetch(endpoint);
-                
-                if (!res.ok) {
-                    throw new Error(`Failed to fetch user data: ${res.status}`);
-                }
-                
-                const data = await res.json();
-                setUser(data);
-                
-                // Also set up profileData with the necessary structure
-                if (data) {
-                    const isOwnProfile = session?.user?.id === String(data.id) || 
-                                        session?.user?.id === data.id;
-                    
-                    setProfileData({
-                        id: data.id,
-                        username: data.username,
-                        name: data.name,
-                        bio: data.bio,
-                        profileImage: data.profileImage,
-                        coverImage: data.coverImage,
-                        isProfilePrivate: data.isProfilePrivate,
-                        circlesCount: data.circlesCount || 0,
-                        albumsCount: data.albumsCount || 0,
-                        followersCount: data.followersCount || 0,
-                        followingCount: data.followingCount || 0,
-                        isFollowing: data.isFollowing || false,
-                        isOwnProfile: isOwnProfile
-                    });
-                }
-            } catch (error) {
-                console.error("Failed to fetch user data:", error);
-            } finally {
-                setLoading(false);
+    const fetchUserData = useCallback(async () => {
+        if (!session?.user?.id && !username) {
+            setLoading(false);
+            return;
+        }
+
+        try {
+            setError(null);
+            const endpoint = username 
+                ? `/api/users/by-username/${encodeURIComponent(username)}`
+                : `/api/users/${session?.user?.id}`;
+            
+            const res = await fetch(endpoint);
+            
+            if (!res.ok) {
+                throw new Error(`Failed to fetch user data: ${res.status}`);
             }
-        };
-
-        fetchUserData();
+            
+            const data = await res.json();
+            setUser(data);
+            
+            if (data) {
+                const isOwnProfile = session?.user?.id === String(data.id) || 
+                                    session?.user?.id === data.id;
+                
+                setProfileData({
+                    id: data.id,
+                    username: data.username,
+                    name: data.name,
+                    bio: data.bio,
+                    profileImage: data.profileImage,
+                    coverImage: data.coverImage,
+                    isProfilePrivate: data.isProfilePrivate,
+                    circlesCount: data.circlesCount || 0,
+                    albumsCount: data.albumsCount || 0,
+                    followersCount: data.followersCount || 0,
+                    followingCount: data.followingCount || 0,
+                    isFollowing: data.isFollowing || false,
+                    isOwnProfile: isOwnProfile
+                });
+            }
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+            setError("Failed to load profile data");
+        } finally {
+            setLoading(false);
+        }
     }, [session?.user?.id, username]);
 
+    useEffect(() => {
+        fetchUserData();
+    }, [fetchUserData]);
+
     if (loading) return <p className="text-center text-circles-light">Loading...</p>;
+    if (error) return <p className="text-center text-red-500">{error}</p>;
     if (!user && !session) return <p className="text-center text-circles-light">Please login to view profiles</p>;
     if (!user) return <p className="text-center text-circles-light">User not found</p>;
 

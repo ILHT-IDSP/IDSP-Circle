@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface AlbumLikeStatus {
@@ -33,22 +33,21 @@ interface AlbumLikesProviderProps {
 export function AlbumLikesProvider({ children, albumIds }: AlbumLikesProviderProps) {
 	const [likeStatuses, setLikeStatuses] = useState<Record<number, AlbumLikeStatus>>({});
 	const [isLoading, setIsLoading] = useState(false);
-	const [pendingAlbums, setPendingAlbums] = useState<Set<number>>(new Set());
+	const [pendingAlbums, setPendingAlbums] = useState<Set<number>>(new Set());	// Memoize albumIds array to prevent unnecessary re-fetches
+	const albumIdsString = JSON.stringify(albumIds);
+	const memoizedAlbumIds = useMemo(() => albumIds, [albumIds]);
 
-	// Fetch all like statuses at once when the component mounts
-	useEffect(() => {
-		const fetchLikeStatuses = async () => {
-			if (!albumIds.length) return;
+	const fetchLikeStatuses = useCallback(async () => {
+		if (!memoizedAlbumIds.length) return;
 
-			setIsLoading(true);
-			try {
-				const response = await fetch('/api/albums/batch-like-status', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ albumIds }),
-				});
+		setIsLoading(true);
+		try {
+			const response = await fetch('/api/albums/batch-like-status', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ albumIds: memoizedAlbumIds }),				});
 
 				if (response.ok) {
 					const data = await response.json();
@@ -61,13 +60,14 @@ export function AlbumLikesProvider({ children, albumIds }: AlbumLikesProviderPro
 			} finally {
 				setIsLoading(false);
 			}
-		};
+		}, [memoizedAlbumIds]);
 
+	useEffect(() => {
 		fetchLikeStatuses();
-	}, [albumIds]);
+	}, [fetchLikeStatuses]);
 
 	// Toggle like status for a single album with optimistic update
-	const toggleLike = async (albumId: number) => {
+	const toggleLike = useCallback(async (albumId: number) => {
 		// Skip if this album is already being processed
 		if (pendingAlbums.has(albumId)) {
 			return;
@@ -132,14 +132,14 @@ export function AlbumLikesProvider({ children, albumIds }: AlbumLikesProviderPro
 				return updated;
 			});
 		}
-	};
+	}, [likeStatuses, pendingAlbums]);
 
-	const value = {
+	const value = useMemo(() => ({
 		likeStatuses,
 		toggleLike,
 		isLoading,
 		pendingAlbums,
-	};
+	}), [likeStatuses, toggleLike, isLoading, pendingAlbums]);
 
 	return <AlbumLikesContext.Provider value={value}>{children}</AlbumLikesContext.Provider>;
 }

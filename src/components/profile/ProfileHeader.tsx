@@ -3,7 +3,7 @@ import { Settings, Check, X } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Session } from 'next-auth';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface ProfileUser {
@@ -21,6 +21,7 @@ interface ProfileUser {
 	isFollowing: boolean;
 	isOwnProfile: boolean;
 }
+
 interface ProfileHeaderProps {
 	profileData?: ProfileUser;
 	session: Session | null;
@@ -28,7 +29,7 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ profileData, session, onFollowUpdate }: ProfileHeaderProps) {
-	const defaultProfileData = {
+	const defaultProfileData = useMemo(() => ({
 		id: -1,
 		username: 'user',
 		name: '',
@@ -42,7 +43,8 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 		followingCount: 0,
 		isFollowing: false,
 		isOwnProfile: true,
-	};
+	}), []);
+
 	const profile = profileData || defaultProfileData;
 	const [isFollowing, setIsFollowing] = useState(profile.isFollowing);
 	const [showUnfollowConfirm, setShowUnfollowConfirm] = useState(false);
@@ -51,47 +53,50 @@ export default function ProfileHeader({ profileData, session, onFollowUpdate }: 
 	const [requestSent, setRequestSent] = useState(false);
 	const [isProcessing, setIsProcessing] = useState(false);
 
+	// Memoize the check request status function to prevent unnecessary re-renders
+	const checkRequestStatus = useCallback(async () => {
+		if (!session?.user || !profileData || profileData.isOwnProfile || profileData.isFollowing || !profileData.isProfilePrivate) {
+			return;
+		}
+
+		try {
+			const response = await fetch(`/api/users/follow?targetUserId=${profileData.id}&checkRequestStatus=true`);
+			if (response.ok) {
+				const data = await response.json();
+				setRequestSent(data.requestSent || false);
+			}
+		} catch (error) {
+			console.error('Error checking follow request status:', error);
+		}
+	}, [session?.user, profileData]);
+
 	useEffect(() => {
 		if (profileData) {
 			setIsFollowing(profileData.isFollowing || false);
 			setFollowersCount(profileData.followersCount || 0);
 			setFollowingCount(profileData.followingCount || 0);
 
-			// Check if a follow request has already been sent
+			// Only check request status for private profiles that aren't being followed
 			if (profileData.isProfilePrivate && !profileData.isFollowing && !profileData.isOwnProfile) {
-				// Define checkRequestStatus inside useEffect to avoid dependency issues
-				const checkRequestStatus = async () => {
-					if (!session?.user) return;
-
-					try {
-						const response = await fetch(`/api/users/follow?targetUserId=${profileData.id}&checkRequestStatus=true`);
-						const data = await response.json();
-						setRequestSent(data.requestSent || false);
-					} catch (error) {
-						console.error('Error checking follow request status:', error);
-					}
-				};
-
 				checkRequestStatus();
 			}
 		}
-	}, [profileData, session]);
-
-	const handleUploadClick = () => {
+	}, [profileData, checkRequestStatus]);
+	const handleUploadClick = useCallback(() => {
 		// Only allow upload if it's user's OWN profile
 		if (profile.isOwnProfile) {
 			document.getElementById('upload-profile-pic')?.click();
 		}
-	};
+	}, [profile.isOwnProfile]);
 
-	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 		const formData = new FormData();
 		formData.append('avatar', file);
 		await fetch('/api/user/avatar', { method: 'POST', body: formData });
 		window.location.reload();
-	};
+	}, []);
 
 	const handleFollowAction = async () => {
 		if (!session) {

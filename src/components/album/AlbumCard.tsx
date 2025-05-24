@@ -1,12 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart, FaRegHeart, FaComment, FaImages } from 'react-icons/fa';
 import CircleHolder from '../circle_holders';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, memo } from 'react';
 import CommentModal from './CommentModal';
 import { useAlbumLikes } from './AlbumLikesContext';
+import OptimizedImage from '../common/OptimizedImage';
 
 /**
  * Gets the display URL for an album cover image
@@ -29,47 +29,61 @@ interface AlbumCardProps {
 	circleImage?: string;
 }
 
-const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, userProfileImage, photoCount, sourceName, sourceType, creatorName, circleName, circleImage }) => {
+const AlbumCard: React.FC<AlbumCardProps> = memo(({ albumId, albumImage, albumName, userProfileImage, photoCount, sourceName, sourceType, creatorName, circleName, circleImage }) => {
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes(); // Process the albumImage to handle any necessary transformations
+	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes();
+
 	const displayImageUrl = useMemo(() => {
-		const url = albumImage || '/images/albums/default.svg';
-		return url;
-	}, [albumImage]); // Generate object-position style (centered by default since we're using uploaded cropped images)
+		return albumImage || '/images/albums/default.svg';
+	}, [albumImage]);
+
 	const objectPosition = useMemo(() => 'center', []);
 
-	const handleLikeClick = async (e: React.MouseEvent) => {
+	const handleLikeClick = useCallback(
+		async (e: React.MouseEvent) => {
+			e.preventDefault();
+			e.stopPropagation();
+
+			if (pendingAlbums.has(albumId)) return;
+			await toggleLike(albumId);
+		},
+		[albumId, pendingAlbums, toggleLike]
+	);
+
+	const openCommentModal = useCallback((e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
+		setIsCommentModalOpen(true);
+	}, []);
 
-		// Don't allow another click if this album is already being processed
-		if (pendingAlbums.has(albumId)) return;
-
-		await toggleLike(albumId);
-	};
+	const closeCommentModal = useCallback(() => {
+		setIsCommentModalOpen(false);
+	}, []);
 
 	const isLiked = likeStatuses[albumId]?.liked || false;
 	const isPending = pendingAlbums.has(albumId);
-
 	return (
 		<div
 			className='relative w-full rounded-lg overflow-hidden'
-			style={{ aspectRatio: '2/3' }}
+			style={{ aspectRatio: '2/3', backgroundColor: 'rgba(0,0,0,0.1)' }}
 		>
 			<Link
 				href={`/album/${albumId}`}
 				className='relative w-full h-full block'
 			>
 				{' '}
-				<div className='relative w-full h-full'>
+				<div className='relative w-full h-full overflow-hidden'>
 					{' '}
-					<Image
+					<OptimizedImage
 						src={displayImageUrl}
 						alt={`${albumName} album cover`}
-						fill
+						width={400}
+						height={600}
 						sizes='(max-width: 768px) 100vw, 33vw'
-						className='object-cover'
+						className='object-cover w-full h-full'
+						fallbackSrc='/images/albums/default.svg'
 						priority
+						objectFit='cover'
 					/>{' '}
 					<div className='absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.5)] via-transparent to-[rgba(0,0,0,0.3)]' />
 					{/* User profile image in top right */}
@@ -156,16 +170,17 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ albumId, albumImage, albumName, u
 					</div>
 				</div>
 			</Link>
-
 			{isCommentModalOpen && (
 				<CommentModal
 					albumId={albumId}
 					isOpen={isCommentModalOpen}
 					onClose={() => setIsCommentModalOpen(false)}
 				/>
-			)}
+			)}{' '}
 		</div>
 	);
-};
+});
+
+AlbumCard.displayName = 'AlbumCard';
 
 export default AlbumCard;

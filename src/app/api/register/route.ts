@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 import { z } from 'zod';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 // Validation schema for registration
 const registrationSchema = z
@@ -58,10 +59,17 @@ export async function POST(req: Request) {
 		}
 
 		const validatedData = validationResult.data;
+		// Check if email or username already exists in a single transaction
+		const [existingEmail, existingUsername] = await PrismaUtils.transaction(async (tx) => {
+			const emailQuery = tx.user.findUnique({
+				where: { email: validatedData.email },
+			});
 
-		// Check if email already exists
-		const existingEmail = await prisma.user.findUnique({
-			where: { email: validatedData.email },
+			const usernameQuery = tx.user.findUnique({
+				where: { username: validatedData.username },
+			});
+
+			return Promise.all([emailQuery, usernameQuery]);
 		});
 
 		if (existingEmail) {
@@ -73,11 +81,6 @@ export async function POST(req: Request) {
 				{ status: 409 }
 			);
 		}
-
-		// Check if username already exists
-		const existingUsername = await prisma.user.findUnique({
-			where: { username: validatedData.username },
-		});
 
 		if (existingUsername) {
 			return NextResponse.json(

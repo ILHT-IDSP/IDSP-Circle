@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
 	try {
@@ -33,69 +34,78 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 				requestSent: !!existingRequest,
 			});
 		}
+		// OPTIMIZATION: Use transaction to batch circle validation and permission checks
+		const result = await PrismaUtils.transaction(async (tx) => {
+			// Check permissions - only circle creator, moderators, and admins can see join requests
+			const circle = await tx.circle.findUnique({
+				where: { id: circleId },
+				select: {
+					creatorId: true,
+					isPrivate: true,
+				},
+			});
 
-		// Check permissions - only circle creator, moderators, and admins can see join requests
-		const circle = await prisma.circle.findUnique({
-			where: { id: circleId },
-			select: {
-				creatorId: true,
-				isPrivate: true,
-			},
-		});
+			if (!circle) {
+				return { error: 'Circle not found', status: 404 };
+			}
 
-		if (!circle) {
-			return NextResponse.json({ error: 'Circle not found' }, { status: 404 });
-		}
+			if (!circle.isPrivate) {
+				return { error: 'Circle is not private', status: 400 };
+			}
 
-		if (!circle.isPrivate) {
-			return NextResponse.json({ error: 'Circle is not private' }, { status: 400 });
-		}
-
-		// Check if user has permission to see join requests
-		const membership =
-			circle.creatorId === userId
-				? { role: 'ADMIN' }
-				: await prisma.membership.findUnique({
-						where: {
-							userId_circleId: {
-								userId,
-								circleId,
+			// Check if user has permission to see join requests
+			const membership =
+				circle.creatorId === userId
+					? { role: 'ADMIN' }
+					: await tx.membership.findUnique({
+							where: {
+								userId_circleId: {
+									userId,
+									circleId,
+								},
 							},
-						},
-						select: { role: true },
-				  });
+							select: { role: true },
+					  });
 
-		if (!membership || (membership.role !== 'ADMIN' && membership.role !== 'MODERATOR')) {
-			return NextResponse.json({ error: 'Access denied' }, { status: 403 });
-		} // Get all join requests for the circle
-		const joinRequests = await prisma.activity.findMany({
-			where: {
-				type: 'circle_join_request',
-				circleId,
-			},
-			orderBy: { createdAt: 'desc' },
-			include: {
-				user: {
-					select: {
-						id: true,
-						username: true,
-						name: true,
-						profileImage: true,
+			if (!membership || (membership.role !== 'ADMIN' && membership.role !== 'MODERATOR')) {
+				return { error: 'Access denied', status: 403 };
+			}
+
+			// Get all join requests for the circle with requester data in single query
+			const joinRequests = await tx.activity.findMany({
+				where: {
+					type: 'circle_join_request',
+					circleId,
+				},
+				orderBy: { createdAt: 'desc' },
+				include: {
+					user: {
+						select: {
+							id: true,
+							username: true,
+							name: true,
+							profileImage: true,
+						},
+					},
+					requester: {
+						select: {
+							id: true,
+							username: true,
+							name: true,
+							profileImage: true,
+						},
 					},
 				},
-				requester: {
-					select: {
-						id: true,
-						username: true,
-						name: true,
-						profileImage: true,
-					},
-				},
-			},
+			});
+
+			return { joinRequests };
 		});
 
+		if ('error' in result) {
+			return NextResponse.json({ error: result.error }, { status: result.status });
+		}
 		// Format the requests for display
-		const processedRequests = joinRequests.map(request => {
+		const processedRequests = result.joinRequests.map(request => {
 			return {
 				id: request.id,
 				content: request.content,

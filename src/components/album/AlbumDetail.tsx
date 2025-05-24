@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart, FaRegHeart, FaComment, FaPlus, FaPencilAlt } from 'react-icons/fa';
 import { Session } from '@auth/core/types';
 import CommentModal from './CommentModal';
 import CroppablePhotoUpload from './CroppablePhotoUpload';
 import PhotoBatchUpload from './PhotoBatchUpload';
+import OptimizedImage from '../common/OptimizedImage';
 import EditAlbumModal from './EditAlbumModal';
 import { useAlbumLikes, AlbumLikesProvider } from './AlbumLikesContext';
 import { toast } from 'react-hot-toast';
@@ -212,12 +212,13 @@ const AlbumDetailContent: React.FC<AlbumDetailProps> = ({ album, isLiked: initia
 									className='flex items-center gap-3 hover:opacity-80 transition-opacity'
 								>
 									{' '}
-									<Image
+									<OptimizedImage
 										src={album.creator.profileImage || '/images/default-avatar.png'}
 										alt={album.creator.username}
 										width={48}
 										height={48}
 										className='rounded-full aspect-square object-cover'
+										fallbackSrc='/images/default-avatar.png'
 									/>
 									<div>
 										<span className='text-xs opacity-60'>Created by</span>
@@ -229,17 +230,19 @@ const AlbumDetailContent: React.FC<AlbumDetailProps> = ({ album, isLiked: initia
 
 						{album.Circle && (
 							<div className='flex items-center'>
+								{' '}
 								<Link
 									href={`/circle/${album.Circle.id}`}
 									className='flex items-center gap-3 hover:opacity-80 transition-opacity'
 								>
 									{' '}
-									<Image
+									<OptimizedImage
 										src={album.Circle.avatar || '/images/circles/default.svg'}
 										alt={album.Circle.name}
 										width={48}
 										height={48}
 										className='rounded-full object-cover border border-[var(--primary)] border-opacity-30'
+										fallbackSrc='/images/circles/default.svg'
 									/>
 									<div>
 										<span className='text-xs opacity-60'>Circle</span>
@@ -263,14 +266,14 @@ const AlbumDetailContent: React.FC<AlbumDetailProps> = ({ album, isLiked: initia
 						>
 							{' '}
 							<div className='flex justify-center'>
-								<Image
+								<OptimizedImage
 									src={photo.url}
 									alt={photo.description || `Photo ${photo.id}`}
 									width={800}
 									height={800}
-									className='w-full h-auto'
-									style={{ display: 'block' }}
+									className='w-full h-auto block'
 									sizes='(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw'
+									fallbackSrc='/images/albums/default.svg'
 								/>
 							</div>
 						</div>

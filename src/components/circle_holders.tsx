@@ -1,4 +1,5 @@
-import Image from 'next/image';import Link from 'next/link';
+import OptimizedImage from './common/OptimizedImage';
+import Link from 'next/link';
 
 interface CircleHolderProps {
 	imageSrc: string;
@@ -24,7 +25,7 @@ const CircleHolder: React.FC<CircleHolderProps> = ({ imageSrc, name, altText, ci
 						href={link}
 						className='w-full h-full block'
 					>
-						<Image
+						<OptimizedImage
 							src={imageSrc}
 							alt={altText || `${name}'s profile picture`}
 							width={baseSize}
@@ -32,11 +33,12 @@ const CircleHolder: React.FC<CircleHolderProps> = ({ imageSrc, name, altText, ci
 							quality={90}
 							className='object-cover w-full h-full '
 							sizes={`${baseSize}px`}
+							fallbackSrc='/images/default-avatar.png'
 							priority
 						/>
 					</Link>
 				) : (
-					<Image
+					<OptimizedImage
 						src={imageSrc}
 						alt={altText || `${name}'s profile picture`}
 						width={baseSize}
@@ -44,6 +46,7 @@ const CircleHolder: React.FC<CircleHolderProps> = ({ imageSrc, name, altText, ci
 						quality={90}
 						className='object-cover w-full h-full'
 						sizes={`${baseSize}px`}
+						fallbackSrc='/images/default-avatar.png'
 						priority
 					/>
 				)}

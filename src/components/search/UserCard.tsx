@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { toast } from 'react-hot-toast';
+import OptimizedImage from '@/components/common/OptimizedImage';
 
 interface User {
 	id: number;
@@ -13,7 +13,7 @@ interface User {
 	isFollowing?: boolean;
 }
 
-export default function UserCard({ user }: { user: User }) {
+const UserCard = memo(function UserCard({ user }: { user: User }) {
 	const [isFollowing, setIsFollowing] = useState(user.isFollowing || false);
 	const [isProcessing, setIsProcessing] = useState(false);
 
@@ -21,7 +21,8 @@ export default function UserCard({ user }: { user: User }) {
 	useEffect(() => {
 		setIsFollowing(user.isFollowing || false);
 	}, [user.isFollowing]);
-	const handleFollowToggle = async (e: React.MouseEvent) => {
+
+	const handleFollowToggle = useCallback(async (e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -70,12 +71,11 @@ export default function UserCard({ user }: { user: User }) {
 			console.error(`Error ${action}ing user:`, error);
 
 			// Revert optimistic update
-			setIsFollowing(isFollowing);
-			toast.error(`Failed to ${action} user`, { id: toastId });
-		} finally {
+			setIsFollowing(isFollowing);			toast.error(`Failed to ${action} user`, { id: toastId });		} finally {
 			setIsProcessing(false);
 		}
-	};
+	}, [isFollowing, isProcessing, user.id, user.username]);
+
 	return (
 		<div className='flex items-center justify-between bg-[var(--background-secondary)] px-4 py-3 rounded-lg hover:bg-[var(--background-secondary)]/80 transition-colors'>
 			<Link
@@ -83,23 +83,21 @@ export default function UserCard({ user }: { user: User }) {
 				className='flex items-center flex-grow'
 			>
 				<div className='flex-shrink-0 w-12 h-12 rounded-full overflow-hidden mr-4'>
-					{user.profileImage ? (
-						<Image
-							src={user.profileImage}
-							alt={user.username}
-							width={48}
-							height={48}
-							className='w-full h-full object-cover'
-						/>
-					) : (
-						<div className='bg-gray-300 w-full h-full'></div>
-					)}
+					<OptimizedImage
+						src={user.profileImage || '/images/default-avatar.png'}
+						alt={user.username}
+						width={48}
+						height={48}
+						className='w-full h-full'
+						objectFit='cover'
+					/>
 				</div>
 				<div>
 					<p className='text-[var(--foreground)] font-semibold'>{user.name || user.username}</p>
 					<p className='text-[var(--foreground-secondary)] text-sm'>@{user.username}</p>
 				</div>
-			</Link>			<button
+			</Link>
+			<button
 				onClick={handleFollowToggle}
 				disabled={isProcessing}
 				className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
@@ -121,4 +119,6 @@ export default function UserCard({ user }: { user: User }) {
 			</button>
 		</div>
 	);
-}
+});
+
+export default UserCard;

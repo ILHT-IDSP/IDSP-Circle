@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: Request) {
 	try {
@@ -11,45 +12,48 @@ export async function GET(request: Request) {
 		}
 
 		const userId = parseInt(session.user.id, 10);
-
-		// Get circles where the user is either a creator or a member
-		const ownedCircles = await prisma.circle.findMany({
-			where: {
-				creatorId: userId,
-			},
-			select: {
-				id: true,
-				name: true,
-				avatar: true,
-				isPrivate: true,
-				_count: {
-					select: {
-						members: true,
-					},
+		// Get circles where the user is either a creator or a member in a single transaction
+		const [ownedCircles, memberCircles] = await PrismaUtils.transaction(async (tx) => {
+			const ownedQuery = tx.circle.findMany({
+				where: {
+					creatorId: userId,
 				},
-			},
-		});
-		const memberCircles = await prisma.membership.findMany({
-			where: {
-				userId,
-				// Include all roles, not just admin and moderator
-			},
-			select: {
-				circle: {
-					select: {
-						id: true,
-						name: true,
-						avatar: true,
-						isPrivate: true,
-						_count: {
-							select: {
-								members: true,
-							},
+				select: {
+					id: true,
+					name: true,
+					avatar: true,
+					isPrivate: true,
+					_count: {
+						select: {
+							members: true,
 						},
 					},
 				},
-				role: true,
-			},
+			});
+
+			const memberQuery = tx.membership.findMany({
+				where: {
+					userId,
+				},
+				select: {
+					circle: {
+						select: {
+							id: true,
+							name: true,
+							avatar: true,
+							isPrivate: true,
+							_count: {
+								select: {
+									members: true,
+								},
+							},
+						},
+					},
+					role: true,
+				},
+			});
+
+			return Promise.all([ownedQuery, memberQuery]);
 		});
 
 		const circlesWithPermission = [

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: Request, { params }) {
 	try {
@@ -12,15 +13,27 @@ export async function GET(request: Request, { params }) {
 		if (isNaN(circleId)) {
 			return NextResponse.json({ error: 'Invalid circle ID' }, { status: 400 });
 		}
-
-		// Get circle details with member count
-		const circle = await prisma.circle.findUnique({
-			where: { id: circleId },
-			include: {
-				_count: {
-					select: { members: true },
+		// Get circle details and membership in a single transaction
+		const [circle, membership] = await PrismaUtils.transaction(async (tx) => {
+			const circleQuery = tx.circle.findUnique({
+				where: { id: circleId },
+				include: {
+					_count: {
+						select: { members: true },
+					},
 				},
-			},
+			});
+
+			const membershipQuery = userId ? tx.membership.findUnique({
+				where: {
+					userId_circleId: {
+						userId,
+						circleId,
+					},
+				},
+			}) : Promise.resolve(null);
+
+			return Promise.all([circleQuery, membershipQuery]);
 		});
 
 		if (!circle) {
@@ -28,28 +41,8 @@ export async function GET(request: Request, { params }) {
 		}
 
 		// Check if the current user is a member or creator of the circle
-		let isMember = false;
-		let isCreator = false;
-
-		if (userId) {
-			// Check if user is circle creator
-			isCreator = circle.creatorId === userId;
-
-			// Check if user is a member
-			if (!isCreator) {
-				const membership = await prisma.membership.findUnique({
-					where: {
-						userId_circleId: {
-							userId,
-							circleId,
-						},
-					},
-				});
-				isMember = !!membership;
-			} else {
-				isMember = true; // Creator is automatically a member
-			}
-		}
+		const isCreator = userId ? circle.creatorId === userId : false;
+		const isMember = isCreator || !!membership;
 
 		// Format the response
 		return NextResponse.json({
