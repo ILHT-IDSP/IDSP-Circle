@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(req: NextRequest) {
 	try {
@@ -10,87 +11,94 @@ export async function GET(req: NextRequest) {
 		}
 		const userId = parseInt(session.user.id);
 
-		// Get activities where the logged-in user is the target/recipient, not the actor
-		const activities = await prisma.activity.findMany({
-			where: {
-				userId: userId,
-				type: {
-					notIn: ['friend_request', 'circle_invite'], // Exclude pending requests
-				},
-				// Exclude self-initiated activities by checking if the content
-				// doesn't mention the user themselves joining or creating something
-				AND: [
-					{
-						NOT: {
-							content: {
-								contains: `${session.user.name || session.user.username} joined`,
+		// OPTIMIZATION: Use transaction to batch all queries
+		const result = await PrismaUtils.transaction(async tx => {
+			// OPTIMIZATION: Batch all activity-related queries
+			const [activities, friendRequestsCount, circleInvitesCount] = await Promise.all([
+				// Get activities where the logged-in user is the target/recipient, not the actor
+				tx.activity.findMany({
+					where: {
+						userId: userId,
+						type: {
+							notIn: ['friend_request', 'circle_invite'], // Exclude pending requests
+						},
+						// Exclude self-initiated activities by checking if the content
+						// doesn't mention the user themselves joining or creating something
+						AND: [
+							{
+								NOT: {
+									content: {
+										contains: `${session.user.name || session.user.username} joined`,
+									},
+								},
+							},
+							{
+								NOT: {
+									content: {
+										contains: `${session.user.name || session.user.username} created`,
+									},
+								},
+							},
+							{
+								NOT: {
+									content: {
+										contains: `${session.user.name || session.user.username} added`,
+									},
+								},
+							},
+						],
+					},
+					orderBy: { createdAt: 'desc' },
+					// OPTIMIZATION: Limit results for better performance
+					take: 50,
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								username: true,
+							},
+						},
+						circle: {
+							select: {
+								id: true,
+								name: true,
+							},
+						},
+						requester: {
+							select: {
+								id: true,
+								username: true,
+								name: true,
+								profileImage: true,
 							},
 						},
 					},
-					{
-						NOT: {
-							content: {
-								contains: `${session.user.name || session.user.username} created`,
-							},
-						},
+				}),
+				// Check if user has pending friend requests
+				tx.activity.count({
+					where: {
+						userId: userId,
+						type: 'friend_request',
 					},
-					{
-						NOT: {
-							content: {
-								contains: `${session.user.name || session.user.username} added`,
-							},
-						},
+				}),
+				// Check if user has pending circle invites
+				tx.activity.count({
+					where: {
+						userId: userId,
+						type: 'circle_invite',
 					},
-				],
-			},
-			orderBy: { createdAt: 'desc' },
-			include: {
-				user: {
-					select: {
-						id: true,
-						name: true,
-						username: true,
-					},
-				},
-				circle: {
-					select: {
-						id: true,
-						name: true,
-					},
-				},
-				requester: {
-					select: {
-						id: true,
-						username: true,
-						name: true,
-						profileImage: true,
-					},
-				},
-			},
-		});
+				}),
+			]);
 
-		// Check if user has pending friend requests
-		const friendRequestsCount = await prisma.activity.count({
-			where: {
-				userId: userId,
-				type: 'friend_request',
-			},
+			return { activities, friendRequestsCount, circleInvitesCount };
 		});
-
-		// Check if user has pending circle invites
-		const circleInvitesCount = await prisma.activity.count({
-			where: {
-				userId: userId,
-				type: 'circle_invite',
-			},
-		});
-
 		return NextResponse.json({
-			activities,
-			hasFollowRequests: friendRequestsCount > 0,
-			hasCircleInvites: circleInvitesCount > 0,
-			followRequestsCount: friendRequestsCount,
-			circleInvitesCount: circleInvitesCount,
+			activities: result.activities,
+			hasFollowRequests: result.friendRequestsCount > 0,
+			hasCircleInvites: result.circleInvitesCount > 0,
+			followRequestsCount: result.friendRequestsCount,
+			circleInvitesCount: result.circleInvitesCount,
 		});
 	} catch (error) {
 		console.error('Error fetching activities:', error);

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 // function to get the logged in users friends for creating a circle
 export async function POST(req: Request) {
@@ -22,71 +23,77 @@ export async function POST(req: Request) {
 				return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
 			}
 			userId = parseInt(session.user.id as string);
-		}
-
-		// Get the user's followers
-		const userFriends = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-			select: {
-				followers: true,
-			},
-		});
-
-		// Extract follower IDs
-		const followerIds =
-			userFriends?.followers?.map(friend => {
-				return friend.followerId;
-			}) || [];
-		// Get the user details of all followers
-		const friends = await prisma.user.findMany({
-			where: {
-				id: {
-					in: followerIds,
-				},
-			},
-			select: {
-				id: true,
-				username: true,
-				name: true,
-				profileImage: true,
-				isProfilePrivate: true,
-			},
-		});
-		// If circleId is provided, we need to:
-		// 1. Get the current members of the circle to exclude them
-		// 2. Check for existing invitations to mark those users as already invited
-		let membersToExclude: number[] = [];
-		let invitedUsers: number[] = [];
-
-		if (circleId) {
-			// Get the current members of the circle
-			const members = await prisma.membership.findMany({
-				where: { circleId },
-				select: { userId: true }
-			});
-			membersToExclude = members.map(member => member.userId);
-
-			// Get users who already have pending invitations
-			const invites = await prisma.activity.findMany({
-				where: {
-					type: 'circle_invite',
-					circleId,
-				},
+		} // OPTIMIZATION: Use transaction to batch all queries
+		const result = await PrismaUtils.transaction(async tx => {
+			// Get the user's followers
+			const userFriends = await tx.user.findUnique({
+				where: { id: userId },
 				select: {
-					userId: true,
-				}
+					followers: {
+						select: { followerId: true },
+					},
+				},
 			});
-			invitedUsers = invites.map(invite => invite.userId);
-		}
+
+			// Extract follower IDs
+			const followerIds = userFriends?.followers?.map(friend => friend.followerId) || [];
+
+			if (followerIds.length === 0) {
+				return { friends: [], membersToExclude: [], invitedUsers: [] };
+			}
+
+			// OPTIMIZATION: Batch all remaining queries
+			const queries = [
+				// Get the user details of all followers
+				tx.user.findMany({
+					where: { id: { in: followerIds } },
+					select: {
+						id: true,
+						username: true,
+						name: true,
+						profileImage: true,
+						isProfilePrivate: true,
+					},
+				}),
+			];
+
+			// If circleId is provided, add circle-specific queries
+			if (circleId) {
+				queries.push(
+					// Get current members of the circle
+					tx.membership.findMany({
+						where: { circleId },
+						select: { userId: true },
+					}),
+					// Get users with pending invitations
+					tx.activity.findMany({
+						where: {
+							type: 'circle_invite',
+							circleId,
+						},
+						select: { userId: true },
+					})
+				);
+			}
+
+			const results = await Promise.all(queries);
+			const friends = results[0];
+			const members = circleId ? results[1] : [];
+			const invites = circleId ? results[2] : [];
+
+			return {
+				friends,
+				membersToExclude: members.map((member: any) => member.userId),
+				invitedUsers: invites.map((invite: any) => invite.userId),
+			};
+		});
 
 		// Filter out members and mark invited users
-		const friendsWithStatus = friends
-			.filter(friend => !membersToExclude.includes(friend.id))
+		const friendsWithStatus = result.friends
+			.filter(friend => !result.membersToExclude.includes(friend.id))
 			.map(friend => ({
 				...friend,
-				isInvited: invitedUsers.includes(friend.id)
+				isInvited: result.invitedUsers.includes(friend.id),
 			}));
 
 		return NextResponse.json(

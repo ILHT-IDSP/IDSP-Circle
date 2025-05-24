@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: NextRequest) {
 	try {
@@ -15,83 +16,71 @@ export async function GET(request: NextRequest) {
 		const searchParams = request.nextUrl.searchParams;
 		const term = searchParams.get('term');
 
-		if (!term || term.trim().length < 2) {
-			// Return top users instead of empty array when no search term
-			const topUsers = await prisma.user.findMany({
-				where: {
-					NOT: {
-						id: currentUserId, // Exclude the current user
+		// OPTIMIZATION: Use transaction to batch user search and follow status queries
+		const result = await PrismaUtils.transaction(async tx => {
+			let userQuery;
+
+			if (!term || term.trim().length < 2) {
+				// Return top users when no search term
+				userQuery = tx.user.findMany({
+					where: {
+						NOT: {
+							id: currentUserId, // Exclude the current user
+						},
 					},
-				},
-				select: {
-					id: true,
-					username: true,
-					name: true,
-					profileImage: true,
-					isProfilePrivate: true,
-				},
-				orderBy: {
-					createdAt: 'desc', // Newest users first
-				},
-				take: 20, // Limit results
-			});
+					select: {
+						id: true,
+						username: true,
+						name: true,
+						profileImage: true,
+						isProfilePrivate: true,
+					},
+					orderBy: {
+						createdAt: 'desc', // Newest users first
+					},
+					take: 20, // Limit results
+				});
+			} else {
+				// Search users by username or name
+				userQuery = tx.user.findMany({
+					where: {
+						OR: [{ username: { contains: term, mode: 'insensitive' } }, { name: { contains: term, mode: 'insensitive' } }],
+						NOT: {
+							id: currentUserId, // Exclude the current user
+						},
+					},
+					select: {
+						id: true,
+						username: true,
+						name: true,
+						profileImage: true,
+						isProfilePrivate: true,
+					},
+					take: 20, // Limit results
+				});
+			}
 
-			// Get all users the current user is following
-			const followings = await prisma.follow.findMany({
-				where: {
-					followerId: currentUserId,
-				},
-				select: {
-					followingId: true,
-				},
-			});
+			// OPTIMIZATION: Batch user search and follow status queries
+			const [users, followings] = await Promise.all([
+				userQuery,
+				// Get all users the current user is following
+				tx.follow.findMany({
+					where: {
+						followerId: currentUserId,
+					},
+					select: {
+						followingId: true,
+					},
+				}),
+			]);
 
-			const followingIds = followings.map(follow => follow.followingId);
-
-			return NextResponse.json({
-				users: topUsers.map(user => ({
-					id: user.id,
-					username: user.username,
-					name: user.name,
-					profileImage: user.profileImage,
-					isPrivate: user.isProfilePrivate,
-					isFollowing: followingIds.includes(user.id), // Add follow status
-				})),
-			});
-		}
-
-		// Search users by username or name
-		const users = await prisma.user.findMany({
-			where: {
-				OR: [{ username: { contains: term, mode: 'insensitive' } }, { name: { contains: term, mode: 'insensitive' } }],
-				NOT: {
-					id: currentUserId, // Exclude the current user
-				},
-			},
-			select: {
-				id: true,
-				username: true,
-				name: true,
-				profileImage: true,
-				isProfilePrivate: true,
-			},
-			take: 20, // Increased limit
+			return { users, followings };
 		});
 
-		// Get all users the current user is following
-		const followings = await prisma.follow.findMany({
-			where: {
-				followerId: currentUserId,
-			},
-			select: {
-				followingId: true,
-			},
-		});
-
-		const followingIds = followings.map(follow => follow.followingId);
+		const followingIds = result.followings.map(follow => follow.followingId);
 
 		return NextResponse.json({
-			users: users.map(user => ({
+			users: result.users.map(user => ({
 				id: user.id,
 				username: user.username,
 				name: user.name,

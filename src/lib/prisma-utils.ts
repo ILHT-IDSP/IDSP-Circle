@@ -27,7 +27,7 @@ export class PrismaUtils {
 
 	/**
 	 * Create a dataloader-like function for batching similar queries
-	 */	static createBatchLoader<T extends number, R>(loadFn: (ids: T[]) => Promise<R[]>, keyExtractor: (item: R) => T | null) {
+	 */ static createBatchLoader<T extends number, R>(loadFn: (ids: T[]) => Promise<R[]>, keyExtractor: (item: R) => T | null) {
 		return async (ids: T[]): Promise<Map<T, R>> => {
 			if (ids.length === 0) return new Map();
 
@@ -47,14 +47,14 @@ export class PrismaUtils {
 	/**
 	 * Execute queries in transaction for better performance
 	 * Use this when you need to make multiple related database operations
-	 */	static async transaction<T>(fn: (tx: any) => Promise<T>): Promise<T> {
+	 */ static async transaction<T>(fn: (tx: any) => Promise<T>): Promise<T> {
 		return prisma.$transaction(fn) as Promise<T>;
 	}
 
 	/**
 	 * Pagination utility that uses cursor-based pagination for better performance
 	 * with large datasets compared to offset-based pagination
-	 */	static async paginateCursor<T, C extends keyof any>(
+	 */ static async paginateCursor<T, C extends keyof any>(
 		model: any,
 		{
 			take = 10,
@@ -72,13 +72,13 @@ export class PrismaUtils {
 			include?: any;
 		}
 	): Promise<{ items: T[]; nextCursor: any | null }> {
-		const items = await model.findMany({
+		const items = (await model.findMany({
 			take: take + 1, // take one extra to check if there are more
 			cursor: cursor ? { [cursorField]: cursor } : undefined,
 			where,
 			orderBy,
 			include,
-		}) as any[];
+		})) as any[];
 
 		const hasMore = items.length > take;
 		const data = hasMore ? items.slice(0, take) : items;
@@ -88,6 +88,110 @@ export class PrismaUtils {
 			items: data as T[],
 			nextCursor,
 		};
+	}
+}
+
+/**
+ * Performance-optimized query utilities for common operations
+ */
+export class QueryOptimizer {
+	/**
+	 * Batch load user follow status for multiple users
+	 * Prevents N+1 queries when checking follow status for many users
+	 */
+	static async batchLoadFollowStatus(currentUserId: number, targetUserIds: number[]): Promise<Map<number, boolean>> {
+		if (targetUserIds.length === 0) return new Map();
+
+		const follows = await prisma.follow.findMany({
+			where: {
+				followerId: currentUserId,
+				followingId: { in: targetUserIds },
+			},
+			select: { followingId: true },
+		});
+
+		const followMap = new Map<number, boolean>();
+		targetUserIds.forEach(id => followMap.set(id, false));
+		follows.forEach(follow => followMap.set(follow.followingId, true));
+
+		return followMap;
+	}
+
+	/**
+	 * Batch load circle membership status for a user across multiple circles
+	 */
+	static async batchLoadCircleMembership(userId: number, circleIds: number[]): Promise<Map<number, { isMember: boolean; role: string | null }>> {
+		if (circleIds.length === 0) return new Map();
+
+		const memberships = await prisma.membership.findMany({
+			where: {
+				userId,
+				circleId: { in: circleIds },
+			},
+			select: { circleId: true, role: true },
+		});
+
+		const membershipMap = new Map<number, { isMember: boolean; role: string | null }>();
+		circleIds.forEach(id => membershipMap.set(id, { isMember: false, role: null }));
+		memberships.forEach(membership => membershipMap.set(membership.circleId, { isMember: true, role: membership.role }));
+
+		return membershipMap;
+	}
+
+	/**
+	 * Batch load like status for albums
+	 */
+	static async batchLoadAlbumLikes(userId: number, albumIds: number[]): Promise<Map<number, { isLiked: boolean; likeCount: number }>> {
+		if (albumIds.length === 0) return new Map();
+
+		const [userLikes, likeCounts] = await Promise.all([
+			prisma.albumLike.findMany({
+				where: {
+					userId,
+					albumId: { in: albumIds },
+				},
+				select: { albumId: true },
+			}),
+			prisma.album.findMany({
+				where: { id: { in: albumIds } },
+				select: {
+					id: true,
+					_count: { select: { AlbumLike: true } },
+				},
+			}),
+		]);
+
+		const resultMap = new Map<number, { isLiked: boolean; likeCount: number }>();
+		const likedAlbumIds = new Set(userLikes.map(like => like.albumId));
+
+		likeCounts.forEach(album => {
+			resultMap.set(album.id, {
+				isLiked: likedAlbumIds.has(album.id),
+				likeCount: album._count.AlbumLike,
+			});
+		});
+
+		return resultMap;
+	}
+
+	/**
+	 * Efficiently get user's accessible circles (created + member)
+	 */
+	static async getUserAccessibleCircles(userId: number): Promise<number[]> {
+		const [createdCircles, memberCircles] = await Promise.all([
+			prisma.circle.findMany({
+				where: { creatorId: userId },
+				select: { id: true },
+			}),
+			prisma.membership.findMany({
+				where: { userId },
+				select: { circleId: true },
+			}),
+		]);
+
+		const accessibleIds = new Set([...createdCircles.map(c => c.id), ...memberCircles.map(m => m.circleId)]);
+
+		return Array.from(accessibleIds);
 	}
 }
 

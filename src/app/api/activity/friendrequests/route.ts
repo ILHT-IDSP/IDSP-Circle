@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(req: NextRequest) {
 	try {
@@ -9,62 +10,81 @@ export async function GET(req: NextRequest) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
 
-		// Get all friend requests for the current user
-		const friendRequests = await prisma.activity.findMany({
-			where: {
-				type: 'friend_request',
-				userId: parseInt(session.user.id),
-			},
-			orderBy: { createdAt: 'desc' },
-			select: {
-				id: true,
-				content: true,
-				createdAt: true,
-				user: {
-					select: {
-						id: true,
-						name: true,
-						username: true,
-						profileImage: true,
-					},
+		// OPTIMIZATION: Use transaction to batch all queries and eliminate N+1 pattern
+		const result = await PrismaUtils.transaction(async tx => {
+			// Get all friend requests for the current user
+			const friendRequests = await tx.activity.findMany({
+				where: {
+					type: 'friend_request',
+					userId: parseInt(session.user.id),
 				},
-			},
-		});
-
-		// Process the friend requests to include the requester information
-		const processedRequests = await Promise.all(
-			friendRequests.map(async (request) => {				// Extract the user ID from the content field
-				// Format is "user:123 wants to follow you"
-				const content = request.content || '';
-				const match = content.match(/user:(\d+)/);
-				const requesterId = match ? parseInt(match[1]) : null;
-
-				if (requesterId) {
-					// Get the requester's information
-					const requester = await prisma.user.findUnique({
-						where: { id: requesterId },
+				orderBy: { createdAt: 'desc' },
+				select: {
+					id: true,
+					content: true,
+					createdAt: true,
+					user: {
 						select: {
 							id: true,
 							name: true,
 							username: true,
 							profileImage: true,
 						},
-					});
+					},
+				},
+			});
 
-					if (requester) {
-						return {
-							...request,
-							requester
-						};
-					}
+			// Extract all unique requester IDs from content
+			const requesterIds = new Set<number>();
+			friendRequests.forEach(request => {
+				// Format is "user:123 wants to follow you"
+				const content = request.content || '';
+				const match = content.match(/user:(\d+)/);
+				const requesterId = match ? parseInt(match[1]) : null;
+				if (requesterId) {
+					requesterIds.add(requesterId);
+				}
+			});
+
+			// OPTIMIZATION: Batch fetch all requesters in single query
+			const requesters =
+				requesterIds.size > 0
+					? await tx.user.findMany({
+							where: {
+								id: { in: Array.from(requesterIds) },
+							},
+							select: {
+								id: true,
+								name: true,
+								username: true,
+								profileImage: true,
+							},
+					  })
+					: [];
+
+			// Create a map for O(1) lookup
+			const requesterMap = new Map(requesters.map(user => [user.id, user]));
+
+			// Process requests with requester data
+			const processedRequests = friendRequests.map(request => {
+				const content = request.content || '';
+				const match = content.match(/user:(\d+)/);
+				const requesterId = match ? parseInt(match[1]) : null;
+
+				if (requesterId && requesterMap.has(requesterId)) {
+					return {
+						...request,
+						requester: requesterMap.get(requesterId),
+					};
 				}
 
-				// Fallback if we can't find the requester
 				return request;
-			})
-		);
+			});
 
-		return NextResponse.json(processedRequests);
+			return processedRequests;
+		});
+
+		return NextResponse.json(result);
 	} catch (error) {
 		console.error('Error fetching friend requests:', error);
 		return NextResponse.json({ error: 'Failed to fetch friend requests' }, { status: 500 });
@@ -94,7 +114,8 @@ export async function PATCH(req: NextRequest) {
 
 		if (!activity) {
 			return NextResponse.json({ error: 'Friend request not found' }, { status: 404 });
-		}		if (action === 'accept') {
+		}
+		if (action === 'accept') {
 			// Get the follow request activity
 			const friendRequest = await prisma.activity.findFirst({
 				where: {
@@ -119,7 +140,7 @@ export async function PATCH(req: NextRequest) {
 
 			if (!requesterId) {
 				return NextResponse.json({ error: 'Could not identify requester' }, { status: 400 });
-			}			// Get the requester's user details for the activity notification
+			} // Get the requester's user details for the activity notification
 			const requester = await prisma.user.findUnique({
 				where: { id: requesterId },
 				select: {
@@ -140,14 +161,14 @@ export async function PATCH(req: NextRequest) {
 				// Delete the friend request activity
 				prisma.activity.delete({
 					where: { id },
-				}),				// Create a new activity record showing the follow has been accepted
+				}), // Create a new activity record showing the follow has been accepted
 				prisma.activity.create({
 					data: {
 						type: 'followed',
 						userId: requesterId, // This activity is for the requester (they see that their request was accepted)
 						content: `${session.user.name || session.user.username} (${session.user.username}) accepted your follow request`,
 					},
-				}),				// Create a new activity record for the current user to see they've been followed
+				}), // Create a new activity record for the current user to see they've been followed
 				prisma.activity.create({
 					data: {
 						type: 'followed',
@@ -155,7 +176,7 @@ export async function PATCH(req: NextRequest) {
 						content: `${requesterName} (${requester.username}) started following you`,
 					},
 				}),
-				
+
 				// Create the follow relationship - requester follows the current user
 				// (The requester is the one who initiated the follow request)
 				prisma.follow.create({

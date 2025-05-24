@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
 	try {
@@ -10,87 +11,110 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 			return NextResponse.json({ error: 'Invalid album ID' }, { status: 400 });
 		}
 
-		// Check if the album exists
-		const album = await prisma.album.findUnique({
-			where: { id: albumId },
-			include: {
-				creator: {
-					select: {
-						id: true,
-						username: true,
-						name: true,
-						profileImage: true,
-					},
-				},
-				Circle: {
-					select: {
-						id: true,
-						name: true,
-						avatar: true,
-						isPrivate: true,
-					},
-				},
-				_count: {
-					select: {
-						Photo: true,
-						AlbumLike: true,
-						AlbumComment: true,
-					},
-				},
-			},
-		});
-
-		if (!album) {
-			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
-		}
-
-		// Check if the user has permission to view this album
+		// Get session data
 		const session = await auth();
 		const userId = session?.user ? parseInt(session.user.id) : null;
 
-		// If the album is private, check permissions
-		if (album.isPrivate) {
-			// For personal albums
-			const isCreator = album.creatorId === userId;
-
-			// For circle albums
-			let isCircleMember = false;
-			if (album.circleId && userId) {
-				// Check if user is a member of the circle
-				const membership = await prisma.membership.findUnique({
-					where: {
-						userId_circleId: {
-							userId: userId,
-							circleId: album.circleId,
+		// OPTIMIZATION: Use transaction to batch all queries
+		const result = await PrismaUtils.transaction(async tx => {
+			// Check if the album exists
+			const album = await tx.album.findUnique({
+				where: { id: albumId },
+				include: {
+					creator: {
+						select: {
+							id: true,
+							username: true,
+							name: true,
+							profileImage: true,
 						},
 					},
-				});
-				isCircleMember = !!membership;
+					Circle: {
+						select: {
+							id: true,
+							name: true,
+							avatar: true,
+							isPrivate: true,
+						},
+					},
+					_count: {
+						select: {
+							Photo: true,
+							AlbumLike: true,
+							AlbumComment: true,
+						},
+					},
+				},
+			});
+
+			if (!album) {
+				return null;
 			}
+
+			// Batch permission check and photo/like queries
+			const queries = [
+				// Get photos for this album
+				tx.photo.findMany({
+					where: { albumId: albumId },
+					orderBy: { createdAt: 'desc' },
+				}),
+			];
+
+			// Add permission queries if needed
+			if (album.isPrivate && album.circleId && userId) {
+				queries.push(
+					// Check if user is a member of the circle
+					tx.membership.findUnique({
+						where: {
+							userId_circleId: {
+								userId: userId,
+								circleId: album.circleId,
+							},
+						},
+					})
+				);
+			}
+
+			// Add like status query if user is logged in
+			if (userId) {
+				queries.push(
+					tx.albumLike.findUnique({
+						where: {
+							userId_albumId: {
+								userId: userId,
+								albumId: albumId,
+							},
+						},
+					})
+				);
+			}
+
+			const results = await Promise.all(queries);
+			const photos = results[0];
+			const membership = album.isPrivate && album.circleId && userId ? results[1] : null;
+			const like = userId ? results[results.length - 1] : null;
+
+			return { album, photos, membership, like };
+		});
+
+		if (!result) {
+			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
+		}
+
+		const { album, photos, membership, like } = result;
+
+		// Check if the user has permission to view this album
+		if (album.isPrivate) {
+			const isCreator = album.creatorId === userId;
+			const isCircleMember = album.circleId && membership;
 
 			if (!isCreator && !isCircleMember) {
 				return NextResponse.json({ error: 'You do not have permission to view this private album' }, { status: 403 });
 			}
 		}
 
-		// Get photos for this album
-		const photos = await prisma.photo.findMany({
-			where: { albumId: albumId },
-			orderBy: { createdAt: 'desc' },
-		});
-		// Get like status if user is logged in
-		let userLikeStatus: boolean | null = null;
-		if (userId) {
-			const like = await prisma.albumLike.findUnique({
-				where: {
-					userId_albumId: {
-						userId: userId,
-						albumId: albumId,
-					},
-				},
-			});
-			userLikeStatus = like ? true : false;
-		}
+		// Format like status
+		const userLikeStatus = userId ? (like ? true : false) : null;
 
 		return NextResponse.json({
 			album,
@@ -118,34 +142,43 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 		if (!session?.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
-
 		const userId = parseInt(session.user.id);
 
-		// Check if the album exists
-		const album = await prisma.album.findUnique({
-			where: { id: albumId },
+		// OPTIMIZATION: Use transaction to batch album check and permission validation
+		const albumResult = await PrismaUtils.transaction(async tx => {
+			// Check if the album exists
+			const album = await tx.album.findUnique({
+				where: { id: albumId },
+			});
+
+			if (!album) {
+				return null;
+			}
+
+			let membership = null;
+			// For circle albums, check membership
+			if (album.circleId) {
+				membership = await tx.membership.findUnique({
+					where: {
+						userId_circleId: {
+							userId: userId,
+							circleId: album.circleId,
+						},
+					},
+				});
+			}
+
+			return { album, membership };
 		});
 
-		if (!album) {
+		if (!albumResult) {
 			return NextResponse.json({ error: 'Album not found' }, { status: 404 });
 		}
 
-		const canAddToPersonalAlbum = album.creatorId === userId;
+		const { album, membership } = albumResult;
 
-		// For circle albums
-		let canAddToCircleAlbum = false;
-		if (album.circleId) {
-			// Check if user is a member of the circle
-			const membership = await prisma.membership.findUnique({
-				where: {
-					userId_circleId: {
-						userId: userId,
-						circleId: album.circleId,
-					},
-				},
-			});
-			canAddToCircleAlbum = !!membership;
-		}
+		const canAddToPersonalAlbum = album.creatorId === userId;
+		const canAddToCircleAlbum = album.circleId ? !!membership : false;
 
 		if (!canAddToPersonalAlbum && !canAddToCircleAlbum) {
 			return NextResponse.json({ error: 'You do not have permission to add photos to this album' }, { status: 403 });

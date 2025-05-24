@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
+import { PrismaUtils } from '@/lib/prisma-utils';
 
 // Define interfaces for better type checking
 interface Circle {
@@ -27,12 +28,23 @@ export async function GET(request: Request, { params }) {
 		// Get the username from params
 		const resolvedParams = await params;
 		const username = resolvedParams.username;
-		// Find the user
+
+		// OPTIMIZATION: Single query to get user data with counts
 		const user = await prisma.user.findUnique({
 			where: { username },
 			select: {
 				id: true,
-				isProfilePrivate: true,
+				username: true,
+				name: true,
+				profileImage: true,
+				isProfilePrivate: true, // OPTIMIZATION: Get counts efficiently without fetching all records
+				_count: {
+					select: {
+						Album: true,
+						createdCircles: true,
+						memberships: true,
+					},
+				},
 			},
 		});
 
@@ -40,153 +52,152 @@ export async function GET(request: Request, { params }) {
 			return NextResponse.json({ error: 'User not found' }, { status: 404 });
 		}
 
-		// Check if this is the user's own profile
 		const isOwnProfile = currentUserId === user.id;
 
-		// Check if the profile is private and the current user is not following them and not the owner
-		if (user.isProfilePrivate && currentUserId !== user.id) {
-			// Check if the current user is following this user
-			const isFollowing = currentUserId
-				? await prisma.follow.findFirst({
-						where: {
-							followerId: currentUserId,
-							followingId: user.id,
-						},
-				  })
-				: null;			// If not following and profile is private, return restricted data
-			if (!isFollowing) {
-				return NextResponse.json({
-					albums: [],
-					circles: [],
-					isPrivate: true,
-					isOwnProfile: currentUserId === user.id
-				});
-			}
+		// OPTIMIZATION: Check privacy and following status in single transaction
+		let hasAccess = isOwnProfile || !user.isProfilePrivate;
+
+		if (!hasAccess && currentUserId) {
+			const followRelation = await prisma.follow.findUnique({
+				where: {
+					followerId_followingId: {
+						followerId: currentUserId,
+						followingId: user.id,
+					},
+				},
+			});
+			hasAccess = !!followRelation;
 		}
-		
-		// Get current user's circle memberships to check private circle access
-		const userCircleMemberships = currentUserId ? await prisma.membership.findMany({
-			where: {
-				userId: currentUserId,
-			},
-			select: {
-				circleId: true,
-			},
-		}) : [];
-		
-		const userCircleIds = userCircleMemberships.map(m => m.circleId);
 
-		// Get user's albums with photo counts, filtering private circle albums
-		const albums = await prisma.album.findMany({
-			where: {
-				AND: [
-					{
-						creatorId: user.id,
+		if (!hasAccess) {
+			return NextResponse.json({
+				albums: [],
+				circles: [],
+				isPrivate: true,
+				isOwnProfile,
+			});
+		}
+
+		// OPTIMIZATION: Use transaction to batch all remaining queries
+		const result = await PrismaUtils.transaction(async tx => {
+			// Get user's accessible circle IDs in one query
+			const userCircleAccess = currentUserId
+				? await tx.membership.findMany({
+						where: { userId: currentUserId },
+						select: { circleId: true },
+				  })
+				: [];
+			const accessibleCircleIds = userCircleAccess.map(m => m.circleId);
+
+			// OPTIMIZATION: Single query for albums with proper filtering
+			const albums = await tx.album.findMany({
+				where: {
+					creatorId: user.id,
+					OR: [
+						{ isPrivate: false },
+						{ creatorId: currentUserId }, // User's own albums
+						{
+							// Private circle albums where current user has access
+							AND: [{ circleId: { not: null } }, { circleId: { in: accessibleCircleIds } }],
+						},
+					],
+				},
+				select: {
+					id: true,
+					title: true,
+					description: true,
+					coverImage: true,
+					isPrivate: true,
+					createdAt: true,
+					circleId: true,
+					// OPTIMIZATION: Get photo count without fetching all photos
+					_count: {
+						select: { Photo: true },
 					},
-					{
-						OR: [
-							{
-								// Personal albums (not in any circle)
-								circleId: null,
-							},
-							{
-								// Public circle albums
-								Circle: {
-									isPrivate: false,
-								},
-							},
-							{
-								// User viewing their own profile can see all their albums
-								creatorId: currentUserId,
-							},
-							{
-								// Private circle albums where the viewing user is a member
-								AND: [
-									{
-										Circle: {
-											isPrivate: true,
-										},
-									},
-									{
-										circleId: {
-											in: userCircleIds,
-										},
-									},
-								],
-							},
-						],
-					},
-				],
-			},
-			select: {
-				id: true,
-				title: true,
-				coverImage: true,
-				creator: {
-					select: {
-						profileImage: true,
+					creator: {
+						select: { profileImage: true },
 					},
 				},
-				_count: {
-					select: {
-						Photo: true,
-					},
-				},
-			},
-		});
+				orderBy: { createdAt: 'desc' },
+				// OPTIMIZATION: Limit results to improve performance
+				take: 50,
+			});
 
-		// Get user's circles (both created and joined)
-		const createdCircles = await prisma.circle.findMany({
-			where: {
-				creatorId: user.id,
-			},
-			select: {
-				id: true,
-				name: true,
-				avatar: true,
-				creatorId: true,
-			},
-		});
-
-		const memberships = await prisma.membership.findMany({
-			where: {
-				userId: user.id,
-			},
-			select: {
-				circle: {
+			// OPTIMIZATION: Batch circle queries
+			const [createdCircles, membershipCircles] = await Promise.all([
+				// Circles created by user
+				tx.circle.findMany({
+					where: { creatorId: user.id },
 					select: {
 						id: true,
 						name: true,
 						avatar: true,
 						creatorId: true,
+						isPrivate: true,
+						_count: { select: { members: true } },
 					},
-				},
-			},
+					orderBy: { createdAt: 'desc' },
+				}),
+				// Circles where user is a member (excluding created ones)
+				tx.circle.findMany({
+					where: {
+						members: { some: { userId: user.id } },
+						creatorId: { not: user.id }, // Exclude circles they created
+					},
+					select: {
+						id: true,
+						name: true,
+						avatar: true,
+						creatorId: true,
+						isPrivate: true,
+						_count: { select: { members: true } },
+					},
+					orderBy: { createdAt: 'desc' },
+				}),
+			]);
+
+			return {
+				albums,
+				createdCircles,
+				membershipCircles,
+			};
 		});
 
-		// Filter out circles the user created to avoid duplicates
-		const joinedCircles = memberships.map(membership => membership.circle as Circle).filter(circle => circle.creatorId !== user.id);
-		// Combine all circles
-		const allCircles = [...createdCircles, ...joinedCircles]; // Transform the data to match the expected format in the frontend
-		const formattedAlbums = albums.map((album: any) => ({
+		// OPTIMIZATION: Combine and format circles efficiently
+		const allCircles = [...result.createdCircles, ...result.membershipCircles];
+
+		// OPTIMIZATION: Transform data efficiently without additional database calls
+		const formattedAlbums = result.albums.map((album: any) => ({
 			id: album.id,
-			name: album.title,
-			image: album.coverImage || '/images/albums/default.svg',
-			userProfileImage: album.creator?.profileImage || '/images/default-avatar.png',
+			title: album.title,
+			description: album.description,
+			coverImage: album.coverImage,
+			isPrivate: album.isPrivate,
+			createdAt: album.createdAt,
+			circleId: album.circleId,
 			photoCount: album._count.Photo,
+			creatorProfileImage: album.creator?.profileImage || null,
 		}));
 
-		const formattedCircles = allCircles.map(circle => ({
+		const formattedCircles = allCircles.map((circle: any) => ({
 			id: circle.id,
 			name: circle.name,
-			image: circle.avatar || '/images/circles/default.svg',
+			avatar: circle.avatar,
+			creatorId: circle.creatorId,
+			isPrivate: circle.isPrivate,
+			memberCount: circle._count.members,
 		}));
 
 		return NextResponse.json({
 			albums: formattedAlbums,
 			circles: formattedCircles,
-			isPrivate: user.isProfilePrivate || false,
-			isOwnProfile: currentUserId === user.id
+			isPrivate: false,
+			isOwnProfile,
+			totalCounts: {
+				albums: user._count.Album,
+				circlesCreated: user._count.createdCircles,
+				circlesJoined: user._count.memberships,
+			},
 		});
 	} catch (error) {
 		console.error('Error fetching user content:', error);
