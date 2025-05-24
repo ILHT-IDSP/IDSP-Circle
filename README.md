@@ -36,7 +36,7 @@ Circles is a modern social media application designed to help people connect in 
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: NextAuth.js
 - **Image Storage**: Cloudinary
-- **Styling**: Chakra UI, Tailwind CSS
+- **Styling**: Tailwind CSS
 - **Icons**: Font Awesome, Lucide React
 - **Deployment**: Vercel
 

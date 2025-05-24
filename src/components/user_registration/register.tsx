@@ -39,13 +39,15 @@ export default function Register() {
 		username: '',
 		profileImage: '',
 	});
-
 	const [step, setStep] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [showOnboarding, setShowOnboarding] = useState(false);
-
+	const [registrationError, setRegistrationError] = useState<string | null>(null);
 	const handleBack = () => {
+		// Clear any registration errors when going back
+		setRegistrationError(null);
+
 		if (step === 1) {
 			router.push('/auth/login');
 			return;
@@ -53,41 +55,51 @@ export default function Register() {
 
 		setStep(prev => prev - 1);
 	};
-
 	const handleRegisterEmail = () => {
 		console.log(`STEP: 1 ${formData.email}`);
 		console.log(`STEP ${formData.confirmEmail}`);
 
+		// Clear any previous errors
+		setRegistrationError(null);
+
 		if (formData.email.length === 0 || formData.confirmEmail.length === 0) {
-			throw new Error('Must enter an email');
+			setRegistrationError('Must enter an email');
+			return;
 		}
 
 		if (formData.email !== formData.confirmEmail) {
-			throw new Error('Emails do not match!');
+			setRegistrationError('Emails do not match!');
+			return;
 		}
 
 		if (step === 1 && formData.email === formData.confirmEmail) {
 			setStep(prev => prev + 1);
 		}
 	};
-
 	const handleRegisterPassword = () => {
 		console.log('STEP 2', formData.password);
 		console.log('STEP 2', formData.confirmPassword);
+
+		// Clear any previous errors
+		setRegistrationError(null);
 
 		if (step !== 2) {
 			router.push('/auth/login');
 		}
 
-		if (formData.password.length === 0 || formData.password.length === 0) {
-			throw new Error('Must enter a password');
+		// Basic validation - detailed validation is now handled in real-time by the components
+		if (!formData.password || !formData.confirmPassword) {
+			setRegistrationError('Please complete all password fields');
+			return;
 		}
 
 		if (formData.password !== formData.confirmPassword) {
-			throw new Error('Passwords do not match');
+			setRegistrationError('Passwords do not match');
+			return;
 		}
 
-		if (step === 2 && formData.password === formData.confirmPassword) {
+		// If basic checks pass, proceed to next step
+		if (step === 2) {
 			setStep(prev => prev + 1);
 		}
 	};
@@ -123,15 +135,19 @@ export default function Register() {
 		if (formData.username.length > 20) {
 			throw new Error('Username must be at most 20 characters long');
 		}
-
 		// Check for valid characters
-		if (!/^[a-zA-Z0-9_-]+$/.test(formData.username)) {
-			throw new Error('Username can only contain letters, numbers, underscores (_) and hyphens (-)');
+		if (!/^[a-z0-9_-]+$/.test(formData.username)) {
+			throw new Error('Username can only contain lowercase letters, numbers, underscores (_) and hyphens (-)');
 		}
 
 		// Check if username starts with a letter
-		if (!/^[a-zA-Z]/.test(formData.username)) {
-			throw new Error('Username must start with a letter');
+		if (!/^[a-z]/.test(formData.username)) {
+			throw new Error('Username must start with a lowercase letter');
+		}
+
+		// Check if username ends with hyphen or underscore
+		if (/[-_]$/.test(formData.username)) {
+			throw new Error('Username cannot end with a hyphen (-) or underscore (_)');
 		}
 
 		// If all checks pass, proceed to the next step
@@ -144,12 +160,17 @@ export default function Register() {
 	const handleCreateProfile = async () => {
 		setLoading(true);
 		setSuccess(false);
+		setRegistrationError(null);
+
 		try {
 			const response = await fetch('/api/register', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ formData }),
 			});
+
+			const data = await response.json();
+
 			if (response.ok) {
 				setSuccess(true);
 				// Sign in the user automatically after successful registration
@@ -163,11 +184,31 @@ export default function Register() {
 					// Show onboarding tutorial before redirecting
 					setShowOnboarding(true);
 				} else {
-					router.push('/auth/login');
+					setRegistrationError('Account created but login failed. Please try logging in manually.');
+					setTimeout(() => router.push('/auth/login'), 3000);
 				}
 			} else {
-				setSuccess(false);
+				// Handle specific error types
+				if (data.field) {
+					// Field-specific errors (email/username already taken)
+					if (data.field === 'email') {
+						setStep(1); // Go back to email step
+						setRegistrationError(data.error);
+					} else if (data.field === 'username') {
+						setStep(4); // Go back to username step
+						setRegistrationError(data.error);
+					}
+				} else if (data.details) {
+					// Validation errors
+					setRegistrationError(`Validation failed: ${data.details.map((d: any) => d.message).join(', ')}`);
+				} else {
+					// General error
+					setRegistrationError(data.error || 'Failed to create account. Please try again.');
+				}
 			}
+		} catch (error: unknown) {
+			console.error('Registration error:', error);
+			setRegistrationError('Network error. Please check your connection and try again.');
 		} finally {
 			setLoading(false);
 		}
@@ -183,6 +224,11 @@ export default function Register() {
 			>
 				<BackButton handleBack={handleBack} />
 			</div>
+			{registrationError && (
+				<div className='mb-4 p-3 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg'>
+					<p className='text-white text-sm font-medium'>{registrationError}</p>
+				</div>
+			)}
 			{step === 1 && (
 				<>
 					<div

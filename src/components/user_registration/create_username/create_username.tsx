@@ -5,11 +5,10 @@ import { useState } from 'react';
 
 export default function CreateUsername({ formData, setFormData, onNext }: IFormDataProps) {
 	const [error, setError] = useState<string | null>(null);
-
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		// Only allow valid characters
-		const sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '');
+		// Only allow valid characters and convert to lowercase
+		const sanitizedValue = value.replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
 		setFormData((prev: IFormData) => ({ ...prev, [name]: sanitizedValue }));
 	};
 
@@ -36,14 +35,18 @@ export default function CreateUsername({ formData, setFormData, onNext }: IFormD
 			setError('Username must be at most 20 characters long');
 			return;
 		}
-
-		if (!/^[a-zA-Z0-9_-]+$/.test(formData.username)) {
-			setError('Username can only contain letters, numbers, underscores (_) and hyphens (-)');
+		if (!/^[a-z0-9_-]+$/.test(formData.username)) {
+			setError('Username can only contain lowercase letters, numbers, underscores (_) and hyphens (-)');
 			return;
 		}
 
-		if (!/^[a-zA-Z]/.test(formData.username)) {
-			setError('Username must start with a letter');
+		if (!/^[a-z]/.test(formData.username)) {
+			setError('Username must start with a lowercase letter');
+			return;
+		}
+
+		if (/[-_]$/.test(formData.username)) {
+			setError('Username cannot end with a hyphen (-) or underscore (_)');
 			return;
 		}
 
