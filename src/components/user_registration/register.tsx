@@ -318,13 +318,7 @@ export default function Register() {
 				<OnboardingTutorial
 					onComplete={() => {
 						setShowOnboarding(false);
-						// Navigate directly to the user's profile using their username
-						// This avoids relying on the session being fully populated
-						if (formData.username) {
-							router.push(`/${formData.username}`);
-						} else {
-							router.push('/home');
-						}
+						router.push('/profile');
 					}}
 				/>
 			)}
