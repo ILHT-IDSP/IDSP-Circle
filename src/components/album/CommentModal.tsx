@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { FaTimes } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
-import Link from 'next/link';
 
 interface Comment {
 	id: number;
@@ -23,10 +22,9 @@ interface CommentModalProps {
 	albumId: number;
 	isOpen: boolean;
 	onClose: () => void;
-	isGuest?: boolean;
 }
 
-const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose, isGuest = false }) => {
+const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose }) => {
 	const [comments, setComments] = useState<Comment[]>([]);
 	const [newComment, setNewComment] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
@@ -252,46 +250,29 @@ const CommentModal: React.FC<CommentModalProps> = ({ albumId, isOpen, onClose, i
 						)}
 					</div>
 
-					{/* Comment Form - Hidden for guests */}
-					{isGuest ? (
-						<div className='p-4 pt-3 pb-6 sm:pb-8 border-t border-[var(--border)] bg-[var(--background)]'>
-							<div className='flex flex-col items-center justify-center gap-3 py-4'>
-								<p className='text-sm text-[var(--foreground-secondary)]'>
-									Sign in to join the conversation
-								</p>
-								<Link
-									href='/auth/login'
-									className='bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium rounded-lg px-6 py-2 transition-colors text-sm'
-									onClick={onClose}
-								>
-									Sign In
-								</Link>
-							</div>
+					{/* Comment Form */}
+					<form
+						onSubmit={handleSubmitComment}
+						className='p-4 pt-3 pb-6 sm:pb-8 border-t border-[var(--border)] bg-[var(--background)]'
+					>
+						<div className='flex gap-2'>
+							<input
+								type='text'
+								value={newComment}
+								onChange={e => setNewComment(e.target.value)}
+								placeholder='Write a comment...'
+								className='flex-1 border border-[var(--border)] rounded-lg py-2 px-4 bg-[var(--background)] text-[var(--foreground)] text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]'
+								disabled={isSubmitting}
+							/>
+							<button
+								type='submit'
+								className='bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium rounded-lg px-4 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+								disabled={isSubmitting || newComment.trim() === ''}
+							>
+								{isSubmitting ? 'Posting...' : 'Post'}
+							</button>
 						</div>
-					) : (
-						<form
-							onSubmit={handleSubmitComment}
-							className='p-4 pt-3 pb-6 sm:pb-8 border-t border-[var(--border)] bg-[var(--background)]'
-						>
-							<div className='flex gap-2'>
-								<input
-									type='text'
-									value={newComment}
-									onChange={e => setNewComment(e.target.value)}
-									placeholder='Write a comment...'
-									className='flex-1 border border-[var(--border)] rounded-lg py-2 px-4 bg-[var(--background)] text-[var(--foreground)] text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]'
-									disabled={isSubmitting}
-								/>
-								<button
-									type='submit'
-									className='bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium rounded-lg px-4 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-									disabled={isSubmitting || newComment.trim() === ''}
-								>
-									{isSubmitting ? 'Posting...' : 'Post'}
-								</button>
-							</div>
-						</form>
-					)}
+					</form>
 				</div>
 			</div>
 		</>,

@@ -7,7 +7,6 @@ import { useState, useMemo, useCallback, memo } from 'react';
 import CommentModal from './CommentModal';
 import { useAlbumLikes } from './AlbumLikesContext';
 import OptimizedImage from '../common/OptimizedImage';
-import { toast } from 'react-hot-toast';
 
 /**
  * Gets the display URL for an album cover image
@@ -28,10 +27,9 @@ interface AlbumCardProps {
 	creatorName?: string;
 	circleName?: string;
 	circleImage?: string;
-	isGuest?: boolean;
 }
 
-const AlbumCard: React.FC<AlbumCardProps> = memo(({ albumId, albumImage, albumName, userProfileImage, photoCount, sourceName, sourceType, creatorName, circleName, circleImage, isGuest = false }) => {
+const AlbumCard: React.FC<AlbumCardProps> = memo(({ albumId, albumImage, albumName, userProfileImage, photoCount, sourceName, sourceType, creatorName, circleName, circleImage }) => {
 	const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 	const { likeStatuses, toggleLike, pendingAlbums } = useAlbumLikes();
 
@@ -46,17 +44,10 @@ const AlbumCard: React.FC<AlbumCardProps> = memo(({ albumId, albumImage, albumNa
 			e.preventDefault();
 			e.stopPropagation();
 
-			if (isGuest) {
-				toast.error('Please sign in to like albums', {
-					icon: '🔒',
-				});
-				return;
-			}
-
 			if (pendingAlbums.has(albumId)) return;
 			await toggleLike(albumId);
 		},
-		[albumId, pendingAlbums, toggleLike, isGuest]
+		[albumId, pendingAlbums, toggleLike]
 	);
 
 	const openCommentModal = useCallback((e: React.MouseEvent) => {
@@ -148,11 +139,10 @@ const AlbumCard: React.FC<AlbumCardProps> = memo(({ albumId, albumImage, albumNa
 						<div className='flex items-center gap-3'>
 							{' '}
 							<button
-								className={`flex items-center gap-1 hover:cursor-pointer ${isPending ? 'opacity-60' : ''} ${isGuest ? 'opacity-50' : ''}`}
-								aria-label={isGuest ? 'Sign in to like' : isLiked ? 'Unlike album' : 'Like album'}
+								className={`flex items-center gap-1 hover:cursor-pointer ${isPending ? 'opacity-60' : ''}`}
+								aria-label={isLiked ? 'Unlike album' : 'Like album'}
 								onClick={handleLikeClick}
 								disabled={isPending}
-								title={isGuest ? 'Sign in to like albums' : ''}
 							>
 								{' '}
 								{isLiked ? (
@@ -166,10 +156,13 @@ const AlbumCard: React.FC<AlbumCardProps> = memo(({ albumId, albumImage, albumNa
 								)}
 							</button>
 							<button
-								className={`black-outline hover:cursor-pointer ${isGuest ? 'opacity-50' : ''}`}
-								aria-label={isGuest ? 'Sign in to comment' : 'Comment on album'}
-								onClick={openCommentModal}
-								title={isGuest ? 'Sign in to comment' : ''}
+								className='black-outline hover:cursor-pointer'
+								aria-label='Comment on album'
+								onClick={e => {
+									e.preventDefault();
+									e.stopPropagation();
+									setIsCommentModalOpen(true);
+								}}
 							>
 								<FaComment className='text-xl' />
 							</button>
@@ -182,7 +175,6 @@ const AlbumCard: React.FC<AlbumCardProps> = memo(({ albumId, albumImage, albumNa
 					albumId={albumId}
 					isOpen={isCommentModalOpen}
 					onClose={() => setIsCommentModalOpen(false)}
-					isGuest={isGuest}
 				/>
 			)}{' '}
 		</div>
